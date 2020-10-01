@@ -6,7 +6,7 @@ services:
     ports:
       - "9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   collector:
     image: starlette
     command: /start-reload.sh
