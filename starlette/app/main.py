@@ -1,14 +1,18 @@
+from remote_pb2 import WriteRequest
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
 import snappy
 
-async def metrics(request):
 
+async def metrics(request):
     message = await request.body()
-    print(snappy.uncompress(message))
-    return PlainTextResponse("Hello World!!")
+    uncompressed_msg = snappy.uncompress(message)
+    metric = WriteRequest()
+    metric.ParseFromString(uncompressed_msg)
+    print(metric.timeseries[0])
+    return PlainTextResponse()
 
 routes = [
     Route("/metrics", endpoint=metrics, methods=["POST"])

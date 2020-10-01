@@ -4,9 +4,6 @@ Testing prototype that deploys Prometheus and a metrics collector using Python S
 
 Prometheus metrics are sent as snappy-compressed protobuf messages to an HTTP endpoint. Thus far, collector server uncompresses messages and prints protobuf directly.
 
-**TODO**: Compile Prometheus protobuf definitions and generate Python metaclasses. Decode protobuf messages and print them nicely.
-
-
 ## Protobuf compilation
 
 We use [jaegertracing/docker-protobuf](https://github.com/jaegertracing/docker-protobuf)  image to compile the Prometheus protobuf definitions.
