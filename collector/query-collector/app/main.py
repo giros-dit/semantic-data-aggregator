@@ -6,16 +6,20 @@ from starlette.routing import Route
 import datetime as dt
 
 
-async def metrics(request):
-    metric_name = request.query_params['metric_name']
+def parse_labels(params):
     labels = {}
-    for param, value in request.query_params.multi_items():
-        if param == 'metric_name':
+    for param, value in params.multi_items():
+        if param == 'metric_name' or param == 'range':
             continue
         labels[param] = value
+    return labels
+
+
+async def metrics(request):
+    metric_name = request.query_params['metric_name']
+    labels = parse_labels(request.query_params)
 
     prom = PrometheusConnect(url="http://prometheus:9090", disable_ssl=True)
-
     # metric current values
     metric_data = prom.get_current_metric_value(
         metric_name=metric_name,
@@ -23,7 +27,7 @@ async def metrics(request):
     )
     metric_df = MetricSnapshotDataFrame(metric_data)
     metric_df.pop('__name__')
-    # print(metric_df.to_string())
+    print(metric_df.to_string())
 
     return PlainTextResponse()
 
@@ -31,19 +35,19 @@ async def metrics(request):
 async def metrics_range(request):
     metric_name = request.query_params['metric_name']
     range = request.query_params['range']
+    labels = parse_labels(request.query_params)
 
     prom = PrometheusConnect(url="http://prometheus:9090", disable_ssl=True)
-    # my_label_config = {'cluster': 'my_cluster_id', 'label_2': 'label_2_value'}
-
     # metric current values
     metric_data = prom.get_metric_range_data(
         metric_name=metric_name,
+        label_config=labels,
         start_time=(dt.datetime.now() - dt.timedelta(minutes=int(range))),
-        end_time=dt.datetime.now(),
+        end_time=dt.datetime.now()
     )
-    metric_df = MetricRangeDataFrame(metric_data)
-    metric_df.pop('__name__')
-    print(metric_df.to_string())
+    if metric_data:
+        metric_df = MetricRangeDataFrame(metric_data)
+        print(metric_df.to_string())
 
     return PlainTextResponse()
 
