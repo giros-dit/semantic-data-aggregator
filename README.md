@@ -101,7 +101,7 @@ curl -X GET "http://localhost:81/metrics?metric_name=prometheus_http_requests_to
 
 To get the value of metric(s) during a given range of time send request as follows:
 ```
-curl -X GET "http://localhost:81/metrics?metric_name=<name_of_metric>&range=<minutes>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
+curl -X GET "http://localhost:81/metrics_range?metric_name=<name_of_metric>&range=<minutes>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
 ```
 
 Example:
