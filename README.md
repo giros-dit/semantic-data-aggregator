@@ -89,22 +89,22 @@ query-collector_1  | INFO:     172.18.0.1:36252 - "GET /metrics_range?metric_nam
 
 To get the current value of metric(s) send request as follows:
 ```
-curl -X GET "http://localhost:81/metrics?metric_name=<name_of_metric>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
+curl -X GET "http://localhost:80/metrics?metric_name=<name_of_metric>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
 ```
 
 Example:
 ```
-curl -X GET "http://localhost:81/metrics?metric_name=prometheus_http_requests_total&job=prometheus"
+curl -X GET "http://localhost:80/metrics?metric_name=prometheus_http_requests_total&job=prometheus"
 ```
 
 ### GET range value
 
 To get the value of metric(s) during a given range of time send request as follows:
 ```
-curl -X GET "http://localhost:81/metrics_range?metric_name=<name_of_metric>&range=<minutes>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
+curl -X GET "http://localhost:80/metrics_range?metric_name=<name_of_metric>&range=<minutes>&<label_1>=<label_1_value>&<label_2>=<label_2_value>..."
 ```
 
 Example:
 ```
-curl -X GET "http://localhost:81/metrics_range?metric_name=prometheus_http_requests_total&range=30&job=prometheus"
+curl -X GET "http://localhost:80/metrics_range?metric_name=prometheus_http_requests_total&range=30&job=prometheus"
 ```

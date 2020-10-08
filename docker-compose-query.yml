@@ -11,6 +11,6 @@ services:
       context:  ./collector/query-collector
     command: /start-reload.sh
     ports:
-      - "81:80"
+      - "80:80"
     volumes:
       - ./collector/query-collector/app:/app
