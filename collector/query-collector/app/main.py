@@ -47,6 +47,7 @@ async def metrics_range(request):
     )
     if metric_data:
         metric_df = MetricRangeDataFrame(metric_data)
+        metric_df.pop('__name__')
         print(metric_df.to_string())
 
     return PlainTextResponse()
