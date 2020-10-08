@@ -35,4 +35,4 @@ scrape_configs:
   #     - targets: ['localhost:9323']
 
 remote_write:
-  - url: "http://localhost:80/metrics"
+  - url: "http://telemetry-collector:80/metrics"
