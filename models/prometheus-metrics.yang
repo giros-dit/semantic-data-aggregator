@@ -1,0 +1,43 @@
+module prometheus-metrics {
+    yang-version 1.1;
+    namespace 'http://example/ns/prom-metrics';
+    prefix prom;
+
+    revision 2020-10-08 {
+        description "Initial revision.";
+    }
+
+    container metrics {
+        list metric {
+            key name;
+
+            leaf name {
+                type string;
+            }
+
+            list labels {
+                key name;
+                leaf name {
+                    type string;
+                }
+                leaf value {
+                    type string;
+                }
+            }
+
+            list samples {
+                key timestamp;
+
+                leaf timestamp {
+                    type string;
+                }
+                leaf value {
+                    type string;
+                }
+            }
+            
+
+        }
+    }
+    
+}
