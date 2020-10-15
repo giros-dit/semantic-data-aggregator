@@ -11,8 +11,8 @@ async def metrics(request):
     uncompressed_msg = snappy.uncompress(message)
     metric = WriteRequest()
     metric.ParseFromString(uncompressed_msg)
-    # print(metric.timeseries[0])
-    print(len(metric.timeseries))
+    print(metric.timeseries[0])
+    #print(len(metric.timeseries))
     return PlainTextResponse()
 
 routes = [
