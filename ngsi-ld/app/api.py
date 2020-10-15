@@ -1,4 +1,5 @@
 
+
 def queryEntities(**kwargs):
     # do something
     print(kwargs['type'])
