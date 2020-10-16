@@ -3,11 +3,12 @@ version: '3'
 services:
   collector:
     build:
-      context: ./
+      context: ./connexion
+    image: ngsi-ld:connexion
     ports:
       - "8080:8080"
     volumes:
-      - ./app:/app
+      - ./connexion/app:/app
     environment:
       FLASK_ENV: development
   zookeeper:
