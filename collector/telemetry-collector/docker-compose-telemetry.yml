@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  telemetry-collector:
+    build:
+      context:  ./collector/telemetry-collector
+    command: /start-reload.sh
+    ports:
+      - "80:80"
+    volumes:
+      - ./collector/telemetry-collector/app:/app
