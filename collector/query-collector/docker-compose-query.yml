@@ -6,13 +6,13 @@ services:
       - "9099:9090"
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
-  query-collector:
+  collector:
     build:
-      context:  ./collector/query-collector
+      context: .
     ports:
       - "8080:8080"
     volumes:
-      - ./collector/query-collector/app:/app
+      - ./app:/app
     environment:
       FLASK_ENV: development
   zookeeper:
