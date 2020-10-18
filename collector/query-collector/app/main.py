@@ -1,9 +1,8 @@
+from datetime import datetime
 from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 from prometheus_api_client import PrometheusConnect
 from typing import Optional
-
-from datetime import datetime
 
 import random
 
@@ -24,7 +23,7 @@ METRIC_KV = """
 
 def buildMetric(sample, timestamp, metric_name, labels):
     metric = {
-        "id": "urn:ngsi-ld:PromMetric:1",
+        "id": "urn:ngsi-ld:PromMetric:",
         "type": "PromMetric",
         "hasLabels": {
             "type": "Property",
@@ -44,6 +43,19 @@ def buildMetric(sample, timestamp, metric_name, labels):
         ]
     }
     return metric
+
+
+def generateMetrics(metric_data):
+    entity_list = []
+    for data in metric_data:
+        dt = datetime.utcfromtimestamp(data['value'][0]).isoformat()
+        labels = data['metric']
+        metric_name = data['metric']['__name__']
+        metric = buildMetric(data['value'][1], dt, metric_name, labels)
+        metric["id"] = metric["id"] + str(random.randint(1, 999))
+        entity_list.append(metric)
+    return entity_list
+
 
 # Prometheus Config
 prom = PrometheusConnect(url="http://prometheus:9090", disable_ssl=True)
@@ -72,16 +84,9 @@ async def queryEntities(type: str,
                         attrs: Optional[str] = None,
                         q: Optional[str] = None,
                         options: Optional[str] = None):
-    entity_list = []
     metric_name = "prometheus_http_requests_total"
     metric_data = prom.get_current_metric_value(
         metric_name=metric_name)
-    for data in metric_data:
-        dt = datetime.utcfromtimestamp(data['value'][0]).isoformat()
-        labels = data['metric']
-        metric = buildMetric(data['value'][1], dt, metric_name, labels)
-        metric["id"] = metric["id"] + str(random.randint(3, 9))
-        entity_list.append(metric)
-
+    entity_list = generateMetrics(metric_data)
     headers = {"Content-Type": "application/ld+json"}
     return JSONResponse(content=entity_list, headers=headers)
