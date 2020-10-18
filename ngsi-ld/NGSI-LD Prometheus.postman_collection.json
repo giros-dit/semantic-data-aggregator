@@ -11,10 +11,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{scorpio}}/scorpio/v1/info/",
+					"raw": "http://{{broker}}/scorpio/v1/info/",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"scorpio",
@@ -39,13 +39,13 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": \"{{label1}}\",\n    \"type\": \"PromLabel\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"job\"\n    },\n    \"instance\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus\"\n    },\n    \"isLabelOf\": {\n        \"type\": \"Relationship\",\n        \"object\": [\"{{metric1}}\"]\n    },\n    \"@context\": [\n        {\n            \"PromMetric\": \"http://example.com/PromMetric\", \n            \"hasLabels\": \"http://example.com/hasLabels\", \n            \"sample\": \"http://example.com/sample\",\n            \"PromLabel\": \"http://example.com/PromLabel\", \n            \"isLabelOf\": \"http://example.com/isLabelOf\", \n            \"instance\": \"http://example.com/instance\"\n        },\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld\"\n    ]\n}"
+					"raw": "{\n    \"id\": \"{{label1}}\",\n    \"type\": \"PromLabel\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"job\"\n    },\n    \"instance\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus\"\n    },\n    \n    \"@context\": [\n        {\n            \"PromMetric\": \"http://example.com/PromMetric\", \n            \"hasLabels\": \"http://example.com/hasLabels\", \n            \"sample\": \"http://example.com/sample\",\n            \"PromLabel\": \"http://example.com/PromLabel\", \n            \"isLabelOf\": \"http://example.com/isLabelOf\", \n            \"instance\": \"http://example.com/instance\"\n        },\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{scorpio}}/ngsi-ld/v1/entities/",
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -85,10 +85,10 @@
 					"raw": "{\n    \"id\": \"{{metric1}}\",\n    \"type\": \"PromMetric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"hasLabels\": {\n        \"type\": \"Relationship\",\n        \"object\": [\"{{label1}}\"]\n    },\n    \"sample\": {\n        \"type\": \"Property\",\n        \"value\": \"28.0\",\n        \"observedAt\": \"2020-10-04T12:30:00Z\"\n    },\n    \"@context\": [\n        {\n            \"PromMetric\": \"http://example.com/PromMetric\", \n            \"hasLabels\": \"http://example.com/hasLabels\", \n            \"sample\": \"http://example.com/sample\",\n            \"PromLabel\": \"http://example.com/PromLabel\", \n            \"isLabelOf\": \"http://example.com/isLabelOf\", \n            \"instance\": \"http://example.com/instance\"\n        },\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{scorpio}}/ngsi-ld/v1/entities/",
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -118,10 +118,45 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{scorpio}}/ngsi-ld/v1/entities/urn:ngsi-ld:PromMetric:1",
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:PromMetric:1",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:PromMetric:1"
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Entity Data by id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/ld+json",
+						"disabled": true
+					},
+					{
+						"key": "Link",
+						"type": "text",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:PromMetric:1",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -151,16 +186,148 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{scorpio}}/ngsi-ld/v1/entities/urn:ngsi-ld:PromMetric:1",
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=PromMetric",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
 						"v1",
 						"entities",
-						"urn:ngsi-ld:PromMetric:1"
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "PromMetric"
+						}
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity Data by name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/ld+json"
+					},
+					{
+						"key": "Link",
+						"type": "text",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=PromMetric&q=name==\"prometheus_http_requests_total\"",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "PromMetric"
+						},
+						{
+							"key": "q",
+							"value": "name==\"prometheus_http_requests_total\""
+						}
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity attr by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/ld+json"
+					},
+					{
+						"key": "Link",
+						"type": "text",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=PromMetric&q=name==\"prometheus_http_requests_total\"",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "PromMetric"
+						},
+						{
+							"key": "q",
+							"value": "name==\"prometheus_http_requests_total\""
+						}
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity Data by type from Collector",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/ld+json"
+					},
+					{
+						"key": "Link",
+						"type": "text",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/ngsi-ld/v1/entities/?type=PromMetric",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "PromMetric"
+						}
 					]
 				},
 				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -184,10 +351,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{scorpio}}/ngsi-ld/v1/entities/?type=PromMetric&q=hasLabels==urn:ngsi-ld:PromLabel:1",
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=PromMetric&q=hasLabels==urn:ngsi-ld:PromLabel:1",
 					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -239,9 +406,10 @@
 					}
 				},
 				"url": {
-					"raw": "{{scorpio}}/ngsi-ld/v1/csourceRegistrations/",
+					"raw": "http://{{broker}}/ngsi-ld/v1/csourceRegistrations/",
+					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -273,9 +441,10 @@
 					}
 				],
 				"url": {
-					"raw": "{{scorpio}}/ngsi-ld/v1/csourceRegistrations?type=PromMetric",
+					"raw": "http://{{broker}}/ngsi-ld/v1/csourceRegistrations?type=PromMetric",
+					"protocol": "http",
 					"host": [
-						"{{scorpio}}"
+						"{{broker}}"
 					],
 					"path": [
 						"ngsi-ld",
@@ -290,6 +459,31 @@
 					]
 				},
 				"description": "Get every entity near NEC Labs Heidelberg, with distance up to 360 meters\r\n    NEC Labs Heidelberg coordinates: 8.684783577919006, 49.406131991436396"
+			},
+			"response": []
+		},
+		{
+			"name": "delete csource",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/csourceRegistrations/urn:ngsi-ld:ContextSourceRegistration:csr1a3458",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"csourceRegistrations",
+						"urn:ngsi-ld:ContextSourceRegistration:csr1a3458"
+					]
+				}
 			},
 			"response": []
 		}
@@ -318,22 +512,22 @@
 	],
 	"variable": [
 		{
-			"id": "e648c224-ff7b-4095-a5a1-0e5758f88977",
-			"key": "scorpio",
+			"id": "51611f6a-bd3e-42f2-a320-50df59ab4fe6",
+			"key": "broker",
 			"value": "localhost:9090"
 		},
 		{
-			"id": "9132fa35-f529-448f-823b-0ad4116623f5",
+			"id": "c5b2118d-0c17-4fe2-ad86-ea0c0029a2eb",
 			"key": "context.jsonld",
 			"value": "https://pastebin.com/raw/ueLM6utf"
 		},
 		{
-			"id": "0282c16d-66b7-4d55-8a43-8d703f76872e",
+			"id": "800484b8-ea57-4055-b040-c4ca09b608c5",
 			"key": "label1",
 			"value": "urn:ngsi-ld:PromLabel:1"
 		},
 		{
-			"id": "dd45854c-d4a1-4f2c-9143-5e75b4dff826",
+			"id": "15801ee3-affe-4240-a3a2-1d2ec30736e5",
 			"key": "metric1",
 			"value": "urn:ngsi-ld:PromMetric:1"
 		}
