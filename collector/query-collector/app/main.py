@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
 from prometheus_api_client import PrometheusConnect
 from typing import Optional
@@ -85,3 +85,10 @@ async def queryEntities(type: str,
     entity_list = formatMetrics(metric_data)
     headers = {"Content-Type": "application/ld+json"}
     return JSONResponse(content=entity_list, headers=headers)
+
+
+# API for consumer
+@app.post("/hello",
+          status_code=status.HTTP_200_OK)
+async def consumerHello(request: Request):
+    print(await request.json())

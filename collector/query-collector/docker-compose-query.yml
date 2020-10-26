@@ -13,8 +13,13 @@ services:
       - "8080:8080"
     volumes:
       - ./app:/app
-    environment:
-      FLASK_ENV: development
+  consumer:
+    build:
+      context: .
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./app:/app
   zookeeper:
     image: zookeeper
     ports:
