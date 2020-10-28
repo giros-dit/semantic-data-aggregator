@@ -80,15 +80,14 @@ async def queryEntities(type: str,
     # TODO: Same thing for labels
     labels = {}
     metric_data = prom.get_current_metric_value(
-        metric_name=metric_name,
-        labels=labels)
+        metric_name=metric_name)
     entity_list = formatMetrics(metric_data)
     headers = {"Content-Type": "application/ld+json"}
     return JSONResponse(content=entity_list, headers=headers)
 
 
 # API for consumer
-@app.post("/hello",
+@app.post("/notify",
           status_code=status.HTTP_200_OK)
 async def consumerHello(request: Request):
     print(await request.json())
