@@ -49,10 +49,9 @@ services:
       POSTGRES_USER: ngb
       POSTGRES_PASSWORD: ngb
       POSTGRES_DB: ngb
-    logging:
-      driver: none
+
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_1.0.0
+    image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
     ports:
       - "9090:9090"
     depends_on:
