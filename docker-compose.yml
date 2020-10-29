@@ -5,21 +5,22 @@ services:
     ports:
       - "9099:9090"
     volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./collector/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   collector:
     build:
-      context: .
+      context: ./collector
     ports:
       - "8080:8080"
     volumes:
-      - ./app:/app
+      - ./collector/app:/app
+  # Re-use collector image to deploy dummy consumer
   consumer:
     build:
-      context: .
+      context: ./collector
     ports:
       - "8081:8080"
     volumes:
-      - ./app:/app
+      - ./collector/app:/app
   zookeeper:
     image: zookeeper
     ports:
