@@ -51,10 +51,6 @@ class ModifiedAt(BaseModel):
     __root__: datetime
 
 
-class Type1(Enum):
-    Relationship = 'Relationship'
-
-
 class Relationship(BaseModel):
     class Config:
         extra = Extra.allow
@@ -66,10 +62,6 @@ class Relationship(BaseModel):
     modifiedAt: Optional[ModifiedAt] = None
     datasetId: Optional[DatasetId] = None
     instanceId: Optional[InstanceId] = None
-
-
-class Type2(Enum):
-    GeoProperty = 'GeoProperty'
 
 
 class GeometrySchema(BaseModel):
