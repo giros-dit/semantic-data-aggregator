@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "NGSI-LD Context Source Subscriptions",
+    "version": "latest"
+  },
+  "components": {
+    "parameters": {
+      "limit": {
+        "name": "limit",
+        "description": "Pagination limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "paths": {
+    "/csourceSubscriptions/": {
+      "get": {
+        "description": "Retrieves the context source discovery subscriptions available in an NGSI-LD system",
+        "operationId": "retrieveCSourceSubscriptions",
+        "tags": ["Context Sources"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/subscriptions/SubscriptionList.json#/definitions/SubscriptionList"
+                },
+                "examples": {
+                  "simple": {
+                    "externalValue": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/examples/SubscriptionList-example.json"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a context source discovery Subscription within an NGSI-LD system",
+        "operationId": "createCSourceSubscription",
+        "tags": ["Context Sources"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;application/ld+json": {
+              "schema": {
+                "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/subscriptions/Subscription.json#/definitions/Subscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. Contains the resource URI of the created Subscription"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Already exists",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

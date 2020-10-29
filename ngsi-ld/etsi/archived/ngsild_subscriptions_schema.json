@@ -1,0 +1,188 @@
+{
+    "definitions": {
+        "SubscriptionParamsExclusion_correct_definition_for_SubscriptionParams_not_compilable_in_swagger_2_0": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "watchedAttributes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "timeInterval": {
+                            "type": "number",
+                            "minimum": 0
+                        }
+                    }
+                }
+            ]
+        },
+        "SubscriptionParams": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "description": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "watchedAttributes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "string"
+                            },
+                            "uniqueItems": true
+                        },
+                        "timeInterval": {
+                            "type": "number",
+                            "minimum": 0
+                        },
+                        "geoQ": {
+                            "$ref": "ngsild_schema.json#/definitions/GeoQuery"
+                        },
+                        "notification": {
+                            "$ref": "ngsild_schema.json#/definitions/NotificationParams"
+                        },
+                        "expires": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "status": {
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "inactive",
+                                "failed",
+                                "expired"
+                            ]
+                        },
+                        "throttling": {
+                            "type": "number",
+                            "minimum": 1
+                        },
+                        "q": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/AtContext"
+                }
+            ]
+        },
+        "SubscriptionMandatoryParams": {
+            "type": "object",
+            "required": ["type","entities"],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["Subscription"]
+                },
+                "entities": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "ngsild_schema.json#/definitions/EntityInfo"
+                    }
+                }
+            }
+        },
+        "Subscription": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/CommonMembers"
+                },
+                {
+                    "$ref": "#/definitions/SubscriptionParams"
+                },
+                {
+                    "$ref": "#/definitions/SubscriptionMandatoryParams"
+                }
+            ]
+        },
+        "SubscriptionDescription": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/SubscriptionParams"
+                },
+                {
+                    "$ref": "#/definitions/SubscriptionMandatoryParams"
+                }
+            ]
+        },
+        "SubscriptionFragment": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "Subscription"
+                            ]
+                        },
+                        "entities": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "ngsild_schema.json#/definitions/EntityInfo"
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/SubscriptionParams"
+                }
+            ]
+        },
+        "SubscriptionList": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Subscription"
+            }
+        }
+    }
+}

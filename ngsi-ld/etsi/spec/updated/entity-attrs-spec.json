@@ -1,0 +1,247 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "NGSI-LD Entity Attributes",
+    "version": "latest"
+  },
+  "components": {
+    "parameters": {
+      "entityId": {
+        "name": "entityId",
+        "description": "Entity Id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "attrId": {
+        "name": "attrId",
+        "description": "Attribute Id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/Name"
+        }
+      },
+      "options": {
+        "name": "options",
+        "description": "Indicates that no attribute overwrite shall be performed",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "noOverwrite"
+          ]
+        }
+      }
+    }
+  },
+  "paths": {
+    "/entities/{entityId}/attrs/": {
+      "post": {
+        "description": "Append new Entity attributes to an existing Entity within an NGSI-LD system",
+        "operationId": "appendEntityAttrs",
+        "tags": ["Context Information"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/entityId"
+          },
+          {
+            "$ref": "#/components/parameters/options"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;application/ld+json": {
+              "schema": {
+                "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/Entity.json#/definitions/EntityFragment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "207": {
+            "description": "Partial Success. Only the attributes included in the response payload were successfully appended",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/UpdateResult.json#"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "Update existing Entity attributes within an NGSI-LD system",
+        "operationId": "updateEntityAttrs",
+        "tags": ["Context Information"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/entityId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;application/ld+json": {
+              "schema": {
+                "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/Entity.json#/definitions/EntityFragment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content."
+          },
+          "207": {
+            "description": "Partial Success. Only the attributes included in the response payload were successfully updated",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/UpdateResult.json#"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entities/{entityId}/attrs/{attrId}": {
+      "patch": {
+        "description": "Update existing Entity attributes within an NGSI-LD system",
+        "operationId": "partialAttrUpdate",
+        "tags": ["Context Information"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/entityId"
+          },
+          {
+            "$ref": "#/components/parameters/attrId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;application/ld+json": {
+              "schema": {
+                "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/Entity.json#/definitions/EntityFragment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content."
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Removes an existing Entity attribute within an NGSI-LD system",
+        "operationId": "removeEntityAttr",
+        "tags": ["Context Information"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/entityId"
+          },
+          {
+            "$ref": "#/components/parameters/attrId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content."
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

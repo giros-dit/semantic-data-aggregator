@@ -1,0 +1,42 @@
+POST
+
+
+/v2/csources
+
+{
+   "source": {
+      "name": "My Context Source",
+      "description": "Context source example 1",
+      "endPoint": "http://broker.example.org/v2/entities",
+      "scope": {
+         "georel": "within",
+         "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+               [
+                   [-10.0, -10.0],
+                   [10.0, -10.0],
+                   [10.0, 10.0],
+                   [-10.0, -10.0]
+               ]
+           ]
+         }
+      }
+   },
+   
+   "dataProvided": {
+      "entities": [{
+         'id',
+         'type',
+         'typePattern'
+         'idPattern'
+      }],
+      "properties": [
+        "width"
+      ]
+   },
+   
+   "expires": ""
+}
+
+Properties cannot be empty array. 

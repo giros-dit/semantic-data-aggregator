@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "NGSI-LD Temporal Entities",
+    "version": "latest"
+  },
+  "components": {
+    "parameters": {
+      "timerel": {
+        "name": "timerel",
+        "description": "Time relationship",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/timerel"
+        }
+      },
+      "time": {
+        "name": "time",
+        "description": "start time for temporal query",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "endTime": {
+        "name": "endTime",
+        "description": "end time for temporal query",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "timeproperty": {
+        "name": "timeproperty",
+        "description": "The name of the property that contains the temporal data that will be used to resolve the temporal query",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/Name"
+        }
+      },
+      "lastN": {
+        "name": "lastN",
+        "description": "Only retrieve last N instances",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "options": {
+        "name": "options",
+        "description": "Options dictionary",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "temporalValues",
+            "sysAttrs"
+          ]
+        }
+      }
+    }
+  },
+  "paths": {
+    "/temporal/entities/": {
+      "get": {
+        "description": "Query temporal evolution of Entities from an NGSI-LD system",
+        "operationId": "queryTemporalEntities",
+        "tags": ["Temporal Evolution"],
+        "parameters": [
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/id"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/idPattern"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/type"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/attrs"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/q"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/georel"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/geometry"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/coordinates"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/geoproperty"
+          },
+          {
+            "$ref": "#/components/parameters/timerel"
+          },
+          {
+            "$ref": "#/components/parameters/timeproperty"
+          },
+          {
+            "$ref": "#/components/parameters/time"
+          },
+          {
+            "$ref": "#/components/parameters/endTime"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/csf"
+          },
+          {
+            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/entities-spec.json#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/options"
+          },
+          {
+            "$ref": "#/components/parameters/lastN"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/temporal/EntityTemporalList.json#/definitions/EntityTemporalList"
+                },
+                "examples": {
+                  "simple": {
+                    "externalValue": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/examples/EntityTemporalList-example.json"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create or update temporal representation of an Entity within an NGSI-LD system",
+        "operationId": "createUpdateEntityTemporal",
+        "tags": ["Temporal Evolution"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json;application/ld+json": {
+              "schema": {
+                "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/temporal/EntityTemporal.json#/definitions/EntityTemporal"
+              },
+              "examples": {
+                "simple": {
+                  "externalValue": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/examples/EntityTemporal-example_C5.5.3.json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. Contains the resource URI of the created Entity"
+          },
+          "204": {
+            "description": "Updated. No Content"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Already exists",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/temporal/EntityTemporalList.json",
+  "title": "NGSI-LD Entity",
+  "description": "NGSI-LD Temporal Representation List",
+  "definitions": {
+    "EntityTemporalList": {
+      "type": "array",
+      "items": {
+        "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/temporal/EntityTemporal.json#"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/EntityTemporalList"
+    }
+  ]
+}

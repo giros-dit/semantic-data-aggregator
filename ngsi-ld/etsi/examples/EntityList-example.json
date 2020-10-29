@@ -1,0 +1,33 @@
+[
+ {
+  "id": "urn:ngsi-ld:Vehicle:V123",
+  "type": "Vehicle",
+  "speed": {
+    "type": "Property",
+    "value": 23,
+    "accuracy": {
+      "type": "Property",
+      "value": 0.7
+    },
+    "providedBy": {
+      "type": "Relationship",
+      "object": "urn:ngsi-ld:Person:Bob"  
+    }
+  },
+  "closeTo": {
+    "type": "Relationship",
+    "object": "urn:ngsi-ld:Building:B1234"  
+  },
+  "location": {
+      "type": "GeoProperty",
+      "value": {
+        "type":"Point",
+        "coordinates": [-8,44]  
+      }
+  },
+  "@context": [
+      "https://example.org/ld/vehicle.jsonld",
+      "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld"
+  ]
+}
+]

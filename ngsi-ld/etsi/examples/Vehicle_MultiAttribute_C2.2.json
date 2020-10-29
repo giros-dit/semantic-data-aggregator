@@ -1,0 +1,30 @@
+{
+  "id": "urn:ngsi-ld:Vehicle:A4567",
+  "type": "Vehicle",
+  "speed#1": {
+    "type": "Property",
+    "value": 55,
+    "source": {
+      "type": "Property",
+      "value": "Speedometer"
+    },
+    "datasetId": "urn:ngsi-ld:Property:speedometerA4567-speed"
+  },
+  "speed#2": {
+    "type": "Property",
+    "value": 54.5,
+    "source": {
+      "type": "Property",
+      "value": "GPS"
+    },
+    "datasetId": "urn:ngsi-ld:Property:gpsBxyz123-speed"
+  },
+  "@context": [
+    {
+      "speed#1": "http://example.org/speed",
+      "speed#2": "http://example.org/speed",
+      "source": "http://example.org/hasSource"
+    },
+    "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld"
+  ]
+}

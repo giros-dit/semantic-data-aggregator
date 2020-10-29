@@ -1,0 +1,35 @@
+{
+  "id": "urn:ngsi-ld:Subscription:mySubscription",
+  "type": "Subscription",
+  "entities": [
+    {
+      "type": "Vehicle"
+    }
+  ],
+  "watchedAttributes": [
+    "speed"
+  ],
+  "q": "speed>50",
+  "geoQ": {
+    "georel": "near;maxDistance==2000",
+    "geometry": "Point",
+    "coordinates": [
+      -1,
+      100
+    ]
+  },
+  "notification": {
+    "attributes": [
+      "speed"
+    ],
+    "format": "keyValues",
+    "endpoint": {
+      "uri": "http://my.endpoint.org/notify",
+      "accept": "application/json"
+    }
+  },
+  "@context": [
+    "http://example.org/ngsi-ld/vehicle.jsonld",
+    "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "NGSI-LD Registration By Id",
+    "version": "latest"
+  },
+  "components": {
+    "parameters": {
+      "registrationId": {
+        "name": "registrationId",
+        "description": "Registration Id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/csourceRegistrations/{registrationId}": {
+      "get": {
+        "description": "Retrieves a specific context source registration from an NGSI-LD system",
+        "operationId": "retrieveCsource",
+        "tags": ["Context Sources"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/registrationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/registrations/ContextSourceRegistration.json#/definitions/ContextSourceRegistration"
+                },
+                "examples": {
+                  "simple": {
+                    "externalValue": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/examples/"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Removes an specific context source registration within an NGSI-LD system",
+        "operationId": "removeCsource",
+        "tags": ["Context Sources"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/registrationId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content. The Registration was removed successfully"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json;application/ld+json": {
+                "schema": {
+                  "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

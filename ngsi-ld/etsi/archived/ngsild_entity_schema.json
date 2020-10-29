@@ -1,0 +1,113 @@
+{
+    "definitions": {
+        "EntityParams": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "$ref": "ngsild_schema.json#/definitions/GeoProperty"
+                        },
+                        "observationSpace": {
+                            "$ref": "ngsild_schema.json#/definitions/GeoProperty"
+                        },
+                        "operationSpace": {
+                            "$ref": "ngsild_schema.json#/definitions/GeoProperty"
+                        }
+                    }
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/AtContext"
+                }
+            ]
+        },
+        "EntityMandatoryParams": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "Entity": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/EntityMandatoryParams"
+                },
+                {
+                    "$ref": "#/definitions/EntityParams"
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/CommonMembers"
+                }
+            ]
+        },
+        "EntityDescription": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/EntityMandatoryParams"
+                },
+                {
+                    "$ref": "#/definitions/EntityParams"
+                }
+            ]
+        },
+        "EntityFragment": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/EntityMandatoryParams"
+                },
+                {
+                    "$ref": "#/definitions/EntityParams"
+                }
+            ]
+        },
+        "EntityAttrList": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/EntityMandatoryParams"
+                },
+                {
+                    "$ref": "#/definitions/EntityParams"
+                }
+            ]
+        },
+        "EntityList": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Entity"
+            }
+        }
+    }
+}

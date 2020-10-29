@@ -1,0 +1,152 @@
+{
+    "definitions": {
+        "CsourceRegistrationParams": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "timestamp": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "ngsild_schema.json#/definitions/TimeInterval"
+                            }
+                        },
+                        "location": {
+                            "$ref": "http://json.schemastore.org/geojson#/definitions/geometry"
+                        },
+                        "expires": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "name": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "description": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/AtContext"
+                }
+            ]
+        },
+        "CsourceRegistrationMandatoryParams": {
+            "type": "object",
+            "required": [
+                "endpoint",
+                "type",
+                "information"
+            ],
+            "properties": {
+                "endpoint": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "ContextSourceRegistration"
+                    ]
+                },
+                "information": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "ngsild_schema.json#/definitions/RegistrationInfo"
+                    }
+                }
+            }
+        },
+        "CsourceRegistration": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "ngsild_schema.json#/definitions/CommonMembers"
+                },
+                {
+                    "$ref": "#/definitions/CsourceRegistrationParams"
+                },
+                {
+                    "$ref": "#/definitions/CsourceRegistrationMandatoryParams"
+                }
+            ]
+        },
+        "CsourceRegistrationDescription": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CsourceRegistrationParams"
+                },
+                {
+                    "$ref": "#/definitions/CsourceRegistrationMandatoryParams"
+                }
+            ]
+        },
+        "CsourceRegistrationFragment": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "endpoint": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "ContextSourceRegistration"
+                            ]
+                        },
+                        "information": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "ngsild_schema.json#/definitions/RegistrationInfo"
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CsourceRegistrationParams"
+                }
+            ]
+        },
+        "CsourceRegistrationList": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/CsourceRegistration"
+            }
+        }
+    }
+}
+

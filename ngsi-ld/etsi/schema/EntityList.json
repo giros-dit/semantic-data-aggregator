@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$id": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/EntityList.json",
+  "title": "NGSI-LD EntityList",
+  "description": "NGSI-LD EntityList",
+  "definitions": {
+    "EntityList": {
+      "type": "array",
+      "items": {
+        "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/Entity.json#/definitions/Entity"
+      }
+    }
+  },
+  "allOf": [{
+    "$ref": "#/definitions/EntityList"
+  }]
+}

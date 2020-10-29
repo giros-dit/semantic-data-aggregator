@@ -1,0 +1,288 @@
+{
+    "definitions": {
+        "ApiErrorResponse": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                }
+            }
+        },
+        "CommonMembers": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "modifiedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "observedMember": {
+            "type": "object",
+            "properties": {
+                "observedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "AtContext": {
+            "type": "object",
+            "properties": {
+                "@context": {
+                    "type": ["string","object","array"]
+                }
+            }
+        },
+        "PropertyCommonData": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "unitCode": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/observedMember"
+                }
+            ]
+        },
+        "Property": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": ["type", "value"],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": ["Property"]
+                        },
+                        "value": {}
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CommonMembers"
+                },
+                {
+                    "$ref": "#/definitions/PropertyCommonData"
+                }
+            ]
+        },
+        "Relationship": {
+            "allOf": [
+                {
+                    "type": "object",
+                    "required": ["type", "object"],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": ["Relationship"]
+                        },
+                        "object": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/CommonMembers"
+                },
+                {
+                    "$ref": "#/definitions/observedMember"
+                }
+            ]
+        },
+        "GeoProperty": {
+            "allOf" : [
+                {
+                    "type": "object",
+                    "required": ["type", "value"],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "GeoProperty"
+                            ]
+                      },
+                      "value": {
+                          "$ref": "http://json.schemastore.org/geojson#/definitions/geometry"
+                      }
+                    }
+                },
+                {
+                  "$ref": "#/definitions/observedMember"
+                }
+              ]
+        },
+        "EntityInfo": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "idPattern": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "EntityInfo_correct_definition_not_compilable_in_swagger_2_0": {
+            "anyOf": [
+                {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": ["idPattern"],
+                    "properties": {
+                        "idPattern": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": ["type"],
+                    "properties": {
+                        "type": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "RegistrationInfo": {
+            "type": "object",
+            "required": ["entities"],
+            "properties": {
+                "entities": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/EntityInfo"
+                    }
+                },
+                "properties": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                },
+                "relationships": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                }
+            }
+        },
+        "TimeInterval" : {
+            "type": "object",
+            "required": ["start"],
+            "properties": {
+                "start": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+            }
+        },
+        "GeoQuery" : {
+            "type": "object",
+            "required": ["geometry","coordinates","georel"],
+            "properties": {
+                "geometry": {
+                    "type": "string"
+                },
+                "coordinates": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "number"
+                    }
+                },
+                "georel": {
+                    "type": "string"
+                }
+            }
+        },
+        "EndPoint" : {
+            "type": "object",
+            "required": ["uri"],
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "accept": {
+                    "type": "string",
+                    "enum": ["application/json", "application/ld+json"]
+                }
+            }
+        },
+        "NotificationParams": {
+            "type": "object",
+            "required": ["endpoint"],
+            "properties": {
+                "attributes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "format": {
+                    "type": "string"
+                },
+                "endpoint": {
+                    "$ref": "#/definitions/EndPoint"
+                },
+                "timesSent": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "lastNotification": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "lastFailure": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastSuccess": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+            }
+        }
+    }
+}
