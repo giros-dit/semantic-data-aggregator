@@ -220,6 +220,33 @@
 			"response": []
 		},
 		{
+			"name": "Get FileStreamSource Kafka Connector topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}/topics",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSource}}",
+						"topics"
+					]
+				},
+				"description": "Topics of specified connector"
+			},
+			"response": []
+		},
+		{
 			"name": "Create FileStreamSink Kafka Connector",
 			"request": {
 				"method": "POST",
@@ -261,7 +288,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}",
@@ -359,6 +389,33 @@
 			"response": []
 		},
 		{
+			"name": "Get FileStreamSink Kafka Connector topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}/topics",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSink}}",
+						"topics"
+					]
+				},
+				"description": "Topics of specified connector"
+			},
+			"response": []
+		},
+		{
 			"name": "Create HTTPSource1 Kafka Connector",
 			"request": {
 				"method": "POST",
@@ -371,7 +428,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"prometheus-source-1\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=prometheus_http_requests_total\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"10000\",\n        \"kafka.topic\": \"prom-topic-1\"\n    }\n}"
+					"raw": "{\n    \"name\": \"prometheus-source-1\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=prometheus_http_requests_total\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"10000\",\n        \"kafka.topic\": \"prom-topic-1\"\n    }\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors",
@@ -400,7 +460,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}",
@@ -498,6 +561,33 @@
 			"response": []
 		},
 		{
+			"name": "Get HTTPSource1 Kafka Connector topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}/topics",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource1}}",
+						"topics"
+					]
+				},
+				"description": "Topics of specified connector"
+			},
+			"response": []
+		},
+		{
 			"name": "Create HTTPSource2 Kafka Connector",
 			"request": {
 				"method": "POST",
@@ -510,7 +600,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"prometheus-source-2\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=up\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"5000\",\n        \"kafka.topic\": \"prom-topic-2\"\n    }\n}"
+					"raw": "{\n    \"name\": \"prometheus-source-2\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=up\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"5000\",\n        \"kafka.topic\": \"prom-topic-2\"\n    }\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors",
@@ -539,7 +632,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}",
@@ -635,6 +731,122 @@
 				"description": "Status of specified connector"
 			},
 			"response": []
+		},
+		{
+			"name": "Get HTTPSource2 Kafka Connector topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}/topics",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource2}}",
+						"topics"
+					]
+				},
+				"description": "Topics of specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Create FileStreamSink Kafka Connector for HTTPSource Kafka Connectors",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"prometheus-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"prometheus-sink.txt\",\n        \"topics\": \"prom-topic-1, prom-topic-2\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Create a file type kafka sink connector for HTTP type kafka source connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete FileStreamSink Kafka Connector for HTTPSource Kafka Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSinkHTTP}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSinkHTTP}}"
+					]
+				},
+				"description": "Delete a file type kafka sink connector for HTTP type kafka source connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSinkHTTP Kafka Connector topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSinkHTTP}}/topics",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSinkHTTP}}",
+						"topics"
+					]
+				},
+				"description": "Topics of specified connector"
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -661,29 +873,34 @@
 	],
 	"variable": [
 		{
-			"id": "7dbee3c7-977c-429d-85cd-f9c5a1bcc31e",
+			"id": "4395c143-eed2-4e37-a3f3-2c23062f5b8c",
 			"key": "kafka-connect",
 			"value": "138.4.7.159:8083"
 		},
 		{
-			"id": "5ef3963d-0c21-4b80-9440-2029bf599750",
+			"id": "10d5bbec-ffb2-43e1-902a-11e95f3b9853",
 			"key": "FileStreamSource",
 			"value": "file-source"
 		},
 		{
-			"id": "2bef4fe6-bdd7-4fd2-ac71-7e943d02afac",
+			"id": "3bd9144e-d5c8-48ce-8b62-da3217e721fb",
 			"key": "FileStreamSink",
 			"value": "file-sink"
 		},
 		{
-			"id": "60690eb5-c8bd-40a4-bb56-21cad6def598",
+			"id": "39830987-ca73-4d72-b4b3-92db6b9495a7",
 			"key": "HTTPSource1",
 			"value": "prometheus-source-1"
 		},
 		{
-			"id": "ab6c1a18-3eee-4861-9ce3-6f0f52eb4ae9",
+			"id": "e11a1b95-7650-426a-b92f-df66e79af24d",
 			"key": "HTTPSource2",
 			"value": "prometheus-source-2"
+		},
+		{
+			"id": "404c2966-dfcf-4e71-b3fe-6e9a6d415a2c",
+			"key": "FileStreamSinkHTTP",
+			"value": "prometheus-sink"
 		}
 	],
 	"protocolProfileBehavior": {}
