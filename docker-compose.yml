@@ -2,6 +2,8 @@ version: '3'
 services:
   prometheus:
     image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
     ports:
       - "9099:9090"
     volumes:
@@ -9,6 +11,9 @@ services:
   collector:
     build:
       context: ./collector
+      dockerfile: Dockerfile
+    hostname: collector
+    container_name: collector
     ports:
       - "8080:8080"
     volumes:
@@ -17,12 +22,17 @@ services:
   consumer:
     build:
       context: ./collector
+      dockerfile: Dockerfile
+    hostname: consumer
+    container_name: consumer
     ports:
       - "8081:8080"
     volumes:
       - ./collector/app:/app
   zookeeper:
     image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
     ports:
       - "2181"
     logging:
@@ -30,20 +40,38 @@ services:
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
+    container_name: kafka
     ports:
-      - "9092"
+      - "9092:9092"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CONNECT_REST_PORT: 8083
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp:/tmp
     depends_on:
       - zookeeper
     logging:
       driver: none
+  kafka-connect:
+    build:
+      context: ./kafka/connect
+      dockerfile: Dockerfile
+    hostname: kafka-connect
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+      - zookeeper
+    volumes:
+      - /tmp:/tmp
   postgres:
     image: mdillon/postgis
+    hostname: postgres
+    container_name: postgres
     ports:
       - "5432"
     environment:
@@ -54,8 +82,18 @@ services:
       driver: none
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
+    hostname: scorpio
+    container_name: scorpio
     ports:
       - "9090:9090"
     depends_on:
       - kafka
       - postgres
+  node-exporter:
+    image: prom/node-exporter
+    hostname: node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    depends_on:
+      - prometheus

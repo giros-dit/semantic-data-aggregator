@@ -1,0 +1,690 @@
+{
+	"info": {
+		"_postman_id": "e198ce91-7811-4035-8c06-e8887a624e38",
+		"name": "API REST Kafka Connect",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get API Connect Information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Get API Kafka Connect worker information"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Connectors",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Returns a list of active connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Connector Plugins",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connector-plugins",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connector-plugins"
+					]
+				},
+				"description": "List of connector installed plugins"
+			},
+			"response": []
+		},
+		{
+			"name": "Create FileStreamSource Kafka Connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"file-source\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSource\",\n        \"tasks.max\": 1,\n        \"file\": \"file-source.txt\",\n        \"topic\": \"file-topic\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Create a file type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Delete FileStreamSource Kafka Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSource}}"
+					]
+				},
+				"description": "Create a file type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSource Kafka Connector information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSource}}"
+					]
+				},
+				"description": "Information about the specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSource Kafka Connector configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}/config",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSource}}",
+						"config"
+					]
+				},
+				"description": "Configuration for specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSource Kafka Connector status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}/status",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSource}}",
+						"status"
+					]
+				},
+				"description": "Status of specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Create FileStreamSink Kafka Connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"file-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"file-sink.txt\",\n        \"topics\": \"file-topic\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Create a file type kafka sink connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Delete FileStreamSink Kafka Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSink}}"
+					]
+				},
+				"description": "Create a file type kafka sink connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSink Kafka Connector information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSink}}"
+					]
+				},
+				"description": "Information about the specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSink Kafka Connector configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}/config",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSink}}",
+						"config"
+					]
+				},
+				"description": "Configuration for specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get FileStreamSink Kafka Connector status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSink}}/status",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{FileStreamSink}}",
+						"status"
+					]
+				},
+				"description": "Status of specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Create HTTPSource1 Kafka Connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"prometheus-source-1\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=prometheus_http_requests_total\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"10000\",\n        \"kafka.topic\": \"prom-topic-1\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Create a HTTP type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Delete HTTPSource1 Kafka Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource1}}"
+					]
+				},
+				"description": "Create a HTTP type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource1 Kafka Connector information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource1}}"
+					]
+				},
+				"description": "Information about the specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource1 Kafka Connector configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}/config",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource1}}",
+						"config"
+					]
+				},
+				"description": "Configuration for specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource1 Kafka Connector status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource1}}/status",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource1}}",
+						"status"
+					]
+				},
+				"description": "Status of specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Create HTTPSource2 Kafka Connector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"prometheus-source-2\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=up\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"5000\",\n        \"kafka.topic\": \"prom-topic-2\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Create a HTTP type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Delete HTTPSource2 Kafka Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource2}}"
+					]
+				},
+				"description": "Delete a HTTP type kafka source connector "
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource2 Kafka Connector information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource2}}"
+					]
+				},
+				"description": "Information about the specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource2 Kafka Connector configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}/config",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource2}}",
+						"config"
+					]
+				},
+				"description": "Configuration for specified connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Get HTTPSource2 Kafka Connector status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{kafka-connect}}/connectors/{{HTTPSource2}}/status",
+					"protocol": "http",
+					"host": [
+						"{{kafka-connect}}"
+					],
+					"path": [
+						"connectors",
+						"{{HTTPSource2}}",
+						"status"
+					]
+				},
+				"description": "Status of specified connector"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bcc7139e-7c0e-4491-935c-7ead31817e3f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0b6c2d71-355f-4252-bc42-db61e313d62f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7dbee3c7-977c-429d-85cd-f9c5a1bcc31e",
+			"key": "kafka-connect",
+			"value": "138.4.7.159:8083"
+		},
+		{
+			"id": "5ef3963d-0c21-4b80-9440-2029bf599750",
+			"key": "FileStreamSource",
+			"value": "file-source"
+		},
+		{
+			"id": "2bef4fe6-bdd7-4fd2-ac71-7e943d02afac",
+			"key": "FileStreamSink",
+			"value": "file-sink"
+		},
+		{
+			"id": "60690eb5-c8bd-40a4-bb56-21cad6def598",
+			"key": "HTTPSource1",
+			"value": "prometheus-source-1"
+		},
+		{
+			"id": "ab6c1a18-3eee-4861-9ce3-6f0f52eb4ae9",
+			"key": "HTTPSource2",
+			"value": "prometheus-source-2"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
