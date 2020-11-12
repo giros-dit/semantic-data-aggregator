@@ -10,8 +10,8 @@ Additionally, we use the metrics collector's Docker image - that runs a webserve
 
 # Requirements
 
-- Docker (**check tested version**)
-- Docker-compose (**check tested version**)
+- Docker (_Tested with version 19.03.13_)
+- Docker-compose (_Tested with version 1.27.4_)
 
 # Quick Start
 
