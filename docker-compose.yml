@@ -37,6 +37,9 @@ services:
       - "2181"
     logging:
       driver: none
+    volumes:
+      - /tmp/zookeeper:/logs
+    working_dir: /
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
@@ -48,9 +51,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_CONNECT_REST_PORT: 8083
+      KAFKA_LOG_DIRS: "/tmp/kafka-logs"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /tmp:/tmp
+      - /tmp/kafka-logs:/tmp/kafka-logs
     depends_on:
       - zookeeper
     logging:
@@ -63,11 +67,11 @@ services:
     container_name: kafka-connect
     ports:
       - "8083:8083"
+    volumes:
+      - /tmp/kafka-connect-logs:/opt/kafka_2.13-2.6.0/logs
     depends_on:
       - kafka
       - zookeeper
-    volumes:
-      - /tmp:/tmp
   postgres:
     image: mdillon/postgis
     hostname: postgres
