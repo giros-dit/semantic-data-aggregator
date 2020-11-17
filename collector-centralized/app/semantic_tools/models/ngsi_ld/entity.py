@@ -11,19 +11,8 @@ from typing import Any, Dict, List, Optional, Union
 from pydantic import AnyUrl, BaseModel, Extra, Field, constr
 
 
-class Entity(BaseModel):
-    class Config:
-        extra = Extra.allow
-
-    _context: Optional[LdContext] = Field(None, alias='@context')
-    location: Optional[GeoProperty] = None
-    observationSpace: Optional[GeoProperty] = None
-    operationSpace: Optional[GeoProperty] = None
-    id: str
-    type: Name
-    createdAt: Optional[CreatedAt] = None
-    modifiedAt: Optional[ModifiedAt] = None
-
+class CreatedAt(BaseModel):
+    __root__: datetime
 
 class DatasetId(BaseModel):
     __root__: AnyUrl
@@ -43,25 +32,8 @@ class ObservedAt(BaseModel):
     __root__: datetime
 
 
-class CreatedAt(BaseModel):
-    __root__: datetime
-
-
 class ModifiedAt(BaseModel):
     __root__: datetime
-
-
-class Relationship(BaseModel):
-    class Config:
-        extra = Extra.allow
-
-    type: Type = Type.Relationship
-    object: str
-    observedAt: Optional[ObservedAt] = None
-    createdAt: Optional[CreatedAt] = None
-    modifiedAt: Optional[ModifiedAt] = None
-    datasetId: Optional[DatasetId] = None
-    instanceId: Optional[InstanceId] = None
 
 
 class GeometrySchema(BaseModel):
@@ -82,12 +54,39 @@ class Name(BaseModel):
     ) = Field(..., description='NGSI-LD Name')
 
 
+class Entity(BaseModel):
+    class Config:
+        extra = Extra.allow
+
+    _context: Optional[LdContext] = Field(None, alias='@context')
+    location: Optional[GeoProperty] = None
+    observationSpace: Optional[GeoProperty] = None
+    operationSpace: Optional[GeoProperty] = None
+    id: str
+    type: Name
+    createdAt: Optional[CreatedAt] = None
+    modifiedAt: Optional[ModifiedAt] = None
+
+
 class Property(BaseModel):
     class Config:
         extra = Extra.allow
 
     type: Type = Type.Property
     value: Union[str, float, bool, List[Any], Dict[str, Any]]
+    observedAt: Optional[ObservedAt] = None
+    createdAt: Optional[CreatedAt] = None
+    modifiedAt: Optional[ModifiedAt] = None
+    datasetId: Optional[DatasetId] = None
+    instanceId: Optional[InstanceId] = None
+
+
+class Relationship(BaseModel):
+    class Config:
+        extra = Extra.allow
+
+    type: Type = Type.Relationship
+    object: str
     observedAt: Optional[ObservedAt] = None
     createdAt: Optional[CreatedAt] = None
     modifiedAt: Optional[ModifiedAt] = None

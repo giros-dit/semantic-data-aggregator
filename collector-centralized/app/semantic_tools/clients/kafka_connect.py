@@ -21,9 +21,12 @@ class kafkaConnectClient():
         self.debug = debug
         if self.debug:
             import logging
-            # These two lines enable debugging at httplib level (requests->urllib3->http.client)
-            # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
-            # The only thing missing will be the response.body which is not logged.
+            # These two lines enable debugging at httplib level
+            # (requests->urllib3->http.client)
+            # You will see the REQUEST, including HEADERS and DATA,
+            # and RESPONSE with HEADERS but without DATA.
+            # The only thing missing will be
+            # the response.body which is not logged.
             try:
                 import http.client as http_client
             except ImportError:
@@ -31,7 +34,8 @@ class kafkaConnectClient():
                 import httplib as http_client
             http_client.HTTPConnection.debuglevel = 1
 
-            # You must initialize logging, otherwise you'll not see debug output.
+            # You must initialize logging,
+            # otherwise you'll not see debug output.
             logging.basicConfig()
             logging.getLogger().setLevel(logging.DEBUG)
             requests_log = logging.getLogger("requests.packages.urllib3")
@@ -45,7 +49,7 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
 
     # Connectors
     def createConnector(self, name: str, config: dict):
@@ -58,7 +62,7 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
 
     def deleteConnector(self, name: str):
         response = self._session.delete(
@@ -69,7 +73,7 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
 
     def getConnector(self, name: str):
         response = self._session.get(
@@ -80,7 +84,7 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
 
     def getConnectors(self):
         response = self._session.get("{0}/connectors".format(self.url),
@@ -89,7 +93,7 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
 
     # Topics
     def getTopics(self, name: str):
@@ -101,4 +105,4 @@ class kafkaConnectClient():
         if response.status_code == 200:
             return response.json()
         else:
-            return response.raise_for_status()
+            response.raise_for_status()
