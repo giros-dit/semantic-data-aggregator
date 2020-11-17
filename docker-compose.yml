@@ -37,8 +37,6 @@ services:
       - "2181"
     logging:
       driver: none
-    volumes:
-      - /tmp/zookeeper:/logs
     working_dir: /
   kafka:
     image: wurstmeister/kafka
@@ -54,7 +52,6 @@ services:
       KAFKA_LOG_DIRS: "/tmp/kafka-logs"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /tmp/kafka-logs:/tmp/kafka-logs
     depends_on:
       - zookeeper
     logging:
@@ -67,8 +64,6 @@ services:
     container_name: kafka-connect
     ports:
       - "8083:8083"
-    volumes:
-      - /tmp/kafka-connect-logs:/opt/kafka_2.13-2.6.0/logs
     depends_on:
       - kafka
       - zookeeper
