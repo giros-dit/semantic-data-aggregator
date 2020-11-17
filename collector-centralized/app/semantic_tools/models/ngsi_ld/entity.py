@@ -5,8 +5,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Literal
 
 from pydantic import AnyUrl, BaseModel, Extra, Field, constr
 
@@ -14,18 +13,13 @@ from pydantic import AnyUrl, BaseModel, Extra, Field, constr
 class CreatedAt(BaseModel):
     __root__: datetime
 
+
 class DatasetId(BaseModel):
     __root__: AnyUrl
 
 
 class InstanceId(BaseModel):
     __root__: AnyUrl
-
-
-class Type(Enum):
-    Property = 'Property'
-    Relationship = 'Relationship'
-    GeoProperty = 'GeoProperty'
 
 
 class ObservedAt(BaseModel):
@@ -72,7 +66,7 @@ class Property(BaseModel):
     class Config:
         extra = Extra.allow
 
-    type: Type = Type.Property
+    type: Literal["Property"] = "Property"
     value: Union[str, float, bool, List[Any], Dict[str, Any]]
     observedAt: Optional[ObservedAt] = None
     createdAt: Optional[CreatedAt] = None
@@ -85,7 +79,7 @@ class Relationship(BaseModel):
     class Config:
         extra = Extra.allow
 
-    type: Type = Type.Relationship
+    type: Literal["Relationship"] = "Relationship"
     object: str
     observedAt: Optional[ObservedAt] = None
     createdAt: Optional[CreatedAt] = None
@@ -98,7 +92,7 @@ class GeoProperty(BaseModel):
     class Config:
         extra = Extra.allow
 
-    type: Type = Type.GeoProperty
+    type: Literal["GeoProperty"] = "GeoProperty"
     value: GeometrySchema
     observedAt: Optional[ObservedAt] = None
     createdAt: Optional[CreatedAt] = None

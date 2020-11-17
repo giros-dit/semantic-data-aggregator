@@ -52,7 +52,7 @@ class ngsildClient():
         """
         Create a new Entity within an NGSI-LD system
         """
-        response = self._session.patch(
+        response = self._session.post(
             "{0}/ngsi-ld/v1/entities".format(self.url),
             verify=self.ssl_verification,
             headers=self.headers,
