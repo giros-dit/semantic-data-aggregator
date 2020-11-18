@@ -1,17 +1,15 @@
 from semantic_tools.models.prometheus import PrometheusMetric
-from semantic_tools.models.ngsi_ld.entity import Property
 from semantic_tools.clients.ngsi_ld import ngsildClient
 
 ngsi = ngsildClient(url="http://scorpio:9090",
-                    headers={"Accept": "application/ld+json"},
                     context="https://pastebin.com/raw/PCe63jxb",
                     debug=True)
 
 # Create entity example
 metric = PrometheusMetric(id="urn:ngsi-ld:PrometheusMetric:1",
-                          name=Property(value="prometheus_http_requests_total"),
-                          labels=Property(value={"job": "prometheus"}),
-                          sample=Property(value="27.0"))
+                          name={"value": "prometheus_http_requests_total"},
+                          labels={"value": {"job": "prometheus"}},
+                          sample={"value": "27.0"})
 
 ngsi.createEntity(metric.dict(exclude_none=True))
 
