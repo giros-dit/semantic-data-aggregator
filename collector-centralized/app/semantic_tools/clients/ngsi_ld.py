@@ -125,3 +125,18 @@ class ngsildClient():
         )
         if response.status_code != 204:
             response.raise_for_status()
+
+    # NGSI-LD Delete Entity -> /entities/{entityId}
+    def deleteEntity(self, entityId: str):
+        """
+        Delete an specific Entity from an NGSI-LD system.
+        """
+        response = self._session.delete(
+            "{0}/ngsi-ld/v1/entities/{1}".format(self.url, entityId),
+            verify=self.ssl_verification,
+            headers=self.headers,
+        )
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.raise_for_status()
