@@ -6,7 +6,7 @@ The metrics collector leverages Kafka Connect to configure Source/Sink Kafka Con
 
 Additionally, we use the metrics collector's Docker image - that runs a webserver programmed with FastAPI - to deploy a dummy context consumer. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from NGSI-LD subscriptions.
 
-**TO ADD TOPOLOGY DIAGRAM**
+![Docker Prototype](docs/collectors-docker-prototype.png)
 
 # Requirements
 
