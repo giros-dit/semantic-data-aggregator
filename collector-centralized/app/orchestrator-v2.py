@@ -126,7 +126,7 @@ ngsi = ngsildClient(url="http://scorpio:9090",
                     headers={"Accept": "application/ld+json"},
                     context="https://pastebin.com/raw/NhZbzu8f")
 
-deleteEntities(ngsi)
+#deleteEntities(ngsi)
 
 createEntities(ngsi)
 
