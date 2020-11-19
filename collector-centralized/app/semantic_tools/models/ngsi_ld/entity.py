@@ -68,7 +68,9 @@ class Property(BaseModel):
 
     type: Literal["Property"] = "Property"
     value: Union[str, float, bool, List[Any], Dict[str, Any]]
-    observedAt: Optional[ObservedAt] = None
+    #observedAt: Optional[ObservedAt] = None
+    observedAt: str = None
+    units: str = None
     createdAt: Optional[CreatedAt] = None
     modifiedAt: Optional[ModifiedAt] = None
     datasetId: Optional[DatasetId] = None
@@ -80,7 +82,8 @@ class Relationship(BaseModel):
         extra = Extra.allow
 
     type: Literal["Relationship"] = "Relationship"
-    object: str
+    #object: str
+    object: Union[str, List[str]]
     observedAt: Optional[ObservedAt] = None
     createdAt: Optional[CreatedAt] = None
     modifiedAt: Optional[ModifiedAt] = None

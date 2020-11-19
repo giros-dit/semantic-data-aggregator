@@ -7,7 +7,7 @@ import requests
 
 class kafkaConnectClient():
     def __init__(
-            self, url: str = "http://localhost:8083",
+            self, url: str = "http://kafka-connect:8083",
             headers: dict = {},
             disable_ssl: bool = False,
             debug: bool = False):
