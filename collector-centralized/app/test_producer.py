@@ -1,5 +1,6 @@
 from json import dumps
 from kafka import KafkaProducer
+from kafka.errors import KafkaError
 from prometheus_api_client import PrometheusConnect
 
 # This an example Kafka Producer that obtains a metric
@@ -18,6 +19,13 @@ prom = PrometheusConnect(url="http://prometheus:9090", disable_ssl=True)
 metric_name = "prometheus_http_requests_total"
 metric_data = prom.get_current_metric_value(
     metric_name=metric_name)
-# Take the first time series
+# Take the first time series for this metric
 metric = metric_data[0]
-producer.send('metric-topic', value=metric)
+future = producer.send('metric-topic', value=metric)
+
+# Block for 'synchronous' sends
+try:
+    record_metadata = future.get(timeout=10)
+except KafkaError:
+    # Decide what to do if produce request failed...
+    pass
