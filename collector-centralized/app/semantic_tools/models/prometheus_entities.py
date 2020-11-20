@@ -6,13 +6,13 @@ from typing import Literal
 class Metric(Entity):
     type: Literal["Metric"] = "Metric"
     sample: Property
-    hasSource: Relationship
 
 class MetricSource(Entity):
     type: Literal["MetricSource"] = "MetricSource"
     name: Property
     expression: Property
     interval: Property
+    isSourceOf: Relationship
     hasEndPoint: Relationship
     javaclass: Property
     topic: Property
@@ -28,4 +28,3 @@ class Prometheus(Entity):
     jobs: Property
     format: Property
     isComposedBy: Relationship
-    isConnectedTo: Relationship

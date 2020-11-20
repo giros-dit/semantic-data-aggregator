@@ -21,14 +21,12 @@ def deleteEntities(ngsi: ngsildClient):
 def createEntities(ngsi: ngsildClient):
     # Create Metric entities
     metric1 = Metric(id="urn:ngsi-ld:Metric:1",
-                              sample=Property(value="27.0", observedAt="2020-03-24T14:59:19.063Z", units=None),
-                              hasSource=Relationship(object="urn:ngsi-ld:MetricSource:source1"))
+                              sample={"value": "27.0", "observedAt": "2020-03-24T14:59:19.063Z", "units": None})
 
     ngsi.createEntity(metric1.dict(exclude_none=True))
 
     metric2 = Metric(id="urn:ngsi-ld:Metric:2",
-                              sample=Property(value="100.0", observedAt="2020-03-24T14:59:19.063Z", units="bytes/s"),
-                              hasSource=Relationship(object="urn:ngsi-ld:MetricSource:source2"))
+                              sample={"value": "100.0", "observedAt": "2020-03-24T14:59:19.063Z", "units": "bytes/s"})
 
     ngsi.createEntity(metric2.dict(exclude_none=True))
 
@@ -42,22 +40,24 @@ def createEntities(ngsi: ngsildClient):
 
     # Create MetricSource entities
     metricsource1 = MetricSource(id="urn:ngsi-ld:MetricSource:source1",
-                              name=Property(value="prometheus_http_requests_total"),
-                              expression=Property(value={"job": "prometheus"}),
-                              interval=Property(value="10000"),
-                              hasEndPoint=Relationship(object="urn:ngsi-ld:Endpoint:1"),
-                              javaclass=Property(value="HttpSourceConnector"),
-                              topic=Property(value="source1-topic"))
+                              name={"value": "prometheus_http_requests_total"},
+                              expression={"value": {"job": "prometheus", "handler": "/api/v1/query", "code": "200"}},
+                              interval={"value": "10000", "units": "ms"},
+                              isSourceOf={"object": "urn:ngsi-ld:Metric:1"},
+                              hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
+                              javaclass={"value": "HttpSourceConnector"},
+                              topic={"value": "source1-topic"})
 
     ngsi.createEntity(metricsource1.dict(exclude_none=True))
 
     metricsource2 = MetricSource(id="urn:ngsi-ld:MetricSource:source2",
-                              name=Property(value="rate(node_network_receive_bytes_total[1m])"),
-                              expression=Property(value={"job": "node"}),
-                              interval=Property(value="60000", units="ms"),
-                              hasEndPoint=Relationship(object="urn:ngsi-ld:Endpoint:1"),
-                              javaclass=Property(value="HttpSourceConnector"),
-                              topic=Property(value="source2-topic"))
+                              name={"value": "rate(node_network_receive_bytes_total[1m])"},
+                              expression={"value": ""},
+                              interval={"value": "60000", "units": "ms"},
+                              isSourceOf={"object": "urn:ngsi-ld:Metric:2"},
+                              hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
+                              javaclass={"value": "HttpSourceConnector"},
+                              topic={"value": "source2-topic"})
 
     ngsi.createEntity(metricsource2.dict(exclude_none=True))
 
@@ -71,8 +71,8 @@ def createEntities(ngsi: ngsildClient):
 
     # Create Endpoint entity
     endpoint = Endpoint(id="urn:ngsi-ld:Endpoint:1",
-                              name=Property(value="prometheus-api"),
-                              URI=Property(value="http://prometheus:9090/api/v1/query"))
+                              name={"value": "prometheus-api"},
+                              URI={"value": "http://prometheus:9090/api/v1/query"})
 
     ngsi.createEntity(endpoint.dict(exclude_none=True))
 
@@ -85,11 +85,10 @@ def createEntities(ngsi: ngsildClient):
 
     # Create Prometheus entity
     prometheus = Prometheus(id="urn:ngsi-ld:Prometheus:1",
-                              name=Property(value="prometheus-server"),
-                              jobs=Property(value={"job1": "prometheus", "job2": "node"}),
-                              format=Property(value="json"),
-                              isComposedBy=Relationship(object=["urn:ngsi-ld:Metric:1", "urn:ngsi-ld:Metric:2"]),
-                              isConnectedTo=Relationship(object="urn:ngsi-ld:Endpoint:1"))
+                              name={"value": "prometheus-server"},
+                              jobs={"value": {"job1": "prometheus", "job2": "node"}},
+                              format={"value": "json"},
+                              isComposedBy={"object": ["urn:ngsi-ld:MetricSource:source1", "urn:ngsi-ld:MetricSource:source2"]})
 
     ngsi.createEntity(prometheus.dict(exclude_none=True))
 
@@ -106,6 +105,31 @@ def getSourceConnectorConfig(ngsi: ngsildClient, metricsource_id: str):
         metricsource=MetricSource.parse_obj(metricsource_entity)
 
         configuration['query'] = metricsource.name.value
+
+        expression = metricsource.expression.value
+
+        labels=""
+
+        if(len(expression) > 0 ):
+            expression_keys = []
+            expression_values = []
+
+            for key in expression.keys():
+              expression_keys.append(key)
+
+            for value in expression.values():
+              expression_values.append(value)
+
+            labels=""
+            cont=0
+            for x in range(0,len(expression_keys)):
+                    labels+=expression_keys[x]+"="+'"'+expression_values[x]+'"'
+                    cont=cont+1
+                    if(cont < len(expression_keys)):
+                       labels+=", "
+
+
+        configuration['expression'] = labels
 
         configuration['interval'] = metricsource.interval.value
 
@@ -128,7 +152,7 @@ ngsi = ngsildClient(url="http://scorpio:9090",
 
 #deleteEntities(ngsi)
 
-createEntities(ngsi)
+#createEntities(ngsi)
 
 kafka_connect = kafkaConnectClient(url="http://kafka-connect:8083")
 
@@ -146,12 +170,19 @@ print("Kafka Connectors: ", connectors)
 
 connector_config1 = getSourceConnectorConfig(ngsi, "urn:ngsi-ld:MetricSource:source1")
 
+url1=""
+
+if(len(connector_config1['expression']) > 0):
+    url1 = connector_config1['URI']+"?query="+connector_config1['query']+"{"+connector_config1['expression']+"}"
+else :
+    url1 = connector_config1['URI']+"?query="+connector_config1['query']
+
 config1 = {
     "name": "prometheus-source-1",
     "config": {
         "connector.class": connector_config1['class'],
         "tasks.max": 1,
-        "http.request.url": connector_config1['URI']+"?query="+connector_config1['query'],
+        "http.request.url": url1,
         "http.request.method": "GET",
         "http.request.headers": "Accept: application/json",
         "http.throttler.interval.millis": connector_config1['interval'],
@@ -163,12 +194,19 @@ kafka_connect.createConnector(config1)
 
 connector_config2 = getSourceConnectorConfig(ngsi, "urn:ngsi-ld:MetricSource:source2")
 
+url2=""
+
+if(len(connector_config2['expression']) > 0):
+    url2 = connector_config2['URI']+"?query="+connector_config2['query']+"{"+connector_config2['expression']+"}"
+else :
+    url2 = connector_config2['URI']+"?query="+connector_config2['query']
+
 config2 = {
     "name": "prometheus-source-2",
     "config": {
         "connector.class": connector_config2['class'],
         "tasks.max": 1,
-        "http.request.url": connector_config2['URI']+"?query="+connector_config2['query'],
+        "http.request.url": url2,
         "http.request.method": "GET",
         "http.request.headers": "Accept: application/json",
         "http.throttler.interval.millis": connector_config2['interval'],
@@ -181,6 +219,7 @@ kafka_connect.createConnector(config2)
 connectors=kafka_connect.getConnectors()
 
 print("Kafka Connectors: ", connectors)
+
 
 #TO GET KAFKA CONNECTORS INFORMATION FROM ITS API REST
 
