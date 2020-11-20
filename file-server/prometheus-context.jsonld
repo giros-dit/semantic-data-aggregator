@@ -1,0 +1,23 @@
+{
+"@context": [
+        {
+            "Endpoint": "http://example.org/Endpoint",
+            "expression": "http://example.org/expression",  
+            "format": "http://example.org/format",
+            "hasEndPoint": "http://example.org/hasEndPoint",
+            "hasSource": "http://example.org/hasSource",
+            "interval": "http://example.org/interval",
+            "isComposedBy": "http://example.org/isComposedBy",
+            "isConnectedTo": "http://example.org/isConnectedTo",
+            "javaclass": "http://example.org/javaclass",
+            "jobs": "http://example.org/jobs",
+            "Metric": "http://example.org/Metric",
+            "MetricSource": "http://example.org/MetricSource",
+            "Prometheus": "http://example.org/Prometheus",
+            "sample": "http://example.org/sample",
+            "topic": "http://example.org/topic",
+            "URI": "http://example.org/URI"            
+        },
+        "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
+    ]
+}

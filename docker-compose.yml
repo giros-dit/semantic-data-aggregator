@@ -1,13 +1,5 @@
 version: '3'
 services:
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
-    ports:
-      - "9099:9090"
-    volumes:
-      - ./collector/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   collector:
     build:
       context: ./collector
@@ -29,15 +21,14 @@ services:
       - "8081:8080"
     volumes:
       - ./collector/app:/app
-  zookeeper:
-    image: zookeeper
-    hostname: zookeeper
-    container_name: zookeeper
+  file-server:
+    image: halverneus/static-file-server
+    hostname: file-server
+    container_name: file-server
     ports:
-      - "2181"
-    logging:
-      driver: none
-    working_dir: /
+      - "8082:8080"
+    volumes:
+      - ./file-server:/web
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
@@ -67,6 +58,22 @@ services:
     depends_on:
       - kafka
       - zookeeper
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9099:9090"
+    volumes:
+      - ./collector/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  node-exporter:
+    image: prom/node-exporter
+    hostname: node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    depends_on:
+      - prometheus
   postgres:
     image: mdillon/postgis
     hostname: postgres
@@ -88,11 +95,12 @@ services:
     depends_on:
       - kafka
       - postgres
-  node-exporter:
-    image: prom/node-exporter
-    hostname: node-exporter
-    container_name: node-exporter
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
     ports:
-      - "9100:9100"
-    depends_on:
-      - prometheus
+      - "2181"
+    logging:
+      driver: none
+    working_dir: /
