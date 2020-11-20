@@ -860,7 +860,7 @@
 		{
 			"id": "ca906f0f-dbf9-4ef7-a6f5-43f36739e06b",
 			"key": "context.jsonld",
-			"value": "http://file-server:8080/prometheus-context.jsonld"
+			"value": "http://context-catalog:8080/prometheus-context.jsonld"
 		},
 		{
 			"id": "a4ba2bfd-8116-4a22-8380-69fa65f859fe",

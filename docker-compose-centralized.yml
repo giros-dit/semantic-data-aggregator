@@ -18,14 +18,14 @@ services:
       - "8081:8080"
     volumes:
       - ./collector/app:/app
-  file-server:
+  context-catalog:
     image: halverneus/static-file-server
-    hostname: file-server
-    container_name: file-server
+    hostname: context-catalog
+    container_name: context-catalog
     ports:
       - "8082:8080"
     volumes:
-      - ./file-server:/web
+      - ./context-catalog:/web
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
