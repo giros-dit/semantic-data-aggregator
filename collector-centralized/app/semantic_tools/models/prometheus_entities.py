@@ -1,6 +1,6 @@
 from .ngsi_ld.entity import Entity, Property, Relationship
 from pydantic import BaseModel
-from typing import Literal
+from typing import Literal, Optional
 
 
 class Metric(Entity):
@@ -10,7 +10,7 @@ class Metric(Entity):
 class MetricSource(Entity):
     type: Literal["MetricSource"] = "MetricSource"
     name: Property
-    expression: Property
+    expression: Optional[Property] = None
     interval: Property
     isSourceOf: Relationship
     hasEndPoint: Relationship

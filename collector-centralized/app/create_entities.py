@@ -6,7 +6,7 @@ import json
 def createEntities(ngsi: ngsildClient):
     # Create Metric entities
     metric1 = Metric(id="urn:ngsi-ld:Metric:1",
-                              sample={"value": "27.0", "observedAt": "2020-03-24T14:59:19.063Z", "units": None})
+                              sample={"value": "27.0", "observedAt": "2020-03-24T14:59:19.063Z"})
 
     ngsi.createEntity(metric1.dict(exclude_none=True))
 
@@ -37,7 +37,7 @@ def createEntities(ngsi: ngsildClient):
 
     metricsource2 = MetricSource(id="urn:ngsi-ld:MetricSource:source2",
                               name={"value": "rate(node_network_receive_bytes_total[1m])"},
-                              expression={"value": ""},
+                              #expression={"value": ""},
                               interval={"value": "60000", "units": "ms"},
                               isSourceOf={"object": "urn:ngsi-ld:Metric:2"},
                               hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},

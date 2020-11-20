@@ -23,12 +23,15 @@ class InstanceId(BaseModel):
 
 
 class ObservedAt(BaseModel):
-    __root__: datetime
+    __root__: str
+#    __root__: datetime
 
 
 class ModifiedAt(BaseModel):
     __root__: datetime
 
+class Units(BaseModel):
+    __root__: str
 
 class GeometrySchema(BaseModel):
     pass
@@ -68,9 +71,9 @@ class Property(BaseModel):
 
     type: Literal["Property"] = "Property"
     value: Union[str, float, bool, List[Any], Dict[str, Any]]
-    #observedAt: Optional[ObservedAt] = None
-    observedAt: str = None
-    units: str = None
+    observedAt: Optional[ObservedAt] = None
+    #observedAt: str = None
+    units: Optional[Units] = None
     createdAt: Optional[CreatedAt] = None
     modifiedAt: Optional[ModifiedAt] = None
     datasetId: Optional[DatasetId] = None
