@@ -18,23 +18,18 @@
     },
     "isComposedBy": [{
         "type": "Relationship",
-        "object": "urn:ngsi-ld:Metric:1"
+        "object": "urn:ngsi-ld:MetricSource:source1"
     },
     {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:Metric:2"
+        "object": "urn:ngsi-ld:MetricSource:source2"
     }],
-    "isConnectedTo": {
-        "type": "Relationship",
-        "value": "urn:ngsi-ld:Endpoint:1"
-    }, 
     "@context": [
         {
             "Prometheus": "http://example.org/Prometheus",
             "jobs": "http://example.org/jobs", 
             "format": "http://example.org/format",
-            "isComposedBy": "http://example.org/isComposedBy",
-            "isConnectedTo": "http://example.org/isConnectedTo"
+            "isComposedBy": "http://example.org/isComposedBy"
         },
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
     ]

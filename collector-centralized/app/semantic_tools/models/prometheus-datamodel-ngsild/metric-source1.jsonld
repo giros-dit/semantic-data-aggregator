@@ -8,22 +8,24 @@
     "expression": {
         "type": "Property",
         "value": {
-            "job": "prometheus"
+            "job": "prometheus", 
+            "handler": "/api/v1/query" 
         }
     },
     "interval": {
         "type": "Property",
         "value": "10000",
-        "unit": {
-            "type": "Property",
-            "value": "ms"
-        }
+        "units": "ms"
+    },
+    "isSourceOf": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Metric:1"
     },
     "hasEndPoint": {
         "type": "Relationship",
         "object": "urn:ngsi-ld:Endpoint:1"
     },
-    "class": {
+    "javaclass": {
         "type": "Property",
         "value": "HttpSourceConnector"
     },
@@ -36,8 +38,9 @@
             "MetricSource": "http://example.org/MetricSource", 
             "expression": "http://example.org/expression", 
             "interval": "http://example.org/interval",
+            "isSourceOf": "http://example.org/isSourceOf",
             "hasEndPoint": "http://example.org/hasEndPoint",
-            "class": "http://example.org/class",
+            "javaclass": "http://example.org/javaclass",
             "topic": "http://example.org/topic"
         },
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"

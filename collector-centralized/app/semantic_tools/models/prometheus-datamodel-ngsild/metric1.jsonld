@@ -3,19 +3,13 @@
     "type": "Metric",
     "sample": {
         "type": "Property",
-        "value": "10.0",
-        "observedAt": "2020-03-24T14:59:19.063Z",
-        "unitCode": ""
-    },
-    "hasSource": {
-        "type": "Relationship",
-        "object": "urn:ngsi-ld:MetricSource:source1"
+        "value": "27.0",
+        "observedAt": "2020-03-24T14:59:19.063Z"
     },
     "@context": [
         {
             "Metric": "http://example.org/Metric",
-            "sample": "http://example.org/sample",
-            "hasSource": "http://example.org/hasSource" 
+            "sample": "http://example.org/sample" 
         },
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
      ]
