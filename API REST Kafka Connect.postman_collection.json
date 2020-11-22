@@ -93,7 +93,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"file-source\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSource\",\n        \"tasks.max\": 1,\n        \"file\": \"file-source.txt\",\n        \"topic\": \"file-topic\"\n    }\n}"
+					"raw": "{\n    \"name\": \"file-source\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSource\",\n        \"tasks.max\": 1,\n        \"file\": \"file-source.txt\",\n        \"topic\": \"file-topic\"\n    }\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors",
@@ -122,7 +125,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors/{{FileStreamSource}}",
@@ -259,7 +265,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"file-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"file-sink.txt\",\n        \"topics\": \"file-topic\"\n    }\n}"
+					"raw": "{\n    \"name\": \"file-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"file-sink.txt\",\n        \"topics\": \"file-topic\"\n    }\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors",
@@ -428,7 +437,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"prometheus-source-1\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=prometheus_http_requests_total\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"10000\",\n        \"kafka.topic\": \"prom-topic-1\"\n    }\n}",
+					"raw": "{\n    \"name\": \"prometheus-source-1\",\n    \"config\": {\n        \"connector.class\": \"HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=prometheus_http_requests_total\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"10000\",\n        \"kafka.topic\": \"prom-topic-1\"\n    }\n}",
 					"options": {
 						"raw": {}
 					}
@@ -600,7 +609,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"prometheus-source-2\",\n    \"config\": {\n        \"connector.class\": \"com.github.castorm.kafka.connect.http.HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=up\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"5000\",\n        \"kafka.topic\": \"prom-topic-2\"\n    }\n}",
+					"raw": "{\n    \"name\": \"prometheus-source-2\",\n    \"config\": {\n        \"connector.class\": \"HttpSourceConnector\",\n        \"tasks.max\": 1,\n        \"http.request.url\": \"http://prometheus:9090/api/v1/query?query=up\",\n        \"http.request.method\": \"GET\",\n        \"http.request.headers\": \"Accept: application/json\",\n        \"http.throttler.interval.millis\": \"20000\",\n        \"http.throttler.catchup.interval.millis\": \"5000\",\n        \"kafka.topic\": \"prom-topic-2\"\n    }\n}",
 					"options": {
 						"raw": {}
 					}
@@ -772,7 +781,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"prometheus-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"prometheus-sink.txt\",\n        \"topics\": \"prom-topic-1, prom-topic-2\"\n    }\n}"
+					"raw": "{\n    \"name\": \"prometheus-sink\",\n    \"config\": {\n        \"connector.class\": \"FileStreamSink\",\n        \"tasks.max\": 1,\n        \"file\": \"prometheus-sink.txt\",\n        \"topics\": \"prom-topic-1, prom-topic-2\"\n    }\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{kafka-connect}}/connectors",
@@ -853,7 +865,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "bcc7139e-7c0e-4491-935c-7ead31817e3f",
+				"id": "0ce8603f-2f6f-4c41-943b-1e95a5180b80",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -863,7 +875,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0b6c2d71-355f-4252-bc42-db61e313d62f",
+				"id": "d80c1832-87c2-4810-8dec-48ba6c49396e",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -873,32 +885,32 @@
 	],
 	"variable": [
 		{
-			"id": "4395c143-eed2-4e37-a3f3-2c23062f5b8c",
+			"id": "bfbd8b90-5840-4d7d-be9e-dfcc719bb63f",
 			"key": "kafka-connect",
-			"value": "138.4.7.159:8083"
+			"value": "localhost:8083"
 		},
 		{
-			"id": "10d5bbec-ffb2-43e1-902a-11e95f3b9853",
+			"id": "839bdc2b-a9aa-491c-b079-142d30068cc8",
 			"key": "FileStreamSource",
 			"value": "file-source"
 		},
 		{
-			"id": "3bd9144e-d5c8-48ce-8b62-da3217e721fb",
+			"id": "e7bed5d6-b78f-4424-afb1-7733ed5a1400",
 			"key": "FileStreamSink",
 			"value": "file-sink"
 		},
 		{
-			"id": "39830987-ca73-4d72-b4b3-92db6b9495a7",
+			"id": "1d39c67c-6317-42be-98f9-78b43c6ab3c1",
 			"key": "HTTPSource1",
 			"value": "prometheus-source-1"
 		},
 		{
-			"id": "e11a1b95-7650-426a-b92f-df66e79af24d",
+			"id": "eeac53f6-4c49-4286-bfd4-2f71c8533d07",
 			"key": "HTTPSource2",
 			"value": "prometheus-source-2"
 		},
 		{
-			"id": "404c2966-dfcf-4e71-b3fe-6e9a6d415a2c",
+			"id": "ed0e6d05-910f-4533-aea0-b044e275adf5",
 			"key": "FileStreamSinkHTTP",
 			"value": "prometheus-sink"
 		}
