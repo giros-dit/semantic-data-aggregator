@@ -8,7 +8,7 @@
             "hasSource": "http://example.org/hasSource",
             "interval": "http://example.org/interval",
             "isComposedBy": "http://example.org/isComposedBy",
-            "isConnectedTo": "http://example.org/isConnectedTo",
+            "isSourceOf": "http://example.org/isSourceOf",
             "javaclass": "http://example.org/javaclass",
             "jobs": "http://example.org/jobs",
             "Metric": "http://example.org/Metric",
