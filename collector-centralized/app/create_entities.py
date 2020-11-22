@@ -1,5 +1,4 @@
 from semantic_tools.models.prometheus_entities import Metric, MetricSource, Endpoint, Prometheus
-from semantic_tools.models.ngsi_ld.entity import Property, Relationship
 from semantic_tools.clients.ngsi_ld import ngsildClient
 import json
 
@@ -26,7 +25,7 @@ def createEntities(ngsi: ngsildClient):
     # Create MetricSource entities
     metricsource1 = MetricSource(id="urn:ngsi-ld:MetricSource:source1",
                               name={"value": "prometheus_http_requests_total"},
-                              expression={"value": {"job": "prometheus", "handler": "/api/v1/query", "code": "200"}},
+                              expression={"value": {"job": "prometheus", "handler": "/api/v1/query"}},
                               interval={"value": "10000", "units": "ms"},
                               isSourceOf={"object": "urn:ngsi-ld:Metric:1"},
                               hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
@@ -37,7 +36,6 @@ def createEntities(ngsi: ngsildClient):
 
     metricsource2 = MetricSource(id="urn:ngsi-ld:MetricSource:source2",
                               name={"value": "rate(node_network_receive_bytes_total[1m])"},
-                              #expression={"value": ""},
                               interval={"value": "60000", "units": "ms"},
                               isSourceOf={"object": "urn:ngsi-ld:Metric:2"},
                               hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
@@ -86,7 +84,7 @@ def createEntities(ngsi: ngsildClient):
 
 ngsi = ngsildClient(url="http://scorpio:9090",
                     headers={"Accept": "application/ld+json"},
-                    context="https://pastebin.com/raw/NhZbzu8f")
+                    context="http://context-catalog:8080/prometheus-context.jsonld")
 
 createEntities(ngsi)
 
