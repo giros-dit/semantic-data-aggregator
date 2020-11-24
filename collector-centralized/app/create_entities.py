@@ -10,7 +10,7 @@ def createEntities(ngsi: ngsildClient):
     ngsi.createEntity(metric1.dict(exclude_none=True))
 
     metric2 = Metric(id="urn:ngsi-ld:Metric:2",
-                              sample={"value": "100.0", "observedAt": "2020-03-24T14:59:19.063Z", "units": "bytes/s"})
+                              sample={"value": "100.0", "observedAt": "2020-03-24T14:59:19.063Z", "unitCode": "bytes/s"})
 
     ngsi.createEntity(metric2.dict(exclude_none=True))
 
@@ -26,7 +26,7 @@ def createEntities(ngsi: ngsildClient):
     metricsource1 = MetricSource(id="urn:ngsi-ld:MetricSource:source1",
                               name={"value": "prometheus_http_requests_total"},
                               expression={"value": {"job": "prometheus", "handler": "/api/v1/query"}},
-                              interval={"value": "10000", "units": "ms"},
+                              interval={"value": "10000", "unitCode": "ms"},
                               isSourceOf={"object": "urn:ngsi-ld:Metric:1"},
                               hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
                               javaclass={"value": "HttpSourceConnector"},
@@ -36,7 +36,7 @@ def createEntities(ngsi: ngsildClient):
 
     metricsource2 = MetricSource(id="urn:ngsi-ld:MetricSource:source2",
                               name={"value": "rate(node_network_receive_bytes_total[1m])"},
-                              interval={"value": "60000", "units": "ms"},
+                              interval={"value": "60000", "unitCode": "ms"},
                               isSourceOf={"object": "urn:ngsi-ld:Metric:2"},
                               hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"},
                               javaclass={"value": "HttpSourceConnector"},

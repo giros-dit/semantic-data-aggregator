@@ -82,12 +82,18 @@ def subscribeKafka(topic: str, metric_id: str, ngsi: ngsildClient):
             result = data['result']
             metric = result[0]
             timestamp = metric['value'][0]
-            datetimestamp = datetime.fromtimestamp(timestamp).isoformat()
+            datetimestamp = datetime.fromtimestamp(timestamp).isoformat()+"Z"
+
+            metric_entity=ngsi.retrieveEntityById(metric_id)
+            metric_instance=Metric.parse_obj(metric_entity)
+            units = metric_instance.sample.unitCode
+
             sample = {
                 "sample": {
                     "type": "Property",
                     "value": metric['value'][1],
-                    "observedAt": datetimestamp  # [timestamp, value]
+                    "observedAt": datetimestamp,
+                    "unitCode": units
                 }
             }
             ngsi.updateEntityAttrs(metric_id, sample)
@@ -149,6 +155,9 @@ if __name__ == '__main__':
             }
         }
         kafka_connect.createConnector(config)
+
+        print("MetricSource", metricsource_entities[i]['id'], "configuration:", config)
+        print("")
 
     connectors=kafka_connect.getConnectors()
 

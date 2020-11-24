@@ -23,8 +23,7 @@ class InstanceId(BaseModel):
 
 
 class ObservedAt(BaseModel):
-    __root__: str
-#    __root__: datetime
+    __root__: datetime
 
 
 class ModifiedAt(BaseModel):
@@ -71,9 +70,10 @@ class Property(BaseModel):
 
     type: Literal["Property"] = "Property"
     value: Union[str, float, bool, List[Any], Dict[str, Any]]
-    observedAt: Optional[ObservedAt] = None
-    #observedAt: str = None
-    units: Optional[Units] = None
+    #observedAt: Optional[ObservedAt] = None
+    observedAt: str = None
+    #units: Optional[Units] = None
+    unitCode: str = None
     createdAt: Optional[CreatedAt] = None
     modifiedAt: Optional[ModifiedAt] = None
     datasetId: Optional[DatasetId] = None
