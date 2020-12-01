@@ -1,182 +1,88 @@
-from semantic_tools.models.prometheus_entities import Metric, MetricSource, Endpoint, Prometheus
-from semantic_tools.clients.ngsi_ld import ngsildClient
-from semantic_tools.clients.kafka_connect import kafkaConnectClient
-from kafka import KafkaConsumer
-from threading import Thread
-from datetime import datetime
-import json
-from json import loads
+from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.clients.kafka_connect import KafkaConnectClient
+from semantic_tools.models.metric import MetricSource, Endpoint
 
-#Get Entity attributes for the Kafka SourceConnector configuration
-def getSourceConnectorConfig(ngsi: ngsildClient, metricsource_id: str):
-    configuration = {}
-    metricsource_entity=ngsi.retrieveEntityById(metricsource_id)
-    metricsource=MetricSource.parse_obj(metricsource_entity)
+import logging
 
-    configuration['query'] = metricsource.name.value
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
-    if("expression" in metricsource_entity):
 
-      expression = metricsource.expression.value
+def buildHTTPSourceConnector(metricSource: MetricSource,
+                             ngsi: NGSILDClient) -> dict:
+    """
+    Generate HTTP Source Connector configuration
+    from a passed MetricSource entity
+    """
+    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndPoint.object)
+    endpoint = Endpoint.parse_obj(endpoint_entity)
 
-      labels=""
-      expression_keys = []
-      expression_values = []
+    url = ""
+    if metricSource.expression:
+        labels = getQueryLabels(metricSource)
+        url = (endpoint.uri.value + "?query=" +
+               metricSource.name.value + "{" + labels + "}")
+    else:
+        url = endpoint.uri.value + "?query=" + metricSource.name.value
 
-      for key in expression.keys():
-        expression_keys.append(key)
+    entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    config = {
+        "name": "prometheus-{0}".format(entity_id),
+        "config": {
+            "connector.class": "HttpSourceConnector",
+            "tasks.max": 1,
+            "http.request.url": url,
+            "http.request.method": "GET",
+            "http.request.headers": "Accept: application/json",
+            "http.throttler.interval.millis": metricSource.interval.value,
+            "kafka.topic": entity_id
+        }
+    }
+    return config
 
-      for value in expression.values():
-        expression_values.append(value)
 
-      cont=0
-      for x in range(0,len(expression_keys)):
-        labels+=expression_keys[x]+"="+'"'+expression_values[x]+'"'
-        cont=cont+1
-        if(cont < len(expression_keys)):
-          labels+=", "
+def getQueryLabels(metricSource: MetricSource) -> str:
+    """
+    Print Prometheus labels to make them consumable
+    by Prometheus REST API
+    """
+    expression = metricSource.expression.value
+    labels = []
+    for label, value in expression.items():
+        labels.append("{0}='{1}'".format(label, value))
 
-      configuration['expression'] = labels
+    return ",".join(labels)
 
-    configuration['interval'] = metricsource.interval.value
-
-    configuration['class'] = metricsource.javaclass.value
-
-    configuration['topic'] = metricsource.topic.value
-
-    endpoint_id = metricsource.hasEndPoint.object
-
-    endpoint_entity=ngsi.retrieveEntityById(endpoint_id)
-    endpoint=Endpoint.parse_obj(endpoint_entity)
-
-    configuration['URI'] = endpoint.URI.value
-
-    return configuration
-
-def createKafkaConsumerThread(topic: str,
-                              metric_id: str,
-                              ngsi: ngsildClient) -> Thread:
-    thread = Thread(target=subscribeKafka,
-                    args=(topic, metric_id, ngsi),
-                    daemon=True)
-    thread.start()
-    return thread
-
-def subscribeKafka(topic: str, metric_id: str, ngsi: ngsildClient):
-    # Config Kafka Consumer
-    consumer = KafkaConsumer(
-                topic,
-                bootstrap_servers=['kafka:9092'],
-                auto_offset_reset='earliest',
-                enable_auto_commit=True,
-                group_id='my-group',
-                value_deserializer=lambda x: loads(x.decode('utf-8')))
-
-    # Subscribe to new messages in metric-topic
-    for message in consumer:
-        try:
-            message_value = message.value
-            value = message_value['value']
-            value = json.loads(value)
-            data = value['data']
-            result = data['result']
-            metric = result[0]
-            timestamp = metric['value'][0]
-            datetimestamp = datetime.fromtimestamp(timestamp).isoformat()+"Z"
-
-            metric_entity=ngsi.retrieveEntityById(metric_id)
-            metric_instance=Metric.parse_obj(metric_entity)
-            units = metric_instance.sample.unitCode
-
-            sample = {
-                "sample": {
-                    "type": "Property",
-                    "value": metric['value'][1],
-                    "observedAt": datetimestamp,
-                    "unitCode": units
-                }
-            }
-            ngsi.updateEntityAttrs(metric_id, sample)
-            # DELETEME: Used for debugging.
-            print("METRIC", metric_id,":", ngsi.retrieveEntityById(metric_id))
-            print("")
-
-        except IndexError:
-            continue
 
 if __name__ == '__main__':
 
     # Init NGSI-LD API Client
-    ngsi = ngsildClient(url="http://scorpio:9090",
-                    headers={"Accept": "application/ld+json"},
-                    context="http://context-catalog:8080/prometheus-context.jsonld")
+    ngsi = NGSILDClient(url="http://scorpio:9090",
+                        headers={"Accept": "application/json"},
+                        context="http://context-catalog:8080/context.jsonld")
 
     # Init Kafka Connect API Client
-    kafka_connect = kafkaConnectClient(url="http://kafka-connect:8083")
+    kafka_connect = KafkaConnectClient(url="http://kafka-connect:8083")
+    connect = kafka_connect.getAPIConnect()
+    logger.info("API Connect: {0}".format(connect))
+    connect_plugins = kafka_connect.getConnectorsPlugins()
+    logger.info("API Connect Plugins: {0}".format(connect_plugins))
 
-    connect=kafka_connect.getAPIConnect()
+    connectors = kafka_connect.getConnectors()
 
-    print("API Connect: ", connect)
-
-    print("")
-
-    connect_plugins=kafka_connect.getConnectorsPlugins()
-
-    print("API Connect Plugins: ", connect_plugins)
-
-    print("")
-
-    connectors=kafka_connect.getConnectors()
-
-    print("Kafka Connectors before: ", connectors)
-
-    print("")
-
-    metricsource_entities = ngsi.queryEntities(type="MetricSource")
-
-    for i in range(0, len(metricsource_entities)):
-        connector_config = getSourceConnectorConfig(ngsi, metricsource_entities[i]['id'])
-        url=""
-        if("expression" in metricsource_entities[i]):
-            url = connector_config['URI']+"?query="+connector_config['query']+"{"+connector_config['expression']+"}"
-        else :
-            url = connector_config['URI']+"?query="+connector_config['query']
-
-        config = {
-            "name": "prometheus-source-"+str(i+1),
-            "config": {
-                "connector.class": connector_config['class'],
-                "tasks.max": 1,
-                "http.request.url": url,
-                "http.request.method": "GET",
-                "http.request.headers": "Accept: application/json",
-                "http.throttler.interval.millis": connector_config['interval'],
-                "kafka.topic": connector_config['topic']
-            }
-        }
+    # Find MetricSources entities and donfig Kafka HTTP Source connectors
+    metricSources = [
+        MetricSource.parse_obj(x) for x in ngsi.queryEntities(
+            type="MetricSource")
+    ]
+    for metricSource in metricSources:
+        config = buildHTTPSourceConnector(metricSource, ngsi)
         kafka_connect.createConnector(config)
+        logger.info("MetricSource '{0}' configuration:\n{1}".format(
+                                                        metricSource.id,
+                                                        config))
 
-        print("MetricSource", metricsource_entities[i]['id'], "configuration:", config)
-        print("")
-
-    connectors=kafka_connect.getConnectors()
-
-    print("Kafka Connectors after: ", connectors)
-
-    print("")
-
-    threads = []
-    for i in range(0, len(metricsource_entities)):
-        metricsource=MetricSource.parse_obj(metricsource_entities[i])
-        # Open threads for Kafka consumers
-        topic = metricsource.topic.value
-        metric_id = metricsource.isSourceOf.object
-        print("Subscribing to metric", metric_id, "in topic", topic,"...")
-        print("")
-        thread = createKafkaConsumerThread(topic, metric_id, ngsi)
-        threads.append(thread)
-
-    for t in threads:
-        t.join()
-
-
+    while True:
+        pass

@@ -5,7 +5,7 @@ import requests
 # See https://docs.confluent.io/current/connect/references/restapi.html
 
 
-class kafkaConnectClient():
+class KafkaConnectClient():
     def __init__(
             self, url: str = "http://kafka-connect:8083",
             headers: dict = {},

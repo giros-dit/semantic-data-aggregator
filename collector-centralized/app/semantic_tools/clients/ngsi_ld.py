@@ -7,7 +7,7 @@ class Options(Enum):
     sysAttrs = "sysAttrs"
 
 
-class ngsildClient():
+class NGSILDClient():
     def __init__(
             self, url: str = "http://scorpio:9090",
             headers: dict = {},
