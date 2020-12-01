@@ -1,8 +1,15 @@
-from semantic_tools.clients.ngsi_ld import ngsildClient
+from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import MetricSource, Endpoint
 
+import logging
 
-def createEntities(ngsi: ngsildClient):
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+
+def createEntities(ngsi: NGSILDClient):
     # Create MetricSource entities
     metricsource1 = MetricSource(
             id="urn:ngsi-ld:MetricSource:1",
@@ -26,7 +33,9 @@ def createEntities(ngsi: ngsildClient):
     entities = ngsi.queryEntities(type="MetricSource")
     for entity in entities:
         metricsource = MetricSource.parse_obj(entity)
-        print(metricsource.json(indent=4, sort_keys=True, exclude_unset=True))
+        logger.info("\n" + metricsource.json(indent=4,
+                                             sort_keys=True,
+                                             exclude_unset=True))
 
     # Create Endpoint entity
     endpoint = Endpoint(id="urn:ngsi-ld:Endpoint:1",
@@ -38,11 +47,13 @@ def createEntities(ngsi: ngsildClient):
     # Get Endpoint entity by id
     response = ngsi.retrieveEntityById(entityId="urn:ngsi-ld:Endpoint:1")
     endpoint = Endpoint.parse_obj(response)
-    print(endpoint.json(indent=4, sort_keys=True, exclude_unset=True))
+    logger.info("\n" + endpoint.json(indent=4,
+                                     sort_keys=True,
+                                     exclude_unset=True))
 
 
 if __name__ == '__main__':
-    ngsi = ngsildClient(url="http://scorpio:9090",
+    ngsi = NGSILDClient(url="http://scorpio:9090",
                         headers={"Accept": "application/json"},
                         context="http://context-catalog:8080/context.jsonld")
 

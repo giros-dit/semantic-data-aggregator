@@ -1,7 +1,7 @@
-from semantic_tools.clients.ngsi_ld import ngsildClient
+from semantic_tools.clients.ngsi_ld import NGSILDClient
 
 
-def deleteEntities(ngsi: ngsildClient):
+def deleteEntities(ngsi: NGSILDClient):
 
     ngsi.deleteEntity("urn:ngsi-ld:MetricSource:1")
     ngsi.deleteEntity("urn:ngsi-ld:MetricSource:2")
@@ -9,7 +9,7 @@ def deleteEntities(ngsi: ngsildClient):
 
 
 if __name__ == '__main__':
-    ngsi = ngsildClient(url="http://scorpio:9090",
+    ngsi = NGSILDClient(url="http://scorpio:9090",
                         headers={"Accept": "application/ld+json"},
                         context="http://context-catalog:8080/context.jsonld")
     deleteEntities(ngsi)
