@@ -1,0 +1,18 @@
+{
+    "@context": {
+        "Credentials": "http://example.org/Credentials",
+        "authMethod": "http://example.org/authMethod",
+        "Endpoint": "http://example.org/Endpoint",
+        "hasLogin": "http://example.org/hasLogin",
+        "uri": "http://example.org/uri",
+        "MetricProcessor": "http://example.org/MetricProcessor",
+        "hasInput": "http://example.org/hasInput",
+        "operation": "http://example.org/operation",
+        "window": "http://example.org/window",
+        "MetricSource": "http://example.org/MetricSource",
+        "expression": "http://example.org/expression",
+        "hasEndPoint": "http://example.org/hasEndPoint",
+        "interval": "http://example.org/interval",
+        "MetricTarget": "http://example.org/MetricTarget"
+    }
+}
