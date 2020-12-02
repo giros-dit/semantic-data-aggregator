@@ -17,7 +17,7 @@ def createEntities(ngsi: NGSILDClient):
             expression={"value": {"job": "prometheus",
                                   "handler": "/api/v1/query"}},
             interval={"value": "10000", "unitCode": "ms"},
-            hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"})
+            hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
 
     ngsi.createEntity(metricsource1.dict(exclude_none=True))
 
@@ -25,7 +25,7 @@ def createEntities(ngsi: NGSILDClient):
             id="urn:ngsi-ld:MetricSource:2",
             name={"value": "rate(node_network_receive_bytes_total[1m])"},
             interval={"value": "60000", "unitCode": "ms"},
-            hasEndPoint={"object": "urn:ngsi-ld:Endpoint:1"})
+            hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
 
     ngsi.createEntity(metricsource2.dict(exclude_none=True))
 

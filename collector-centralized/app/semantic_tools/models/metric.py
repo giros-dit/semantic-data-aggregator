@@ -30,7 +30,7 @@ class MetricProcessor(Entity):
 class MetricSource(Entity):
     type: Literal["MetricSource"] = "MetricSource"
     expression: Optional[Property] = None
-    hasEndPoint: Relationship
+    hasEndpoint: Relationship
     interval: Property
     name: Property
 

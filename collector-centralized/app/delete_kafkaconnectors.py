@@ -1,6 +1,6 @@
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.clients.kafka_connect import KafkaConnectClient
-from semantic_tools.models.metric import MetricSource
+from semantic_tools.models.metric import MetricSource, Endpoint
 from kafka import KafkaClient, KafkaAdminClient, KafkaConsumer
 from kafka.errors import KafkaError
 import time
@@ -39,7 +39,10 @@ print("")
 for metricSource in metricSources:
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     connector_topics.append(entity_id)
-    kafka_connect_client.deleteConnector("prometheus-{0}".format(entity_id))
+    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
+    endpoint = Endpoint.parse_obj(endpoint_entity)
+    kafka_connect_client.deleteConnector("{0}-{1}".format(endpoint.name.value,
+                                                          entity_id))
 
 print("Kafka connectors after deletion:", kafka_connect_client.getConnectors())
 print("")

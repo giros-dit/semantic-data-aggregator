@@ -16,7 +16,7 @@ def buildHTTPSourceConnector(metricSource: MetricSource,
     Generate HTTP Source Connector configuration
     from a passed MetricSource entity
     """
-    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndPoint.object)
+    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
 
     url = ""
@@ -29,7 +29,7 @@ def buildHTTPSourceConnector(metricSource: MetricSource,
 
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     config = {
-        "name": "prometheus-{0}".format(entity_id),
+        "name": "{0}-{1}".format(endpoint.name.value, entity_id),
         "config": {
             "connector.class": "HttpSourceConnector",
             "tasks.max": 1,

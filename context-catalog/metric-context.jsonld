@@ -11,7 +11,7 @@
         "window": "http://example.org/window",
         "MetricSource": "http://example.org/MetricSource",
         "expression": "http://example.org/expression",
-        "hasEndPoint": "http://example.org/hasEndPoint",
+        "hasEndpoint": "http://example.org/hasEndpoint",
         "interval": "http://example.org/interval",
         "MetricTarget": "http://example.org/MetricTarget"
     }
