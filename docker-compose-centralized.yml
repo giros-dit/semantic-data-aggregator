@@ -7,6 +7,9 @@ services:
     container_name: collector
     volumes:
       - ./collector-centralized/app:/app
+    depends_on:
+      - scorpio
+      - kafka-connect
   # Re-use collector image to deploy dummy consumer
   consumer:
     build:

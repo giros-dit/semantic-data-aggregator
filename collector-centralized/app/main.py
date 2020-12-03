@@ -1,8 +1,11 @@
+from fastapi import FastAPI, status, Request
+from fastapi.responses import JSONResponse
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.clients.kafka_connect import KafkaConnectClient
-from semantic_tools.models.metric import MetricSource, Endpoint
+from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget
 
 import logging
+import sys
 
 logging.basicConfig(
         level=logging.INFO,
@@ -56,12 +59,12 @@ def getQueryLabels(metricSource: MetricSource) -> str:
     return ",".join(labels)
 
 
-if __name__ == '__main__':
-
+def initCollector():
     # Init NGSI-LD API Client
     ngsi = NGSILDClient(url="http://scorpio:9090",
                         headers={"Accept": "application/json"},
                         context="http://context-catalog:8080/context.jsonld")
+    ngsi.checkScorpioHealth()
 
     # Init Kafka Connect API Client
     kafka_connect = KafkaConnectClient(url="http://kafka-connect:8083")
@@ -70,9 +73,7 @@ if __name__ == '__main__':
     connect_plugins = kafka_connect.getConnectorsPlugins()
     logger.info("API Connect Plugins: {0}".format(connect_plugins))
 
-    connectors = kafka_connect.getConnectors()
-
-    # Find MetricSources entities and donfig Kafka HTTP Source connectors
+    # Find MetricSource entities and config Kafka HTTP Source connectors
     metricSources = [
         MetricSource.parse_obj(x) for x in ngsi.queryEntities(
             type="MetricSource")
@@ -84,5 +85,25 @@ if __name__ == '__main__':
                                                         metricSource.id,
                                                         config))
 
-    while True:
-        pass
+# Run  FastAPI server
+try:
+    initCollector()
+except Exception as e:
+    logger.exception(e)
+    sys.exit(1)
+
+# Init FastAPI server
+app = FastAPI(
+    title="Weaver API",
+    version="1.0.0")
+
+# API for NGSI-LD notifications
+@app.post("/notify",
+          status_code=status.HTTP_200_OK)
+async def receiveNotification(request: Request):
+    notifications = await request.json()
+    for notification in notifications["data"]:
+        metricTarget = MetricTarget.parse_obj(notification)
+        logger.info(metricTarget.json(indent=4,
+                                      sort_keys=True,
+                                      exclude_unset=True))

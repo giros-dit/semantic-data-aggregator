@@ -8,5 +8,6 @@ COPY ./app /app
 
 WORKDIR /app
 
-# Sleep forever until main.py is available
-CMD [ "tail", "-f", "/dev/null" ]
+EXPOSE 8080
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
