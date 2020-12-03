@@ -4,7 +4,6 @@
         "authMethod": "http://example.org/authMethod",
         "Endpoint": "http://example.org/Endpoint",
         "hasLogin": "http://example.org/hasLogin",
-        "uri": "http://example.org/uri",
         "MetricProcessor": "http://example.org/MetricProcessor",
         "hasInput": "http://example.org/hasInput",
         "operation": "http://example.org/operation",
