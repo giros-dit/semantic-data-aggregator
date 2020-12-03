@@ -1,3 +1,4 @@
+from create_entities import createEntities
 from fastapi import FastAPI, status, Request
 from fastapi.responses import JSONResponse
 from semantic_tools.clients.ngsi_ld import NGSILDClient
@@ -65,6 +66,13 @@ def initCollector():
                         headers={"Accept": "application/json"},
                         context="http://context-catalog:8080/context.jsonld")
     ngsi.checkScorpioHealth()
+
+    # Create pre-defined MetricSources for demo
+    try:
+        createEntities(ngsi)
+    except Exception as e:
+        logger.exception(e)
+        logger.warning("Keep running...")
 
     # Init Kafka Connect API Client
     kafka_connect = KafkaConnectClient(url="http://kafka-connect:8083")
