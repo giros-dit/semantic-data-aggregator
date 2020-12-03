@@ -56,6 +56,12 @@ services:
     depends_on:
       - kafka
       - zookeeper
+  nifi:
+    image: apache/nifi
+    hostname: nifi
+    container_name: nifi
+    ports:
+      - "8080:8080"
   node-exporter:
     image: prom/node-exporter
     hostname: node-exporter

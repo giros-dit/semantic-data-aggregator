@@ -2,4 +2,4 @@ fastapi==0.61.1
 kafka-python
 pydantic
 requests
-uvicorn==0.11.8
+nipyapi
