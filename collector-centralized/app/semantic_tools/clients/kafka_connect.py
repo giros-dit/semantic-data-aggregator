@@ -1,3 +1,6 @@
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
 import requests
 
 # Class built based on reference docs
@@ -15,6 +18,15 @@ class KafkaConnectClient():
         self.headers = headers
         self.url = url
         self.ssl_verification = not disable_ssl
+        # Retry strategy
+        retry_strategy = Retry(
+            total=10,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "PUT", "POST", "OPTIONS"],
+            backoff_factor=5
+        )
+        self._session = requests.Session()
+        self._session.mount(self.url, HTTPAdapter(max_retries=retry_strategy))
         self._session = requests.Session()
         self.headers['Accept'] = "application/json"
         self.headers['Content-Type'] = "application/json"

@@ -1,4 +1,7 @@
 from enum import Enum
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
 import requests
 
 
@@ -18,7 +21,15 @@ class NGSILDClient():
         self.headers = headers
         self.url = url
         self.ssl_verification = not disable_ssl
+        # Retry strategy
+        retry_strategy = Retry(
+            total=10,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "PUT", "POST", "OPTIONS"],
+            backoff_factor=5
+        )
         self._session = requests.Session()
+        self._session.mount(self.url, HTTPAdapter(max_retries=retry_strategy))
         self.context = context
         self.headers['Link'] = ('<{0}>;'
                                 ' rel="http://www.w3.org/ns/json-ld#context";'
@@ -46,6 +57,17 @@ class NGSILDClient():
             logging.getLogger().setLevel(logging.DEBUG)
             requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.propagate = True
+
+    def checkScorpioHealth(self):
+        """
+        Checks NGSI-LD Scorpio broker status is up
+        """
+        response = self._session.get(
+            "{0}/scorpio/v1/info/health".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        return response.ok
 
     # NGSI-LD Create Entity -> /entities
     def createEntity(self, entity: dict):
