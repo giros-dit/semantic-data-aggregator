@@ -72,7 +72,7 @@ services:
     ports:
       - "9099:9090"
     volumes:
-      - ./weaver/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
     hostname: scorpio
