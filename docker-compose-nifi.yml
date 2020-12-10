@@ -1,0 +1,97 @@
+version: '3'
+services:
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    hostname: consumer
+    container_name: consumer
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./consumer/app:/app
+  context-catalog:
+    image: halverneus/static-file-server
+    hostname: context-catalog
+    container_name: context-catalog
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./context-catalog:/web
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CONNECT_REST_PORT: 8083
+      KAFKA_LOG_DIRS: "/tmp/kafka-logs"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
+  nifi:
+    image: apache/nifi
+    hostname: nifi
+    container_name: nifi
+    ports:
+      - "8080:8080"
+  node-exporter:
+    image: prom/node-exporter
+    hostname: node-exporter
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    depends_on:
+      - prometheus
+  postgres:
+    image: mdillon/postgis
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+    logging:
+      driver: none
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9099:9090"
+    volumes:
+      - ./weaver/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  scorpio:
+    image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
+    hostname: scorpio
+    container_name: scorpio
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kafka
+      - postgres
+  weaver:
+    build:
+      context: ./weaver
+    hostname: weaver
+    container_name: weaver
+    volumes:
+      - ./weaver/app:/app
+    depends_on:
+      - scorpio
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181"
+    logging:
+      driver: none
+    working_dir: /
