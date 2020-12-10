@@ -605,7 +605,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"ContextSourceRegistration\",\r\n    \"name\": \"cSource1\",\r\n    \"description\": \"cSource Registration for Metric\",\r\n    \"information\": [\r\n        {\r\n            \"entities\": [\r\n                {\r\n                \"type\": \"Metric\"\r\n                }\r\n            ],\r\n            \"properties\": [\r\n                \"sample\"\r\n            ]\r\n        }\r\n    ],\r\n    \"endpoint\": \"http://collector:8080\"\r\n}",
+							"raw": "{\r\n    \"type\": \"ContextSourceRegistration\",\r\n    \"name\": \"cSource1\",\r\n    \"description\": \"cSource Registration for Metric\",\r\n    \"information\": [\r\n        {\r\n            \"entities\": [\r\n                {\r\n                \"type\": \"Metric\"\r\n                }\r\n            ],\r\n            \"properties\": [\r\n                \"sample\"\r\n            ]\r\n        }\r\n    ],\r\n    \"endpoint\": \"http://weaver:8080\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

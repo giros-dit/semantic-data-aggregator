@@ -1,26 +1,15 @@
 version: '3'
 services:
-  collector:
-    build:
-      context: ./collector
-      dockerfile: Dockerfile
-    hostname: collector
-    container_name: collector
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./collector/app:/app
-  # Re-use collector image to deploy dummy consumer
   consumer:
     build:
-      context: ./collector
+      context: ./consumer
       dockerfile: Dockerfile
     hostname: consumer
     container_name: consumer
     ports:
       - "8081:8080"
     volumes:
-      - ./collector/app:/app
+      - ./consumer/app:/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -45,8 +34,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
-    logging:
-      driver: none
   kafka-connect:
     build:
       context: ./kafka/connect
@@ -58,14 +45,6 @@ services:
     depends_on:
       - kafka
       - zookeeper
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
-    ports:
-      - "9099:9090"
-    volumes:
-      - ./collector/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   node-exporter:
     image: prom/node-exporter
     hostname: node-exporter
@@ -86,6 +65,14 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9099:9090"
+    volumes:
+      - ./weaver/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
     hostname: scorpio
@@ -95,6 +82,16 @@ services:
     depends_on:
       - kafka
       - postgres
+  weaver:
+    build:
+      context: ./weaver
+    hostname: weaver
+    container_name: weaver
+    volumes:
+      - ./weaver/app:/app
+    depends_on:
+      - scorpio
+      - kafka-connect
   zookeeper:
     image: zookeeper
     hostname: zookeeper
