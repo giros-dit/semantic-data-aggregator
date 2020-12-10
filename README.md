@@ -1,10 +1,12 @@
-# Prometheus-collector
+# Semantic Data Aggregator
 
-Docker-based prototype that deploys a Prometheus metrics collector along with Scorpio Broker as the NGSI-LD context broker. 
+Docker-based prototype that deploys the semantic data aggregator.
 
-The metrics collector leverages Kafka Connect to configure Source/Sink Kafka Connectors that provide functionalities such as retrieving Prometheus metrics by polling Prometheus REST API. For the sake of simplicity, the metrics collector configures Kafka Connectors to use the same Kafka instance that Scorpio runs for its internal communication bus.
+The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the Scorpio Broker while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by Kafka. These agents are dynamically configured by the weaver which subscribes to the context broker for news definitions of data sources and data consumers.
 
-Additionally, we use the metrics collector's Docker image - that runs a webserver programmed with FastAPI - to deploy a dummy context consumer. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from NGSI-LD subscriptions.
+The weaver leverages Kafka Connect to configure Source/Sink Kafka Connectors that provide functionalities such as retrieving Prometheus metrics by polling Prometheus REST API. For the sake of simplicity, the weaver configures Kafka Connectors to use the same Kafka instance that Scorpio runs for its internal communication bus.
+
+Additionally, a dummy context consumer is deployed based on a simple docker image that runs a FastAPI webserver. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from HTTP subscriptions.
 
 ![Docker Prototype](docs/collectors-docker-prototype.png)
 
