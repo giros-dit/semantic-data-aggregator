@@ -100,7 +100,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>flinkkafka.FlinkKafka</mainClass>
+                  <mainClass>flinkkafka.TrafficRate</mainClass>
                 </transformer>
               </transformers>
             </configuration>
