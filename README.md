@@ -35,5 +35,5 @@ This repository contains Postman collections that you can use to play with the R
   
 - [API REST Kafka Connect.postman_collection](postman_collections/API%20REST%20Kafka%20Connect.postman_collection.json) provides example requests for all the supported operations in [Kafka Connect REST API](https://docs.confluent.io/current/connect/references/restapi.html).
 
-- [API REST Flink.postman_collection](postmam_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
+- [API REST Flink.postman_collection](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
     
