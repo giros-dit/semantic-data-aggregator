@@ -1,0 +1,149 @@
+version: '3'
+services:
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    hostname: consumer
+    container_name: consumer
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./consumer/app:/app
+  context-catalog:
+    image: halverneus/static-file-server
+    hostname: context-catalog
+    container_name: context-catalog
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./context-catalog:/web
+  jobmanager:
+    image: flink:latest
+    hostname: jobmanager
+    container_name: jobmanager
+    ports:
+      - "8084:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+    volumes:
+      - ./flink-conf:/flink-conf
+  taskmanager:
+    image: flink:latest
+    hostname: taskmanager
+    container_name: taskmanager
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CONNECT_REST_PORT: 8083
+      KAFKA_LOG_DIRS: "/tmp/kafka-logs"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
+  kafka-connect:
+    build:
+      context: ./kafka/connect
+      dockerfile: Dockerfile
+    hostname: kafka-connect
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+      - zookeeper
+  kafka-streams:
+    image: ubuntu:18.04
+    hostname: kafka-streams
+    container_name: kafka-streams
+    build:
+      context: ./kafka/streams
+    depends_on:
+      - kafka
+      - zookeeper
+    volumes:
+      - ./kafka/streams/streams.examples:/kafka_2.13-2.6.0/streams.examples
+    command: tail -f /dev/null
+  node-exporter-1:
+    image: prom/node-exporter
+    hostname: node-exporter-1
+    container_name: node-exporter-1
+    ports:
+      - "9100:9100"
+    depends_on:
+      - prometheus
+  node-exporter-2:
+    image: prom/node-exporter
+    hostname: node-exporter-2
+    container_name: node-exporter-2
+    ports:
+      - "9101:9100"
+    depends_on:
+      - prometheus
+  postgres:
+    image: mdillon/postgis
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+    logging:
+      driver: none
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9099:9090"
+    volumes:
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  scorpio:
+    image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
+    hostname: scorpio
+    container_name: scorpio
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kafka
+      - postgres
+  weaver:
+    build:
+      context: ./weaver
+    hostname: weaver
+    container_name: weaver
+    volumes:
+      - ./weaver/app:/app
+    depends_on:
+      - scorpio
+      - kafka-connect
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181"
+    logging:
+      driver: none
+    working_dir: /

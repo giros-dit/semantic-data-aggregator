@@ -5,6 +5,8 @@ def deleteEntities(ngsi: NGSILDClient):
 
     ngsi.deleteEntity("urn:ngsi-ld:MetricSource:1")
     ngsi.deleteEntity("urn:ngsi-ld:MetricSource:2")
+    ngsi.deleteEntity("urn:ngsi-ld:MetricSource:3")
+    ngsi.deleteEntity("urn:ngsi-ld:MetricSource:4")
     ngsi.deleteEntity("urn:ngsi-ld:Endpoint:1")
 
 

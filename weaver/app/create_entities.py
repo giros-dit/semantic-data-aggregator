@@ -16,18 +16,35 @@ def createEntities(ngsi: NGSILDClient):
             name={"value": "prometheus_http_requests_total"},
             expression={"value": {"job": "prometheus",
                                   "handler": "/api/v1/query"}},
-            interval={"value": "10000", "unitCode": "ms"},
+            interval={"value": "10000", "unitCode": "C26"},
             hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
 
     ngsi.createEntity(metricsource1.dict(exclude_none=True))
 
     metricsource2 = MetricSource(
             id="urn:ngsi-ld:MetricSource:2",
-            name={"value": "rate(node_network_receive_bytes_total[1m])"},
-            interval={"value": "60000", "unitCode": "ms"},
+            #name={"value": "rate(node_network_receive_bytes_total[1m])"},
+	    name={"value": "node_network_transmit_packets_total"},
+            interval={"value": "10000", "unitCode": "C26"},
             hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
 
     ngsi.createEntity(metricsource2.dict(exclude_none=True))
+
+    metricsource3 = MetricSource(id="urn:ngsi-ld:MetricSource:3",
+                              name={"value": "node_load1"},
+                              expression={"value": {"job": "node-1"}},
+                              interval={"value": "60000", "unitCode": "C26"},
+                              hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
+
+    ngsi.createEntity(metricsource3.dict(exclude_none=True))
+
+    metricsource4 = MetricSource(id="urn:ngsi-ld:MetricSource:4",
+                              name={"value": "node_load1"},
+                              expression={"value": {"job": "node-2"}},
+                              interval={"value": "60000", "unitCode": "C26"},
+                              hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"})
+
+    ngsi.createEntity(metricsource4.dict(exclude_none=True))
 
     # Query MetricSource entities
     entities = ngsi.queryEntities(type="MetricSource")
