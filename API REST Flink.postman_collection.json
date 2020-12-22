@@ -1,0 +1,516 @@
+{
+	"info": {
+		"_postman_id": "e74509c0-747a-49d9-8ff7-2a9b661bf74e",
+		"name": "API REST Flink",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get WebUI configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/config",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload application1 jar to Flink Cluster",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Expect",
+						"value": "jarfile=@{{path/to/flink-app1.jar}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jars/upload",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jars",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload application2 jar to Flink Cluster",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Expect",
+						"value": "jarfile=@{{path/to/flink-app2.jar}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jars/upload",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jars",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Flink Job1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jars/{{app1-jar-id}}/run?entry-class={{app1-class}}",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jars",
+						"{{app1-jar-id}}",
+						"run"
+					],
+					"query": [
+						{
+							"key": "entry-class",
+							"value": "{{app1-class}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Flink Job2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jars/{{app2-jar-id}}/run?entry-class={{app2-class}}",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jars",
+						"{{app2-jar-id}}",
+						"run"
+					],
+					"query": [
+						{
+							"key": "entry-class",
+							"value": "{{app2-class}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink application jars",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jars",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink Jobs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobs",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobs"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink Jobs Overview",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobs/overview",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobs",
+						"overview"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink Jobs Metrics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobs/metrics",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobs",
+						"metrics"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Flink Job1",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobs/{{job1-id}}?mode=cancel",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobs",
+						"{{job1-id}}"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "cancel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Flink Job2",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobs/{{job2-id}}?mode=cancel",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobs",
+						"{{job2-id}}"
+					],
+					"query": [
+						{
+							"key": "mode",
+							"value": "cancel"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink JobManager configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobmanager/config",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobmanager",
+						"config"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink JobManager logs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobmanager/logs",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobmanager",
+						"logs"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flink JobManager metrics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{flink}}/jobmanager/metrics",
+					"protocol": "http",
+					"host": [
+						"{{flink}}"
+					],
+					"path": [
+						"jobmanager",
+						"metrics"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4b880b3c-f274-4437-bd3f-17f105c8d52b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "438b6066-ca25-4a99-adb9-d32740597c50",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "45dc820b-59b7-4115-994b-f1ac3e9719e4",
+			"key": "flink",
+			"value": "localhost:8084"
+		},
+		{
+			"id": "ed3386d4-3cca-4166-b85d-e8b1c837a9fb",
+			"key": "path/to/flink-app1.jar",
+			"value": "flink-conf/flink-kafka-uc1/target/flinkkafka-0.0.1-SNAPSHOT.jar"
+		},
+		{
+			"id": "bf18234d-5825-4594-9447-5a978f32335f",
+			"key": "path/to/flink-app2.jar",
+			"value": "flink-conf/flink-kafka-uc2/target/flinkkafka-0.0.1-SNAPSHOT.jar"
+		},
+		{
+			"id": "e4dcb2d2-18bf-4b4c-9836-8904eb76d93d",
+			"key": "app1-class",
+			"value": "flinkkafka.TrafficAvg"
+		},
+		{
+			"id": "dd562280-6116-4b27-bdb7-9f6ad178c698",
+			"key": "app2-class",
+			"value": "flinkkafka.TrafficRate"
+		},
+		{
+			"id": "8a18be4d-3553-4d23-b8ad-29d521b36355",
+			"key": "app1-jar-id",
+			"value": ""
+		},
+		{
+			"id": "7634542b-dd4f-4404-9d47-2032716898bb",
+			"key": "app2-jar-id",
+			"value": ""
+		},
+		{
+			"id": "dc0646ad-0c32-433a-a3cb-56eb95729828",
+			"key": "job1-id",
+			"value": ""
+		},
+		{
+			"id": "16e118b0-0162-46a9-bb2a-1aa065297a43",
+			"key": "job2-id",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
