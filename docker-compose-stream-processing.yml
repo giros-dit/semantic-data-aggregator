@@ -18,31 +18,31 @@ services:
       - "8082:8080"
     volumes:
       - ./context-catalog:/web
-  jobmanager:
+  flink-jobmanager:
     image: flink:latest
-    hostname: jobmanager
-    container_name: jobmanager
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
     ports:
       - "8084:8081"
     command: jobmanager
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
     volumes:
       - ./flink-conf:/flink-conf
-  taskmanager:
+  flink-taskmanager:
     image: flink:latest
-    hostname: taskmanager
-    container_name: taskmanager
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
     depends_on:
-      - jobmanager
+      - flink-jobmanager
     command: taskmanager
     scale: 1
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
   kafka:
     image: wurstmeister/kafka
