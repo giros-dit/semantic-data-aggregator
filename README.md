@@ -35,6 +35,4 @@ This repository contains Postman collections that you can use to play with the R
 
 - [NGSI-LD Prometheus.postman_collection](postman_collections/NGSI-LD%20Prometheus.postman_collection.json) is a set of requests that can be used to interact with the [NGSI-LD Scorpio Broker](https://github.com/ScorpioBroker/ScorpioBroker). This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in NGSI-LD. The requests contained in this collection can be utilized with other NGSI-LD compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
   
-- [API REST Kafka Connect.postman_collection](postman_collections/API%20REST%20Kafka%20Connect.postman_collection.json) provides example requests for all the supported operations in [Kafka Connect REST API](https://docs.confluent.io/current/connect/references/restapi.html).
-
 - [API REST Flink.postman_collection](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
