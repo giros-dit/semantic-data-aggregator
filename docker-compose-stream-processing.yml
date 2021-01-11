@@ -45,7 +45,7 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
   kafka:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:latest
     hostname: kafka
     container_name: kafka
     ports:
@@ -81,7 +81,7 @@ services:
       - kafka
       - zookeeper
     volumes:
-      - ./kafka/streams/streams.examples:/kafka_2.13-2.6.0/streams.examples
+      - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
     command: tail -f /dev/null
   node-exporter-1:
     image: prom/node-exporter
