@@ -1,20 +1,20 @@
 from create_entities import createEntities
 from fastapi import FastAPI, status, Request
-from fastapi.responses import JSONResponse
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget
+from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
 
 import logging
 import nipyapi
 import time
-import sys
 
 logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
 
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
@@ -40,16 +40,18 @@ def deployMetricSource(metricSource: MetricSource,
     root_pg = nipyapi.canvas.get_process_group("root")
     # Y multiply ID last integer by 200, X fixed to -250 for MS PGs
     ms_pg = nipyapi.canvas.create_process_group(
-                    root_pg, 
-                    metricSource.id, 
+                    root_pg,
+                    metricSource.id,
                     (-250, 200*source_id_number)
     )
     # Set variable for MS PG
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
-    nipyapi.canvas.update_variable_registry(ms_pg, 
+    nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
     # Deploy MS template
-    ms_pg_flow = nipyapi.templates.deploy_template(ms_pg.id, ms_template.id, -250, 200)
+    ms_pg_flow = nipyapi.templates.deploy_template(ms_pg.id,
+                                                   ms_template.id,
+                                                   -250, 200)
     # Retrieve GET Prometheus API processor
     http_ps = None
     for ps in ms_pg_flow.flow.processors:
@@ -57,11 +59,12 @@ def deployMetricSource(metricSource: MetricSource,
             http_ps = ps
             break
     # Update GET Prometheus API interval to the requested value
+    interval_unit = UnitCode[metricSource.interval.unitCode].value
     nipyapi.canvas.update_processor(
-        http_ps, 
-        nipyapi.nifi.ProcessorConfigDTO(scheduling_period='{0}{1}'.format(
-                                                    metricSource.interval.value,
-                                                    metricSource.interval.unitCode)))
+        http_ps,
+        nipyapi.nifi.ProcessorConfigDTO(
+            scheduling_period='{0}{1}'.format(metricSource.interval.value,
+                                              interval_unit)))
     return ms_pg
 
 
@@ -79,15 +82,16 @@ def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     root_pg = nipyapi.canvas.get_process_group("root")
     # Y multiply ID last integer by 200, X fixed to 250 for MT PGs
     mt_pg = nipyapi.canvas.create_process_group(
-                    root_pg, 
-                    metricTarget.id, 
-                    (250, 200*target_id_number)
-    )
+                    root_pg,
+                    metricTarget.id,
+                    (250, 200*target_id_number))
     # Deploy MT template
-    mt_pg_flow = nipyapi.templates.deploy_template(mt_pg.id, mt_template.id)
-    #Set variables for MT PG
-    nipyapi.canvas.update_variable_registry(mt_pg, [("topic", input_id)])
-    nipyapi.canvas.update_variable_registry(mt_pg, [("consumer_url", metricTarget.uri.value)])
+    nipyapi.templates.deploy_template(mt_pg.id, mt_template.id)
+    # Set variables for MT PG
+    nipyapi.canvas.update_variable_registry(
+        mt_pg, [("topic", input_id)])
+    nipyapi.canvas.update_variable_registry(
+        mt_pg, [("consumer_url", metricTarget.uri.value)])
     return mt_pg
 
 
@@ -103,14 +107,16 @@ def getQueryLabels(metricSource: MetricSource) -> str:
 
     return ",".join(labels)
 
+
 def loadEntities(ngsi: NGSILDClient):
     # Wait until Scorpio is up
     ngsi.checkScorpioHealth()
     # Create pre-defined MetricSources for demo
     try:
         createEntities(ngsi)
-    except Exception as e:
-        logger.warning("Could not load NGSI-LD entities. Keep running...") 
+    except Exception:
+        logger.warning("Could not load NGSI-LD entities. Keep running...")
+
 
 def loadMetricSources(ngsi: NGSILDClient):
     # Find MetricSource entities and config Kafka HTTP Source connectors
@@ -120,25 +126,25 @@ def loadMetricSources(ngsi: NGSILDClient):
     ]
     for metricSource in metricSources:
         ms_pg = deployMetricSource(metricSource, ngsi)
-        # Schedule MT PG 
+        # Schedule MT PG
         nipyapi.canvas.schedule_process_group(ms_pg.id, True)
 
 
-##### Init NGSI-LD API Client
+# Init NGSI-LD API Client
 ngsi = NGSILDClient(url="http://scorpio:9090",
                     headers={"Accept": "application/json"},
                     context="http://context-catalog:8080/context.jsonld")
-##### Load demo NGSI-LD entities
+# Load demo NGSI-LD entities
 loadEntities(ngsi)
 
-##### Init NiFi REST API Client
+# Init NiFi REST API Client
 # Set NiFi endpoint
 nipyapi.config.nifi_config.host = "http://nifi:8080/nifi-api"
 # Quick loop to wait for NiFi REST API to be up
 while True:
     try:
         nipyapi.system.get_nifi_version_info()
-    except MaxRetryError as e:
+    except MaxRetryError:
         logger.warning("Could not connect to NiFi REST API. "
                        "Retrying in 30 seconds ...")
         time.sleep(30)
@@ -148,15 +154,18 @@ while True:
 # Get root PG
 root_pg = nipyapi.canvas.get_process_group("root")
 # Upload templates
-ms_template = nipyapi.templates.upload_template(root_pg.id, "/app/nifi/MetricSource.xml")
-mt_template = nipyapi.templates.upload_template(root_pg.id, "/app/nifi/MetricTarget.xml")  
+ms_template = nipyapi.templates.upload_template(
+    root_pg.id, "/app/nifi/MetricSource.xml")
+mt_template = nipyapi.templates.upload_template(
+    root_pg.id, "/app/nifi/MetricTarget.xml")
 # Deploy pre-loaded MetricSources
 loadMetricSources(ngsi)
 
-##### Init FastAPI server
+# Init FastAPI server
 app = FastAPI(
     title="Weaver API",
     version="1.0.0")
+
 
 # API for NGSI-LD notifications
 @app.post("/notify",
@@ -166,6 +175,7 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         metricTarget = MetricTarget.parse_obj(notification)
         mt_pg = deployMetricTarget(metricTarget)
-        # Schedule MT PG 
+        # Schedule MT PG
         nipyapi.canvas.schedule_process_group(mt_pg.id, True)
-        logger.info("MetricTarget '{0}' scheduled in NiFi.".format(metricTarget.id))
+        logger.info(
+            "MetricTarget '{0}' scheduled in NiFi.".format(metricTarget.id))
