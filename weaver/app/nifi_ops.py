@@ -73,7 +73,8 @@ def deployMetricSource(metricSource: MetricSource,
             http_ps = ps
             break
     # Update GET Prometheus API interval to the requested value
-    interval_unit = UnitCode[metricSource.interval.unitCode].value
+    # interval_unit = UnitCode[metricSource.interval.unitCode].value
+    interval_unit = "ms"
     nipyapi.canvas.update_processor(
         http_ps,
         nipyapi.nifi.ProcessorConfigDTO(
