@@ -10,14 +10,6 @@ services:
       - "8081:8080"
     volumes:
       - ./consumer/app:/app
-  context-catalog:
-    image: halverneus/static-file-server
-    hostname: context-catalog
-    container_name: context-catalog
-    ports:
-      - "8082:8080"
-    volumes:
-      - ./context-catalog:/web
   kafka:
     image: wurstmeister/kafka
     hostname: kafka
@@ -48,18 +40,6 @@ services:
       - "9100:9100"
     depends_on:
       - prometheus
-  postgres:
-    image: mdillon/postgis
-    hostname: postgres
-    container_name: postgres
-    ports:
-      - "5432"
-    environment:
-      POSTGRES_USER: ngb
-      POSTGRES_PASSWORD: ngb
-      POSTGRES_DB: ngb
-    logging:
-      driver: none
   prometheus:
     image: prom/prometheus
     hostname: prometheus
@@ -67,25 +47,7 @@ services:
     ports:
       - "9099:9090"
     volumes:
-      - ./weaver/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
-  scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_1.0.2
-    hostname: scorpio
-    container_name: scorpio
-    ports:
-      - "9090:9090"
-    depends_on:
-      - kafka
-      - postgres
-  weaver:
-    build:
-      context: ./weaver
-    hostname: weaver
-    container_name: weaver
-    volumes:
-      - ./weaver/app:/app
-    depends_on:
-      - scorpio
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   zookeeper:
     image: zookeeper
     hostname: zookeeper
