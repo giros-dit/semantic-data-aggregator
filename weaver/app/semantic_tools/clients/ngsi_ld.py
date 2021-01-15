@@ -58,6 +58,18 @@ class NGSILDClient():
             requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.propagate = True
 
+    def checkOrionHealth(self):
+        """
+        Checks NGSI-LD Orion-LD broker status is up
+        """
+        response = self._session.get(
+            "{0}/version".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        return response.ok
+
+
     def checkScorpioHealth(self):
         """
         Checks NGSI-LD Scorpio broker status is up
@@ -158,7 +170,4 @@ class NGSILDClient():
             verify=self.ssl_verification,
             headers=self.headers,
         )
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return response.raise_for_status()
+        return response.ok
