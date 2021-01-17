@@ -22,7 +22,6 @@ class Endpoint(Entity):
 class MetricProcessor(Entity):
     type: Literal["MetricProcessor"] = "MetricProcessor"
     hasInput: Relationship
-    interval: Property
     operation: Property
     window: Property
 

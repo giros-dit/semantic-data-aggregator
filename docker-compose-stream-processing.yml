@@ -54,22 +54,10 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_CONNECT_REST_PORT: 8083
       KAFKA_LOG_DIRS: "/tmp/kafka-logs"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - zookeeper
-  kafka-connect:
-    build:
-      context: ./kafka/connect
-      dockerfile: Dockerfile
-    hostname: kafka-connect
-    container_name: kafka-connect
-    ports:
-      - "8083:8083"
-    depends_on:
-      - kafka
       - zookeeper
   kafka-streams:
     image: ubuntu:18.04
@@ -83,6 +71,12 @@ services:
     volumes:
       - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
     command: tail -f /dev/null
+  nifi:
+    image: apache/nifi
+    hostname: nifi
+    container_name: nifi
+    ports:
+      - "8080:8080"
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
@@ -136,8 +130,8 @@ services:
     volumes:
       - ./weaver/app:/app
     depends_on:
+      - nifi
       - scorpio
-      - kafka-connect
   zookeeper:
     image: zookeeper
     hostname: zookeeper

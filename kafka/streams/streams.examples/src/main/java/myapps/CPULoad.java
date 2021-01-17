@@ -63,15 +63,17 @@ public class CPULoad {
 				//System.out.println("Topic value: " + value);
 				JSONObject jso = new JSONObject(value);
 				//value = jso.get("value").toString();
+				JSONArray metric_value = new JSONArray(jso.get("value").toString());
+				value = metric_value.get(1).toString();
 
 				// IMPORTANTE MANTENER SI NO HAY TRANSFORMACIONES DE DATOS PREVIA!
-				JSONObject data_value = new JSONObject(jso.get("value").toString());
+				/*JSONObject data_value = new JSONObject(jso.get("value").toString());
 				JSONObject data = new JSONObject(data_value.get("data").toString());
-				JSONArray result = new JSONArray(data.get("result").toString()); JSONObject
-				metric = result.getJSONObject(0); JSONArray metric_value = new
-				JSONArray(metric.get("value").toString());
+				JSONArray result = new JSONArray(data.get("result").toString());
+				JSONObject metric = result.getJSONObject(0);
+				JSONArray metric_value = new JSONArray(metric.get("value").toString());*/
 				//System.out.println("Metric value: " + metric_value.get(1));
-				value = metric_value.get(1).toString();
+				//value = metric_value.get(1).toString();
 
 				array.add(value);
 			} catch (JSONException e) {
@@ -112,6 +114,7 @@ public class CPULoad {
 				value = value.split("-")[1];
 				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 				JSONObject result = new JSONObject();
+				result.accumulate("metric_name", "CPULoad");
 				result.accumulate("value", value);
 				result.accumulate("timestamp", timestamp);
 				array.add(result.toString());
@@ -121,7 +124,7 @@ public class CPULoad {
 			}
 			return array;
 		})
-		.to("metricsource-3-4-output", Produced.with(windowedSerde, Serdes.String()));
+		.to("metricprocessor-2", Produced.with(windowedSerde, Serdes.String()));
 
 		Topology topology = builder.build();
 		System.out.println(topology.describe());

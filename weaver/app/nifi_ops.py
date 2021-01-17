@@ -45,6 +45,7 @@ def deployMetricSource(metricSource: MetricSource,
                metricSource.name.value + "{" + labels + "}")
     else:
         url = endpoint.uri.value + "?query=" + metricSource.name.value
+    logger.info("DANI URL '{0}'.".format(url))
     # Get topic name from input ID
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # We assume last string is an integer value

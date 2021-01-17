@@ -54,17 +54,18 @@ public class TrafficRate {
 				try {
 					System.out.println("Topic value: " + value);
 					JSONObject jso = new JSONObject(value);
-					//value = jso.get("value").toString();
+					JSONArray metric_value = new JSONArray(jso.get("value").toString());
+					value = metric_value.get(1).toString();
 
 					// IMPORTANTE MANTENER SI NO HAY TRANSFORMACIONES DE DATOS PREVIA!
-					JSONObject data_value = new JSONObject(jso.get("value").toString());
+					/*JSONObject data_value = new JSONObject(jso.get("value").toString());
 					JSONObject data = new JSONObject(data_value.get("data").toString());
-					JSONArray result = new JSONArray(data.get("result").toString()); JSONObject
-					metric = result.getJSONObject(0); JSONArray metric_value = new
-					JSONArray(metric.get("value").toString());
+					JSONArray result = new JSONArray(data.get("result").toString());
+					JSONObject metric = result.getJSONObject(0);
+					JSONArray metric_value = new JSONArray(metric.get("value").toString());*/
 
 					// System.out.println("Metric value: " + metric_value.get(1));
-					value = metric_value.get(1).toString();
+					//value = metric_value.get(1).toString();
 					//JSONObject result = new JSONObject();
 					//result.append("value", value);
 				} catch (JSONException e) {
@@ -94,6 +95,7 @@ public class TrafficRate {
 		    public String map(String value) throws Exception {
 				try {
 					JSONObject result = new JSONObject();
+					result.accumulate("metric_name", "TrafficRate");
 					result.accumulate("value", value.split("-")[1]);
 					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 					result.accumulate("timestamp", timestamp.toString());

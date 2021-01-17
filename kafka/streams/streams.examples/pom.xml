@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>streams.examples</groupId>
-    <artifactId>streams.examples</artifactId>
+    <artifactId>streams.CPULoad</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
 
