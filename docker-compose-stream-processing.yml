@@ -122,6 +122,14 @@ services:
     depends_on:
       - kafka
       - postgres
+  stream-catalog:
+    image: halverneus/static-file-server
+    hostname: stream-catalog
+    container_name: stream-catalog
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver

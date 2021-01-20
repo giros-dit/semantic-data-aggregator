@@ -39,12 +39,20 @@ services:
     container_name: nifi
     ports:
       - "8080:8080"
-  node-exporter:
+  node-exporter-1:
     image: prom/node-exporter
-    hostname: node-exporter
-    container_name: node-exporter
+    hostname: node-exporter-1
+    container_name: node-exporter-1
     ports:
       - "9100:9100"
+    depends_on:
+      - prometheus
+  node-exporter-2:
+    image: prom/node-exporter
+    hostname: node-exporter-2
+    container_name: node-exporter-2
+    ports:
+      - "9101:9100"
     depends_on:
       - prometheus
   postgres:
