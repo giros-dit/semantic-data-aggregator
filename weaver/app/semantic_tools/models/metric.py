@@ -22,8 +22,9 @@ class Endpoint(Entity):
 class MetricProcessor(Entity):
     type: Literal["MetricProcessor"] = "MetricProcessor"
     hasInput: Relationship
-    operation: Property
-    window: Property
+    hasApplication: Relationship
+    name: Property
+    arguments: Optional[Property] = None
 
 
 class MetricSource(Entity):
@@ -37,4 +38,12 @@ class MetricSource(Entity):
 class MetricTarget(Entity):
     type: Literal["MetricTarget"] = "MetricTarget"
     hasInput: Relationship
+    uri: _URI
+
+class StreamApplication(Entity):
+    type: Literal["StreamApplication"] = "StreamApplication"
+    fileName: Property
+    fileId: Property
+    entryClass: Property
+    description: Property
     uri: _URI
