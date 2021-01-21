@@ -43,10 +43,10 @@ async def startup_event():
     # Upload MetricSource and MetricTarget templates
     nifi_ops.upload_templates()
     # Subscribe to data pipeline stage entities
-    ngsi_ld.subscribeMetricSource(ngsi, weaver_uri)
-    ngsi_ld.subscribeMetricProcessor(ngsi, weaver_uri)
-    ngsi_ld.subscribeStreamApplication(ngsi, weaver_uri)
-    ngsi_ld.subscribeMetricTarget(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
 
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
