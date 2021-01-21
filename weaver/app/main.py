@@ -39,7 +39,7 @@ async def startup_event():
           status_code=status.HTTP_200_OK)
 async def receiveNotification(request: Request):
     notifications = await request.json()
-    print("NOTA", notifications)
+    print("NOTIFICATION:", notifications)
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)

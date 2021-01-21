@@ -20,34 +20,29 @@ def uploadStreamApp(streamApplication: StreamApplication, ngsi: NGSILDClient, fl
     time.sleep(2)
 
     # Upload JAR file
-    logger.info("\n Upload Flink jar: {0}".format(flink.uploadJar(streamApplication.fileName.value)))
+    jar_uploaded = flink.uploadJar(streamApplication.fileName.value)
+    logger.info("\n Upload Flink jar: {0}".format(jar_uploaded))
 
-    # Remove JAR file from system store
+    # Remove JAR file from Weaver system store
     subprocess.call(["rm", streamApplication.fileName.value])
 
     # Update StreamApplication Entity with JAR id and entry-class
-    files = flink.getFlinkAppsJars()['files']
-    print("FILES", files)
-    file_id=""
+    jarfiles = flink.getFlinkAppsJars()['files']
+    jarfile_id=""
     entries=""
     entry_name=""
-    for file in files:
-    	print(file["id"])
-    	if file["name"] == streamApplication.fileName.value:
-    		file_id=file["id"]
-    		print("FILE ID", file_id)
-    		entries=file["entry"]
-    		print("ENTRIES", entries)
+    for jarfile in jarfiles:
+    	if jarfile["name"] == streamApplication.fileName.value:
+    		jarfile_id=jarfile["id"]
+    		entries=jarfile["entry"]
 
     for entry in entries:
     	entry_name=entry["name"]
 
-    print("ENTRY NAME", entry_name)
-
     fileId_dict = {
 	"fileId": {
 		"type": "Property",
-		"value": file_id
+		"value": jarfile_id
         }
     }
 
@@ -63,26 +58,35 @@ def uploadStreamApp(streamApplication: StreamApplication, ngsi: NGSILDClient, fl
     ngsi.updateEntityAttrs(streamApplication.id, entryClass_dict)
 
 def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink: FlinkClient):
-    streamapp_entity = ngsi.retrieveEntityById(metricProcessor.hasApplication.object)
-    streamapp = StreamApplication.parse_obj(streamapp_entity)
-
-    files = flink.getFlinkAppsJars()['files']
-    file_id=""
+    streamApplication_entity = ngsi.retrieveEntityById(metricProcessor.hasApplication.object)
+    streamApplication = StreamApplication.parse_obj(streamApplication_entity)
 
     # Retrieve StreamApplication Entity JAR id
-    for file in files:
-    	if file["name"] == streamapp.fileName.value:
-    		file_id=file["id"]
+    jarfile_id = streamApplication.fileId.value
+
+    """
+    jarfiles = flink.getFlinkAppsJars()['files']
+    jarfile_id=""
+
+    for jarfile in jarfiles:
+    	if jarfile["name"] == streamApplication.fileName.value:
+    		jarfile_id=jarfile["id"]
+    """
 
     # Run job for JAR id
-    logger.info("\n Submit Flink Job: {0}".format(flink.submitJob(file_id)))
+    job_submitted = flink.submitJob(jarfile_id)
+    logger.info("\n Submit Flink Job: {0}".format(job_submitted))
+    job_id = job_submitted['jobid']
 
     # Update MetricProcessor Entity with Job id
+
+    """
     jobs = flink.getFlinkJobs()["jobs"]
     job_id=""
     for job in jobs:
         if job['status'] == 'RUNNING':
                 job_id=job["id"]
+    """
 
     jobId_dict = {
         "jobId": {

@@ -59,18 +59,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
-  kafka-streams:
-    image: ubuntu:18.04
-    hostname: kafka-streams
-    container_name: kafka-streams
-    build:
-      context: ./kafka/streams
-    depends_on:
-      - kafka
-      - zookeeper
-    volumes:
-      - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
-    command: tail -f /dev/null
+#  kafka-streams:
+#    image: ubuntu:18.04
+#    hostname: kafka-streams
+#    container_name: kafka-streams
+#    build:
+#      context: ./kafka/streams
+#    depends_on:
+#      - kafka
+#      - zookeeper
+#    volumes:
+#      - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
+#    command: tail -f /dev/null
   nifi:
     image: apache/nifi
     hostname: nifi
