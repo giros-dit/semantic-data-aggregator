@@ -1,7 +1,10 @@
 from fastapi import FastAPI, status, Request
 from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import MetricSource, MetricTarget, MetricProcessor, StreamApplication
+from semantic_tools.models.metric import (
+    MetricSource, MetricTarget,
+    MetricProcessor, StreamApplication
+)
 
 import flink_ops
 import logging
@@ -48,6 +51,7 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
 
+
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
 async def receiveNotification(request: Request):
@@ -60,8 +64,8 @@ async def receiveNotification(request: Request):
             metricTarget = MetricTarget.parse_obj(notification)
             nifi_ops.instantiateMetricTarget(metricTarget)
         if notification["type"] == "MetricProcessor":
-        	metricProcessor = MetricProcessor.parse_obj(notification)
-        	flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
+            metricProcessor = MetricProcessor.parse_obj(notification)
+            flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
         if notification["type"] == "StreamApplication":
-        	streamApplication = StreamApplication.parse_obj(notification)
-        	flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
+            streamApplication = StreamApplication.parse_obj(notification)
+            flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
