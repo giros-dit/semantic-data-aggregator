@@ -4,14 +4,21 @@
         "authMethod": "http://example.org/authMethod",
         "Endpoint": "http://example.org/Endpoint",
         "hasLogin": "http://example.org/hasLogin",
-        "MetricProcessor": "http://example.org/MetricProcessor",
         "hasInput": "http://example.org/hasInput",
-        "operation": "http://example.org/operation",
-        "window": "http://example.org/window",
+        "uri": "http://example.org/uri",
         "MetricSource": "http://example.org/MetricSource",
         "expression": "http://example.org/expression",
         "hasEndpoint": "http://example.org/hasEndpoint",
         "interval": "http://example.org/interval",
-        "MetricTarget": "http://example.org/MetricTarget"
+        "MetricTarget": "http://example.org/MetricTarget",
+        "MetricProcessor": "http://example.org/MetricProcessor",
+        "hasApplication": "http://example.org/hasApplication",
+        "jobId": "http://example.org/jobId",
+        "arguments": "http://example.org/arguments",
+	"StreamApplication": "http://example.org/StreamApplication",
+	"fileName": "http://example.org/fileName",
+	"fileId": "http://example.org/fileId",
+	"entryClass": "http://example.org/entryClass",
+	"description": "http://example.org/description"
     }
 }
