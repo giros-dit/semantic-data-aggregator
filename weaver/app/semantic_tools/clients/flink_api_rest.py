@@ -150,7 +150,7 @@ class FlinkClient():
 
         params = {}
         if entryClass:
-            params['entry-class'] = entryclass
+            params['entry-class'] = entryClass
 
         if programArg:
             params['programArg'] = programArg

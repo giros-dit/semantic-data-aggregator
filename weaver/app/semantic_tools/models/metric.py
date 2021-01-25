@@ -21,7 +21,6 @@ class MetricSource(Entity):
     hasEndpoint: Relationship
     interval: Property
     name: Property
-    TSDB: Property
 
 class MetricTarget(Entity):
     type: Literal["MetricTarget"] = "MetricTarget"
