@@ -5,7 +5,6 @@
         "Endpoint": "http://example.org/Endpoint",
         "hasLogin": "http://example.org/hasLogin",
         "hasInput": "http://example.org/hasInput",
-        "uri": "http://example.org/uri",
         "MetricSource": "http://example.org/MetricSource",
         "expression": "http://example.org/expression",
         "hasEndpoint": "http://example.org/hasEndpoint",
@@ -18,7 +17,6 @@
 	"StreamApplication": "http://example.org/StreamApplication",
 	"fileName": "http://example.org/fileName",
 	"fileId": "http://example.org/fileId",
-	"entryClass": "http://example.org/entryClass",
-	"description": "http://example.org/description"
+	"entryClass": "http://example.org/entryClass"
     }
 }
