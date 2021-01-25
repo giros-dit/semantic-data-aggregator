@@ -168,6 +168,70 @@ class NGSILDClient():
         response = self._session.delete(
             "{0}/ngsi-ld/v1/entities/{1}".format(self.url, entityId),
             verify=self.ssl_verification,
-            headers=self.headers,
+            headers=self.headers
         )
-        return response.ok
+        if response.status_code != 204:
+            response.raise_for_status()
+
+    # NGSI-LD Create Subscription -> /subscriptions
+    def createSubscription(self, subscription: dict):
+        """
+        Creates a new Subscription within an NGSI-LD system
+        """
+        response = self._session.post(
+            "{0}/ngsi-ld/v1/subscriptions/".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            json=subscription
+        )
+        if response.status_code != 201:
+            response.raise_for_status()
+
+    # NGSI-LD Retrieve Subscription -> /subscriptions/{subscriptionId}
+    def retrieveSubscription(self, subscriptionId: str = None):
+        """
+        Retrieves a specific Subscription from an NGSI-LD system
+        """
+        response = self._session.get(
+            "{0}/ngsi-ld/v1/subscriptions/{1}".format(self.url,
+                                                      subscriptionId),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        if response.status_code == 200:
+            return response
+        else:
+            response.raise_for_status()
+
+    # NGSI-LD Retrieve Subscriptions -> /subscriptions
+    def retrieveSubscriptions(self, limit: int = None):
+        """
+        Retrieves the Subscriptions available in an NGSI-LD system
+        """
+        params = {}
+        if limit:
+            params['limit'] = limit
+        response = self._session.get(
+            "{0}/ngsi-ld/v1/subscriptions".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            params=params
+        )
+        if response.status_code == 200:
+            return response
+        else:
+            response.raise_for_status()
+
+    # NGSI-LD Delete Subscription -> /subscriptions/{subscriptionId}
+    def removeSubscription(self, subscriptionId: str):
+        """
+        Removes a specific Subscription from an NGSI-LD system
+        """
+        response = self._session.delete(
+            "{0}/ngsi-ld/v1/subscriptions/{1}".format(self.url,
+                                                      subscriptionId),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        if response.status_code != 204:
+            response.raise_for_status()

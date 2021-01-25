@@ -1,9 +1,27 @@
 {
   "$schema": "http://json-schema.org/schema#",
   "$id": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/subscriptions/Subscription.json",
-  "title": "NGSI-LD Subscription",
-  "description": "NGSI-LD Subscription",
+  "title": "Subscription",
+  "description": "Subscription",
   "definitions": {
+    "EntityInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "$ref": "#/definitions/Name"
+        },
+        "idPattern": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
     "NotificationParams": {
       "type": "object",
       "properties": {
@@ -78,7 +96,7 @@
         "entities": {
           "type": "array",
           "items": {
-            "$ref": "https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/schema/common.json#/definitions/EntityInfo"
+            "$ref": "#/definitions/EntityInfo"
           },
           "minItems": 1
         },
