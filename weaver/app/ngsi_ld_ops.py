@@ -49,11 +49,51 @@ def _subscribeToEntity(ngsi: NGSILDClient,
             % subscriptionType.name
         )
 
-def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
+def _subscribeToEntityAttribute(ngsi: NGSILDClient,
+                      subscriptionType: SubscriptionType,
+                      uri: str, attribute: str):
+    """
+    Method to create subscription to a particular attribute
+    for one of the available subscription types
+    """
+    attributes = []
+    attributes.append(attribute)
+    try:
+        logger.info(
+            "Subscribing weaver to %s entities ..."
+            % subscriptionType.name
+        )
+        response = ngsi.retrieveSubscription(
+            subscriptionType.value)
+    except:
+        subscription = Subscription(
+            id=subscriptionType.value,
+            entities=[
+                {
+                    "type": subscriptionType.name
+                }
+            ],
+            watchedAttributes=attributes,
+            notification={
+                "endpoint": {
+                    "uri": uri
+                }
+            }
+        )
+        ngsi.createSubscription((subscription.dict(exclude_none=True)))
+    else:
+        logger.info(
+            "Weaver is already subscribed to %s entities!"
+            % subscriptionType.name
+        )
+
+
+
+def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str, attribute: str):
     """
     Create subscription for MetricProcessor entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor, uri)
+    _subscribeToEntityAttribute(ngsi, SubscriptionType.MetricProcessor, uri, attribute)
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
@@ -67,8 +107,9 @@ def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricTarget, uri)
 
-def subscribeStreamApplication(ngsi: NGSILDClient, uri: str):
+def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
     """
     Create subscription for StreamApplication entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.StreamApplication, uri)
+    _subscribeToEntityAttribute(ngsi, SubscriptionType.StreamApplication, uri, attribute)
+
