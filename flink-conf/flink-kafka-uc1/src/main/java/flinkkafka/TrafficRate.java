@@ -9,6 +9,11 @@ import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -45,7 +50,7 @@ public class TrafficRate {
 		StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
 
 		//Consume data stream from Kafka topic
-		FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>("metricsource-2", new SimpleStringSchema(), props);
+		FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>(args[0], new SimpleStringSchema(), props);
 		DataStream<String> stringInputStream = environment.addSource(consumer);
 
 		DataStream<String> metric_values = stringInputStream.map(new MapFunction<String, String>(){
@@ -77,10 +82,10 @@ public class TrafficRate {
 		});
 
 		//Produce data stream for Kafka topic
-		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>("metricsource-2-rate", new SimpleStringSchema(), props);
+		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>(args[1], new SimpleStringSchema(), props);
 
 		//WindowedStream<String, String, TimeWindow> win_values = metric_values.keyBy(value -> "traffic_record").window(TumblingEventTimeWindows.of(Time.seconds(10)));
-		metric_values.keyBy(value -> "traffic_records").countWindow(2,1)/*windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))*/
+		metric_values.keyBy(value -> "traffic_records").countWindow(2,1)/*window(TumblingProcessingTimeWindows.of(Time.seconds(10)))*/
 		/*DataStreamSink<String> values = win_values*/.reduce(new ReduceFunction<String>() {
 		    @Override
 		    public String reduce(String value1, String value2)

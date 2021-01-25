@@ -1,6 +1,6 @@
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.clients.flink_api_rest import FlinkClient
-from semantic_tools.models.metric import MetricProcessor, StreamApplication
+from semantic_tools.models.metric import MetricSource, MetricProcessor, StreamApplication
 
 import logging
 import subprocess
@@ -64,30 +64,24 @@ def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink:
     # Retrieve StreamApplication Entity JAR id
     jarfile_id = streamApplication.fileId.value
 
-    """
-    jarfiles = flink.getFlinkAppsJars()['files']
-    jarfile_id=""
+    # Infer input_topic argument from hasInput relationship
+    input_topic = metricProcessor.hasInput.object.strip("urn:ngsi-ld:").replace(":", "-").lower()
 
-    for jarfile in jarfiles:
-    	if jarfile["name"] == streamApplication.fileName.value:
-    		jarfile_id=jarfile["id"]
-    """
+    # Infer output_topic argument from id argument
+    output_topic = metricProcessor.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+
+    # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
+    arguments = getArguments(metricProcessor, input_topic, output_topic)
+
+    # Get a entry class of the Stream Aplication
+    entryClass = streamApplication.entryClass.value
 
     # Run job for JAR id
-    job_submitted = flink.submitJob(jarfile_id)
+    job_submitted = flink.submitJob(jarfile_id, entryClass, arguments)
     logger.info("\n Submit Flink Job: {0}".format(job_submitted))
-    job_id = job_submitted['jobid']
 
     # Update MetricProcessor Entity with Job id
-
-    """
-    jobs = flink.getFlinkJobs()["jobs"]
-    job_id=""
-    for job in jobs:
-        if job['status'] == 'RUNNING':
-                job_id=job["id"]
-    """
-
+    job_id = job_submitted['jobid']
     jobId_dict = {
         "jobId": {
                 "type": "Property",
@@ -96,6 +90,7 @@ def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink:
     }
     ngsi.updateEntityAttrs(metricProcessor.id, jobId_dict)
 
+
 def deleteStreamApps(flink: FlinkClient):
     jobs = flink.getFlinkJobs()["jobs"]
 
@@ -103,25 +98,26 @@ def deleteStreamApps(flink: FlinkClient):
         if job['status'] == 'RUNNING':
                 logger.info("\n Delete Flink Job: {0}".format(flink.deleteJob(job["id"])))
 
-"""
-def createStreamAppEntity(jarfile, ngsi: NGSILDClient, flink: FlinkClient):
-    # Create StreamApplication entity
-    streamapp = StreamApplication(id="urn:ngsi-ld:StreamApplication:1",
-                        fileName={"value": jarfile},
-                        fileId={"value": "null"},
-			entryClass={"value": "null"},
-                        description={"value": "description"},
-                        uri={"value": "http://stream-catalog:8080/{0}".format(jarfile)})
 
-    ngsi.createEntity(streamapp.dict(exclude_none=True))
+def getArguments(metricProcessor: MetricProcessor, input_topic: str, output_topic: str) -> str:
 
-    # Get StreamApplication entity by id
-    response = ngsi.retrieveEntityById(entityId="urn:ngsi-ld:StreamApplication:1")
-    streamapp = StreamApplication.parse_obj(response)
-    logger.info("\n" + streamapp.json(indent=4,
-                                     sort_keys=True,
-                                     exclude_unset=True))
-"""
+    arguments_list = []
+    arguments_list.append(input_topic)
+    arguments_list.append(output_topic)
+
+    if(metricProcessor.arguments):
+    	arguments_property = metricProcessor.arguments.value
+    	for key, value in arguments_property.items():
+    		arguments_list.append(value)
+
+    arguments = ""
+    for i in range(0,len(arguments_list)):
+        if(i < (len(arguments_list)-1)):
+                arguments += arguments_list[i]+","
+        else:
+                arguments += arguments_list[i]
+
+    return arguments
 
 """
 if __name__ == '__main__':

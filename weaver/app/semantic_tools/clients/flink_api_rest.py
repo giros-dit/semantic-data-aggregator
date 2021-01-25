@@ -137,21 +137,26 @@ class FlinkClient():
             return response.raise_for_status()
 
     # Submit a Flink job
-    def submitJob(self, jarid: str, entryclass: str = None):
+    def submitJob(self, jarId: str, entryClass: str = None, programArg: str = None):
         """
 	Submits a job by running a jar previously uploaded via '/jars/upload'. Program arguments can be passed both via the JSON request (recommended) or query parameters.
 
-	jarid - String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID. This value is equivalent to the `id` field in the list of uploaded jars (/jars).
+	jarId - String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID. This value is equivalent to the `id` field in the list of uploaded jars (/jars).
 
 	entry-class (optional): String value that specifies the fully qualified name of the entry point class. Overrides the class defined in the jar file manifest.
+
+	programArg (optional): Comma-separated list of program arguments.
         """
 
         params = {}
-        if entryclass:
+        if entryClass:
             params['entry-class'] = entryclass
 
+        if programArg:
+            params['programArg'] = programArg
+
         response = self._session.post(
-            "{0}/jars/{1}/run".format(self.url, jarid),
+            "{0}/jars/{1}/run".format(self.url, jarId),
             verify=self.ssl_verification,
             headers=self.headers,
 	    params=params

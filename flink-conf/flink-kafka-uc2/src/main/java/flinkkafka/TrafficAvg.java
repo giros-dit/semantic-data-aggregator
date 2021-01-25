@@ -34,7 +34,7 @@ public class TrafficAvg {
 		StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
 
 		//Consume data stream from Kafka topic
-		FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>("metricsource-2-rate", new SimpleStringSchema(), props);
+		FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>(args[0], new SimpleStringSchema(), props);
 
 		DataStream<String> stringInputStream = environment.addSource(consumer);
 
@@ -66,10 +66,10 @@ public class TrafficAvg {
 		});
 
 		//Produce data stream for Kafka topic
-		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>("metricprocessor-1", new SimpleStringSchema(), props);
+		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>(args[1], new SimpleStringSchema(), props);
 
 		//WindowedStream<String, String, TimeWindow> win_values = metric_values.keyBy(value -> "traffic_record").window(TumblingEventTimeWindows.of(Time.seconds(10)));
-		metric_values/*.keyBy(value -> "traffic_record")*/.countWindowAll(6)/*window(TumblingEventTimeWindows.of(Time.seconds(10)))*/
+		metric_values/*.keyBy(value -> "traffic_record")*/.countWindowAll(Integer.parseInt(args[2]))/*window(TumblingEventTimeWindows.of(Time.seconds(10)))*/
 		/*DataStreamSink<String> values = win_values*/.reduce(new ReduceFunction<String>() {
 		    @Override
 		    public String reduce(String value1, String value2)
@@ -84,9 +84,8 @@ public class TrafficAvg {
 		    public String map(String value) throws Exception {
 				try {
 					JSONObject result = new JSONObject();
-					//result.accumulate("value", value);
 					result.accumulate("metric_name", "TrafficAverage");
-					result.accumulate("value", Float.toString(Float.parseFloat(value)/6));
+					result.accumulate("value", Float.toString(Float.parseFloat(value)/Integer.parseInt(args[2])));
 					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 					result.accumulate("timestamp", timestamp.toString());
 					value = result.toString();
