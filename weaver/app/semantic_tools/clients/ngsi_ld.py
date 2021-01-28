@@ -146,6 +146,28 @@ class NGSILDClient():
         else:
             response.raise_for_status()
 
+    # NGSI-LD obtain Entity by 'q' filter -> /entities/?{type=...}&{q=property==...}
+    def obtainEntityByFilter(self, type: str, q: str = None, options: Options = None) -> dict:
+        """
+        Retrieve a entity which matches
+        a specific query filter from an NGSI-LD system
+        """
+        params = {}
+        if type:
+            params['type'] = type
+        elif q:
+            params['q'] = q
+        response = self._session.get(
+            "{0}/ngsi-ld/v1/entities".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            params=params
+        )
+        if response.status_code == 200:
+            return response.json()
+        else:
+            response.raise_for_status()
+
     # NGSI-LD Update Entity Attributes -> /entities/{entityId}/attrs
     def updateEntityAttrs(self, entityId: str, fragment: dict):
         """

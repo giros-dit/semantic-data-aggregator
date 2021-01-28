@@ -71,7 +71,7 @@ def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink:
     output_topic = metricProcessor.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
 
     # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
-    arguments = getArguments(metricProcessor, input_topic, output_topic)
+    arguments = getStreamAppArguments(metricProcessor, input_topic, output_topic)
 
     # Get a entry class of the Stream Aplication
     entryClass = streamApplication.entryClass.value
@@ -90,16 +90,31 @@ def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink:
     }
     ngsi.updateEntityAttrs(metricProcessor.id, jobId_dict)
 
-
-def deleteStreamApps(flink: FlinkClient):
+def deleteStreamJobs(ngsi: NGSILDClient, flink: FlinkClient):
     jobs = flink.getFlinkJobs()["jobs"]
+    jobId = ""
 
     for job in jobs:
         if job['status'] == 'RUNNING':
-                logger.info("\n Delete Flink Job: {0}".format(flink.deleteJob(job["id"])))
+        	jobId = job['id']
+        	qValue = "jobId=="+'"'+jobId+'"'
+        	metricProcessor_entity = ngsi.obtainEntityByFilter(type="MetricProcessor", q=qValue)
+        	metricProcessor = MetricProcessor.parse_obj(metricProcessor_entity[0])
+        	logger.info("\n Delete MetricProcessor Entity with id {0}".format(metricProcessor.id, ngsi.deleteEntity(metricProcessor.id)))
+        	logger.info("\n Delete Flink Job with id {0}".format(flink.deleteJob(jobId)))
 
+def deleteStreamJob(ngsi: NGSILDClient, flink: FlinkClient, metricProcessorId: str):
+    metricProcessor_entity = ngsi.retrieveEntityById(metricProcessorId)
+    metricProcessor = MetricProcessor.parse_obj(metricProcessor_entity)
+    jobId = metricProcessor.jobId.value
+    jobs = flink.getFlinkJobs()["jobs"]
 
-def getArguments(metricProcessor: MetricProcessor, input_topic: str, output_topic: str) -> str:
+    for job in jobs:
+        if job['status'] == 'RUNNING' and jobId == job['id']:
+        	logger.info("\n Delete MetricProcessor Entity with id {0}".format(metricProcessor.id, ngsi.deleteEntity(metricProcessor.id)))
+        	logger.info("\n Delete Flink Job with id {0}".format(flink.deleteJob(jobId)))
+
+def getStreamAppArguments(metricProcessor: MetricProcessor, input_topic: str, output_topic: str) -> str:
 
     arguments_list = []
     arguments_list.append(input_topic)
@@ -118,21 +133,3 @@ def getArguments(metricProcessor: MetricProcessor, input_topic: str, output_topi
                 arguments += arguments_list[i]
 
     return arguments
-
-"""
-if __name__ == '__main__':
-    ngsi = NGSILDClient(url="http://scorpio:9090",
-                        headers={"Accept": "application/json"},
-                        context="http://context-catalog:8080/context.jsonld")
-    flink = FlinkClient(url="http://flink-jobmanager:8081", headers={"Accept": "application/json", "Content-Type": "application/json"})
-
-    streamApplication_entity = ngsi.retrieveEntityById("urn:ngsi-ld:StreamApplication:1")
-    streamApplication = StreamApplication.parse_obj(streamApplication_entity)
-
-    uploadStreamApp(streamApplication, ngsi, flink)
-
-    metricProcessor_entity = ngsi.retrieveEntityById("urn:ngsi-ld:MetricProcessor:1")
-    metricProcessor = MetricProcessor.parse_obj(metricProcessor_entity)
-
-    submitStreamJob(metricProcessor, ngsi, flink)
-"""

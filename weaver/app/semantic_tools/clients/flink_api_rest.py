@@ -128,7 +128,6 @@ class FlinkClient():
             "{0}/jars/upload".format(self.url),
             verify=self.ssl_verification,
 	    #headers=self.headers,
-            #files=files
             files={"jar": (os.path.basename(jarfile), open(jarfile, "rb"), "application/x-java-archive")}
         )
         if response.status_code == 200:
@@ -167,7 +166,7 @@ class FlinkClient():
             return response.raise_for_status()
 
     # Delete a Flink job
-    def deleteJob(self, jobid: str):
+    def deleteJob(self, jobId: str):
         """
 	Cancel/Stop a Flink job.
         """
@@ -176,13 +175,13 @@ class FlinkClient():
         params['mode'] = "cancel"
 
         response = self._session.patch(
-            "{0}/jobs/{1}".format(self.url, jobid),
+            "{0}/jobs/{1}".format(self.url, jobId),
             verify=self.ssl_verification,
             headers=self.headers,
             params=params
         )
-        if response.status_code == 200:
-            return response.json()
+        if response.status_code == 202:
+            return jobId
         else:
             return response.raise_for_status()
 
