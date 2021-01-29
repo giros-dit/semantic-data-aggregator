@@ -97,7 +97,7 @@ class NGSILDClient():
 
     # NGSI-LD Query Entity -> /entities
     def queryEntities(self, entityId: str = None, attrs: str = None,
-                      type: str = None, options: Options = None) -> dict:
+                      type: str = None, q: str = None, options: Options = None) -> dict:
         """
         Retrieve a set of entities which matches
         a specific query from an NGSI-LD system
@@ -107,6 +107,8 @@ class NGSILDClient():
             params['attrs'] = attrs
         elif type:
             params['type'] = type
+        elif q:
+            params['q'] = q
         elif options:
             params['options'] = options
         response = self._session.get(
@@ -137,28 +139,6 @@ class NGSILDClient():
             params['options'] = options
         response = self._session.get(
             "{0}/ngsi-ld/v1/entities/{1}".format(self.url, entityId),
-            verify=self.ssl_verification,
-            headers=self.headers,
-            params=params
-        )
-        if response.status_code == 200:
-            return response.json()
-        else:
-            response.raise_for_status()
-
-    # NGSI-LD obtain Entity by 'q' filter -> /entities/?{type=...}&{q=property==...}
-    def obtainEntityByFilter(self, type: str, q: str = None, options: Options = None) -> dict:
-        """
-        Retrieve a entity which matches
-        a specific query filter from an NGSI-LD system
-        """
-        params = {}
-        if type:
-            params['type'] = type
-        elif q:
-            params['q'] = q
-        response = self._session.get(
-            "{0}/ngsi-ld/v1/entities".format(self.url),
             verify=self.ssl_verification,
             headers=self.headers,
             params=params

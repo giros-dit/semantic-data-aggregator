@@ -90,15 +90,15 @@ def submitStreamJob(metricProcessor: MetricProcessor, ngsi: NGSILDClient, flink:
     }
     ngsi.updateEntityAttrs(metricProcessor.id, jobId_dict)
 
-def deleteStreamJobs(ngsi: NGSILDClient, flink: FlinkClient):
+def deleteAllStreamJobs(ngsi: NGSILDClient, flink: FlinkClient):
     jobs = flink.getFlinkJobs()["jobs"]
     jobId = ""
 
     for job in jobs:
         if job['status'] == 'RUNNING':
         	jobId = job['id']
-        	qValue = "jobId=="+'"'+jobId+'"'
-        	metricProcessor_entity = ngsi.obtainEntityByFilter(type="MetricProcessor", q=qValue)
+        	filter = "jobId=="+'"'+jobId+'"'
+        	metricProcessor_entity = ngsi.queryEntities(type="MetricProcessor", q=filter)
         	metricProcessor = MetricProcessor.parse_obj(metricProcessor_entity[0])
         	logger.info("\n Delete MetricProcessor Entity with id {0}".format(metricProcessor.id, ngsi.deleteEntity(metricProcessor.id)))
         	logger.info("\n Delete Flink Job with id {0}".format(flink.deleteJob(jobId)))
