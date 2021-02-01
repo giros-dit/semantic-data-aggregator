@@ -4,6 +4,10 @@ from pydantic import AnyUrl
 from typing import Literal, Optional
 
 
+class _ModeResultProperty(Property):
+    modeInfo: Optional[Property]
+
+
 class _URI(Property):
     value: AnyUrl
 
@@ -32,14 +36,10 @@ class Endpoint(Entity):
     uri: _URI
 
 
-class ModeResultProperty(Property):
-    modeInfo: Optional[Property]
-
-
 class MetricStage(Entity):
     type: Literal["MetricStage"] = "MetricStage"
     stageMode: Property
-    modeResult: ModeResultProperty
+    modeResult: _ModeResultProperty
 
 
 class MetricSource(MetricStage):
