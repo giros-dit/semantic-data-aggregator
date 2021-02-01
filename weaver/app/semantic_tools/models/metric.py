@@ -1,27 +1,10 @@
 from .ngsi_ld.entity import Entity, Property, Relationship
-from enum import Enum
 from pydantic import AnyUrl
 from typing import Literal, Optional
 
 
-class _ModeResultProperty(Property):
-    modeInfo: Optional[Property]
-
-
 class _URI(Property):
     value: AnyUrl
-
-
-class ModeResult(Enum):
-    in_progress = "IN_PROGRESS"
-    successful = "SUCCESSFUL"
-    failed = "FAILED"
-
-
-class StageMode(Enum):
-    start = "START"
-    stop = "STOP"
-    failed = "TERMINATE"
 
 
 class Credentials(Entity):
@@ -36,10 +19,19 @@ class Endpoint(Entity):
     uri: _URI
 
 
+class StageMode(Property):
+    value: Literal["START", "STOP", "TERMINATE"]
+
+
+class ModeResult(Property):
+    value: Literal["IN_PROGRESS", "SUCCESSFUL", "FAILED"]
+    modeInfo: Optional[Property]
+
+
 class MetricStage(Entity):
     type: Literal["MetricStage"] = "MetricStage"
-    stageMode: Property
-    modeResult: _ModeResultProperty
+    stageMode: StageMode
+    modeResult: Optional[ModeResult]
 
 
 class MetricSource(MetricStage):

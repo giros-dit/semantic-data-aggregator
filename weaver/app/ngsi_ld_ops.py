@@ -59,6 +59,43 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
+def stageToInProgress(ngsi: NGSILDClient, entityId: str):
+    """
+    Update modeResult of a given stage to IN_PROGRESS
+    """
+    result = {
+        "modeResult": ModeResult(
+            value="IN_PROGRESS"
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, result)
+
+
+def stageToFailed(ngsi: NGSILDClient, entityId: str):
+    """
+    Update modeResult of a given stage to FAILED
+    """
+    result = {
+        "modeResult": ModeResult(
+            value="SUCCESSFUL",
+            modeInfo={"value": "ERROR. Add Python traceback here."}
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, result)
+
+
+def stageToSuccessful(ngsi: NGSILDClient, entityId: str):
+    """
+    Update modeResult of a given stage to SUCCESSFUL
+    """
+    result = {
+        "modeResult": ModeResult(
+            value="SUCCESSFUL"
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, result)
+
+
 def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str, attribute: str):
     """
     Create subscription for MetricProcessor entity
