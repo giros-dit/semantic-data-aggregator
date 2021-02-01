@@ -96,25 +96,28 @@ def stageToSuccessful(ngsi: NGSILDClient, entityId: str):
     ngsi.updateEntityAttrs(entityId, result)
 
 
-def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str, attribute: str):
+def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricProcessor entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricProcessor, uri, attribute)
+    _subscribeToEntity(ngsi, SubscriptionType.metricProcessor,
+                       uri, "stageMode")
 
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricSource entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricSource, uri)
+    _subscribeToEntity(ngsi, SubscriptionType.metricSource,
+                       uri, "stageMode"),
 
 
 def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricTarget entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricTarget, uri)
+    _subscribeToEntity(ngsi, SubscriptionType.metricTarget,
+                       uri, "stageMode")
 
 
 def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
