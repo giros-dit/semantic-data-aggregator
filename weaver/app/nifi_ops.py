@@ -206,7 +206,7 @@ def processMetricSourceMode(metricSource: MetricSource,
             "Terminate '{0}' NiFi flow.".format(
                 metricSource.id)
         )
-        terminateMetricSource(metricSource)
+        deleteMetricSource(metricSource)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricSource)
         logger.info("Delete '{0}' entity".format(metricSource.id))
         ngsi.deleteEntity(metricSource.id)
@@ -252,7 +252,7 @@ def processMetricTargetMode(metricTarget: MetricTarget,
             "Terminate '{0}' NiFi flow.".format(
                 metricTarget.id)
         )
-        terminateMetricTarget(metricTarget)
+        deleteMetricTarget(metricTarget)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget)
         logger.info("Delete '{0}' entity".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
@@ -274,22 +274,20 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
 
 
-def terminateMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
+def deleteMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
-    Delete MetricSource flow and associated NGSI-LD entity
+    Delete MetricSource flow
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
-    ngsi.deleteEntity(metricSource.id)
 
 
-def terminateMetricTarget(metricTarget: MetricTarget, ngsi: NGSILDClient):
+def deleteMetricTarget(metricTarget: MetricTarget, ngsi: NGSILDClient):
     """
-    Delete MetricTarget flow and associated NGSI-LD entity
+    Delete MetricTarget flow
     """
     ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
-    ngsi.deleteEntity(metricTarget.id)
 
 
 def upgradeMetricSouce(metricSource: MetricSource, ngsi: NGSILDClient):

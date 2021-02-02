@@ -80,6 +80,19 @@ class FlinkClient():
             return response.raise_for_status()
 
     # Get Flink jobs
+    def getFlinkJob(self, jobId: str):
+        """
+        Returns a specific job.
+         """
+        response = self._session.get("{0}/job/{1}".format(self.url, jobId),
+                                     verify=self.ssl_verification,
+                                     headers=self.headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+
+    # Get Flink jobs
     def getFlinkJobs(self):
         """
 	Returns a description over all jobs and their current state.

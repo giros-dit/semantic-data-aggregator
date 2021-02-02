@@ -66,7 +66,7 @@ async def receiveNotification(request: Request):
             nifi_ops.processMetricTargetMode(metricTarget, ngsi)
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
+            flink_ops.processMetricProcessorMode(metricProcessor, ngsi, flink)
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
             flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
