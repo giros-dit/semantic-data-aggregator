@@ -45,7 +45,6 @@ def deployMetricSource(metricSource: MetricSource,
                metricSource.name.value + "{" + labels + "}")
     else:
         url = endpoint.uri.value + "?query=" + metricSource.name.value
-    logger.info("DANI URL '{0}'.".format(url))
     # Get topic name from input ID
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # We assume last string is an integer value
@@ -74,8 +73,8 @@ def deployMetricSource(metricSource: MetricSource,
             http_ps = ps
             break
     # Update GET Prometheus API interval to the requested value
-    # interval_unit = UnitCode[metricSource.interval.unitCode].value
-    interval_unit = "ms"
+    interval_unit = UnitCode[metricSource.interval.unitCode].value
+    #interval_unit = "ms"
     nipyapi.canvas.update_processor(
         http_ps,
         nipyapi.nifi.ProcessorConfigDTO(

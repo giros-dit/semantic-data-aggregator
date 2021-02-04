@@ -59,6 +59,9 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
+            # Query entity by id to get the 'unitCode' from MetricSource (notification doesn't receive it)
+            metricSource_entity = ngsi.retrieveEntityById(metricSource.id)
+            metricSource = MetricSource.parse_obj(metricSource_entity)
             nifi_ops.instantiateMetricSource(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
