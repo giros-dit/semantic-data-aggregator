@@ -114,7 +114,7 @@ services:
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_1.0.4
+    image: scorpiobroker/scorpio:scorpio-aaio_1.0.5
     hostname: scorpio
     container_name: scorpio
     ports:
