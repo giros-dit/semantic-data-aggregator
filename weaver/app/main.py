@@ -46,7 +46,7 @@ async def startup_event():
     # Upload MetricSource and MetricTarget templates
     nifi_ops.upload_templates()
     # Check Scorpio API is up
-    ngsi.checkScorpioHealth()
+    ngsi_ld_ops.check_scorpio_status(ngsi)
     # Subscribe to data pipeline stage entities
     ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)

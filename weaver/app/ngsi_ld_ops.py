@@ -5,6 +5,7 @@ from semantic_tools.models.metric import ModeResult
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,24 @@ def appendModeResult(ngsi: NGSILDClient, entityId: str):
         ).dict(exclude_none=True)
     }
     ngsi.appendEntityAttrs(entityId, result)
+
+
+def check_scorpio_status(ngsi: NGSILDClient):
+    """
+    Infinite loop that checks every 30 seconds
+    until Scorpio REST API becomes available
+    """
+    logger.info("Checking Scorpio REST API status ...")
+    while True:
+        if ngsi.checkScorpioHealth():
+            logger.info(
+                "Weaver successfully connected to Scorpio REST API!")
+            break
+        else:
+            logger.warning("Could not connect to Scorpio REST API. "
+                           "Retrying in 30 seconds ...")
+            time.sleep(30)
+            continue
 
 
 def stageToInProgress(ngsi: NGSILDClient, entityId: str):
