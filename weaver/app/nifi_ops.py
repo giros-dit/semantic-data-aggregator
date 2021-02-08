@@ -30,7 +30,7 @@ def check_nifi_status():
         break
 
 
-def deleteMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
+def deleteMetricSource(metricSource: MetricSource):
     """
     Delete MetricSource flow
     """
@@ -38,7 +38,7 @@ def deleteMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     nipyapi.canvas.delete_process_group(ms_pg, True)
 
 
-def deleteMetricTarget(metricTarget: MetricTarget, ngsi: NGSILDClient):
+def deleteMetricTarget(metricTarget: MetricTarget):
     """
     Delete MetricTarget flow
     """
@@ -223,7 +223,7 @@ def processMetricSourceMode(metricSource: MetricSource,
             "Terminate '{0}' NiFi flow.".format(
                 metricSource.id)
         )
-        deleteMetricSource(metricSource, ngsi)
+        deleteMetricSource(metricSource)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
         logger.info("Delete '{0}' entity".format(metricSource.id))
         ngsi.deleteEntity(metricSource.id)
@@ -243,13 +243,13 @@ def processMetricTargetMode(metricTarget: MetricTarget,
                 "Upgrade '{0}' NiFi flow.".format(
                     metricTarget.id)
             )
-            upgradeMetricTarget(metricTarget, ngsi)
+            upgradeMetricTarget(metricTarget)
         else:
             logger.info(
                 "Instantiate new '{0}' NiFi flow.".format(
                     metricTarget.id)
             )
-            instantiateMetricTarget(metricTarget, ngsi)
+            instantiateMetricTarget(metricTarget)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
     if metricTarget.stageMode.value == "STOP":
         if mt_pg:
@@ -260,16 +260,17 @@ def processMetricTargetMode(metricTarget: MetricTarget,
             stopMetricTarget(metricTarget)
         else:
             logger.info(
-                "New '{0}' already stopped. Moving on.".format(
+                "New '{0}' to STOP.".format(
                     metricTarget.id)
             )
+            deployMetricTarget(metricTarget)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
     if metricTarget.stageMode.value == "TERMINATE":
         logger.info(
             "Terminate '{0}' NiFi flow.".format(
                 metricTarget.id)
         )
-        deleteMetricTarget(metricTarget, ngsi)
+        deleteMetricTarget(metricTarget)
         ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
         logger.info("Delete '{0}' entity".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
@@ -341,7 +342,7 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
     """
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     # Stop MT PG
-    nipyapi.canvas.schedule_process_group(metricTarget.id, False)
+    nipyapi.canvas.schedule_process_group(mt_pg.id, False)
     # Set variables for MT PG
     # Get topic name from input ID
     input_id = metricTarget.hasInput.object.strip(
@@ -351,7 +352,7 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
     nipyapi.canvas.update_variable_registry(
         mt_pg, [("consumer_url", metricTarget.uri.value)])
     # Restart MT PG
-    nipyapi.canvas.schedule_process_group(metricTarget.id, True)
+    nipyapi.canvas.schedule_process_group(mt_pg.id, True)
 
 
 def upload_templates():
