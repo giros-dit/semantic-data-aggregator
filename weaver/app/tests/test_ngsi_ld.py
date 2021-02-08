@@ -49,7 +49,7 @@ class TestScorpio(unittest.TestCase):
                                       "handler": "/api/v1/query"}},
                 interval={"value": "10000", "unitCode": "C26"},
                 hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"},
-                operation={"value": "START"})
+                stageMode={"value": "START"})
 
         metricsource2 = MetricSource(
                 id="urn:ngsi-ld:MetricSource:2",
@@ -57,7 +57,7 @@ class TestScorpio(unittest.TestCase):
                 name={"value": "node_network_transmit_packets_total"},
                 interval={"value": "10000", "unitCode": "C26"},
                 hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"},
-                operation={"value": "START"})
+                stageMode={"value": "START"})
 
         metricsource3 = MetricSource(
                 id="urn:ngsi-ld:MetricSource:3",
@@ -65,7 +65,7 @@ class TestScorpio(unittest.TestCase):
                 expression={"value": {"job": "node-1"}},
                 interval={"value": "60000", "unitCode": "C26"},
                 hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"},
-                operation={"value": "START"})
+                stageMode={"value": "START"})
 
         metricsource4 = MetricSource(
                 id="urn:ngsi-ld:MetricSource:4",
@@ -73,7 +73,7 @@ class TestScorpio(unittest.TestCase):
                 expression={"value": {"job": "node-2"}},
                 interval={"value": "60000", "unitCode": "C26"},
                 hasEndpoint={"object": "urn:ngsi-ld:Endpoint:1"},
-                operation={"value": "START"})
+                stageMode={"value": "START"})
 
         entities = [
             endpoint,
