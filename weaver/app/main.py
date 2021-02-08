@@ -45,6 +45,8 @@ async def startup_event():
     nifi_ops.check_nifi_status()
     # Upload MetricSource and MetricTarget templates
     nifi_ops.upload_templates()
+    # Check Scorpio API is up
+    ngsi.checkScorpioHealth()
     # Subscribe to data pipeline stage entities
     ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
@@ -60,6 +62,10 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
+            # Query entity by id to get the 'unitCode'
+            # from MetricSource (notification doesn't receive it)
+            metricSource_entity = ngsi.retrieveEntityById(metricSource.id)
+            metricSource = MetricSource.parse_obj(metricSource_entity)
             nifi_ops.processMetricSourceMode(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)

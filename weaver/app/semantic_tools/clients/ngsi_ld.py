@@ -2,7 +2,10 @@ from enum import Enum
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+import logging
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 class Options(Enum):
@@ -68,7 +71,6 @@ class NGSILDClient():
             headers=self.headers
         )
         return response.ok
-
 
     def checkScorpioHealth(self):
         """
@@ -154,7 +156,7 @@ class NGSILDClient():
         Update existing Entity attributes within an NGSI-LD system
         """
         response = self._session.patch(
-            "{0}/ngsi-ld/v1/entities/{1}/attrs/".format(self.url, entityId),
+            "{0}/ngsi-ld/v1/entities/{1}/attrs".format(self.url, entityId),
             verify=self.ssl_verification,
             headers=self.headers,
             json=fragment

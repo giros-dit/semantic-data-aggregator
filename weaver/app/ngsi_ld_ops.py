@@ -1,12 +1,7 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import (
-    ModeResult,
-    ModeResultType,
-    MetricProcessor,
-    MetricSource,
-    MetricTarget
-)
+from semantic_tools.models.metric import ModeResult
+
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
@@ -15,10 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
-    metricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor"
-    metricSource = "urn:ngsi-ld:Subscription:MetricSource"
-    metricTarget = "urn:ngsi-ld:Subscription:MetricTarget"
-    streamApplication = "urn:ngsi-ld:Subscription:StreamApplication"
+    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor"
+    MetricSource = "urn:ngsi-ld:Subscription:MetricSource"
+    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget"
+    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication"
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -100,7 +95,7 @@ def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricProcessor entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricProcessor,
+    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
                        uri, "stageMode")
 
 
@@ -108,7 +103,7 @@ def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricSource entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricSource,
+    _subscribeToEntity(ngsi, SubscriptionType.MetricSource,
                        uri, "stageMode"),
 
 
@@ -116,7 +111,7 @@ def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricTarget entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.metricTarget,
+    _subscribeToEntity(ngsi, SubscriptionType.MetricTarget,
                        uri, "stageMode")
 
 
@@ -124,5 +119,5 @@ def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
     """
     Create subscription for StreamApplication entity
     """
-    _subscribeToEntity(ngsi, SubscriptionType.streamApplication,
+    _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
                        uri, attribute)

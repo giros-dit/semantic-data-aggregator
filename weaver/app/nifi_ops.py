@@ -30,6 +30,22 @@ def check_nifi_status():
         break
 
 
+def deleteMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
+    """
+    Delete MetricSource flow
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    nipyapi.canvas.delete_process_group(ms_pg, True)
+
+
+def deleteMetricTarget(metricTarget: MetricTarget, ngsi: NGSILDClient):
+    """
+    Delete MetricTarget flow
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
+    nipyapi.canvas.delete_process_group(ms_pg, True)
+
+
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
     """
@@ -75,7 +91,7 @@ def deployMetricSource(metricSource: MetricSource,
             break
     # Update GET Prometheus API interval to the requested value
     interval_unit = UnitCode[metricSource.interval.unitCode].value
-    #interval_unit = "ms"
+    # interval_unit = "ms"
     nipyapi.canvas.update_processor(
         http_ps,
         nipyapi.nifi.ProcessorConfigDTO(
@@ -172,7 +188,7 @@ def processMetricSourceMode(metricSource: MetricSource,
     Process MetricSource resources (i.e., NiFi flow)
     based on the value of the stageMode property
     """
-    ngsi_ld_ops.stageToInProgress(ngsi, metricSource)
+    ngsi_ld_ops.stageToInProgress(ngsi, metricSource.id)
     ms_pg = getMetricSourcePG(metricSource)
     if metricSource.stageMode.value == "START":
         if ms_pg:
@@ -187,7 +203,7 @@ def processMetricSourceMode(metricSource: MetricSource,
                     metricSource.id)
             )
             instantiateMetricSource(metricSource, ngsi)
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
     if metricSource.stageMode.value == "STOP":
         if ms_pg:
             logger.info(
@@ -197,17 +213,18 @@ def processMetricSourceMode(metricSource: MetricSource,
             stopMetricSource(metricSource)
         else:
             logger.info(
-                "New '{0}' already stopped. Moving on.".format(
+                "New '{0}' to STOP.".format(
                     metricSource.id)
             )
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource)
+            deployMetricSource(metricSource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
     if metricSource.stageMode.value == "TERMINATE":
         logger.info(
             "Terminate '{0}' NiFi flow.".format(
                 metricSource.id)
         )
-        deleteMetricSource(metricSource)
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource)
+        deleteMetricSource(metricSource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
         logger.info("Delete '{0}' entity".format(metricSource.id))
         ngsi.deleteEntity(metricSource.id)
 
@@ -218,7 +235,7 @@ def processMetricTargetMode(metricTarget: MetricTarget,
     Process MetricTarget resources (i.e., NiFi flow)
     based on the value of the stageMode property
     """
-    ngsi_ld_ops.stageToInProgress(ngsi, metricTarget)
+    ngsi_ld_ops.stageToInProgress(ngsi, metricTarget.id)
     mt_pg = getMetricTargetPG(metricTarget)
     if metricTarget.stageMode.value == "START":
         if mt_pg:
@@ -233,7 +250,7 @@ def processMetricTargetMode(metricTarget: MetricTarget,
                     metricTarget.id)
             )
             instantiateMetricTarget(metricTarget, ngsi)
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
     if metricTarget.stageMode.value == "STOP":
         if mt_pg:
             logger.info(
@@ -246,14 +263,14 @@ def processMetricTargetMode(metricTarget: MetricTarget,
                 "New '{0}' already stopped. Moving on.".format(
                     metricTarget.id)
             )
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
     if metricTarget.stageMode.value == "TERMINATE":
         logger.info(
             "Terminate '{0}' NiFi flow.".format(
                 metricTarget.id)
         )
-        deleteMetricTarget(metricTarget)
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget)
+        deleteMetricTarget(metricTarget, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
         logger.info("Delete '{0}' entity".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
 
@@ -274,29 +291,13 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
 
 
-def deleteMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
-    """
-    Delete MetricSource flow
-    """
-    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
-    nipyapi.canvas.delete_process_group(ms_pg, True)
-
-
-def deleteMetricTarget(metricTarget: MetricTarget, ngsi: NGSILDClient):
-    """
-    Delete MetricTarget flow
-    """
-    ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
-    nipyapi.canvas.delete_process_group(ms_pg, True)
-
-
 def upgradeMetricSouce(metricSource: MetricSource, ngsi: NGSILDClient):
     """
     Stops flow, updates variables and re-starts flow
     for a given MetricSource entity
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
-    nipyapi.canvas.schedule_process_group(metricSource.id, False)
+    nipyapi.canvas.schedule_process_group(ms_pg.id, False)
     # Get Endpoint
     endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
@@ -316,21 +317,21 @@ def upgradeMetricSouce(metricSource: MetricSource, ngsi: NGSILDClient):
                                             [("prometheus_request", url)])
     # Retrieve GET Prometheus API processor
     http_ps = None
-    ms_pg_flow = nipyapi.canvas.get_flow(ms_pg.id)
+    ms_pg_flow = nipyapi.canvas.get_flow(ms_pg.id).process_group_flow
     for ps in ms_pg_flow.flow.processors:
         if ps.status.name == "GET Prometheus API":
             http_ps = ps
             break
     # Update GET Prometheus API interval to the requested value
-    # interval_unit = UnitCode[metricSource.interval.unitCode].value
-    interval_unit = "ms"
+    interval_unit = UnitCode[metricSource.interval.unitCode].value
+    # interval_unit = "ms"
     nipyapi.canvas.update_processor(
         http_ps,
         nipyapi.nifi.ProcessorConfigDTO(
             scheduling_period='{0}{1}'.format(metricSource.interval.value,
                                               interval_unit)))
     # Restart MS PG
-    nipyapi.canvas.schedule_process_group(metricSource.id, True)
+    nipyapi.canvas.schedule_process_group(ms_pg.id, True)
 
 
 def upgradeMetricTarget(metricTarget: MetricTarget):
