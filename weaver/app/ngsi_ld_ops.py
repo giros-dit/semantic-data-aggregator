@@ -54,6 +54,22 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
+def appendModeResult(ngsi: NGSILDClient, entityId: str):
+    """
+    Appends 'modeResult' property to an entity.
+    This property is set to 'IN_PROGRESS' by default.
+    """
+    result = {
+        "modeResult": ModeResult(
+            value="IN_PROGRESS",
+            modeInfo={
+                "value": ""
+            }
+        ).dict(exclude_none=True)
+    }
+    ngsi.appendEntityAttrs(entityId, result)
+
+
 def stageToInProgress(ngsi: NGSILDClient, entityId: str):
     """
     Update modeResult of a given stage to IN_PROGRESS

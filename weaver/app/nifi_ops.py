@@ -188,7 +188,7 @@ def processMetricSourceMode(metricSource: MetricSource,
     Process MetricSource resources (i.e., NiFi flow)
     based on the value of the stageMode property
     """
-    ngsi_ld_ops.stageToInProgress(ngsi, metricSource.id)
+    ngsi_ld_ops.appendModeResult(ngsi, metricSource.id)
     ms_pg = getMetricSourcePG(metricSource)
     if metricSource.stageMode.value == "START":
         if ms_pg:
@@ -235,7 +235,7 @@ def processMetricTargetMode(metricTarget: MetricTarget,
     Process MetricTarget resources (i.e., NiFi flow)
     based on the value of the stageMode property
     """
-    ngsi_ld_ops.stageToInProgress(ngsi, metricTarget.id)
+    ngsi_ld_ops.appendModeResult(ngsi, metricTarget.id)
     mt_pg = getMetricTargetPG(metricTarget)
     if metricTarget.stageMode.value == "START":
         if mt_pg:

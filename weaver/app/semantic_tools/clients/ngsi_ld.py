@@ -61,6 +61,20 @@ class NGSILDClient():
             requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.propagate = True
 
+    # NGSI-LD Append Entity Attributes -> /entities/{entityId}/attrs
+    def appendEntityAttrs(self, entityId: str, fragment: dict):
+        """
+        Append attributes to existing Entity within an NGSI-LD system
+        """
+        response = self._session.post(
+            "{0}/ngsi-ld/v1/entities/{1}/attrs".format(self.url, entityId),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            json=fragment
+        )
+        if response.status_code != 204:
+            response.raise_for_status()
+
     def checkOrionHealth(self):
         """
         Checks NGSI-LD Orion-LD broker status is up
