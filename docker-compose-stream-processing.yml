@@ -113,6 +113,22 @@ services:
       - "9099:9090"
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  schema-registry:
+    image: schema-registry:0.9.0
+    hostname: schema-registry
+    container_name: schema-registry
+    environment:
+      DB_TYPE: "postgresql"
+      DATA_SRC_CLASS_NAME: "org.postgresql.ds.PGSimpleDataSource"
+      DB_URL: "jdbc:postgresql://postgres/ngb"
+      DB_USER: ngb
+      DB_PASSWORD: ngb
+      REGISTRY_HEAP_OPTS: "-Xmx1G -Xms1G"
+    ports:
+      - "9010:9090"
+      - "9011:9091"
+    depends_on:
+      - postgres
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_1.0.5
     hostname: scorpio
