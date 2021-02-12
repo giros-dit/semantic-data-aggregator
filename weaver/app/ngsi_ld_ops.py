@@ -101,14 +101,14 @@ def stageToInProgress(ngsi: NGSILDClient, entityId: str):
     ngsi.updateEntityAttrs(entityId, result)
 
 
-def stageToFailed(ngsi: NGSILDClient, entityId: str):
+def stageToFailed(ngsi: NGSILDClient, entityId: str, modeInfo_dict: dict):
     """
     Update modeResult of a given stage to FAILED
     """
     result = {
         "modeResult": ModeResult(
             value="FAILED",
-            modeInfo={"value": "ERROR. Add Python traceback here."}
+            modeInfo=modeInfo_dict #{"value": "ERROR. Add Python traceback here."}
         ).dict(exclude_none=True)
     }
     ngsi.updateEntityAttrs(entityId, result)
