@@ -196,7 +196,7 @@ def processMetricSourceMode(metricSource: MetricSource,
                 "Upgrade '{0}' NiFi flow.".format(
                     metricSource.id)
             )
-            upgradeMetricSouce(metricSource, ngsi)
+            upgradeMetricSource(metricSource, ngsi)
         else:
             logger.info(
                 "Instantiate new '{0}' NiFi flow.".format(
@@ -292,7 +292,7 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
 
 
-def upgradeMetricSouce(metricSource: MetricSource, ngsi: NGSILDClient):
+def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
     Stops flow, updates variables and re-starts flow
     for a given MetricSource entity

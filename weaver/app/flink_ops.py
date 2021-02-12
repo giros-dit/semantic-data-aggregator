@@ -173,39 +173,63 @@ def processMetricProcessorMode(metricProcessor: MetricProcessor,
     Process MetricProcess resources (i.e., Flink job)
     based on the value of the stageMode property
     """
-    ngsi_ld_ops.stageToInProgress(ngsi, metricProcessor)
-    job = flink.getFlinkJob(metricProcessor.jobId.value)
+    ngsi_ld_ops.appendModeResult(ngsi, metricProcessor.id)
+    job = ""
+    job_exist = False
+    if metricProcessor.jobId.value != "":
+        job = flink.getFlinkJob(metricProcessor.jobId.value)
+        job_exist = True
     if metricProcessor.stageMode.value == "START":
-        if job and job['status'] == 'RUNNING':
-            # Cancel job and create another with new configuration
-            deleteStreamJob(metricProcessor)
-            submitStreamJob(metricProcessor)
-            logger.info(
-                "Upgrade '{0}' MetricProcessor.".format(metricProcessor.id)
-            )
-        else:
+        if job_exist == False:
+            submitStreamJob(metricProcessor, ngsi, flink)
             logger.info(
                 "Start new '{0}' MetricProcessor.".format(metricProcessor.id)
             )
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor)
-    if metricProcessor.stageMode.value == "STOP":
-        if job and job['status'] == 'RUNNING':
-            deleteStreamJob(metricProcessor)
+        elif job_exist and job['state'] == 'RUNNING':
+            # Cancel job and create another with new configuration
+            #deleteStreamJob(metricProcessor, ngsi, flink)
             logger.info(
-                "Stop '{0}' MetricProcessor.".format(metricProcessor.id)
+                "\n Delete Flink Job with id {0}".format(
+                    flink.deleteJob(job['jid'])))
+            submitStreamJob(metricProcessor, ngsi, flink)
+            logger.info(
+                "Upgrade '{0}' MetricProcessor.".format(metricProcessor.id)
             )
-        else:
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
+    if metricProcessor.stageMode.value == "STOP":
+        if job_exist == False or job['state'] == 'CANCELED':
             logger.info(
                 "New '{0}' MetricProcessor already stopped. Moving on.".format(
                     metricProcessor.id)
             )
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor)
+        elif job_exist and job['state'] == 'RUNNING':
+            #deleteStreamJob(metricProcessor, ngsi, flink)
+            logger.info(
+                "\n Delete Flink Job with id {0}".format(
+                    flink.deleteJob(job['jid'])))
+            logger.info(
+                "Stop '{0}' MetricProcessor.".format(metricProcessor.id)
+            )
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
     if metricProcessor.stageMode.value == "TERMINATE":
-        logger.info(
-            "Terminate '{0}' MetricProcessor.".format(
-                metricProcessor.id)
-        )
-        deleteStreamJob(metricProcessor)
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor)
+        if job_exist == False:
+            logger.info(
+                "New '{0}' MetricProcessor not started.".format(metricProcessor.id)
+            )
+        else:
+            logger.info(
+                "Terminate '{0}' MetricProcessor.".format(
+                    metricProcessor.id)
+                )
+            if job['state'] == 'RUNNING':
+                #deleteStreamJob(metricProcessor, ngsi, flink)
+                logger.info(
+                    "\n Delete Flink Job with id {0}".format(
+                        flink.deleteJob(job['jid'])))
+                logger.info(
+                    "Cancel '{0}' MetricProcessor.".format(metricProcessor.id)
+                    )
+
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
         logger.info("Delete '{0}' entity".format(metricProcessor.id))
         ngsi.deleteEntity(metricProcessor.id)

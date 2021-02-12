@@ -54,7 +54,6 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri, "fileName")
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
 
-
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
 async def receiveNotification(request: Request):
@@ -72,7 +71,20 @@ async def receiveNotification(request: Request):
             nifi_ops.processMetricTargetMode(metricTarget, ngsi)
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            flink_ops.processMetricProcessorMode(metricProcessor, ngsi, flink)
+            # Checking if MetricProcesor has a StreamApplication already created
+            streamApplication_entities = ngsi.queryEntities(type="StreamApplication")
+            failed = False
+            if len(streamApplication_entities) > 0:
+                for streamApplication_entity in streamApplication_entities:
+                    if streamApplication_entity['id'] == metricProcessor.hasApplication.object:
+                        flink_ops.processMetricProcessorMode(metricProcessor, ngsi, flink)
+                        failed = False
+                    else:
+                        failed = True
+            else:
+                failed = True
+            if failed:
+                ngsi.deleteEntity(metricProcessor.id)
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
             flink_ops.uploadStreamApp(streamApplication, ngsi, flink)

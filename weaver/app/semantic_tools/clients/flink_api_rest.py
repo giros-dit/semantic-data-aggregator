@@ -84,7 +84,7 @@ class FlinkClient():
         """
         Returns a specific job.
          """
-        response = self._session.get("{0}/job/{1}".format(self.url, jobId),
+        response = self._session.get("{0}/jobs/{1}".format(self.url, jobId),
                                      verify=self.ssl_verification,
                                      headers=self.headers)
         if response.status_code == 200:

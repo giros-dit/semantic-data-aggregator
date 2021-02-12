@@ -48,7 +48,7 @@ class MetricProcessor(MetricStage):
     hasApplication: Relationship
     name: Property
     arguments: Optional[Property] = None
-
+    jobId: Property
 
 class MetricTarget(MetricStage):
     type: Literal["MetricTarget"] = "MetricTarget"

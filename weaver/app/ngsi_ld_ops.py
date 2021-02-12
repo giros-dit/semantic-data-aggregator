@@ -107,7 +107,7 @@ def stageToFailed(ngsi: NGSILDClient, entityId: str):
     """
     result = {
         "modeResult": ModeResult(
-            value="SUCCESSFUL",
+            value="FAILED",
             modeInfo={"value": "ERROR. Add Python traceback here."}
         ).dict(exclude_none=True)
     }
