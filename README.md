@@ -23,7 +23,7 @@ Additionally, a dummy context consumer is deployed based on a simple docker imag
 
 The prototype is composed by some containers which require building their Docker images. Utility script `build-docker.sh` eases the process of building such images. So far, it only supports building the `schema-registry:0.9.0` image. To do so, run the following command:
 ```bash
-sh build-docker.sh build-registry
+./build-docker.sh build-registry
 ```
 It is expected for future works to support more building procedures for images such as `weaver`.
 
