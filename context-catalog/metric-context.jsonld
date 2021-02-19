@@ -1,5 +1,9 @@
 {
     "@context": {
+        "MetricStage": "http://example.org/MetricStage",
+        "stageMode": "http://example.org/stageMode",
+        "modeResult": "http://example.org/modeResult",
+        "modeInfo": "http://example.org/modeInfo",
         "Credentials": "http://example.org/Credentials",
         "authMethod": "http://example.org/authMethod",
         "Endpoint": "http://example.org/Endpoint",
@@ -14,9 +18,9 @@
         "hasApplication": "http://example.org/hasApplication",
         "jobId": "http://example.org/jobId",
         "arguments": "http://example.org/arguments",
-	"StreamApplication": "http://example.org/StreamApplication",
-	"fileName": "http://example.org/fileName",
-	"fileId": "http://example.org/fileId",
-	"entryClass": "http://example.org/entryClass"
+	    "StreamApplication": "http://example.org/StreamApplication",
+	    "fileName": "http://example.org/fileName",
+	    "fileId": "http://example.org/fileId",
+	    "entryClass": "http://example.org/entryClass"
     }
 }

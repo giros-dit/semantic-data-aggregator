@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7b59eb6d-1c3d-4f6f-8f36-67a755ab53ca",
+		"_postman_id": "2a306c7f-108f-4539-aac0-e75af6ffadb5",
 		"name": "NGSI-LD Prometheus",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,6 +8,947 @@
 		{
 			"name": "Entities",
 			"item": [
+				{
+					"name": "MetricSource",
+					"item": [
+						{
+							"name": "Create MetricSource:1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:1\",\n    \"type\": \"MetricSource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"prometheus\", \n            \"code\": \"200\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"10000\",\n        \"unitCode\": \"C26\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricSource:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:2\",\n    \"type\": \"MetricSource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_network_transmit_packets_total\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-1\",\n            \"device\":\"eth0\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"10000\",\n        \"unitCode\": \"C26\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricSource:3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:3\",\n    \"type\": \"MetricSource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_load1\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-1\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"60000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricSource:4",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:4\",\n    \"type\": \"MetricSource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"STOP\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_load1\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-2\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"60000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs/stageModel",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricsource1}}",
+										"attrs",
+										"stageModel"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricsource1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id Copy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricsource1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "MetricTarget",
+					"item": [
+						{
+							"name": "Create MetricTarget:1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:1\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricTarget:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:2\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricTarget:3",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:3\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"STOP\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:2\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metrictarget1}}/attrs/stageModel",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metrictarget1}}",
+										"attrs",
+										"stageModel"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metrictarget1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metrictarget1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id Copy 2",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metrictarget1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metrictarget1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "MetricProcessor",
+					"item": [
+						{
+							"name": "Create MetricProcessor:1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:1\",\n    \"type\": \"MetricProcessor\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:2\"\n    },\n    \"hasApplication\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:1\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficRate\"\n    },    \n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricProcessor:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:2\",\n    \"type\": \"MetricProcessor\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"STOP\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:1\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:2\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficAvg\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"num_records\": \"3\"\n        }\n    },\n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}/attrs/stageModel",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricprocessor1}}",
+										"attrs",
+										"stageModel"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricprocessor1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id Copy 3",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricprocessor1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "StreamApplication",
+					"item": [
+						{
+							"name": "Create StreamApplication:1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:1\",\n    \"type\": \"StreamApplication\",\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic packet rate sent through a specific interface of a device between two instants of time.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create StreamApplication:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:2\",\n    \"type\": \"StreamApplication\",\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic rate average sent through a specific interface of a device in the last 30 seconds.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}/attrs/stageModel",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{streamapplication1}}",
+										"attrs",
+										"stageModel"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{streamapplication1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id Copy 4",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{streamapplication1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Create Endpoint",
 					"event": [
@@ -54,624 +995,6 @@
 						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
 					},
 					"response": []
-				},
-				{
-					"name": "Create MetricSource:1",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:1\",\n    \"type\": \"MetricSource\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"prometheus\", \n            \"handler\": \"/api/v1/query\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"10000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricSource:2",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:2\",\n    \"type\": \"MetricSource\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_network_transmit_packets_total\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-1\",\n            \"device\":\"eth0\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"10000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricSource:3",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:3\",\n    \"type\": \"MetricSource\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_load1\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-1\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"60000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricSource:4",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricSource:4\",\n    \"type\": \"MetricSource\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"node_load1\"\n    },\n    \"expression\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"job\": \"node-2\"\n        }\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"60000\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricTarget:1",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:1\",\n    \"type\": \"MetricTarget\",\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricTarget:2",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:2\",\n    \"type\": \"MetricTarget\",\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricTarget:3",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:3\",\n    \"type\": \"MetricTarget\",\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:2\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricProcessor:1",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:1\",\n    \"type\": \"MetricProcessor\",\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:2\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:1\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficRate\"\n    },\n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create MetricProcessor:2",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:2\",\n    \"type\": \"MetricProcessor\",\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": [\"urn:ngsi-ld:MetricSource:3\", \"urn:ngsi-ld:MetricSource:4\"]\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:3\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"CPULoad\"\n    },\n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create StreamApplication:1",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:1\",\n    \"type\": \"StreamApplication\",\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic packet rate sent through a specific interface of a device between two instants of time.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create StreamApplication:2",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:2\",\n    \"type\": \"StreamApplication\",\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic rate average sent through a specific interface of a device in the last minute.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Partial Attribute Update",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"value\": \"15.2\",\r\n    \"type\": \"Property\"\r\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs/sample",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"{{metricsource1}}",
-								"attrs",
-								"sample"
-							]
-						},
-						"description": "partially update the attribute of entity"
-					},
-					"response": []
-				},
-				{
-					"name": "Update Entity Attributes",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"type": "text",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"sample\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"18.1\"\r\n    }\r\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"{{metricsource1}}",
-								"attrs"
-							]
-						},
-						"description": "update the attribute of entity"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Entity Data by id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"{{metricprocessor1}}"
-							]
-						},
-						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
-					},
-					"response": []
 				}
 			]
 		},
@@ -695,7 +1018,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -704,7 +1027,46 @@
 								"ngsi-ld",
 								"v1",
 								"entities",
-								"{{streamapplication1}}"
+								"{{metricsource1}}"
+							]
+						},
+						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtain Entity Data by type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Link",
+								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=MetricSource",
+							"protocol": "http",
+							"host": [
+								"{{broker}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "MetricSource"
+								}
 							]
 						},
 						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -728,7 +1090,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=MetricSource&q=expression[code]==\"200\"",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=MetricSource&q=expression[job]==\"prometheus\"",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -746,7 +1108,7 @@
 								},
 								{
 									"key": "q",
-									"value": "expression[code]==\"200\""
+									"value": "expression[job]==\"prometheus\""
 								}
 							]
 						},
@@ -798,7 +1160,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtain Entity Data by type",
+					"name": "Obtain Entity Data by sysAttrs option",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -814,7 +1176,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Metric",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=MetricSource&options=sysAttrs",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -828,7 +1190,11 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "Metric"
+									"value": "MetricSource"
+								},
+								{
+									"key": "options",
+									"value": "sysAttrs"
 								}
 							]
 						},
@@ -1312,10 +1678,10 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{broker}}{{subscription4}}",
+							"raw": "http://{{broker}}{{subscription1}}",
 							"protocol": "http",
 							"host": [
-								"{{broker}}{{subscription4}}"
+								"{{broker}}{{subscription1}}"
 							]
 						}
 					},
@@ -1324,7 +1690,7 @@
 			]
 		},
 		{
-			"name": "Obtaining Version Information",
+			"name": "Scorpio: Obtaining Version Information",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -1339,6 +1705,25 @@
 						"v1",
 						"info",
 						""
+					]
+				},
+				"description": "You can check if the Scorpio Context Broker is running by making an HTTP request to the exposed port."
+			},
+			"response": []
+		},
+		{
+			"name": "Orion-LD: Obtain Version Information Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{broker}}/version",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"version"
 					]
 				},
 				"description": "You can check if the Scorpio Context Broker is running by making an HTTP request to the exposed port."
@@ -1369,7 +1754,11 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "138.4.7.159:9090"
+			"value": "localhost:9090"
+		},
+		{
+			"key": "broker",
+			"value": "localhost:1026"
 		},
 		{
 			"key": "context.jsonld",
@@ -1442,6 +1831,10 @@
 		{
 			"key": "csource1",
 			"value": "/ngsi-ld/v1/csourceRegistrations/urn:ngsi-ld:csourceregistration:1338599189"
+		},
+		{
+			"key": "broker",
+			"value": "138.4.7.159:9090"
 		}
 	]
 }

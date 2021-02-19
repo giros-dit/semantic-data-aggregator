@@ -2,12 +2,15 @@ from .ngsi_ld.entity import Entity, Property, Relationship
 from pydantic import AnyUrl
 from typing import Literal, Optional
 
+
 class _URI(Property):
     value: AnyUrl
+
 
 class Credentials(Entity):
     type: Literal["Credentials"] = "Credentials"
     authMethod: Property
+
 
 class Endpoint(Entity):
     type: Literal["Endpoint"] = "Endpoint"
@@ -15,25 +18,43 @@ class Endpoint(Entity):
     name: Property
     uri: _URI
 
-class MetricSource(Entity):
+
+class StageMode(Property):
+    value: Literal["START", "STOP", "TERMINATE"]
+
+
+class ModeResult(Property):
+    value: Literal["IN_PROGRESS", "SUCCESSFUL", "FAILED"]
+    modeInfo: Optional[Property]
+
+
+class MetricStage(Entity):
+    type: Literal["MetricStage"] = "MetricStage"
+    stageMode: StageMode
+    modeResult: Optional[ModeResult]
+
+
+class MetricSource(MetricStage):
     type: Literal["MetricSource"] = "MetricSource"
     expression: Optional[Property] = None
     hasEndpoint: Relationship
     interval: Property
     name: Property
 
-class MetricTarget(Entity):
-    type: Literal["MetricTarget"] = "MetricTarget"
-    hasInput: Relationship
-    uri: _URI
 
-class MetricProcessor(Entity):
+class MetricProcessor(MetricStage):
     type: Literal["MetricProcessor"] = "MetricProcessor"
     hasInput: Relationship
     hasApplication: Relationship
     name: Property
     arguments: Optional[Property] = None
     jobId: Property
+
+class MetricTarget(MetricStage):
+    type: Literal["MetricTarget"] = "MetricTarget"
+    hasInput: Relationship
+    uri: _URI
+
 
 class StreamApplication(Entity):
     type: Literal["StreamApplication"] = "StreamApplication"

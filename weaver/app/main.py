@@ -45,12 +45,14 @@ async def startup_event():
     nifi_ops.check_nifi_status()
     # Upload MetricSource and MetricTarget templates
     nifi_ops.upload_templates()
+    # Check Scorpio API is up
+    ngsi_ld_ops.check_scorpio_status(ngsi)
     # Subscribe to data pipeline stage entities
     ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri, "name")
+    ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
+    # Fix to avoid loops when creating StreamApplications
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri, "fileName")
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
-
 
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
@@ -59,16 +61,17 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
-            # Query entity by id to get the 'unitCode' from MetricSource (notification doesn't receive it)
+            # Query entity by id to get the 'unitCode'
+            # from MetricSource (notification doesn't receive it)
             metricSource_entity = ngsi.retrieveEntityById(metricSource.id)
             metricSource = MetricSource.parse_obj(metricSource_entity)
-            nifi_ops.instantiateMetricSource(metricSource, ngsi)
+            nifi_ops.processMetricSourceMode(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
-            nifi_ops.instantiateMetricTarget(metricTarget)
+            nifi_ops.processMetricTargetMode(metricTarget, ngsi)
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
+            flink_ops.processMetricProcessorMode(metricProcessor, ngsi, flink)
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
             flink_ops.uploadStreamApp(streamApplication, ngsi, flink)

@@ -6,6 +6,7 @@ from urllib3.exceptions import MaxRetryError
 
 import logging
 import nipyapi
+import ngsi_ld_ops
 import time
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,22 @@ def check_nifi_status():
             continue
         logger.info("Weaver successfully connected to NiFi REST API!")
         break
+
+
+def deleteMetricSource(metricSource: MetricSource):
+    """
+    Delete MetricSource flow
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    nipyapi.canvas.delete_process_group(ms_pg, True)
+
+
+def deleteMetricTarget(metricTarget: MetricTarget):
+    """
+    Delete MetricTarget flow
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
+    nipyapi.canvas.delete_process_group(ms_pg, True)
 
 
 def deployMetricSource(metricSource: MetricSource,
@@ -74,7 +91,7 @@ def deployMetricSource(metricSource: MetricSource,
             break
     # Update GET Prometheus API interval to the requested value
     interval_unit = UnitCode[metricSource.interval.unitCode].value
-    #interval_unit = "ms"
+    # interval_unit = "ms"
     nipyapi.canvas.update_processor(
         http_ps,
         nipyapi.nifi.ProcessorConfigDTO(
@@ -109,6 +126,20 @@ def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     nipyapi.canvas.update_variable_registry(
         mt_pg, [("consumer_url", metricTarget.uri.value)])
     return mt_pg
+
+
+def getMetricSourcePG(metricSource: MetricSource) -> ProcessGroupEntity:
+    """
+    Get NiFi flow (Process Group) from MetricSource
+    """
+    return nipyapi.canvas.get_process_group(metricSource.id)
+
+
+def getMetricTargetPG(metricTarget: MetricTarget) -> ProcessGroupEntity:
+    """
+    Get NiFi flow (Process Group) from MetricTarget
+    """
+    return nipyapi.canvas.get_process_group(metricTarget.id)
 
 
 def getQueryLabels(metricSource: MetricSource) -> str:
@@ -149,6 +180,179 @@ def instantiateMetricTarget(metricTarget: MetricTarget):
     logger.info(
         "MetricTarget '{0}' scheduled in NiFi.".format(
             metricTarget.id))
+
+
+def processMetricSourceMode(metricSource: MetricSource,
+                            ngsi: NGSILDClient):
+    """
+    Process MetricSource resources (i.e., NiFi flow)
+    based on the value of the stageMode property
+    """
+    ngsi_ld_ops.appendModeResult(ngsi, metricSource.id)
+    ms_pg = getMetricSourcePG(metricSource)
+    if metricSource.stageMode.value == "START":
+        if ms_pg:
+            logger.info(
+                "Upgrade '{0}' NiFi flow.".format(
+                    metricSource.id)
+            )
+            upgradeMetricSource(metricSource, ngsi)
+        else:
+            logger.info(
+                "Instantiate new '{0}' NiFi flow.".format(
+                    metricSource.id)
+            )
+            instantiateMetricSource(metricSource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
+    if metricSource.stageMode.value == "STOP":
+        if ms_pg:
+            logger.info(
+                "Stop '{0}' NiFi flow.".format(
+                    metricSource.id)
+            )
+            stopMetricSource(metricSource)
+        else:
+            logger.info(
+                "New '{0}' to STOP.".format(
+                    metricSource.id)
+            )
+            deployMetricSource(metricSource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
+    if metricSource.stageMode.value == "TERMINATE":
+        logger.info(
+            "Terminate '{0}' NiFi flow.".format(
+                metricSource.id)
+        )
+        deleteMetricSource(metricSource)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricSource.id)
+        logger.info("Delete '{0}' entity".format(metricSource.id))
+        ngsi.deleteEntity(metricSource.id)
+
+
+def processMetricTargetMode(metricTarget: MetricTarget,
+                            ngsi: NGSILDClient):
+    """
+    Process MetricTarget resources (i.e., NiFi flow)
+    based on the value of the stageMode property
+    """
+    ngsi_ld_ops.appendModeResult(ngsi, metricTarget.id)
+    mt_pg = getMetricTargetPG(metricTarget)
+    if metricTarget.stageMode.value == "START":
+        if mt_pg:
+            logger.info(
+                "Upgrade '{0}' NiFi flow.".format(
+                    metricTarget.id)
+            )
+            upgradeMetricTarget(metricTarget)
+        else:
+            logger.info(
+                "Instantiate new '{0}' NiFi flow.".format(
+                    metricTarget.id)
+            )
+            instantiateMetricTarget(metricTarget)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
+    if metricTarget.stageMode.value == "STOP":
+        if mt_pg:
+            logger.info(
+                "Stop '{0}' NiFi flow.".format(
+                    metricTarget.id)
+            )
+            stopMetricTarget(metricTarget)
+        else:
+            logger.info(
+                "New '{0}' to STOP.".format(
+                    metricTarget.id)
+            )
+            deployMetricTarget(metricTarget)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
+    if metricTarget.stageMode.value == "TERMINATE":
+        logger.info(
+            "Terminate '{0}' NiFi flow.".format(
+                metricTarget.id)
+        )
+        deleteMetricTarget(metricTarget)
+        ngsi_ld_ops.stageToSuccessful(ngsi, metricTarget.id)
+        logger.info("Delete '{0}' entity".format(metricTarget.id))
+        ngsi.deleteEntity(metricTarget.id)
+
+
+def stopMetricSource(metricSource: MetricSource) -> ProcessGroupEntity:
+    """
+    Stop NiFi flow (Process Group) from MetricSource
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    return nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+
+
+def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
+    """
+    Stop NiFi flow (Process Group) from MetricTarget
+    """
+    mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
+    return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+
+
+def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
+    """
+    Stops flow, updates variables and re-starts flow
+    for a given MetricSource entity
+    """
+    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    # Get Endpoint
+    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
+    endpoint = Endpoint.parse_obj(endpoint_entity)
+    # Build URL based on optional expression
+    url = ""
+    if metricSource.expression:
+        labels = getQueryLabels(metricSource)
+        url = (endpoint.uri.value + "?query=" +
+               metricSource.name.value + "{" + labels + "}")
+    else:
+        url = endpoint.uri.value + "?query=" + metricSource.name.value
+    # Get topic name from input ID
+    entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    # Set variable for MS PG
+    nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
+    nipyapi.canvas.update_variable_registry(ms_pg,
+                                            [("prometheus_request", url)])
+    # Retrieve GET Prometheus API processor
+    http_ps = None
+    ms_pg_flow = nipyapi.canvas.get_flow(ms_pg.id).process_group_flow
+    for ps in ms_pg_flow.flow.processors:
+        if ps.status.name == "GET Prometheus API":
+            http_ps = ps
+            break
+    # Update GET Prometheus API interval to the requested value
+    interval_unit = UnitCode[metricSource.interval.unitCode].value
+    # interval_unit = "ms"
+    nipyapi.canvas.update_processor(
+        http_ps,
+        nipyapi.nifi.ProcessorConfigDTO(
+            scheduling_period='{0}{1}'.format(metricSource.interval.value,
+                                              interval_unit)))
+    # Restart MS PG
+    nipyapi.canvas.schedule_process_group(ms_pg.id, True)
+
+
+def upgradeMetricTarget(metricTarget: MetricTarget):
+    """
+    Stops flow, updates variables and restarts flow
+    for a given MetricTarget entity
+    """
+    mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
+    # Stop MT PG
+    nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+    # Set variables for MT PG
+    # Get topic name from input ID
+    input_id = metricTarget.hasInput.object.strip(
+                    "urn:ngsi-ld:").replace(":", "-").lower()
+    nipyapi.canvas.update_variable_registry(
+        mt_pg, [("topic", input_id)])
+    nipyapi.canvas.update_variable_registry(
+        mt_pg, [("consumer_url", metricTarget.uri.value)])
+    # Restart MT PG
+    nipyapi.canvas.schedule_process_group(mt_pg.id, True)
 
 
 def upload_templates():
