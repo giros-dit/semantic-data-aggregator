@@ -6,8 +6,10 @@
 
 # Image name variables
 registry_image="schema-registry"
+minimal_ubuntu_image="minimal-ubuntu:0.1"
 # Image paths
 registry_image_path="schema-registry"
+minimal_ubuntu_image_path="schema-registry/minimal-ubuntu"
 # Image URLs
 schema_registry_download_url="https://github.com/hortonworks/registry/releases/download/0.9.0/hortonworks-registry-0.9.0.tar.gz"
 # Standard output variable
@@ -20,6 +22,9 @@ function registryVersion {
 }
 
 function buildSchemaRegistry {
+    echo "Building ${minimal_ubuntu_image} image"
+    docker build -t ${minimal_ubuntu_image} ${minimal_ubuntu_image_path}
+    echo "Building ${registry_image} image"
     rversion=$(registryVersion)
     filename=$(echo ${schema_registry_download_url} | cut -d '/' -f9)
     if [[ "$(docker images -q ${registry_image}:${rversion} 2> ${std_output})" == "" ]]; then
