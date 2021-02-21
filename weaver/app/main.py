@@ -3,7 +3,8 @@ from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication
+    MetricProcessor, StreamApplication,
+    TelemetrySource
 )
 
 import flink_ops
@@ -53,6 +54,7 @@ async def startup_event():
     # Fix to avoid loops when creating StreamApplications
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri, "fileName")
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
 
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
@@ -75,3 +77,11 @@ async def receiveNotification(request: Request):
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
             flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
+        if notification["type"] == "TelemetrySource":
+            telemetrySource = TelemetrySource.parse_obj(notification)
+            # Query entity by id to get the 'unitCode'
+            # from TelemetrySource (notification doesn't receive it)
+            telemetrySource_entity = ngsi.retrieveEntityById(telemetrySource.id)
+            telemetrySource = TelemetrySource.parse_obj(telemetrySource_entity)
+            nifi_ops.processTelemetrySourceMode(telemetrySource, ngsi)
+

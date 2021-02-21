@@ -16,8 +16,8 @@ class Endpoint(Entity):
     type: Literal["Endpoint"] = "Endpoint"
     hasLogin: Optional[Relationship] = None
     name: Property
-    uri: _URI
-
+    uri: Optional[_URI] = None
+    address: Optional[Property] = None
 
 class StageMode(Property):
     value: Literal["START", "STOP", "TERMINATE"]
@@ -50,6 +50,7 @@ class MetricProcessor(MetricStage):
     arguments: Optional[Property] = None
     jobId: Property
 
+
 class MetricTarget(MetricStage):
     type: Literal["MetricTarget"] = "MetricTarget"
     hasInput: Relationship
@@ -63,3 +64,12 @@ class StreamApplication(Entity):
     entryClass: Property
     description: Property
     uri: _URI
+
+
+class TelemetrySource(MetricStage):
+    type: Literal["TelemetrySource"] = "TelemetrySource"
+    arguments: Optional[Property] = None
+    hasEndpoint: Relationship
+    name: Property
+    subscriptionMode: Property
+    interval: Optional[Property] = None
