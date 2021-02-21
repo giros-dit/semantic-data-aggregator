@@ -221,7 +221,7 @@
 									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs/stageModel",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs/stageMode",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -232,7 +232,7 @@
 										"entities",
 										"{{metricsource1}}",
 										"attrs",
-										"stageModel"
+										"stageMode"
 									]
 								},
 								"description": "partially update the attribute of entity"
@@ -468,7 +468,7 @@
 									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metrictarget1}}/attrs/stageModel",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metrictarget1}}/attrs/stageMode",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -479,7 +479,7 @@
 										"entities",
 										"{{metrictarget1}}",
 										"attrs",
-										"stageModel"
+										"stageMode"
 									]
 								},
 								"description": "partially update the attribute of entity"
@@ -668,7 +668,7 @@
 									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}/attrs/stageModel",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricprocessor1}}/attrs/stageMode",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -679,7 +679,7 @@
 										"entities",
 										"{{metricprocessor1}}",
 										"attrs",
-										"stageModel"
+										"stageMode"
 									]
 								},
 								"description": "partially update the attribute of entity"
@@ -868,7 +868,7 @@
 									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"STOP\"\r\n}\r\n"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}/attrs/stageModel",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{streamapplication1}}/attrs/stageMode",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -879,7 +879,7 @@
 										"entities",
 										"{{streamapplication1}}",
 										"attrs",
-										"stageModel"
+										"stageMode"
 									]
 								},
 								"description": "partially update the attribute of entity"
