@@ -7,10 +7,11 @@
     "subscriptions": {
         "sample": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets",
+                "/interfaces/interface[name=Ethernet1]/state/counters/out-octets"
             ],
             "stream-mode": "sample",
-            "sample-interval": "1s",
+            "sample-interval": "5s",
             "qos": 0
         },
         "on-change": {

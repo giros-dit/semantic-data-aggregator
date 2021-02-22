@@ -175,7 +175,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
-    filename = '/app/gnmic-cfgs/cfg-kafka.json'
+    filename = '/gnmic-cfgs/cfg-kafka.json'
     with open(filename, 'r') as file:
         data = json.load(file)
         # outputs = data['outputs']
@@ -183,11 +183,26 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
         # topic = output['topic']
         data['address'] = endpoint.address.value
         data['outputs']['output']['topic'] = entity_id
-        if subscription_mode == "sample":
+        if subscription_mode == "on-change":
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.name.value) is str:
+                telemetry_data.append(telemetrySource.name.value)
+            elif type(telemetrySource.name.value) is list:
+                telemetry_data = telemetrySource.name.value
+            data['subscriptions']['on-change']['paths'] = telemetry_data
+        elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.name.value) is str:
+                telemetry_data.append(telemetrySource.name.value)
+            elif type(telemetrySource.name.value) is list:
+                telemetry_data = telemetrySource.name.value
+            data['subscriptions']['sample']['paths'] = telemetry_data
             # Get interval value
-            interval = telemetrySource.interval.value
+            interval = subscription_mode['interval'] #telemetrySource.interval.value
             # Get interval unit
-            interval_unit = UnitCode[telemetrySource.interval.unitCode].value
+            interval_unit = UnitCode[telemetrySource.subscriptionMode.unitCode].value #UnitCode[telemetrySource.interval.unitCode].value
             data['subscriptions']['sample']['sample-interval'] = interval+interval_unit
 
     os.remove(filename)
@@ -206,7 +221,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     )
     # Set variable for TS PG
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
-    arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_mode)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
 
     # Deploy TS template
@@ -524,7 +540,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
-    filename = '/app/gnmic-cfgs/cfg-kafka.json'
+    filename = '/gnmic-cfgs/cfg-kafka.json'
     with open(filename, 'r') as file:
         data = json.load(file)
         # outputs = data['outputs']
@@ -532,11 +548,26 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
         # topic = output['topic']
         data['address'] = endpoint.address.value
         data['outputs']['output']['topic'] = entity_id
-        if subscription_mode == "sample":
+        if subscription_mode == "on-change":
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.name.value) is str:
+                telemetry_data.append(telemetrySource.name.value)
+            elif type(telemetrySource.name.value) is list:
+                telemetry_data = telemetrySource.name.value
+            data['subscriptions']['on-change']['paths'] = telemetry_data
+        elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.name.value) is str:
+                telemetry_data.append(telemetrySource.name.value)
+            elif type(telemetrySource.name.value) is list:
+                telemetry_data = telemetrySource.name.value
+            data['subscriptions']['sample']['paths'] = telemetry_data
             # Get interval value
-            interval = telemetrySource.interval.value
+            interval = subscription_mode['interval'] #telemetrySource.interval.value
             # Get interval unit
-            interval_unit = UnitCode[telemetrySource.interval.unitCode].value
+            interval_unit = UnitCode[telemetrySource.subscriptionMode.unitCode].value #UnitCode[telemetrySource.interval.unitCode].value
             data['subscriptions']['sample']['sample-interval'] = interval+interval_unit
 
     os.remove(filename)
@@ -544,7 +575,8 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
         json.dump(data, file, indent=4)
     # Set variables for TS PG
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
-    arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_mode)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
     # Restart TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, True)

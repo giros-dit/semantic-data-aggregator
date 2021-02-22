@@ -68,8 +68,8 @@ class StreamApplication(Entity):
 
 class TelemetrySource(MetricStage):
     type: Literal["TelemetrySource"] = "TelemetrySource"
-    arguments: Optional[Property] = None
+    # arguments: Optional[Property] = None
     hasEndpoint: Relationship
     name: Property
     subscriptionMode: Property
-    interval: Optional[Property] = None
+    # interval: Optional[Property] = None

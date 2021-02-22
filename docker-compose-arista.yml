@@ -70,7 +70,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./gnmic-cfgs:/opt/nifi/nifi-current/gnmic-cfgs
+      - ./gnmic-cfgs:/gnmic-cfgs
     #command: "curl -sL https://github.com/karimra/gnmic/raw/master/install.sh | bash"
   node-exporter-1:
     image: prom/node-exporter
@@ -132,7 +132,7 @@ services:
     container_name: weaver
     volumes:
       - ./weaver/app:/app
-      - ./gnmic-cfgs:/app/gnmic-cfgs
+      - ./gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
