@@ -176,6 +176,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
+    subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)
         # outputs = data['outputs']
@@ -185,6 +186,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
         data['outputs']['output']['topic'] = entity_id
         if subscription_mode == "on-change":
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            subscription_name = subscription_mode
             telemetry_data = []
             if type(telemetrySource.name.value) is str:
                 telemetry_data.append(telemetrySource.name.value)
@@ -193,6 +195,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
             data['subscriptions']['on-change']['paths'] = telemetry_data
         elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            subscription_name = subscription_mode['mode']
             telemetry_data = []
             if type(telemetrySource.name.value) is str:
                 telemetry_data.append(telemetrySource.name.value)
@@ -222,7 +225,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     # Set variable for TS PG
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
-    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_mode)
+    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
 
     # Deploy TS template
@@ -541,6 +544,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
+    subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)
         # outputs = data['outputs']
@@ -550,6 +554,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
         data['outputs']['output']['topic'] = entity_id
         if subscription_mode == "on-change":
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            subscription_name = subscription_mode
             telemetry_data = []
             if type(telemetrySource.name.value) is str:
                 telemetry_data.append(telemetrySource.name.value)
@@ -558,6 +563,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
             data['subscriptions']['on-change']['paths'] = telemetry_data
         elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            subscription_name = subscription_mode['mode']
             telemetry_data = []
             if type(telemetrySource.name.value) is str:
                 telemetry_data.append(telemetrySource.name.value)
@@ -576,7 +582,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # Set variables for TS PG
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
-    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_mode)
+    arguments = "--config /gnmic-cfgs/cfg-kafka.json subscribe --name {0}".format(subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
     # Restart TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, True)
