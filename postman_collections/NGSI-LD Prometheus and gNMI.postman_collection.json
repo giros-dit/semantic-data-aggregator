@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "2a306c7f-108f-4539-aac0-e75af6ffadb5",
-		"name": "NGSI-LD Prometheus Telemetry",
+		"_postman_id": "f6ade4b8-e018-4dc1-bda5-6bf4dea08921",
+		"name": "NGSI-LD Prometheus and gNMI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -953,7 +953,7 @@
 					"name": "TelemetrySource",
 					"item": [
 						{
-							"name": "Create TelemetrySource:1 v1",
+							"name": "Create TelemetrySource:1",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -980,7 +980,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"yangPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"mode\": \"sample\", \n            \"interval\": \"5\"\n        },\n        \"unitCode\": \"SEC\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1000,7 +1000,7 @@
 							"response": []
 						},
 						{
-							"name": "Create TelemetrySource:1 v2",
+							"name": "Create TelemetrySource:2",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -1027,7 +1027,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"\",\n        \"unitCode\": \"SEC\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:2\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"yangPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1047,7 +1047,7 @@
 							"response": []
 						},
 						{
-							"name": "Create TelemetrySource:1 with Flags",
+							"name": "Create MetricTarget:1",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -1074,7 +1074,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet2]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    },\n    \"interval\": {\n        \"type\": \"Property\",\n        \"value\": \"\",\n        \"unitCode\": \"SEC\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": \"--config /gnmic-cfgs/cfg-kafka.json subscribe\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:1\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:TelemetrySource:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1094,7 +1094,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricTarget:4",
+							"name": "Create MetricTarget:2",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -1121,7 +1121,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:4\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:TelemetrySource:1\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricTarget:2\",\n    \"type\": \"MetricTarget\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:TelemetrySource:2\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://consumer:8080/notify\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1141,7 +1141,132 @@
 							"response": []
 						},
 						{
-							"name": "Partial Attribute Update",
+							"name": "Create Endpoint:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"address\": {\n        \"type\": \"Property\",\n        \"value\": \"ceos1:6030\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes of TelemetrySource:1",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"yangPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"on-change\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{telemetrysource1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes of TelemetrySource:2",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"yangPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": [\"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\", \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"]\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": {\r\n            \"mode\": \"sample\", \r\n            \"interval\": \"5\"\r\n        },\r\n        \"unitCode\": \"SEC\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource2}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{telemetrysource2}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update of TelemetrySource:1",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -1181,28 +1306,28 @@
 							"response": []
 						},
 						{
-							"name": "Update Entity Attributes v1",
+							"name": "Partial Attribute Update of TelemetrySource:2",
 							"request": {
 								"method": "PATCH",
 								"header": [
 									{
 										"key": "Content-Type",
 										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "text"
 									},
 									{
 										"key": "Link",
-										"type": "text",
-										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": {\r\n        \"type\": \"Property\",\r\n        \"value\": [\"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\", \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"]\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": {\r\n            \"mode\": \"sample\", \r\n            \"interval\": \"5\"\r\n        },\r\n        \"unitCode\": \"SEC\"\r\n    }\r\n}"
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"TERMINATE\"\r\n}\r\n"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource1}}/attrs",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource2}}/attrs/stageMode",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1211,50 +1336,12 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{telemetrysource1}}",
-										"attrs"
+										"{{telemetrysource2}}",
+										"attrs",
+										"stageMode"
 									]
 								},
-								"description": "update the attribute of entity"
-							},
-							"response": []
-						},
-						{
-							"name": "Update Entity Attributes v2",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									},
-									{
-										"key": "Link",
-										"type": "text",
-										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": {\r\n        \"type\": \"Property\",\r\n        \"value\": [\"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\", \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"]\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"sample\"\r\n    },\r\n    \"interval\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"5\",\r\n        \"unitCode\": \"SEC\"\r\n    }\r\n}"
-								},
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource1}}/attrs",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										"{{telemetrysource1}}",
-										"attrs"
-									]
-								},
-								"description": "update the attribute of entity"
+								"description": "partially update the attribute of entity"
 							},
 							"response": []
 						},
@@ -1283,98 +1370,103 @@
 					]
 				},
 				{
-					"name": "Create Endpoint:1",
-					"event": [
+					"name": "Endpoint",
+					"item": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:1\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
+							"name": "Create Endpoint:1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:1\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
 						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Endpoint:2",
-					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"address\": {\n        \"type\": \"Property\",\n        \"value\": \"ceos1:6030\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-							"protocol": "http",
-							"host": [
-								"{{broker}}"
+							"name": "Create Endpoint:2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							]
-						},
-						"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-					},
-					"response": []
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"address\": {\n        \"type\": \"Property\",\n        \"value\": \"ceos1:6030\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2296,6 +2388,10 @@
 		{
 			"key": "telemetrysource1",
 			"value": "urn:ngsi-ld:TelemetrySource:1"
+		},
+		{
+			"key": "telemetrysource2",
+			"value": "urn:ngsi-ld:TelemetrySource:2"
 		},
 		{
 			"key": "metrictarget4",

@@ -23,6 +23,7 @@
 	"fileId": "http://example.org/fileId",
 	"entryClass": "http://example.org/entryClass",
         "TelemetrySource": "http://example.org/TelemetrySource",
+        "yangPath": "http://example.org/yangPath",
         "subscriptionMode": "http://example.org/subscriptionMode"
     }
 }

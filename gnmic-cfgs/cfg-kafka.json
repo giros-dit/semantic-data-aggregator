@@ -16,7 +16,7 @@
         },
         "on-change": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+                "/interfaces/interface[name=Ethernet1]/state/admin-status"
             ],
             "stream-mode": "on-change"
         }
@@ -25,7 +25,7 @@
         "output": {
             "type": "kafka",
             "address": "kafka:9092",
-            "topic": "telemetrysource-1",
+            "topic": "telemetrysource-2",
             "max-retry": 2,
             "timeout": "5s",
             "recovery-wait-time": "10s",
