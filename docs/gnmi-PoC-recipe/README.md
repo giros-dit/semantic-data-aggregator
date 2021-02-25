@@ -1,4 +1,4 @@
-# gNMI Telemetry Proof of Concept Recipe
+# gNMI Telemetry Proof of Concept - Recipe
 
 The purpose of this prototype is collect data of [gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the semantic data aggregator. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
 
@@ -87,4 +87,4 @@ Get Response:
 (2) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name on-change
 ```
 In the message bus of the Kafka docker container, a new topic will appear where new entries will be written according to the type of subscription chosen.
-- [`NGSI-LD Prometheus and gNMI`](postman_collections/NGSI-LD%20Prometheus%20and%20gNMI.postman_collection.json) Postman collection has a set of requests that can be used to model a NGSI-LD datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the semantic data aggregator using `gNMIc`. 
+- [`NGSI-LD Prometheus and gNMI`](../../postman_collections/NGSI-LD%20Prometheus%20and%20gNMI.postman_collection.json) Postman collection has a set of requests that can be used to model a NGSI-LD datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the semantic data aggregator using `gNMIc`. 
