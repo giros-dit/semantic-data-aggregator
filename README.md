@@ -39,6 +39,25 @@ In case you are interested in running the prototype in background (kafka or scor
 docker-compose up -d
 ```
 
+If you are interested to run the gNMI-based data collection prototype, follow the next steps:
+
+1) Before starting docker-compose it is necessary to import the Arista cEOS router docker image. Specifically, the scenario uses one of the latest available versions "cEOS-lab-4.24.4M.tar". Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
+
+2) The command to import the image is:
+```bash
+docker import cEOS-lab-4.24.4M.tar ceos-image:4.24.4M
+```
+
+3) Then you can start the docker-compose:
+```bash
+docker-compose -f docker-compose-arista.yml up
+```
+
+The purpose of this prototype is collect data of [gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the semantic data aggregator. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [Arista cEOS routers](https://www.arista.com/en/products/software-controlled-container-networking) as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [gNMIc](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+
+To get a fine-grained view on how to extract telemetry information of Arista cEOS routers using the gNMIc client from our semantic data aggregator, follow the recipe.
+
+
 # Postman Collections
 
 This repository contains Postman collections that you can use to play with the REST APIs of some of the components present in the prototype. We recommend downloading [Postman Desktop](https://www.postman.com/downloads/) for an better user experience.
