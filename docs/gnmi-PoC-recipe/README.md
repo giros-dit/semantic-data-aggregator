@@ -35,7 +35,7 @@ ceos1#write memory
 ```
 
 5) In order to play with the `gNMIc` client, a series of steps and RPCs execution examples are shown:
-- The `nifi` Docker container has `gNMIc` installed.
+- The `nifi` docker container has `gNMIc` installed.
 - To learn about the gNMI capabilities of `ceos1` (which gNMI version the device runs, what models it is loaded with and which encoding it understands).
 ```bash
 root@nifi:/opt/nifi/nifi-current# gnmic -a ceos1:6030 -u admin -p xxxx --insecure capabilities
