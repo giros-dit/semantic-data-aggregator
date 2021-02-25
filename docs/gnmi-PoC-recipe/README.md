@@ -87,4 +87,4 @@ Get Response:
 (2) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name on-change
 ```
 In the message bus of the Kafka docker container, a new topic will appear where new entries will be written according to the type of subscription chosen.
-- [`NGSI-LD Prometheus and gNMI`](https://github.com/giros-dit/semantic-data-aggregator/blob/gnmi/postman_collections/NGSI-LD%20Prometheus%20and%20gNMI.postman_collection.json) Postman collection has a set of requests that can be used to model a NGSI-LD datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` from the semantic data aggregator using `gNMIc`. 
+- [`NGSI-LD Prometheus and gNMI`](postman_collections/NGSI-LD%20Prometheus%20and%20gNMI.postman_collection.json) Postman collection has a set of requests that can be used to model a NGSI-LD datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the semantic data aggregator using `gNMIc`. 
