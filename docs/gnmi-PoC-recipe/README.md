@@ -74,7 +74,7 @@ Get Response:
   }
 ]
 ```
-- To subscribe to information (Subscribe RPC) about a specific leaf node of an available YANG tree module ((1) `on-change` or (2) `sample subscription modes):
+- To subscribe to information (Subscribe RPC) about a specific leaf node of an available YANG tree module ((1) `on-change` or (2) `sample` subscription modes):
 ```bash
 (1) root@nifi:/opt/nifi/nifi-current# gnmic -a ceos1:6030 -u admin -p xxxx --insecure subscribe --path "/interfaces/interface[name=Ethernet1]/state/counters/in-octets" --stream-mode on_change --qos 0
 
