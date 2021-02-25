@@ -55,7 +55,7 @@ docker-compose -f docker-compose-arista.yml up
 
 The purpose of this prototype is collect data of [gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the semantic data aggregator. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
 
-To get a fine-grained view on how to extract telemetry information of Arista cEOS routers using the gNMIc client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](semantic-data-aggregator/new/gnmi/docs/gnmi-PoC-recipe/README.md).
+To get a fine-grained view on how to extract telemetry information of Arista cEOS routers using the gNMIc client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-PoC-recipe/README.md).
 
 
 # Postman Collections
