@@ -41,7 +41,7 @@ docker-compose up -d
 
 If you are interested to run the gNMI-based data collection prototype, follow the next steps:
 
-1) Before starting docker-compose it is necessary to import the Arista cEOS router docker image. Specifically, the scenario uses one of the latest available versions "cEOS-lab-4.24.4M.tar". Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
+1) Before starting docker-compose it is necessary to import the Arista cEOS router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.24.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
 
 2) The command to import the image is:
 ```bash
