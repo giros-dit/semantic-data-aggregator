@@ -4,7 +4,7 @@ The purpose of this prototype is collect data of [gNMI](https://github.com/openc
 
 Here are the most important steps to be able to run the gNMI-based data collection prototype and extract telemetry information of Arista cEOS routers using the gNMIc client from the semantic data aggregator:
 
-1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available versions `cEOS-lab-4.24.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
+1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.24.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
 
 2) The command to import the image is:
 ```bash
