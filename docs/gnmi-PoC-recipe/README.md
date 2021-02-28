@@ -80,7 +80,7 @@ Get Response:
 
 (2) root@nifi:/opt/nifi/nifi-current# gnmic -a ceos1:6030 -u admin -p xxxx --insecure subscribe --path "/interfaces/interface[name=Ethernet1]/state/counters/in-octets" --stream-mode sample --sample-interval 5s --qos 0
 ```
-- [`/gnmic-cfgs/cfg-kafka.json`](../../gnmic-cfgs/cfg-kafka.json) is the configuration file used to automate the gNMI subscriptions and store the information monitored in the Kafka data data substrate of the aggregator. Weaver is the building block in charge of parameterizing the file values regarding the type and subscription interval, the YANG path of the data to be monitored, the address and port of the endpoint and the Kafka topic. To be able to do a subscription test with `gNMIc` using this configuration file, you can run the following example commands ((1) `on-change` or (2) `sample` subscription modes):
+- [`/gnmic-cfgs/cfg-kafka.json`](../../gnmic-cfgs/cfg-kafka.json) is the configuration file used to automate the gNMI subscriptions and store the information monitored in the Kafka data data substrate of the aggregator. Weaver is the building block in charge of parameterizing the file values regarding the type and subscription interval, the YANG path of the data to be monitored, the address and port of the endpoint and the Kafka topic. To be able to do a subscription test with `gNMIc` using this configuration file, you can run the following example commands ((1) `sample` or (2) `on-change` subscription modes):
 ```bash
 (1) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name sample
 
