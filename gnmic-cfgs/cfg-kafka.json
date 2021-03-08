@@ -7,8 +7,7 @@
     "subscriptions": {
         "sample": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets",
-                "/interfaces/interface[name=Ethernet1]/state/counters/out-octets"
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
             ],
             "stream-mode": "sample",
             "sample-interval": "5s",
@@ -25,11 +24,11 @@
         "output": {
             "type": "kafka",
             "address": "kafka:9092",
-            "topic": "telemetrysource-2",
+            "topic": "telemetrysource-1",
             "max-retry": 2,
             "timeout": "5s",
             "recovery-wait-time": "10s",
-            "format": "event",
+            "format": "prototext",
             "num-workers": 1,
             "debug": false
         }

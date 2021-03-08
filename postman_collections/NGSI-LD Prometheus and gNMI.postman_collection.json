@@ -980,7 +980,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"yangPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"mode\": \"sample\", \n            \"interval\": \"5\"\n        },\n        \"unitCode\": \"SEC\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:1\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"XPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"mode\": \"sample\", \n            \"interval\": \"5\"\n        },\n        \"unitCode\": \"SEC\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1027,7 +1027,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:2\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"yangPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:TelemetrySource:2\",\n    \"type\": \"TelemetrySource\",\n    \"stageMode\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"XPath\": {\n        \"type\": \"Property\",\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    },\n    \"subscriptionMode\": {\n        \"type\": \"Property\",\n        \"value\": \"on-change\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1168,7 +1168,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"address\": {\n        \"type\": \"Property\",\n        \"value\": \"ceos1:6030\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1206,7 +1206,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"yangPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"on-change\"\r\n    }\r\n}"
+									"raw": "{\r\n    \"XPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"/interfaces/interface[name=Ethernet1]/state/admin-status\"\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"on-change\"\r\n    }\r\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource1}}/attrs",
@@ -1245,7 +1245,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"yangPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": [\"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\", \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"]\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": {\r\n            \"mode\": \"sample\", \r\n            \"interval\": \"5\"\r\n        },\r\n        \"unitCode\": \"SEC\"\r\n    }\r\n}"
+									"raw": "{\r\n    \"XPath\": {\r\n        \"type\": \"Property\",\r\n        \"value\": [\"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\", \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"]\r\n    },\r\n    \"stageMode\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"subscriptionMode\": {\r\n        \"type\": \"Property\",\r\n        \"value\": {\r\n            \"mode\": \"sample\", \r\n            \"interval\": \"5\"\r\n        },\r\n        \"unitCode\": \"SEC\"\r\n    }\r\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetrysource2}}/attrs",

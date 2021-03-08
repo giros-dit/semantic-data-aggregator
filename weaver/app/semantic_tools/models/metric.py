@@ -16,8 +16,7 @@ class Endpoint(Entity):
     type: Literal["Endpoint"] = "Endpoint"
     hasLogin: Optional[Relationship] = None
     name: Property
-    uri: Optional[_URI] = None
-    address: Optional[Property] = None
+    uri: _URI
 
 class StageMode(Property):
     value: Literal["START", "STOP", "TERMINATE"]
@@ -69,6 +68,6 @@ class StreamApplication(Entity):
 class TelemetrySource(MetricStage):
     type: Literal["TelemetrySource"] = "TelemetrySource"
     hasEndpoint: Relationship
-    yangPath: Property
+    XPath: Property
     subscriptionMode: Property
     # interval: Optional[Property] = None

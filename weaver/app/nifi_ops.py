@@ -154,27 +154,27 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)
-        data['address'] = endpoint.address.value
+        data['address'] = endpoint.uri.value.split("://")[1]
         data['outputs']['output']['topic'] = entity_id
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
             telemetry_data = []
-            if type(telemetrySource.yangPath.value) is str:
-                telemetry_data.append(telemetrySource.yangPath.value)
-            elif type(telemetrySource.yangPath.value) is list:
-                telemetry_data = telemetrySource.yangPath.value
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
             data['subscriptions']['on-change']['paths'] = telemetry_data
         elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
             # Get the subscription mode name
             subscription_name = subscription_mode['mode']
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
             telemetry_data = []
-            if type(telemetrySource.yangPath.value) is str:
-                telemetry_data.append(telemetrySource.yangPath.value)
-            elif type(telemetrySource.yangPath.value) is list:
-                telemetry_data = telemetrySource.yangPath.value
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
             data['subscriptions']['sample']['paths'] = telemetry_data
             # Get interval value
             interval = subscription_mode['interval'] #telemetrySource.interval.value
@@ -521,27 +521,27 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)
-        data['address'] = endpoint.address.value
+        data['address'] = endpoint.uri.value.split("://")[1]
         data['outputs']['output']['topic'] = entity_id
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
             telemetry_data = []
-            if type(telemetrySource.yangPath.value) is str:
-                telemetry_data.append(telemetrySource.yangPath.value)
-            elif type(telemetrySource.yangPath.value) is list:
-                telemetry_data = telemetrySource.yangPath.value
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
             data['subscriptions']['on-change']['paths'] = telemetry_data
         elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
             # Get the subscription mode name
             subscription_name = subscription_mode['mode']
             # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
             telemetry_data = []
-            if type(telemetrySource.yangPath.value) is str:
-                telemetry_data.append(telemetrySource.yangPath.value)
-            elif type(telemetrySource.yangPath.value) is list:
-                telemetry_data = telemetrySource.yangPath.value
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
             data['subscriptions']['sample']['paths'] = telemetry_data
             # Get interval value
             interval = subscription_mode['interval'] #telemetrySource.interval.value
