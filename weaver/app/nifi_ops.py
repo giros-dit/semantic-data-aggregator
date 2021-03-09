@@ -1,6 +1,6 @@
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget
+from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget, TelemetrySource
 from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
 
@@ -8,6 +8,10 @@ import logging
 import nipyapi
 import ngsi_ld_ops
 import time
+import sys
+import ruamel.yaml
+import json
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +49,12 @@ def deleteMetricTarget(metricTarget: MetricTarget):
     ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
 
+def deleteTelemetrySource(telemetrySource: TelemetrySource):
+    """
+    Delete TelemetrySource flow
+    """
+    ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    nipyapi.canvas.delete_process_group(ts_pg, True)
 
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
@@ -52,6 +62,7 @@ def deployMetricSource(metricSource: MetricSource,
     Deploys a MetricSource NiFi template
     from a passed MetricSource NGSI-LD entity
     """
+    # Get Endpoint
     endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Build URL based on optional expression
@@ -62,7 +73,7 @@ def deployMetricSource(metricSource: MetricSource,
                metricSource.name.value + "{" + labels + "}")
     else:
         url = endpoint.uri.value + "?query=" + metricSource.name.value
-    # Get topic name from input ID
+    # Get topic name from MetricSource entity ID
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # We assume last string is an integer value
     source_id_number = int(metricSource.id.split(":")[-1])
@@ -127,6 +138,75 @@ def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
         mt_pg, [("consumer_url", metricTarget.uri.value)])
     return mt_pg
 
+def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) -> ProcessGroupEntity:
+    """
+    Deploys a TelemetrySource NiFi template
+    from a passed TelemetrySource NGSI-LD entity
+    """
+    # Get gNMI server address from hasEndpoint relationship
+    endpoint_entity = ngsi.retrieveEntityById(telemetrySource.hasEndpoint.object)
+    endpoint = Endpoint.parse_obj(endpoint_entity)
+    # Get topic name from TelemetrySource entity ID
+    entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    # Get subscription mode (sample or on-change)
+    subscription_mode = telemetrySource.subscriptionMode.value
+    filename = '/gnmic-cfgs/cfg-kafka.json'
+    subscription_name = ""
+    with open(filename, 'r') as file:
+        data = json.load(file)
+        data['address'] = endpoint.uri.value.split("://")[1]
+        data['outputs']['output']['topic'] = entity_id
+        if subscription_mode == "on-change":
+            # Get the subscription mode name
+            subscription_name = subscription_mode
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
+            data['subscriptions']['on-change']['paths'] = telemetry_data
+        elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
+            # Get the subscription mode name
+            subscription_name = subscription_mode['mode']
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
+            data['subscriptions']['sample']['paths'] = telemetry_data
+            # Get interval value
+            interval = subscription_mode['interval'] #telemetrySource.interval.value
+            # Get interval unit
+            interval_unit = UnitCode[telemetrySource.subscriptionMode.unitCode].value #UnitCode[telemetrySource.interval.unitCode].value
+            data['subscriptions']['sample']['sample-interval'] = interval+interval_unit
+
+    os.remove(filename)
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
+
+    # We assume last string is an integer value
+    source_id_number = int(telemetrySource.id.split(":")[-1])
+    # Get root PG
+    root_pg = nipyapi.canvas.get_process_group("root")
+    # Y multiply ID last integer by 200, X fixed to 500 for TS PGs
+    ts_pg = nipyapi.canvas.create_process_group(
+                    root_pg,
+                    telemetrySource.id,
+                    (500, 200*source_id_number)
+    )
+    # Set variable for TS PG
+    nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
+    # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
+    nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
+
+    # Deploy TS template
+    ts_template = nipyapi.templates.get_template("TelemetrySource")
+    ts_pg_flow = nipyapi.templates.deploy_template(ts_pg.id, ts_template.id)
+
+    return ts_pg
 
 def getMetricSourcePG(metricSource: MetricSource) -> ProcessGroupEntity:
     """
@@ -141,6 +221,11 @@ def getMetricTargetPG(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
     return nipyapi.canvas.get_process_group(metricTarget.id)
 
+def getTelemetrySourcePG(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
+    """
+    Get NiFi flow (Process Group) from TelemetrySource
+    """
+    return nipyapi.canvas.get_process_group(telemetrySource.id)
 
 def getQueryLabels(metricSource: MetricSource) -> str:
     """
@@ -181,6 +266,17 @@ def instantiateMetricTarget(metricTarget: MetricTarget):
         "MetricTarget '{0}' scheduled in NiFi.".format(
             metricTarget.id))
 
+def instantiateTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
+    """
+    Deploys and starts TelemetrySource template given
+    a TelemetrySource entity
+    """
+    ts_pg = deployTelemetrySource(telemetrySource, ngsi)
+    # Schedule TS PG
+    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
+    logger.info(
+        "TelemetrySource '{0}' scheduled in NiFi.".format(
+            telemetrySource.id))
 
 def processMetricSourceMode(metricSource: MetricSource,
                             ngsi: NGSILDClient):
@@ -275,6 +371,51 @@ def processMetricTargetMode(metricTarget: MetricTarget,
         logger.info("Delete '{0}' entity".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
 
+def processTelemetrySourceMode(telemetrySource: TelemetrySource,
+                            ngsi: NGSILDClient):
+    """
+    Process TelemetrySource resources (i.e., NiFi flow)
+    based on the value of the stageMode property
+    """
+    ngsi_ld_ops.appendModeResult(ngsi, telemetrySource.id)
+    ts_pg = getTelemetrySourcePG(telemetrySource)
+    if telemetrySource.stageMode.value == "START":
+        if ts_pg:
+            logger.info(
+                "Upgrade '{0}' NiFi flow.".format(
+                    telemetrySource.id)
+            )
+            upgradeTelemetrySource(telemetrySource, ngsi)
+        else:
+            logger.info(
+                "Instantiate new '{0}' NiFi flow.".format(
+                    telemetrySource.id)
+            )
+            instantiateTelemetrySource(telemetrySource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, telemetrySource.id)
+    if telemetrySource.stageMode.value == "STOP":
+        if ts_pg:
+            logger.info(
+                "Stop '{0}' NiFi flow.".format(
+                    telemetrySource.id)
+            )
+            stopTelemetrySource(telemetrySource)
+        else:
+            logger.info(
+                "New '{0}' to STOP.".format(
+                    telemetrySource.id)
+            )
+            deployTelemetrySource(telemetrySource, ngsi)
+        ngsi_ld_ops.stageToSuccessful(ngsi, telemetrySource.id)
+    if telemetrySource.stageMode.value == "TERMINATE":
+        logger.info(
+            "Terminate '{0}' NiFi flow.".format(
+                telemetrySource.id)
+        )
+        deleteTelemetrySource(telemetrySource)
+        ngsi_ld_ops.stageToSuccessful(ngsi, telemetrySource.id)
+        logger.info("Delete '{0}' entity".format(telemetrySource.id))
+        ngsi.deleteEntity(telemetrySource.id)
 
 def stopMetricSource(metricSource: MetricSource) -> ProcessGroupEntity:
     """
@@ -291,6 +432,12 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
 
+def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
+    """
+    Stop NiFi flow (Process Group) from TelemetrySource
+    """
+    ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    return nipyapi.canvas.schedule_process_group(ts_pg.id, False)
 
 def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
@@ -298,6 +445,7 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     for a given MetricSource entity
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    # Stop MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, False)
     # Get Endpoint
     endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
@@ -310,7 +458,7 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
                metricSource.name.value + "{" + labels + "}")
     else:
         url = endpoint.uri.value + "?query=" + metricSource.name.value
-    # Get topic name from input ID
+    # Get topic name from MetricSource entity ID
     entity_id = metricSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
     # Set variable for MS PG
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
@@ -343,10 +491,10 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     # Stop MT PG
     nipyapi.canvas.schedule_process_group(mt_pg.id, False)
-    # Set variables for MT PG
     # Get topic name from input ID
     input_id = metricTarget.hasInput.object.strip(
                     "urn:ngsi-ld:").replace(":", "-").lower()
+    # Set variables for MT PG
     nipyapi.canvas.update_variable_registry(
         mt_pg, [("topic", input_id)])
     nipyapi.canvas.update_variable_registry(
@@ -354,10 +502,67 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
     # Restart MT PG
     nipyapi.canvas.schedule_process_group(mt_pg.id, True)
 
+def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
+    """
+    Stops flow, updates variables and restarts flow
+    for a given TelemetrySource entity
+    """
+    ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    # Stop TS PG
+    nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+    # Get gNMI server address from hasEndpoint relationship
+    endpoint_entity = ngsi.retrieveEntityById(telemetrySource.hasEndpoint.object)
+    endpoint = Endpoint.parse_obj(endpoint_entity)
+    # Get topic name from TelemetrySource entity ID
+    entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    # Get subscription mode (sample or on-change)
+    subscription_mode = telemetrySource.subscriptionMode.value
+    filename = '/gnmic-cfgs/cfg-kafka.json'
+    subscription_name = ""
+    with open(filename, 'r') as file:
+        data = json.load(file)
+        data['address'] = endpoint.uri.value.split("://")[1]
+        data['outputs']['output']['topic'] = entity_id
+        if subscription_mode == "on-change":
+            # Get the subscription mode name
+            subscription_name = subscription_mode
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
+            data['subscriptions']['on-change']['paths'] = telemetry_data
+        elif subscription_mode['mode'] == "sample": #else: #elif subscription_mode == "sample":
+            # Get the subscription mode name
+            subscription_name = subscription_mode['mode']
+            # Get the names of the telemetry data paths to subscribe (path names of the YANG module data nodes)
+            telemetry_data = []
+            if type(telemetrySource.XPath.value) is str:
+                telemetry_data.append(telemetrySource.XPath.value)
+            elif type(telemetrySource.XPath.value) is list:
+                telemetry_data = telemetrySource.XPath.value
+            data['subscriptions']['sample']['paths'] = telemetry_data
+            # Get interval value
+            interval = subscription_mode['interval'] #telemetrySource.interval.value
+            # Get interval unit
+            interval_unit = UnitCode[telemetrySource.subscriptionMode.unitCode].value #UnitCode[telemetrySource.interval.unitCode].value
+            data['subscriptions']['sample']['sample-interval'] = interval+interval_unit
+
+    os.remove(filename)
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
+    # Set variables for TS PG
+    nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
+    # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
+    arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
+    nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
+    # Restart TS PG
+    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
 
 def upload_templates():
     """
-    Upload MetricSource and MetricTarget templates
+    Upload MetricSource, MetricTarget and TelemetrySource templates
     to the root process group
     """
     # Get root PG
@@ -373,3 +578,8 @@ def upload_templates():
             root_pg.id, "/app/config/templates/MetricTarget.xml")
     except ValueError:
         logger.info("MetricTarget already uploaded in NiFi")
+    try:
+        nipyapi.templates.upload_template(
+            root_pg.id, "/app/config/templates/TelemetrySource.xml")
+    except ValueError:
+        logger.info("TelemetrySource already uploaded in NiFi")

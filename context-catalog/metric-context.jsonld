@@ -18,9 +18,12 @@
         "hasApplication": "http://example.org/hasApplication",
         "jobId": "http://example.org/jobId",
         "arguments": "http://example.org/arguments",
-	    "StreamApplication": "http://example.org/StreamApplication",
-	    "fileName": "http://example.org/fileName",
-	    "fileId": "http://example.org/fileId",
-	    "entryClass": "http://example.org/entryClass"
+	"StreamApplication": "http://example.org/StreamApplication",
+	"fileName": "http://example.org/fileName",
+	"fileId": "http://example.org/fileId",
+	"entryClass": "http://example.org/entryClass",
+        "TelemetrySource": "http://example.org/TelemetrySource",
+        "XPath": "http://example.org/XPath",
+        "subscriptionMode": "http://example.org/subscriptionMode"
     }
 }

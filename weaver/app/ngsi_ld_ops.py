@@ -15,6 +15,7 @@ class SubscriptionType(Enum):
     MetricSource = "urn:ngsi-ld:Subscription:MetricSource"
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication"
+    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource"
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -139,7 +140,7 @@ def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     Create subscription for MetricSource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricSource,
-                       uri, "stageMode"),
+                       uri, "stageMode")
 
 
 def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
@@ -156,3 +157,10 @@ def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
     """
     _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
                        uri, attribute)
+
+def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for TelemetrySource entity
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "stageMode")

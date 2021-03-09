@@ -1,0 +1,33 @@
+# gNMI target address; CLI flag `--address`
+address: "ceos1:6030"
+# gNMI target user name; CLI flag `--username`
+username: admin
+# gNMI target user password; CLI flag `--password`
+password: xxxx
+# connection mode; CLI flag `--insecure`
+insecure: true
+# log file location; CLI flag `--log-file`
+log-file: /tmp/gnmic.log
+
+subscriptions:
+  # A named subscription, a key is a name
+  port_stats_1:
+    # List of subscription paths for that named subscription
+    paths:
+      - "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+      #- "/interfaces/interface[name=Ethernet1]/state/counters/out-octets"
+    # One of [on-change target-defined sample]
+    stream-mode: sample
+    sample-interval: 5s
+    qos: 0
+
+  # A named subscription, a key is a name
+  port_stats_2:
+    # List of subscription paths for that named subscription
+    paths:
+      #- "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+      - "/interfaces/interface[name=Ethernet1]/state/counters/out-octets"
+    # One of [on-change target-defined sample]
+    stream-mode: sample
+    sample-interval: 5s
+    qos: 0
