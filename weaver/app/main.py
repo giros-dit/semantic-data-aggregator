@@ -63,10 +63,6 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
-            # Query entity by id to get the 'unitCode'
-            # from MetricSource (notification doesn't receive it)
-            metricSource_entity = ngsi.retrieveEntityById(metricSource.id)
-            metricSource = MetricSource.parse_obj(metricSource_entity)
             nifi_ops.processMetricSourceMode(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
@@ -79,9 +75,5 @@ async def receiveNotification(request: Request):
             flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
-            # Query entity by id to get the 'unitCode'
-            # from TelemetrySource (notification doesn't receive it)
-            telemetrySource_entity = ngsi.retrieveEntityById(telemetrySource.id)
-            telemetrySource = TelemetrySource.parse_obj(telemetrySource_entity)
             nifi_ops.processTelemetrySourceMode(telemetrySource, ngsi)
 
