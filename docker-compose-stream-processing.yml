@@ -130,7 +130,7 @@ services:
     depends_on:
       - postgres
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_1.0.5
+    image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
     container_name: scorpio
     ports:
