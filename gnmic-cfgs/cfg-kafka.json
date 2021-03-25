@@ -15,7 +15,7 @@
         },
         "on-change": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/admin-status"
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
             ],
             "stream-mode": "on-change"
         }
@@ -28,7 +28,7 @@
             "max-retry": 2,
             "timeout": "5s",
             "recovery-wait-time": "10s",
-            "format": "prototext",
+            "format": "json",
             "num-workers": 1,
             "debug": false
         }

@@ -1,6 +1,6 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import ModeResult
+from semantic_tools.models.metric import State
 
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
-    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor"
-    MetricSource = "urn:ngsi-ld:Subscription:MetricSource"
-    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget"
-    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication"
-    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource"
+    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:weaver-subs"
+    MetricSource = "urn:ngsi-ld:Subscription:MetricSource:weaver-subs"
+    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:weaver-subs"
+    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:weaver-subs"
+    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:weaver-subs"
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -56,20 +56,20 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
-def appendModeResult(ngsi: NGSILDClient, entityId: str):
+def appendState(ngsi: NGSILDClient, entityId: str, _stateInfo: str):
     """
-    Appends 'modeResult' property to an entity.
-    This property is set to 'IN_PROGRESS' by default.
+    It appends 'state' property to an entity.
+    This property is set to 'BUILDING' by default.
     """
-    result = {
-        "modeResult": ModeResult(
-            value="IN_PROGRESS",
-            modeInfo={
-                "value": ""
+    state = {
+        "state": State(
+            value="BUILDING",
+            stateInfo={
+                "value": _stateInfo #""
             }
         ).dict(exclude_none=True)
     }
-    ngsi.appendEntityAttrs(entityId, result)
+    ngsi.appendEntityAttrs(entityId, state)
 
 
 def check_scorpio_status(ngsi: NGSILDClient):
@@ -90,49 +90,85 @@ def check_scorpio_status(ngsi: NGSILDClient):
             continue
 
 
-def stageToInProgress(ngsi: NGSILDClient, entityId: str):
+def stateToBuilding(ngsi: NGSILDClient, entityId: str):
     """
-    Update modeResult of a given stage to IN_PROGRESS
+    Update state of a given agent entity to BUILDING
     """
-    result = {
-        "modeResult": ModeResult(
-            value="IN_PROGRESS"
+    state = {
+        "state": State(
+            value="BUILDING"
         ).dict(exclude_none=True)
     }
-    ngsi.updateEntityAttrs(entityId, result)
+    ngsi.updateEntityAttrs(entityId, state)
 
 
-def stageToFailed(ngsi: NGSILDClient, entityId: str, modeInfo_dict: dict):
+def stateToFailed(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update modeResult of a given stage to FAILED
+    Update state of a given agent entity to FAILED
     """
-    result = {
-        "modeResult": ModeResult(
+    state = {
+        "state": State(
             value="FAILED",
-            modeInfo=modeInfo_dict #{"value": "ERROR. Add Python traceback here."}
+            stateInfo=stateInfo_dict #{"value": "ERROR. Add Python traceback here."}
         ).dict(exclude_none=True)
     }
-    ngsi.updateEntityAttrs(entityId, result)
+    ngsi.updateEntityAttrs(entityId, state)
 
 
-def stageToSuccessful(ngsi: NGSILDClient, entityId: str):
+def stateToRunning(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update modeResult of a given stage to SUCCESSFUL
+    Update state of a given agent entity to RUNNING
     """
-    result = {
-        "modeResult": ModeResult(
-            value="SUCCESSFUL"
+    state = {
+        "state": State(
+            value="RUNNING",
+            stateInfo=stateInfo_dict
         ).dict(exclude_none=True)
     }
-    ngsi.updateEntityAttrs(entityId, result)
+    ngsi.updateEntityAttrs(entityId, state)
 
+def stateToStopped(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
+    """
+    Update state of a given agent entity to STOPPED
+    """
+    state = {
+        "state": State(
+            value="STOPPED",
+            stateInfo=stateInfo_dict
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, state)
+
+def stateToCleaned(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
+    """
+    Update state of a given agent entity to CLEANED
+    """
+    state = {
+        "state": State(
+            value="CLEANED",
+            stateInfo=stateInfo_dict
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, state)
+
+def stateToUploaded(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
+    """
+    Update state of a stream application entity to UPLOADED
+    """
+    state = {
+        "state": State(
+            value="UPLOADED",
+            stateInfo=stateInfo_dict
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, state)
 
 def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricProcessor entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
-                       uri, "stageMode")
+                       uri, "action")
 
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
@@ -140,7 +176,7 @@ def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     Create subscription for MetricSource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricSource,
-                       uri, "stageMode")
+                       uri, "action")
 
 
 def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
@@ -148,19 +184,25 @@ def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
     Create subscription for MetricTarget entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricTarget,
-                       uri, "stageMode")
+                       uri, "action")
 
-
+"""
 def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
+    #Create subscription for StreamApplication entity
+    _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
+                       uri, attribute)
+"""
+
+def subscribeStreamApplication(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for StreamApplication entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
-                       uri, attribute)
+                       uri, "action")
 
 def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for TelemetrySource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
-                       uri, "stageMode")
+                       uri, "action")

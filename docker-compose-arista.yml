@@ -1,5 +1,43 @@
 version: '3'
 services:
+  ceos1:
+    image: "ceos-image:4.24.4M"
+    hostname: ceos1
+    container_name: ceos1
+    ports:
+      - "6030:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  ceos2:
+    image: "ceos-image:4.24.4M"
+    hostname: ceos2
+    container_name: ceos2
+    ports:
+      - "6031:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
   consumer:
     build:
       context: ./consumer
@@ -18,6 +56,16 @@ services:
       - "8082:8080"
     volumes:
       - ./context-catalog:/web
+  experimenter:
+    build:
+      context: ./experimenter
+      dockerfile: Dockerfile
+    hostname: experimenter
+    container_name: experimenter
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./experimenter/app:/app
   flink-jobmanager:
     image: flink:latest
     hostname: flink-jobmanager
@@ -108,6 +156,22 @@ services:
       - "9099:9090"
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+  schema-registry:
+    image: schema-registry:0.9.0
+    hostname: schema-registry
+    container_name: schema-registry
+    environment:
+      DB_TYPE: "postgresql"
+      DATA_SRC_CLASS_NAME: "org.postgresql.ds.PGSimpleDataSource"
+      DB_URL: "jdbc:postgresql://postgres/ngb"
+      DB_USER: ngb
+      DB_PASSWORD: ngb
+      REGISTRY_HEAP_OPTS: "-Xmx1G -Xms1G"
+    ports:
+      - "9010:9090"
+      - "9011:9091"
+    depends_on:
+      - postgres
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
@@ -145,46 +209,6 @@ services:
     logging:
       driver: none
     working_dir: /
-  ceos1:
-    image: "ceos-image:4.24.4M"
-    hostname: ceos1
-    container_name: ceos1
-    ports:
-      - "6030:6030"
-    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
-    privileged: true
-    environment:
-      INTFTYPE: eth
-      ETBA: 1
-      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
-      CEOS: 1
-      EOS_PLATFORM: ceoslab
-      container: docker
-    networks:
-      default:
-      net1:
-      net2:
-  ceos2:
-    image: "ceos-image:4.24.4M"
-    hostname: ceos2
-    container_name: ceos2
-    ports:
-      - "6031:6030"
-    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
-    privileged: true
-    environment:
-      INTFTYPE: eth
-      ETBA: 1
-      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
-      CEOS: 1
-      EOS_PLATFORM: ceoslab
-      container: docker
-    networks:
-      default:
-      net1:
-      net2:
 networks:
   net1:
   net2:
-  gnmic-net:
-    driver: bridge

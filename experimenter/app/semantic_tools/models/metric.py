@@ -18,14 +18,6 @@ class Endpoint(Entity):
     name: Property
     uri: _URI
 
-"""
-class Prometheus(Entity):
-    type: Literal["Prometheus"] = "Prometheus"
-    hasEndpoint: Relationship
-    name: Property
-    version: Property
-"""
-
 class Action(Property):
     value: Literal["START", "STOP", "END"]
 
@@ -63,6 +55,15 @@ class MetricTarget(Agent):
     hasInput: Relationship
     uri: _URI
 
+"""
+class StreamApplication(Entity):
+    type: Literal["StreamApplication"] = "StreamApplication"
+    fileName: Property
+    fileId: Property
+    entryClass: Property
+    description: Property
+    uri: _URI
+"""
 
 class StreamApplication(Agent):
     type: Literal["StreamApplication"] = "StreamApplication"

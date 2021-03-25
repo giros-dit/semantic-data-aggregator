@@ -4,6 +4,7 @@ from semantic_tools.models.metric import (
     MetricProcessor,
     StreamApplication
 )
+from semantic_tools.models.ngsi_ld.entity import Entity
 
 import logging
 import ngsi_ld_ops
@@ -35,7 +36,7 @@ def uploadStreamApp(streamApplication: StreamApplication,
     subprocess.call(["rm", streamApplication.fileName.value])
 
     # Update StreamApplication Entity with JAR id and entry-class
-    jarfiles = flink.getFlinkAppsJars()['files']
+    jarfiles = flink.getFlinkAppJars()['files']
     jarfile_id = ""
     entries = ""
     entry_name = ""
@@ -165,91 +166,214 @@ def getStreamAppArguments(metricProcessor: MetricProcessor,
 
     return arguments
 
-def processMetricProcessorMode(metricProcessor: MetricProcessor,
+def processStreamApplicationState(streamApplication: StreamApplication,
+                               ngsi: NGSILDClient,
+                               flink: FlinkClient):
+    """
+    Process StreamApplication resources (i.e., application jar)
+    based on the value of the action property
+    """
+    ngsi_ld_ops.appendState(ngsi, streamApplication.id, "Building the stream application...")
+    jar = ""
+    jar_exists = False
+    if streamApplication.fileId.value != "":
+        jarId = streamApplication.fileId.value
+        jar_exists = True
+    if streamApplication.action.value == "START":
+        if jar_exists == False:
+            uploadStreamApp(streamApplication, ngsi, flink)
+            logger.info(
+                "Upload new '{0}' Flink application jar.".format(streamApplication.id)
+                )
+        else:
+            # Delete jar and create another one with new configuration
+            logger.info("Delete Flink application jar with id {0}".format(jarId))
+            flink.deleteJar(jarId)
+            uploadStreamApp(streamApplication, ngsi, flink)
+            logger.info(
+                "Upgrade '{0}' Flink application jar.".format(streamApplication.id)
+                )
+        ngsi_ld_ops.stateToUploaded(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application uploaded successfully."})
+    elif streamApplication.action.value == "END":
+        if jar_exists == False:
+            logger.info(
+                "New '{0}' Flink application jar does not exist.".format(streamApplication.id)
+            )
+        else:
+            logger.info("Delete Flink application jar with id {0}".format(jarId))
+            flink.deleteJar(jarId)
+        ngsi_ld_ops.stateToCleaned(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application deleted successfully."})
+        logger.info("Delete '{0}' entity".format(streamApplication.id))
+        ngsi.deleteEntity(streamApplication.id)
+
+def processMetricProcessorState(metricProcessor: MetricProcessor,
                                ngsi: NGSILDClient,
                                flink: FlinkClient):
     """
     Process MetricProcess resources (i.e., Flink job)
-    based on the value of the stageMode property
+    based on the value of the action property
     """
-    ngsi_ld_ops.appendModeResult(ngsi, metricProcessor.id)
+    ngsi_ld_ops.appendState(ngsi, metricProcessor.id, "Building the aggregation agent...")
     job = ""
-    job_exist = False
+    job_exists = False
     if metricProcessor.jobId.value != "":
         job = flink.getFlinkJob(metricProcessor.jobId.value)
-        job_exist = True
-    if metricProcessor.stageMode.value == "START":
-        modeResult_failed = checkStreamApplicationExistence(metricProcessor, ngsi)
-        if modeResult_failed == False:
-            if job_exist == False or job['state'] == 'CANCELED':
+        job_exists = True
+    if metricProcessor.action.value == "START":
+        streamApplication_exists = checkStreamApplicationExistence(metricProcessor, ngsi)
+        input_exists = checkInputExistence(metricProcessor, ngsi)
+        if streamApplication_exists == True and input_exists == True:
+            if job_exists == False or job['state'] == 'CANCELED':
                 submitStreamJob(metricProcessor, ngsi, flink)
                 logger.info(
-                    "Start new '{0}' MetricProcessor.".format(metricProcessor.id)
+                    "Submit new '{0}' Flink Job.".format(metricProcessor.id)
                     )
-            elif job_exist and job['state'] == 'RUNNING':
+            elif job_exists and job['state'] == 'RUNNING':
                 # Cancel job and create another with new configuration
                 #deleteStreamJob(metricProcessor, ngsi, flink)
                 logger.info(
-                    "Delete Flink Job with id {0}".format(
+                    "Cancel Flink Job with id {0}".format(
                         flink.deleteJob(job['jid'])))
                 submitStreamJob(metricProcessor, ngsi, flink)
                 logger.info(
-                    "Upgrade '{0}' MetricProcessor.".format(metricProcessor.id)
+                    "Upgrade '{0}' Flink Job.".format(metricProcessor.id)
                     )
-            ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
-    if metricProcessor.stageMode.value == "STOP":
-        if job_exist == False or job['state'] == 'CANCELED':
+            ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent started successfully."})
+        else:
+            if streamApplication_exists == False:
+            	logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
+            	ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' StreamApplication entity doesn't exist.".format(metricProcessor.hasApplication.object)})
+
+            if input_exists == False:
+            	logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
+            	ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricProcessor.hasInput.object)})
+
+            logger.info("Delete '{0}' entity".format(metricProcessor.id))
+            ngsi.deleteEntity(metricProcessor.id)
+    elif metricProcessor.action.value == "STOP":
+        if job_exists == False or job['state'] == 'CANCELED':
             logger.info(
-                "New '{0}' MetricProcessor already stopped. Moving on.".format(
+                "New '{0}' Flink Job already stopped. Moving on.".format(
                     metricProcessor.id)
             )
-        elif job_exist and job['state'] == 'RUNNING':
+        elif job_exists and job['state'] == 'RUNNING':
             #deleteStreamJob(metricProcessor, ngsi, flink)
             logger.info(
-                "Delete Flink Job with id {0}".format(
+                "Cancel Flink Job with id {0}".format(
                     flink.deleteJob(job['jid'])))
             logger.info(
-                "Stop '{0}' MetricProcessor.".format(metricProcessor.id)
+                "Stop '{0}' Flink Job.".format(metricProcessor.id)
             )
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
-    if metricProcessor.stageMode.value == "TERMINATE":
-        if job_exist == False:
-            logger.info(
-                "New '{0}' MetricProcessor not started.".format(metricProcessor.id)
-            )
-        else:
-            logger.info(
-                "Terminate '{0}' MetricProcessor.".format(
-                    metricProcessor.id)
+        ngsi_ld_ops.stateToStopped(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent stopped successfully."})
+    elif metricProcessor.action.value == "END":
+        output_exists = checkOutputExistence(metricProcessor, ngsi)
+        if output_exists == False:
+            if job_exists == False:
+                logger.info(
+                    "New '{0}' Flink Job not started.".format(metricProcessor.id)
                 )
-            if job['state'] == 'RUNNING':
-                #deleteStreamJob(metricProcessor, ngsi, flink)
+            else:
+                if job['state'] == 'RUNNING':
+                    #deleteStreamJob(metricProcessor, ngsi, flink)
+                    logger.info(
+                        "Cancel Flink Job with id {0}".format(
+                            flink.deleteJob(job['jid'])))
                 logger.info(
-                    "Delete Flink Job with id {0}".format(
-                        flink.deleteJob(job['jid'])))
-                logger.info(
-                    "Cancel '{0}' MetricProcessor.".format(metricProcessor.id)
+                    "Delete '{0}' Flink Job.".format(
+                        metricProcessor.id)
                     )
-
-        ngsi_ld_ops.stageToSuccessful(ngsi, metricProcessor.id)
-        logger.info("Delete '{0}' entity".format(metricProcessor.id))
-        ngsi.deleteEntity(metricProcessor.id)
+            ngsi_ld_ops.stateToCleaned(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent deleted successfully."})
+            logger.info("Delete '{0}' entity".format(metricProcessor.id))
+            ngsi.deleteEntity(metricProcessor.id)
 
 def checkStreamApplicationExistence(metricProcessor: MetricProcessor, ngsi: NGSILDClient) -> bool:
     """
     Checking if MetricProcesor has a StreamApplication already created
     """
     streamApplication_entities = ngsi.queryEntities(type="StreamApplication")
-    modeResult_failed = False
+    streamApplication_exists = False
     if len(streamApplication_entities) > 0:
         for streamApplication_entity in streamApplication_entities:
             if streamApplication_entity['id'] == metricProcessor.hasApplication.object:
-                modeResult_failed = False
+                streamApplication_exists = True
+                break
             else:
-                modeResult_failed = True
+                streamApplication_exists = False
     else:
-        modeResult_failed = True
-    if modeResult_failed:
-        ngsi_ld_ops.stageToFailed(ngsi, metricProcessor.id, {"value": "ERROR. The '{0}' StreamApplication doesn't exist.".format(metricProcessor.hasApplication.object)})
-        logger.info("Start new '{0}' MetricProcessor. The job execution failed.".format(metricProcessor.id))
-    return modeResult_failed
+        streamApplication_exists = False
+    #if streamApplication_exists:
+        #ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' StreamApplication entity doesn't exist.".format(metricProcessor.hasApplication.object)})
+        #logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
+        #logger.info("Delete '{0}' entity".format(metricProcessor.id))
+        #ngsi.deleteEntity(metricProcessor.id)
+    return streamApplication_exists
+
+def checkInputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
+    """
+    Checking if aggregation agent entity has an input
+    """
+    candidate_input_entities = []
+    input_id = entity.hasInput.object
+    if input_id.split(":")[2] == "MetricSource":
+        candidate_input_entities = ngsi.queryEntities(type="MetricSource")
+    elif input_id.split(":")[2] == "MetricProcessor":
+        candidate_input_entities = ngsi.queryEntities(type="MetricProcessor")
+    input_exists = False
+    if len(candidate_input_entities) > 0:
+        for candidate_input_entity in candidate_input_entities:
+            if candidate_input_entity['id'] == input_id:
+                input_exists = True
+                break
+            else:
+                input_exists = False
+    else:
+        input_exists = False
+
+    return input_exists
+
+
+def checkOutputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
+    """
+    Checking if aggregation agent entity has an output
+    """
+    target_entities = ngsi.queryEntities(type="MetricTarget")
+    processor_entities = ngsi.queryEntities(type="MetricProcessor")
+
+    target_output_entities_id = []
+    processor_output_entities_id = []
+    output_entities_id = []
+
+    target_output_exists = False
+    processor_output_exists = False
+    output_exists = False
+
+    if len(target_entities) > 0:
+        for target_entity in target_entities:
+            if target_entity['hasInput']['object'] == entity.id:
+                target_output_exists = True
+                target_output_entities_id.append(target_entity['id'])
+        if len(target_output_entities_id) > 0:
+            output_entities_id.extend(target_output_entities_id)
+        else:
+            target_output_exists = False
+    else:
+        target_output_exists = False
+
+    if len(processor_entities) > 0:
+        for processor_entity in processor_entities:
+            if processor_entity['hasInput']['object'] == entity.id:
+                processor_output_exists = True
+                processor_output_entities_id.append(processor_entity['id'])
+        if len(processor_output_entities_id) > 0:
+            output_entities_id.extend(processor_output_entities_id)
+        else:
+            processor_output_exists = False
+    else:
+        processor_output_exists = False
+
+    if target_output_exists == True or processor_output_exists == True:
+        logger.info("Delete a '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
+        ngsi_ld_ops.stateToFailed(ngsi, entity.id, {"value": "ERROR! The '{0}' entity has an output: '{1}'.".format(entity.id, output_entities_id)})
+        output_exists = True
+
+    return output_exists

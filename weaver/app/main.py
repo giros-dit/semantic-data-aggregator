@@ -48,11 +48,10 @@ async def startup_event():
     nifi_ops.upload_templates()
     # Check Scorpio API is up
     ngsi_ld_ops.check_scorpio_status(ngsi)
-    # Subscribe to data pipeline stage entities
+    # Subscribe to data pipeline agent entities
     ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
-    # Fix to avoid loops when creating StreamApplications
-    ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri, "fileName")
+    ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
 
@@ -63,17 +62,17 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
-            nifi_ops.processMetricSourceMode(metricSource, ngsi)
+            nifi_ops.processMetricSourceState(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
-            nifi_ops.processMetricTargetMode(metricTarget, ngsi)
+            nifi_ops.processMetricTargetState(metricTarget, ngsi)
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            flink_ops.processMetricProcessorMode(metricProcessor, ngsi, flink)
+            flink_ops.processMetricProcessorState(metricProcessor, ngsi, flink)
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
-            flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
+            flink_ops.processStreamApplicationState(streamApplication, ngsi, flink)
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
-            nifi_ops.processTelemetrySourceMode(telemetrySource, ngsi)
+            nifi_ops.processTelemetrySourceState(telemetrySource, ngsi)
 

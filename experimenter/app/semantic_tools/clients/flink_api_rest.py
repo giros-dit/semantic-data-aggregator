@@ -23,7 +23,7 @@ class FlinkClient():
         retry_strategy = Retry(
             total=10,
             status_forcelist=[429, 500, 502, 503, 504],
-            method_whitelist=["HEAD", "GET", "PATCH", "PUT", "POST", "OPTIONS", "DELETE"],
+            method_whitelist=["HEAD", "GET", "PATCH", "PUT", "POST", "OPTIONS"],
             backoff_factor=5
         )
         self._session = requests.Session()
@@ -65,24 +65,25 @@ class FlinkClient():
             return response.raise_for_status()
 
     # Get Flink application jars
-    def getFlinkAppJars(self):
+    def getFlinkAppsJars(self):
         """
 	Returns a list of all jars previously uploaded via '/jars/upload'.
         """
         response = self._session.get("{0}/jars".format(self.url),
                                      verify=self.ssl_verification,
                                      headers=self.headers)
+
         print(response.json())
         if response.status_code == 200:
             return response.json()
         else:
             return response.raise_for_status()
 
-    # Get Flink job
+    # Get Flink jobs
     def getFlinkJob(self, jobId: str):
         """
         Returns a specific job.
-        """
+         """
         response = self._session.get("{0}/jobs/{1}".format(self.url, jobId),
                                      verify=self.ssl_verification,
                                      headers=self.headers)
@@ -180,9 +181,9 @@ class FlinkClient():
     # Delete a Flink job
     def deleteJob(self, jobId: str):
         """
-	Cancel/terminate a Flink job.
-	mode - String value that specifies the termination mode. The only supported value is: "cancel".
+	Cancel/Stop a Flink job.
         """
+
         params = {}
         params['mode'] = "cancel"
 
@@ -197,19 +198,3 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Delete an application jar from Flink cluster
-    def deleteJar(self, jarId: str):
-        """
-        Deletes a jar previously uploaded via '/jars/upload'.
-	jarid - String value that identifies a jar. When uploading the jar a path is returned, where the filename is the ID.
-	This value is equivalent to the `id` field in the list of uploaded jars (/jars).
-        """
-        response = self._session.delete(
-            "{0}/jars/{1}".format(self.url, jarId),
-            verify=self.ssl_verification,
-            headers=self.headers
-        )
-        if response.status_code == 204:
-            return jarId
-        else:
-            return response.raise_for_status()
