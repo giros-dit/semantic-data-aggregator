@@ -18,6 +18,14 @@ class Endpoint(Entity):
     name: Property
     uri: _URI
 
+
+class Prometheus(Entity):
+    type: Literal["Prometheus"] = "Prometheus"
+    hasEndpoint: Relationship
+    name: Property
+    version: Property
+
+
 class Action(Property):
     value: Literal["START", "STOP", "END"]
 
@@ -36,7 +44,7 @@ class Agent(Entity):
 class MetricSource(Agent):
     type: Literal["MetricSource"] = "MetricSource"
     expression: Optional[Property] = None
-    hasEndpoint: Relationship
+    collectsFrom: Relationship
     interval: Property
     name: Property
 
@@ -55,15 +63,6 @@ class MetricTarget(Agent):
     hasInput: Relationship
     uri: _URI
 
-"""
-class StreamApplication(Entity):
-    type: Literal["StreamApplication"] = "StreamApplication"
-    fileName: Property
-    fileId: Property
-    entryClass: Property
-    description: Property
-    uri: _URI
-"""
 
 class StreamApplication(Agent):
     type: Literal["StreamApplication"] = "StreamApplication"
@@ -73,10 +72,3 @@ class StreamApplication(Agent):
     description: Property
     uri: _URI
 
-
-class TelemetrySource(Agent):
-    type: Literal["TelemetrySource"] = "TelemetrySource"
-    hasEndpoint: Relationship
-    XPath: Property
-    subscriptionMode: Property
-    # interval: Optional[Property] = None

@@ -8,12 +8,15 @@
         "authMethod": "http://example.org/authMethod",
         "Endpoint": "http://example.org/Endpoint",
         "hasLogin": "http://example.org/hasLogin",
-        "hasInput": "http://example.org/hasInput",
-        "MetricSource": "http://example.org/MetricSource",
-        "expression": "http://example.org/expression",
+        "Prometheus": "http://example.org/Prometheus",
         "hasEndpoint": "http://example.org/hasEndpoint",
+        "version": "http://example.org/version",
+        "MetricSource": "http://example.org/MetricSource",
+        "collectsFrom": "http://example.org/collectsFrom",
+        "expression": "http://example.org/expression",
         "interval": "http://example.org/interval",
         "MetricTarget": "http://example.org/MetricTarget",
+        "hasInput": "http://example.org/hasInput",
         "MetricProcessor": "http://example.org/MetricProcessor",
         "hasApplication": "http://example.org/hasApplication",
         "jobId": "http://example.org/jobId",
@@ -21,9 +24,6 @@
 	"StreamApplication": "http://example.org/StreamApplication",
 	"fileName": "http://example.org/fileName",
 	"fileId": "http://example.org/fileId",
-	"entryClass": "http://example.org/entryClass",
-        "TelemetrySource": "http://example.org/TelemetrySource",
-        "XPath": "http://example.org/XPath",
-        "subscriptionMode": "http://example.org/subscriptionMode"
+	"entryClass": "http://example.org/entryClass"
     }
 }

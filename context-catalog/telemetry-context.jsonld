@@ -1,0 +1,21 @@
+{
+    "@context": {
+        "Agent": "http://example.org/Agent",
+        "action": "http://example.org/action",
+        "state": "http://example.org/state",
+        "stateInfo": "http://example.org/stateInfo",
+        "Credentials": "http://example.org/Credentials",
+        "authMethod": "http://example.org/authMethod",
+        "Endpoint": "http://example.org/Endpoint",
+        "hasLogin": "http://example.org/hasLogin",
+        "Device": "http://example.org/Device",
+        "protocol": "http://example.org/protocol",
+        "hasEndpoint": "http://example.org/hasEndpoint",
+        "TelemetrySource": "http://example.org/TelemetrySource",
+        "XPath": "http://example.org/XPath",
+        "subscriptionMode": "http://example.org/subscriptionMode",
+        "collectsFrom": "http://example.org/collectsFrom",
+        "MetricTarget": "http://example.org/MetricTarget",
+        "hasInput": "http://example.org/hasInput"
+    }
+}

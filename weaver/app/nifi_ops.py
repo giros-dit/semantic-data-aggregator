@@ -1,6 +1,7 @@
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget, TelemetrySource
+from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget, Prometheus
+from semantic_tools.models.telemetry import Endpoint, Device, TelemetrySource
 from semantic_tools.models.ngsi_ld.entity import Entity
 from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
@@ -42,7 +43,6 @@ def deleteMetricSource(metricSource: MetricSource):
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
 
-
 def deleteMetricTarget(metricTarget: MetricTarget):
     """
     Delete MetricTarget flow
@@ -64,7 +64,9 @@ def deployMetricSource(metricSource: MetricSource,
     from a passed MetricSource NGSI-LD entity
     """
     # Get Endpoint
-    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
+    prometheus_entity = ngsi.retrieveEntityById(metricSource.collectsFrom.object)
+    prometheus = Prometheus.parse_obj(prometheus_entity)
+    endpoint_entity = ngsi.retrieveEntityById(prometheus.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Build URL based on optional expression
     url = ""
@@ -111,7 +113,6 @@ def deployMetricSource(metricSource: MetricSource,
                                               interval_unit)))
     return ms_pg
 
-
 def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
     Deploys a MetricTarget NiFi template
@@ -145,7 +146,9 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     from a passed TelemetrySource NGSI-LD entity
     """
     # Get gNMI server address from hasEndpoint relationship
-    endpoint_entity = ngsi.retrieveEntityById(telemetrySource.hasEndpoint.object)
+    device_entity = ngsi.retrieveEntityById(telemetrySource.collectsFrom.object)
+    device = Device.parse_obj(device_entity)
+    endpoint_entity = ngsi.retrieveEntityById(device.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
@@ -240,7 +243,6 @@ def getQueryLabels(metricSource: MetricSource) -> str:
 
     return ",".join(labels)
 
-
 def instantiateMetricSource(metricSource: MetricSource,
                             ngsi: NGSILDClient):
     """
@@ -288,41 +290,66 @@ def processMetricSourceState(metricSource: MetricSource,
     ngsi_ld_ops.appendState(ngsi, metricSource.id, "Building the collection agent...")
     ms_pg = getMetricSourcePG(metricSource)
     if metricSource.action.value == "START":
-        endpoint_exists = checkEndpointExistence(metricSource, ngsi)
-        if endpoint_exists == True:
-            if ms_pg:
-                logger.info(
-                    "Upgrade '{0}' NiFi flow.".format(metricSource.id)
-                )
-                upgradeMetricSource(metricSource, ngsi)
+        prometheus_id = metricSource.collectsFrom.object
+        prometheus_exists = checkSourceExistence(prometheus_id, ngsi)
+        if prometheus_exists == True:
+            prometheus_entity = ngsi.retrieveEntityById(prometheus_id)
+            prometheus = Prometheus.parse_obj(prometheus_entity)
+            endpoint_id = prometheus.hasEndpoint.object
+            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
+            if endpoint_exists == True:
+                if ms_pg:
+                    logger.info(
+                        "Upgrade '{0}' NiFi flow.".format(metricSource.id)
+                    )
+                    upgradeMetricSource(metricSource, ngsi)
+                else:
+                    logger.info(
+                        "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
+                    )
+                    instantiateMetricSource(metricSource, ngsi)
+                ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent started successfully."})
             else:
-                logger.info(
-                    "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
-                )
-                instantiateMetricSource(metricSource, ngsi)
-            ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent started successfully."})
+                logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
+                ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
+                logger.info("Delete '{0}' entity".format(metricSource.id))
+                ngsi.deleteEntity(metricSource.id)
+
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(metricSource.hasEndpoint.object)})
+            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
+            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(prometheus_id)})
             logger.info("Delete '{0}' entity".format(metricSource.id))
             ngsi.deleteEntity(metricSource.id)
     elif metricSource.action.value == "STOP":
-        endpoint_exists = checkEndpointExistence(metricSource, ngsi)
-        if endpoint_exists == True:
-            if ms_pg:
-                logger.info(
-                    "Stop '{0}' NiFi flow.".format(metricSource.id)
-                )
-                stopMetricSource(metricSource)
+        prometheus_id = metricSource.collectsFrom.object
+        prometheus_exists = checkSourceExistence(prometheus_id, ngsi)
+        if prometheus_exists == True:
+            prometheus_entity = ngsi.retrieveEntityById(prometheus_id)
+            prometheus = Prometheus.parse_obj(prometheus_entity)
+            endpoint_id = prometheus.hasEndpoint.object
+            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
+            if endpoint_exists == True:
+                if ms_pg:
+                    logger.info(
+                        "Stop '{0}' NiFi flow.".format(metricSource.id)
+                    )
+                    stopMetricSource(metricSource)
+                else:
+                    logger.info(
+                        "New '{0}' NiFi flow to STOP.".format(metricSource.id)
+                    )
+                    deployMetricSource(metricSource, ngsi)
+                ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+
             else:
-                logger.info(
-                    "New '{0}' NiFi flow to STOP.".format(metricSource.id)
-                )
-                deployMetricSource(metricSource, ngsi)
-            ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+                logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
+                ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
+                logger.info("Delete '{0}' entity".format(metricSource.id))
+                ngsi.deleteEntity(metricSource.id)
+
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(metricSource.hasEndpoint.object)})
+            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
+            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(prometheus_id)})
             logger.info("Delete '{0}' entity".format(metricSource.id))
             ngsi.deleteEntity(metricSource.id)
     elif metricSource.action.value == "END":
@@ -362,7 +389,7 @@ def processMetricTargetState(metricTarget: MetricTarget,
                 instantiateMetricTarget(metricTarget)
             ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent started successfully."})
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
+            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
             ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricTarget.hasInput.object)})
             logger.info("Delete '{0}' entity".format(metricTarget.id))
             ngsi.deleteEntity(metricTarget.id)
@@ -383,7 +410,7 @@ def processMetricTargetState(metricTarget: MetricTarget,
                 deployMetricTarget(metricTarget)
             ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent stopped successfully."})
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
+            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
             ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricTarget.hasInput.object)})
             logger.info("Delete '{0}' entity".format(metricTarget.id))
             ngsi.deleteEntity(metricTarget.id)
@@ -406,41 +433,66 @@ def processTelemetrySourceState(telemetrySource: TelemetrySource,
     ngsi_ld_ops.appendState(ngsi, telemetrySource.id, "Building the collection agent...")
     ts_pg = getTelemetrySourcePG(telemetrySource)
     if telemetrySource.action.value == "START":
-        state_failed = checkEndpointExistence(telemetrySource, ngsi)
-        if state_failed == False:
-            if ts_pg:
-                logger.info(
-                    "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
-                )
-                upgradeTelemetrySource(telemetrySource, ngsi)
+        device_id = telemetrySource.collectsFrom.object
+        device_exists = checkSourceExistence(device_id, ngsi)
+        if device_exists == True:
+            device_entity = ngsi.retrieveEntityById(device_id)
+            device = Device.parse_obj(device_entity)
+            endpoint_id = device.hasEndpoint.object
+            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
+            if endpoint_exists == True:
+                if ts_pg:
+                    logger.info(
+                        "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
+                    )
+                    upgradeTelemetrySource(telemetrySource, ngsi)
+                else:
+                    logger.info(
+                        "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
+                    )
+                    instantiateTelemetrySource(telemetrySource, ngsi)
+                ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent started successfully."})
             else:
-                logger.info(
-                    "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
-                )
-                instantiateTelemetrySource(telemetrySource, ngsi)
-            ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent started successfully."})
+                logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
+                ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
+                logger.info("Delete '{0}' entity".format(telemetrySource.id))
+                ngsi.deleteEntity(telemetrySource.id)
+
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(telemetrySource.hasEndpoint.object)})
+            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
+            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(device_id)})
             logger.info("Delete '{0}' entity".format(telemetrySource.id))
             ngsi.deleteEntity(telemetrySource.id)
     elif telemetrySource.action.value == "STOP":
-        state_failed = checkEndpointExistence(telemetrySource, ngsi)
-        if state_failed == False:
-            if ts_pg:
-                logger.info(
-                    "Stop '{0}' NiFi flow.".format(telemetrySource.id)
-                )
-                stopTelemetrySource(telemetrySource)
+        device_id = telemetrySource.collectsFrom.object
+        device_exists = checkSourceExistence(device_id, ngsi)
+        if device_exists == True:
+            device_entity = ngsi.retrieveEntityById(device_id)
+            device = Device.parse_obj(device_entity)
+            endpoint_id = device.hasEndpoint.object
+            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
+            if endpoint_exists == True:
+                if ts_pg:
+                    logger.info(
+                        "Stop '{0}' NiFi flow.".format(telemetrySource.id)
+                    )
+                    stopTelemetrySource(telemetrySource)
+                else:
+                    logger.info(
+                        "New '{0}' NiFi flow to STOP.".format(telemetrySource.id)
+                    )
+                    deployTelemetrySource(telemetrySource, ngsi)
+                ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+
             else:
-                logger.info(
-                    "New '{0}' NiFi flow to STOP.".format(telemetrySource.id)
-                )
-                deployTelemetrySource(telemetrySource, ngsi)
-            ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+                logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
+                ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
+                logger.info("Delete '{0}' entity".format(telemetrySource.id))
+                ngsi.deleteEntity(telemetrySource.id)
+
         else:
-            logger.info("Instantiate new '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(telemetrySource.hasEndpoint.object)})
+            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
+            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(device_id)})
             logger.info("Delete '{0}' entity".format(telemetrySource.id))
             ngsi.deleteEntity(telemetrySource.id)
     elif telemetrySource.action.value == "END":
@@ -461,7 +513,6 @@ def stopMetricSource(metricSource: MetricSource) -> ProcessGroupEntity:
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     return nipyapi.canvas.schedule_process_group(ms_pg.id, False)
-
 
 def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
@@ -486,7 +537,9 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     # Stop MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, False)
     # Get Endpoint
-    endpoint_entity = ngsi.retrieveEntityById(metricSource.hasEndpoint.object)
+    prometheus_entity = ngsi.retrieveEntityById(metricSource.collectsFrom.object)
+    prometheus = Prometheus.parse_obj(prometheus_entity)
+    endpoint_entity = ngsi.retrieveEntityById(prometheus.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Build URL based on optional expression
     url = ""
@@ -520,7 +573,6 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     # Restart MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, True)
 
-
 def upgradeMetricTarget(metricTarget: MetricTarget):
     """
     Stops flow, updates variables and restarts flow
@@ -549,7 +601,9 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # Stop TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, False)
     # Get gNMI server address from hasEndpoint relationship
-    endpoint_entity = ngsi.retrieveEntityById(telemetrySource.hasEndpoint.object)
+    device_entity = ngsi.retrieveEntityById(telemetrySource.collectsFrom.object)
+    device = Device.parse_obj(device_entity)
+    endpoint_entity = ngsi.retrieveEntityById(device.hasEndpoint.object)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
@@ -640,6 +694,46 @@ def checkEndpointExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
 
     return endpoint_exists
 
+def checkEndpointExistence(endpoint_id: str, ngsi: NGSILDClient) -> bool:
+    """
+    Checking if collection agent entity has an endpoint
+    """
+    endpoint_entities = ngsi.queryEntities(type="Endpoint")
+    endpoint_exists = False
+    if len(endpoint_entities) > 0:
+        for endpoint_entity in endpoint_entities:
+            if endpoint_entity['id'] == endpoint_id:
+                endpoint_exists = True
+                break
+            else:
+                endpoint_exists = False
+    else:
+        endpoint_exists = False
+
+    return endpoint_exists
+
+def checkSourceExistence(source_id: str, ngsi: NGSILDClient) -> bool:
+    """
+    Checking if collection agent entity has a source (i.e., Prometheus, Device, ...)
+    """
+    source_entities = []
+    if source_id.split(":")[2] == "Prometheus":
+        source_entities = ngsi.queryEntities(type="Prometheus")
+    elif source_id.split(":")[2] == "Device":
+        source_entities = ngsi.queryEntities(type="Device")
+    source_exists = False
+    if len(source_entities) > 0:
+        for source_entity in source_entities:
+            if source_entity['id'] == source_id:
+                source_exists = True
+                break
+            else:
+                source_exists = False
+    else:
+        source_exists = False
+
+    return source_exists
+
 def checkInputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
     """
     Checking if dispatcher agent entity has an input
@@ -703,7 +797,7 @@ def checkOutputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
         processor_output_exists = False
 
     if target_output_exists == True or processor_output_exists == True:
-        logger.info("Delete a '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
+        logger.info("Delete '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
         ngsi_ld_ops.stateToFailed(ngsi, entity.id, {"value": "ERROR! The '{0}' entity has an output: '{1}'.".format(entity.id, output_entities_id)})
         output_exists = True
 

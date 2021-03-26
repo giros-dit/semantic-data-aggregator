@@ -3,10 +3,9 @@ from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication,
-    TelemetrySource
+    MetricProcessor, StreamApplication
 )
-
+from semantic_tools.models.telemetry import TelemetrySource
 import flink_ops
 import logging
 import nifi_ops

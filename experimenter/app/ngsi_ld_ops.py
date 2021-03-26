@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
-    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:experimenter-sub"
-    MetricSource = "urn:ngsi-ld:Subscription:MetricSource:experimenter-sub"
-    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-sub"
-    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:experimenter-sub"
-    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:experimenter-sub"
+    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:experimenter-subs"
+    MetricSource = "urn:ngsi-ld:Subscription:MetricSource:experimenter-subs"
+    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-subs"
+    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:experimenter-subs"
+    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:experimenter-subs"
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -27,7 +27,7 @@ def _subscribeToEntity(ngsi: NGSILDClient,
     """
     try:
         logger.info(
-            "Subscribing consumer to %s entities ..."
+            "Subscribing experimenter to %s entities ..."
             % subscriptionType.name
         )
         ngsi.retrieveSubscription(
@@ -51,7 +51,7 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         ngsi.createSubscription((subscription.dict(exclude_none=True)))
     else:
         logger.info(
-            "Consumer is already subscribed to %s entities!"
+            "Experimenter is already subscribed to %s entities!"
             % subscriptionType.name
         )
 
@@ -65,7 +65,7 @@ def check_scorpio_status(ngsi: NGSILDClient):
     while True:
         if ngsi.checkScorpioHealth():
             logger.info(
-                "Consumer successfully connected to Scorpio REST API!")
+                "Experimenter successfully connected to Scorpio REST API!")
             break
         else:
             logger.warning("Could not connect to Scorpio REST API. "

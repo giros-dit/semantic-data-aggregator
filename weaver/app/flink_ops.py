@@ -240,12 +240,11 @@ def processMetricProcessorState(metricProcessor: MetricProcessor,
                     )
             ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent started successfully."})
         else:
+            logger.info("Submit '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
             if streamApplication_exists == False:
-            	logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
             	ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' StreamApplication entity doesn't exist.".format(metricProcessor.hasApplication.object)})
 
             if input_exists == False:
-            	logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
             	ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricProcessor.hasInput.object)})
 
             logger.info("Delete '{0}' entity".format(metricProcessor.id))
@@ -301,11 +300,7 @@ def checkStreamApplicationExistence(metricProcessor: MetricProcessor, ngsi: NGSI
                 streamApplication_exists = False
     else:
         streamApplication_exists = False
-    #if streamApplication_exists:
-        #ngsi_ld_ops.stateToFailed(ngsi, metricProcessor.id, {"value": "ERROR! The '{0}' StreamApplication entity doesn't exist.".format(metricProcessor.hasApplication.object)})
-        #logger.info("Submit new '{0}' Flink Job. The job execution failed.".format(metricProcessor.id))
-        #logger.info("Delete '{0}' entity".format(metricProcessor.id))
-        #ngsi.deleteEntity(metricProcessor.id)
+
     return streamApplication_exists
 
 def checkInputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
@@ -372,7 +367,7 @@ def checkOutputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
         processor_output_exists = False
 
     if target_output_exists == True or processor_output_exists == True:
-        logger.info("Delete a '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
+        logger.info("Delete '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
         ngsi_ld_ops.stateToFailed(ngsi, entity.id, {"value": "ERROR! The '{0}' entity has an output: '{1}'.".format(entity.id, output_entities_id)})
         output_exists = True
 

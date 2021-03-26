@@ -2,10 +2,9 @@ from fastapi import FastAPI, status, Request
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication,
-    TelemetrySource
+    MetricProcessor, StreamApplication
 )
-
+from semantic_tools.models.telemetry import TelemetrySource
 import logging
 import ngsi_ld_ops
 
@@ -17,19 +16,19 @@ ngsi = NGSILDClient(
             headers={"Accept": "application/json"},
             context="http://context-catalog:8080/context.jsonld")
 
-# Consumer URI (Should be provided by external agent in the future)
-consumer_uri = "http://experimenter:8080/notify"
+# Experimenter URI (Should be provided by external agent in the future)
+experimenter_uri = "http://experimenter:8080/notify"
 
 # FastAPI specific code
 tags_metadata = [
     {
-        "name": "Dummy Consumer"
+        "name": "Dummy Experimenter"
     }
 ]
 
 # Init FastAPI server
 app = FastAPI(
-    title="Dummy Consumer API",
+    title="Experimenter API",
     version="1.0.0",
     openapi_tags=tags_metadata)
 
@@ -37,22 +36,14 @@ app = FastAPI(
 async def startup_event():
     # Check Scorpio API is up
     ngsi_ld_ops.check_scorpio_status(ngsi)
-    # Subscribe to data pipeline admin entities
-    ngsi_ld_ops.subscribeMetricSource(ngsi, consumer_uri)
-    ngsi_ld_ops.subscribeMetricProcessor(ngsi, consumer_uri)
-    ngsi_ld_ops.subscribeStreamApplication(ngsi, consumer_uri)
-    ngsi_ld_ops.subscribeMetricTarget(ngsi, consumer_uri)
-    ngsi_ld_ops.subscribeTelemetrySource(ngsi, consumer_uri)
+    # Subscribe to data pipeline agent entities
+    ngsi_ld_ops.subscribeMetricSource(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeMetricProcessor(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeStreamApplication(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeMetricTarget(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeTelemetrySource(ngsi, experimenter_uri)
 
-# API for consumer
-"""
-@app.post("/notify",
-          status_code=status.HTTP_200_OK)
-async def consumerHello(request: Request):
-    print(await request.json())
-"""
-
-# API for consumer
+# API for experimenter
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
 async def receiveNotification(request: Request):
