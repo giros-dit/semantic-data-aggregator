@@ -44,7 +44,7 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 }'
 ```
 
-The StreamApplication entity has the follow properties:
+The StreamApplication entity has the following properties:
 - fileName: the application JAR name.
 - fileId: the ID generated after uploading the JAR to the Stream Processing Engine. 
 - entryClass: the name of the main Java class.
@@ -105,7 +105,7 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 }'
 ```
 
-The StreamApplication entity has the follow properties:
+The StreamApplication entity has the following attributes:
 -	name property: the Job name.
 -	hasInput relationship:
 	- object: MetricSource entity Id.
