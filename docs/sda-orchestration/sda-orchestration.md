@@ -1,6 +1,6 @@
 # Data Aggregator Orchestration
 
-An approach to orchestrate the `Semantic Data Aggregator` (SDA) life cycle management by an external application or system using the NGSI-LD API like an interface that allows translating orders from an external orchestrator component to requests to the SDA and extending the NGSI-LD data model for that.
+An approach to orchestrate the `Semantic Data Aggregator` (SDA) life cycle management by an external application or system using the NGSI-LD API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the NGSI-LD data model for that.
 
 This is a mechanism to orchestrate the state transitions of those NGSI-LD entities that represent the different stages in the data pipelines and model the actions of the Data Aggregator agents.
 
@@ -34,17 +34,17 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 1.	First of all, the user has to model and create a new NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker` to describe collection agent metadata. In the entity we have to define the action property (inherited from the `Agent` parent entity) initialized to the `START` value.
 
-2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the state property initialized to the `BUILDING` value while the collection agent initialization is being processed. 
+2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent initialization is being processed. 
 
 3.	Then, the Weaver manages the configuration and instantiation of the collection agent with a `NiFi` processor.
 
-4.	When `NiFi` successfully instantiates the processor, the `Weaver` update the state property of the agent entity to the `RUNNING` value and the `stateInfo` cross-domain property with feedback information about the successfully operation.
+4.	When `NiFi` successfully instantiates the processor, the `Weaver` update the `state` property of the agent entity to the `RUNNING` value and the `stateInfo` cross-domain property with feedback information about the successfully operation.
 
 5.	Finally, the user is notified that the collection agent has been successfully instantiated.
 
 ![SDA-orchestration-sequence-diagrams-collection-agent-endpoint-error](img/SDA-orchestration-sequence-diagrams-collection-agent-endpoint-error.png)
 
-The previous sequence diagram shows and example of `Endpoint` error detection. After creating the collection agent entity and before configuring and instantiating the `NiFI` processor for the collection agent, `Weaver` must check whether or not there is a endpoint entity that defines the service from which the information is extracted. If this `Endpoint` entity does not exist, the collection agent configuration and the processor execution will fail. In that case, the `Weaver` will update the state property of the agent entity to the `FAILED` value and the `stateInfo` cross-domain property with feedback information about the failed operation. Finally, the user is notified that the collection agent could not be instantiated.
+The previous sequence diagram shows and example of `Endpoint` error detection. After creating the collection agent entity and before configuring and instantiating the `NiFI` processor for the collection agent, `Weaver` must check whether or not there is a endpoint entity that defines the service from which the information is extracted. If this `Endpoint` entity does not exist, the collection agent configuration and the processor execution will fail. In that case, the `Weaver` will update the `state` property of the agent entity to the `FAILED` value and the `stateInfo` cross-domain property with feedback information about the failed operation. Finally, the user is notified that the collection agent could not be instantiated.
 
 ![SDA-orchestration-sequence-diagrams-collection-agent-upgrade](img/SDA-orchestration-sequence-diagrams-collection-agent-upgrade.png)
 
