@@ -4,7 +4,7 @@ A mechanism to orchestrate the `Semantic Data Aggregator` (SDA) life cycle manag
 
 This is an approach to orchestrate the state transitions of those NGSI-LD entities that represent the different stages in the data pipelines and model the actions of the Data Aggregator agents.
 
-To deal with the life cycle management of the data aggregator we define the Agent NGSI-LD Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication`.
+To deal with the life cycle management of the data aggregator we define the `Agent` NGSI-LD Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication`.
 
 Users or applications can declaratively express the desired state for each agent of the Data Aggregator (`collector`, `aggregator` and `dispatcher`).
 
