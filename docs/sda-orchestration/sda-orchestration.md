@@ -28,7 +28,7 @@ Next, the transition diagram between states is represented (different possible v
 
 In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities that represent the metadata for the collection agents.
 
-### I - Instantiate and upgrade collection agents
+### I - Instantiate and upgrade collection agent
 
 ![SDA-orchestration-sequence-diagrams-collection-agent-instantiation](img/SDA-orchestration-sequence-diagrams-collection-agent-instantiation.png)
 
@@ -115,7 +115,7 @@ The previous sequence diagram shows the steps that the `SDA` framework follows t
 
 In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities (i.e., `StreamApplication` and `MetricProcessor` entities) that represent the metadata for the aggregation agents.
 
-### I - Upload and delete JAR stream applications
+### I - Upload and delete JAR stream application
 
 ![SDA-orchestration-sequence-diagrams-stream-application-upload](img/SDA-orchestration-sequence-diagrams-stream-application-upload.png)
 
@@ -145,7 +145,7 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 5.	Finally, the user is notified that the stream processing application has been successfully deleted.
 
-### II - Submit and upgrade Job instances
+### II - Submit and upgrade Job instance
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-submit](img/SDA-orchestration-sequence-diagrams-aggregation-agent-submit.png)
 
@@ -179,7 +179,7 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 5.	Finally, the user is notified that the Job instance has been successfully updated and is running.
 
-### III - Define and stop Job
+### III - Define and stop Job instance
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-stop-definition](img/SDA-orchestration-sequence-diagrams-aggregation-agent-stop-definition.png)
 
@@ -209,7 +209,7 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 5.	Finally, the user is notified that the Job instance has been successfully cancelled and stopped.
 
-### IV - Delete Job
+### IV - Delete Job instance
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-deletion](img/SDA-orchestration-sequence-diagrams-aggregation-agent-deletion.png)
 
