@@ -8,12 +8,12 @@ To deal with the life cycle management of the data aggregator we define the `Age
 
 Users or applications can declaratively express the desired state for each agent of the Data Aggregator (`collector`, `aggregator` and `dispatcher`).
 
-The Agent parent entity has the following properties:
+The `Agent` parent entity has the following properties:
 -	`action`: property value set by users to change the agent state.
 -	`state`: property value updated by the `Weaver` during the action triggered by users to indicate the agent state.
 - `stateInfo`: optional cross-domain property to describe errors when the processed action fails or feedback information about the agent state.
 
-The information model for the Agent parent entity is represented below.
+The information model for the `Agent` parent entity is represented below.
 
 ![agent-model-Agent-entity](img/agent-model-Agent-entity.png)
 
