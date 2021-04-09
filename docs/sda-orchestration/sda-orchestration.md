@@ -149,7 +149,7 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-submit](img/SDA-orchestration-sequence-diagrams-aggregation-agent-submit.png)
 
-The previous sequence diagram shows the steps that the `SDA`framework follows to allow the Job instance submission to the aggregation agent. This diagram corresponds to the `START(0)` transition action of the state transition diagram. The steps are the following:
+The previous sequence diagram shows the steps that the `SDA` framework follows to allow the Job instance submission to the aggregation agent. This diagram corresponds to the `START(0)` transition action of the state transition diagram. The steps are the following:
 
 1.	First of all, the user has to model and create a new NGSI-LD `MetricProcessor` entity in `Scorpio Broker` to describe stream processing Job metadata. In the entity we have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
 
@@ -163,7 +163,7 @@ The previous sequence diagram shows the steps that the `SDA`framework follows to
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-stream-application-error](img/SDA-orchestration-sequence-diagrams-aggregation-agent-stream-application-error.png)
 
-The previous sequence diagram shows and example of `StreamApplication` error detection. After creating the `MetricProcessor` entity and before configuring and submitting the Job instance to the aggregation agent (`Flink` engine), `Weaver` must check whether or not there is a `StreamApplication` entity that identifies the JAR of the stream application to run on the `Flink` engine. If this `StreamApplication` entity does not exist, the aggregation agent configuration and the Job execution will fail. In that case, the `Weaver` will update the `state` property of the agent entity to the `FAILED` value and the `stateInfo` cross-domain property with feedback information about the failed operation. Finally, the user is notified that the Job instance could not be submitted and executed in the `Flink` engine.
+The previous sequence diagram shows an example of `StreamApplication` error detection. After creating the `MetricProcessor` entity and before configuring and submitting the Job instance to the aggregation agent (`Flink` engine), `Weaver` must check whether or not there is a `StreamApplication` entity that identifies the JAR of the stream application to run on the `Flink` engine. If this `StreamApplication` entity does not exist, the aggregation agent configuration and the Job execution will fail. In that case, the `Weaver` will update the `state` property of the agent entity to the `FAILED` value and the `stateInfo` cross-domain property with feedback information about the failed operation. Finally, the user is notified that the Job instance could not be submitted and executed in the `Flink` engine.
 
 ![SDA-orchestration-sequence-diagrams-aggregation-agent-upgrade](img/SDA-orchestration-sequence-diagrams-aggregation-agent-upgrade.png)
 
