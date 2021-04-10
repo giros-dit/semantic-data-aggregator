@@ -6,7 +6,7 @@ In `Apache Flink` engine, the stream processing applications are packaged as JAR
 
 The previous sequence diagram shows the steps that the `Semantic Data Aggregator` (SDA) framework follows to allow the upload of the stream applications to the `Flink` engine. The steps are the following:
 
-1. First of all, the most obvious but most important thing is that a properly compiled and packaged `Flink` stream processing application is available as a JAR file. To do this, the application developer or the own user must upload the JAR application to a secure external repository. A docker service called `stream-catalog` is available in the framework that works as a repository accessible via HTTP where the stream processing applications can be uploaded and downloaded at the time the user wishes. In this way, the user can upload the JAR applications in the `stream-catalog` repository to be uploaded to the `Flink` engine later.
+1. First of all, the obvious but most important thing is that a properly compiled and packaged `Flink` stream processing application is available as a JAR file. To do this, the application developer or the own user must upload the JAR application to a secure external repository. A docker service called `stream-catalog` is available in the framework that works as a repository accessible via HTTP where the stream processing applications can be uploaded and downloaded at the time the user wishes. In this way, the user can upload the JAR applications in the `stream-catalog` repository to be uploaded to the `Flink` engine later.
 
 2. Secondly, the user has to model and create a new `StreamApplication` NGSI-LD entity in `Scorpio Broker` to describe the JAR application metadata. The `StreamApplication` entity creation looks like this:
 
@@ -45,7 +45,7 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 ```
 
 The `StreamApplication` entity has the following properties:
-- `fileName`: the application JAR name.
+- `fileName`: the JAR application name.
 - `fileId`: the ID generated after uploading the JAR to the stream processing engine. 
 - `entryClass`: the name of the main Java class.
 - `description`: optional description of the stream processing application.
@@ -58,13 +58,13 @@ The `StreamApplication` entity has the following properties:
 5. Finally, the user is notified that the JAR application has been successfully uploaded to the `Flink` engine.
 
 
-To run the stream processing applications a related Job instance must be submitted to the `Flink` engine. A `Flink` application can be executed to run one or multiple `Flink` Jobs. 
+To run the stream processing applications, a related Job instance must be submitted to the `Flink` engine. A `Flink` application can be uploaded to run one or multiple `Flink` Jobs. 
 
 ![`data-aggregator-stream-job-sequence`](../data-aggregator-stream-job-sequence.png)
 
 The previous sequence diagram shows the steps that the framework follows to allow the submit of a Job instance to the `Flink` engine. The steps are the following:
 
-1. First of all, the user has to model and create a new `MetricProcessor` NGSI-LD entity in `Scorpio Broker` to describe the Job instance metadata. The `MetricProcessor entity creation looks like this:
+1. First of all, the user has to model and create a new `MetricProcessor` NGSI-LD entity in `Scorpio Broker` to describe the Job instance metadata. The `MetricProcessor` entity creation looks like this:
 
 ```
 curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
