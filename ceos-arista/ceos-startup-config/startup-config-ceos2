@@ -1,0 +1,8 @@
+hostname ceos2
+!
+username admin role network-admin secret sha512 $6$p5AZ3SGdjD5tFKTO$Oayy.I2CVJKEyy7jilmWAUpwScQJ8oZWqejzFAHsdrZNcDCGH2.AukyuWGfK0Pi5y9/pDKRxPPpT36whNF..O0
+!
+management api gnmi
+   transport grpc default
+!
+end
