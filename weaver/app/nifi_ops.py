@@ -148,6 +148,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
@@ -155,7 +156,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     with open(filename, 'r') as file:
         data = json.load(file)
         data['address'] = endpoint.uri.value.split("://")[1]
-        data['outputs']['output']['topic'] = entity_id
+        data['outputs']['output']['topic'] = gnmic_topic
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
@@ -197,6 +198,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
                     (500, 200*source_id_number)
     )
     # Set variable for TS PG
+    nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
@@ -515,6 +517,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
@@ -522,7 +525,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     with open(filename, 'r') as file:
         data = json.load(file)
         data['address'] = endpoint.uri.value.split("://")[1]
-        data['outputs']['output']['topic'] = entity_id
+        data['outputs']['output']['topic'] = gnmic_topic
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
@@ -553,6 +556,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4)
     # Set variables for TS PG
+    nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
