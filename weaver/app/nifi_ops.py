@@ -1,4 +1,5 @@
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
+from nipyapi.nifi.models.controller_service_entity import ControllerServiceEntity
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget, TelemetrySource
 from semantic_tools.utils.units import UnitCode
@@ -54,6 +55,11 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     Delete TelemetrySource flow
     """
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    # Disable controller services
+    json_reader = getControllerService(ts_pg, "JsonTreeReader")
+    avro_writer = getControllerService(ts_pg, "AvroRecordSetWriter")
+    nipyapi.canvas.schedule_controller(json_reader, False)
+    nipyapi.canvas.schedule_controller(avro_writer, False)
     nipyapi.canvas.delete_process_group(ts_pg, True)
 
 def deployMetricSource(metricSource: MetricSource,
@@ -203,12 +209,25 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
-
+    # Enable controller services
+    json_reader = getControllerService(ts_pg, "JsonTreeReader")
+    avro_writer = getControllerService(ts_pg, "AvroRecordSetWriter")
+    nipyapi.canvas.schedule_controller(json_reader, True)
+    nipyapi.canvas.schedule_controller(avro_writer, True)
     # Deploy TS template
     ts_template = nipyapi.templates.get_template("TelemetrySource")
     ts_pg_flow = nipyapi.templates.deploy_template(ts_pg.id, ts_template.id)
 
     return ts_pg
+
+def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerServiceEntity:
+    """
+    Get Controller Service by name within a given ProcessGroup
+    """
+    controllers = nipyapi.canvas.list_all_controllers(pg.id, False)
+    for controller in controllers:
+        if controller.component.name == name:
+            return controller
 
 def getMetricSourcePG(metricSource: MetricSource) -> ProcessGroupEntity:
     """
@@ -561,6 +580,13 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
+    # Enable controller services
+    json_reader = getControllerService(ts_pg, "JsonTreeReader")
+    avro_writer = getControllerService(ts_pg, "AvroRecordSetWriter")
+    if json_reader.status.run_status != 'ENABLED':
+        nipyapi.canvas.schedule_controller(json_reader, True)
+    if avro_writer.status.run_status != 'ENABLED':
+        nipyapi.canvas.schedule_controller(avro_writer, True)
     # Restart TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, True)
 
