@@ -1,0 +1,7 @@
+interface Ethernet1
+   description "Peering interface between Arista cEOS routers"
+   ip address 192.168.1.1/24
+!
+interface Ethernet2
+!
+end

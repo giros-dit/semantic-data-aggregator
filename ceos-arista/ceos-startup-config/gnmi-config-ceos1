@@ -1,0 +1,14 @@
+hostname ceos1
+!
+username admin privilege 15 secret xxxx
+!
+management api gnmi
+   transport grpc default
+!
+interface Ethernet1
+   no switchport
+!
+interface Ethernet2
+   no switchport
+!
+end
