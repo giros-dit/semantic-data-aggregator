@@ -204,6 +204,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
                     (500, 200*source_id_number)
     )
     # Set variable for TS PG
+    # Avro schema hardcoded to openconfig-interfaces
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
     nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
@@ -574,6 +576,8 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4)
     # Set variables for TS PG
+    # Avro schema hardcoded to openconfig-interfaces
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
     nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
