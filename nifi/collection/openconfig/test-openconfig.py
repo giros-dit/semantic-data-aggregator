@@ -38,51 +38,111 @@ def build_tree(data, parent, yang_base, obj=None, path_helper=None,
     # Please, be kind.
     #
     # Populate tree with update elements
-    if data["prefix"]["elem"]:
-        for elem in data["prefix"]["elem"]:
-            cdata = copy.deepcopy(data)
-            cdata["prefix"]["elem"].remove(elem)
-            del data["prefix"]["elem"][0]
-            del data["prefix"]["elem"][1:]
-            # Exclude current element for next iteration
-            key = elem["name"]
-            child = getattr(obj, "_get_%s" % safe_name(key), None)
-            if child is None and skip_unknown is False:
-                raise AttributeError(
-                    "JSON object contained a key that " +
-                    "did not exist (%s)" % (key))
-            elif child is None and skip_unknown:
-                # skip unknown elements if we are asked to by the user`
-                continue
-            chobj = child()
-            pybind_attr = getattr(chobj, "_pybind_generated_by", None)
-            if pybind_attr in ["container"]:
-                build_tree(cdata, None, None, obj=chobj,
-                        path_helper=path_helper, skip_unknown=skip_unknown)
-                set_via_stdmethod = False
-
-            elif pybind_attr in ["YANGListType", "list"]:
-                # we need to add each key to the list and then skip
-                # a level in the JSON hierarchy
-                list_obj = getattr(obj, safe_name(key), None)
-                if list_obj is None and skip_unknown is False:
-                    raise Exception("Could not load list object " +
-                                    "with name %s" % key)
-                child_key = elem["key"]["name"]
-                if child_key not in chobj:
-                    chobj.add(child_key)
-
-                build_tree(cdata, None, None, obj=chobj[child_key],
-                            path_helper=path_helper, skip_unknown=skip_unknown)
-                set_via_stdmethod = False
-
-    if set_via_stdmethod:
-        for update in data["update"]:
-            for elem in update["path"]["elem"]:
+    if "prefix" in data:
+        if data["prefix"]["elem"]:
+            for elem in data["prefix"]["elem"]:
+                cdata = copy.deepcopy(data)
+                cdata["prefix"]["elem"].remove(elem)
+                del data["prefix"]["elem"][0]
+                del data["prefix"]["elem"][1:]
+                # Exclude current element for next iteration
                 key = elem["name"]
+                child = getattr(obj, "_get_%s" % safe_name(key), None)
+                if child is None and skip_unknown is False:
+                    raise AttributeError(
+                        "JSON object contained a key that " +
+                        "did not exist (%s)" % (key))
+                elif child is None and skip_unknown:
+                    # skip unknown elements if we are asked to by the user`
+                    continue
+                chobj = child()
+                pybind_attr = getattr(chobj, "_pybind_generated_by", None)
+                if pybind_attr in ["container"]:
+                    build_tree(cdata, None, None, obj=chobj,
+                            path_helper=path_helper, skip_unknown=skip_unknown)
+                    set_via_stdmethod = False
 
-                set_method = getattr(obj, "_set_%s" % safe_name(key))
-                set_method(update["val"]["stringVal"])
+                elif pybind_attr in ["YANGListType", "list"]:
+                    # we need to add each key to the list and then skip
+                    # a level in the JSON hierarchy
+                    list_obj = getattr(obj, safe_name(key), None)
+                    if list_obj is None and skip_unknown is False:
+                        raise Exception("Could not load list object " +
+                                        "with name %s" % key)
+                    child_key = elem["key"]["name"]
+                    if child_key not in chobj:
+                        chobj.add(child_key)
+
+                    build_tree(cdata, None, None, obj=chobj[child_key],
+                            path_helper=path_helper, skip_unknown=skip_unknown)
+                    set_via_stdmethod = False
+
+        if set_via_stdmethod:
+            for update in data["update"]:
+                for elem in update["path"]["elem"]:
+                    key = elem["name"]
+                    set_method = getattr(obj, "_set_%s" % safe_name(key))
+                    if "stringVal" in update["val"]:
+                        set_method(update["val"]["stringVal"])
+                    elif "uintVal" in update["val"]:
+                        set_method(update["val"]["uintVal"])
+
+    # Update has no prefix
+    else:
+        # We may assume there is just one update
+        update = data["update"][0]
+        if update["path"]["elem"]:
+            for elem in update["path"]["elem"]:
+                cdata = copy.deepcopy(data)
+                cdata["update"][0]["path"]["elem"].remove(elem)
+                del update["path"]["elem"][0]
+                del update["path"]["elem"][1:]
+                # Exclude current element for next iteration
+                key = elem["name"]
+                child = getattr(obj, "_get_%s" % safe_name(key), None)
+                if child is None and skip_unknown is False:
+                    raise AttributeError(
+                        "JSON object contained a key that " +
+                        "did not exist (%s)" % (key))
+                elif child is None and skip_unknown:
+                    # skip unknown elements if we are asked to by the user`
+                    continue
+                chobj = child()
+                pybind_attr = getattr(chobj, "_pybind_generated_by", None)
+                if pybind_attr in ["container"]:
+                    build_tree(cdata, None, None, obj=chobj,
+                            path_helper=path_helper, skip_unknown=skip_unknown)
+                    set_via_stdmethod = False
+
+                elif pybind_attr in ["YANGListType", "list"]:
+                    # we need to add each key to the list and then skip
+                    # a level in the JSON hierarchy
+                    list_obj = getattr(obj, safe_name(key), None)
+                    if list_obj is None and skip_unknown is False:
+                        raise Exception("Could not load list object " +
+                                        "with name %s" % key)
+                    child_key = elem["key"]["name"]
+                    if child_key not in chobj:
+                        chobj.add(child_key)
+
+                    build_tree(cdata, None, None, obj=chobj[child_key],
+                            path_helper=path_helper, skip_unknown=skip_unknown)
+                    set_via_stdmethod = False
+
+                elif pybind_attr in ["RestrictedClassType", "ReferencePathType", "RestrictedPrecisionDecimal"]:
+                    # normal but valid types - which use the std set method
+                    pass
+
+                elif pybind_attr is None:
+                    # not a pybind attribute at all - keep using the std set method
+                    pass
+
+                if set_via_stdmethod:
+                    set_method = getattr(obj, "_set_%s" % safe_name(key))
+                    if "stringVal" in update["val"]:
+                        set_method(update["val"]["stringVal"])
+                    elif "uintVal" in update["val"]:
+                        set_method(update["val"]["uintVal"])
 
     return obj
 
