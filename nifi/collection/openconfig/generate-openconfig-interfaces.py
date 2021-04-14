@@ -43,7 +43,7 @@ def build_tree(data, parent, yang_base, obj=None, path_helper=None,
     # Please, be kind.
     #
     # Populate tree with update elements
-    if data["prefix"]["elem"]:
+    if "prefix" in data:
         for elem in data["prefix"]["elem"]:
             cdata = copy.deepcopy(data)
             cdata["prefix"]["elem"].remove(elem)

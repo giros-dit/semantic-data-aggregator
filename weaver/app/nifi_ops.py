@@ -54,13 +54,24 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     """
     Delete TelemetrySource flow
     """
-    ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    ts_pg = stopTelemetrySource(telemetrySource)
     # Disable controller services
     controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    registry_controller = None
     for controller in controllers:
-        nipyapi.canvas.schedule_controller(controller, False)
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "HortonworksSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..." % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..." % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
     # Delete TS PG
     nipyapi.canvas.delete_process_group(ts_pg, True)
+
 
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
@@ -163,6 +174,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
         data = json.load(file)
         data['address'] = endpoint.uri.value.split("://")[1]
         data['outputs']['output']['topic'] = gnmic_topic
+        data['outputs']['output']['format'] = "protojson"
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
@@ -211,14 +223,19 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
-    # Enable controller services
-    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
-    for controller in controllers:
-        nipyapi.canvas.schedule_controller(controller, True)
     # Deploy TS template
     ts_template = nipyapi.templates.get_template("TelemetrySource")
     ts_pg_flow = nipyapi.templates.deploy_template(ts_pg.id, ts_template.id)
-
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller HortonworksSchemaRegistry...")
+    registry_controller = getControllerService(ts_pg, "HortonworksSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
+    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True)
     return ts_pg
 
 def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerServiceEntity:
@@ -444,7 +461,8 @@ def stopMetricSource(metricSource: MetricSource) -> ProcessGroupEntity:
     Stop NiFi flow (Process Group) from MetricSource
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
-    return nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    return ms_pg
 
 
 def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
@@ -452,14 +470,16 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     Stop NiFi flow (Process Group) from MetricTarget
     """
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
-    return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+    nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+    return mt_pg
 
 def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     """
     Stop NiFi flow (Process Group) from TelemetrySource
     """
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
-    return nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+    nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+    return ts_pg
 
 def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
@@ -583,13 +603,13 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
+    # Restart TS PG
+    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
     # Enable controller services
     controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
     for controller in controllers:
         if controller.status.run_status != 'ENABLED':
-            nipyapi.canvas.schedule_controller(controller, True)
-    # Restart TS PG
-    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
+            nipyapi.canvas.schedule_controller(controller, True, True)
 
 def upload_templates():
     """
