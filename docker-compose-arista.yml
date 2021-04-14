@@ -60,7 +60,6 @@ services:
     depends_on:
       - zookeeper
   nifi:
-    #image: apache/nifi
     build:
       context: ./nifi
       dockerfile: Dockerfile
@@ -71,7 +70,7 @@ services:
       - "8080:8080"
     volumes:
       - ./gnmic-cfgs:/gnmic-cfgs
-    #command: "curl -sL https://github.com/karimra/gnmic/raw/master/install.sh | bash"
+      - ./nifi:/opt/aggregator
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
