@@ -77,6 +77,7 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     logger.info("TelemetrySource '{0}' flow deleted in NiFi.".format(telemetrySource.id))
 
 
+
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
     """
@@ -247,6 +248,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
         logger.debug("Enabling controller %s ..." % controller.component.name)
         if controller.status.run_status != 'ENABLED':
             nipyapi.canvas.schedule_controller(controller, True)
+<<<<<<< HEAD
     logger.info("TelemetrySource '{0}' flow deployed in NiFi.".format(telemetrySource.id))
     return ts_pg
 
@@ -254,13 +256,23 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
 def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerServiceEntity:
     """
     Get Controller Service by name within a given ProcessGroup.
+=======
+    return ts_pg
+
+def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerServiceEntity:
+    """
+    Get Controller Service by name within a given ProcessGroup
+>>>>>>> develop
     """
     controllers = nipyapi.canvas.list_all_controllers(pg.id, False)
     for controller in controllers:
         if controller.component.name == name:
             return controller
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 def getMetricSourcePG(metricSource: MetricSource) -> ProcessGroupEntity:
     """
     Get NiFi flow (Process Group) from MetricSource.
@@ -351,7 +363,10 @@ def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.schedule_process_group(mt_pg.id, False)
     return mt_pg
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 
 def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     """
@@ -360,7 +375,10 @@ def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
     nipyapi.canvas.schedule_process_group(ts_pg.id, False)
     return ts_pg
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
 
 def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
@@ -499,8 +517,11 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     for controller in controllers:
         if controller.status.run_status != 'ENABLED':
             nipyapi.canvas.schedule_controller(controller, True, True)
+<<<<<<< HEAD
     logger.info("TelemetrySource '{0}' flow upgraded in NiFi.".format(telemetrySource.id))
 
+=======
+>>>>>>> develop
 
 def upload_templates():
     """

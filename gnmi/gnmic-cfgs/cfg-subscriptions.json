@@ -25,7 +25,7 @@
         "output": {
             "type": "kafka",
             "address": "kafka:9092",
-            "topic": "telemetrysource-1",
+            "topic": "gnmic-telemetrysource-1",
             "max-retry": 2,
             "timeout": "5s",
             "recovery-wait-time": "10s",

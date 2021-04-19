@@ -1,5 +1,6 @@
 version: '3'
 services:
+<<<<<<< HEAD
   ceos1:
     image: "ceos-image:4.24.5M"
     hostname: ceos1
@@ -48,6 +49,8 @@ services:
       - "8081:8080"
     volumes:
       - ./consumer/app:/app
+=======
+>>>>>>> develop
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -56,6 +59,7 @@ services:
       - "8082:8080"
     volumes:
       - ./context-catalog:/web
+<<<<<<< HEAD
   experimenter:
     build:
       context: ./experimenter
@@ -92,6 +96,8 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
+=======
+>>>>>>> develop
   kafka:
     image: wurstmeister/kafka:latest
     hostname: kafka
@@ -117,6 +123,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
+<<<<<<< HEAD
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./nifi:/opt/aggregator
   node-exporter-1:
@@ -135,6 +142,10 @@ services:
       - "9101:9100"
     depends_on:
       - prometheus
+=======
+      - ./gnmic-cfgs:/gnmic-cfgs
+      - ./nifi:/opt/aggregator
+>>>>>>> develop
   postgres:
     image: mdillon/postgis
     hostname: postgres
@@ -147,11 +158,19 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
+  schema-registry:
+    image: schema-registry:0.9.0
+    hostname: schema-registry
+    container_name: schema-registry
+    environment:
+      DB_TYPE: "postgresql"
+      DATA_SRC_CLASS_NAME: "org.postgresql.ds.PGSimpleDataSource"
+      DB_URL: "jdbc:postgresql://postgres/ngb"
+      DB_USER: ngb
+      DB_PASSWORD: ngb
+      REGISTRY_HEAP_OPTS: "-Xmx1G -Xms1G"
     ports:
+<<<<<<< HEAD
       - "9099:9090"
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -167,6 +186,8 @@ services:
       DB_PASSWORD: ngb
       REGISTRY_HEAP_OPTS: "-Xmx1G -Xms1G"
     ports:
+=======
+>>>>>>> develop
       - "9010:9090"
       - "9011:9091"
     depends_on:
@@ -180,14 +201,6 @@ services:
     depends_on:
       - kafka
       - postgres
-  stream-catalog:
-    image: halverneus/static-file-server
-    hostname: stream-catalog
-    container_name: stream-catalog
-    ports:
-      - "8083:8080"
-    volumes:
-      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver
@@ -209,6 +222,47 @@ services:
     logging:
       driver: none
     working_dir: /
+<<<<<<< HEAD
+=======
+  ceos1:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos1
+    container_name: ceos1
+    ports:
+      - "6030:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  ceos2:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos2
+    container_name: ceos2
+    ports:
+      - "6031:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+>>>>>>> develop
 networks:
   net1:
   net2:
