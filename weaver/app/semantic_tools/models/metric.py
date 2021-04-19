@@ -11,20 +11,6 @@ class Credentials(Entity):
     type: Literal["Credentials"] = "Credentials"
     authMethod: Property
 
-"""
-class Endpoint(Entity):
-    type: Literal["Endpoint"] = "Endpoint"
-    hasLogin: Optional[Relationship] = None
-    name: Property
-    uri: _URI
-"""
-"""
-class Prometheus(Entity):
-    type: Literal["Prometheus"] = "Prometheus"
-    hasEndpoint: Relationship
-    name: Property
-    version: Property
-"""
 
 class Action(Property):
     value: Literal["START", "STOP", "END"]

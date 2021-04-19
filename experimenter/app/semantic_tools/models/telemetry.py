@@ -1,4 +1,4 @@
-from .ngsi_ld.entity import Entity, Property, Relationship, Relationships
+from .ngsi_ld.entity import Entity, Property, Relationship
 from pydantic import AnyUrl
 from typing import Literal, Optional
 
@@ -11,20 +11,6 @@ class Credentials(Entity):
     type: Literal["Credentials"] = "Credentials"
     authMethod: Property
 
-"""
-class Endpoint(Entity):
-    type: Literal["Endpoint"] = "Endpoint"
-    hasLogin: Optional[Relationship] = None
-    name: Property
-    uri: _URI
-"""
-"""
-class Device(Entity):
-    type: Literal["Device"] = "Device"
-    hasEndpoint: Relationship
-    name: Property
-    protocol: Property
-"""
 
 class Action(Property):
     value: Literal["START", "STOP", "END"]
@@ -53,6 +39,7 @@ class Device(Agent):
     hasEndpoint: Relationship
     name: Property
     protocol: Property
+    version: Optional[Property]
 
 
 class Module(Entity):

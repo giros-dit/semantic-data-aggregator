@@ -10,6 +10,7 @@
         "hasLogin": "http://example.org/hasLogin",
         "Device": "http://example.org/Device",
         "protocol": "http://example.org/protocol",
+        "version": "http://example.org/version",
         "hasEndpoint": "http://example.org/hasEndpoint",
         "TelemetrySource": "http://example.org/TelemetrySource",
         "XPath": "http://example.org/XPath",
