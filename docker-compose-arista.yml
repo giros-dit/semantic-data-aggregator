@@ -1,7 +1,7 @@
 version: '3'
 services:
   ceos1:
-    image: "ceos-image:4.24.4M"
+    image: "ceos-image:4.24.5M"
     hostname: ceos1
     container_name: ceos1
     ports:
@@ -20,7 +20,7 @@ services:
       net1:
       net2:
   ceos2:
-    image: "ceos-image:4.24.4M"
+    image: "ceos-image:4.24.5M"
     hostname: ceos2
     container_name: ceos2
     ports:
@@ -108,7 +108,6 @@ services:
     depends_on:
       - zookeeper
   nifi:
-    #image: apache/nifi
     build:
       context: ./nifi
       dockerfile: Dockerfile
@@ -118,8 +117,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./gnmic-cfgs:/gnmic-cfgs
-    #command: "curl -sL https://github.com/karimra/gnmic/raw/master/install.sh | bash"
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./nifi:/opt/aggregator
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
@@ -194,9 +193,10 @@ services:
       context: ./weaver
     hostname: weaver
     container_name: weaver
+    user: root
     volumes:
       - ./weaver/app:/app
-      - ./gnmic-cfgs:/gnmic-cfgs
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
