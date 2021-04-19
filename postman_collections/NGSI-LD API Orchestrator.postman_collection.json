@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "651649a0-ddec-4cc7-9d4f-0b63ebfcc34c",
+		"_postman_id": "55f244aa-3869-45a1-a212-1233f91a0d66",
 		"name": "NGSI-LD API Orchestrator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -627,7 +627,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:1\",\n    \"type\": \"MetricProcessor\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:2\"\n    },\n    \"hasApplication\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:1\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficRate\"\n    },    \n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:1\",\n    \"type\": \"MetricProcessor\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricSource:2\"\n    },\n    \"hasApplication\":{\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:1\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficRate\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -674,7 +674,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:2\",\n    \"type\": \"MetricProcessor\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"STOP\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:1\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:2\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficAvg\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"num_records\": \"3\"\n        }\n    },\n    \"jobId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:MetricProcessor:2\",\n    \"type\": \"MetricProcessor\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"STOP\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:MetricProcessor:1\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:StreamApplication:2\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"TrafficAvg\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"num_records\": \"3\"\n        }\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -827,7 +827,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:1\",\n    \"type\": \"StreamApplication\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic packet rate sent through a specific interface of a device between two instants of time.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:1\",\n    \"type\": \"StreamApplication\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic packet rate sent through a specific interface of a device between two instants of time.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficRate-0.0.1-SNAPSHOT.jar\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -874,7 +874,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:2\",\n    \"type\": \"StreamApplication\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    },\n    \"fileId\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"entryClass\": {\n        \"type\": \"Property\",\n        \"value\": \"\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic rate average sent through a specific interface of a device in the last 30 seconds.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:StreamApplication:2\",\n    \"type\": \"StreamApplication\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"fileName\": {\n        \"type\": \"Property\",\n        \"value\": \"flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"A Flink stream processing application that calculates the traffic rate average sent through a specific interface of a device in the last 30 seconds.\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://stream-catalog:8080/flink.TrafficAvg-0.0.1-SNAPSHOT.jar\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1215,7 +1215,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Device:1\",\n    \"type\": \"Device\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"router-ceos1\"\n    },\n    \"protocol\": {\n        \"type\": \"Property\",\n        \"value\": \"gNMI\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Device:1\",\n    \"type\": \"Device\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"router-ceos1\"\n    },\n    \"protocol\": {\n        \"type\": \"Property\",\n        \"value\": \"gNMI\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1262,7 +1262,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1494,7 +1494,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:1\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:1\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1541,7 +1541,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:2\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1557,6 +1557,107 @@
 									]
 								},
 								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"END\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{endpoint1}}/attrs/action",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{endpoint1}}",
+										"attrs",
+										"action"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{endpoint1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{endpoint1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{device1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{device1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
 							},
 							"response": []
 						}
@@ -1593,7 +1694,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Prometheus:1\",\n    \"type\": \"Prometheus\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.25.2\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Prometheus:1\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:1\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1609,6 +1710,107 @@
 									]
 								},
 								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"END\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{prometheus1}}/attrs/action",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{prometheus1}}",
+										"attrs",
+										"action"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{prometheus1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{prometheus1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{prometheus1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{prometheus1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
 							},
 							"response": []
 						}
@@ -1645,7 +1847,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Device:1\",\n    \"type\": \"Device\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"router-ceos1\"\n    },\n    \"protocol\": {\n        \"type\": \"Property\",\n        \"value\": \"gNMI\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Device:1\",\n    \"type\": \"Device\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"router-ceos1\"\n    },\n    \"protocol\": {\n        \"type\": \"Property\",\n        \"value\": \"gNMI\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:2\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -1661,6 +1863,107 @@
 									]
 								},
 								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Partial Attribute Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"END\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{device1}}/attrs/action",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{device1}}",
+										"attrs",
+										"action"
+									]
+								},
+								"description": "partially update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{device1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{device1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Entity Data by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{device1}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{device1}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
 							},
 							"response": []
 						}
