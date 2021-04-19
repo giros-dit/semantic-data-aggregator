@@ -1,5 +1,10 @@
 FROM python:3.8
 
+USER root
+
+# Install gNMIc
+RUN bash -c "$(curl -sL https://get-gnmic.kmrd.dev)"
+
 COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
