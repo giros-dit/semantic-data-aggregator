@@ -2,9 +2,11 @@ from fastapi import FastAPI, status, Request
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication
+    MetricProcessor, StreamApplication,
+    Prometheus, Endpoint
 )
-from semantic_tools.models.telemetry import TelemetrySource
+from semantic_tools.models.telemetry import TelemetrySource, Device
+
 import logging
 import ngsi_ld_ops
 
@@ -42,6 +44,11 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, experimenter_uri)
+    # Subscribe to data sources entities
+    ngsi_ld_ops.subscribePrometheus(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeDevice(ngsi, experimenter_uri)
+    # Subscribe to Endpoint entities
+    ngsi_ld_ops.subscribeEndpoint(ngsi, experimenter_uri)
 
 # API for experimenter
 @app.post("/notify",
@@ -51,21 +58,33 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
-            print(metricSource.json(indent=4, sort_keys=True, exclude_unset=True))
-            print("Notification! State: '{0}' -  State information: '{1}'".format(metricSource.state.value, metricSource.state.stateInfo.value))
+            logger.info(metricSource.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(metricSource.state.value, metricSource.state.stateInfo.value))
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
-            print(metricTarget.json(indent=4, sort_keys=True, exclude_unset=True))
-            print("Notification! State: '{0}' -  State information: '{1}'".format(metricTarget.state.value, metricTarget.state.stateInfo.value))
+            logger.info(metricTarget.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(metricTarget.state.value, metricTarget.state.stateInfo.value))
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            print(metricProcessor.json(indent=4, sort_keys=True, exclude_unset=True))
-            print("Notification! State: '{0}' -  State information: '{1}'".format(metricProcessor.state.value, metricProcessor.state.stateInfo.value))
+            logger.info(metricProcessor.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(metricProcessor.state.value, metricProcessor.state.stateInfo.value))
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
-            print(streamApplication.json(indent=4, sort_keys=True, exclude_unset=True))
-            print("Notification! State: '{0}' -  State information: '{1}'".format(streamApplication.state.value, streamApplication.state.stateInfo.value))
+            logger.info(streamApplication.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(streamApplication.state.value, streamApplication.state.stateInfo.value))
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
-            print(telemetrySource.json(indent=4, sort_keys=True, exclude_unset=True))
-            print("Notification! State: '{0}' -  State information: '{1}'".format(telemetrySource.state.value, telemetrySource.state.stateInfo.value))
+            logger.info(telemetrySource.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(telemetrySource.state.value, telemetrySource.state.stateInfo.value))
+        if notification["type"] == "Prometheus":
+            prometheus = Prometheus.parse_obj(notification)
+            logger.info(prometheus.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(prometheus.state.value, prometheus.state.stateInfo.value))
+        if notification["type"] == "Device":
+            device = Device.parse_obj(notification)
+            logger.info(device.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(device.state.value, device.state.stateInfo.value))
+        if notification["type"] == "Endpoint":
+            endpoint = Endpoint.parse_obj(notification)
+            logger.info(endpoint.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(endpoint.state.value, endpoint.state.stateInfo.value))

@@ -16,6 +16,27 @@ class SubscriptionType(Enum):
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-subs"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:experimenter-subs"
     TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:experimenter-subs"
+    Prometheus = "urn:ngsi-ld:Subscription:Prometheus:experimenter-subs"
+    Device = "urn:ngsi-ld:Subscription:Device:experimenter-subs"
+    Endpoint = "urn:ngsi-ld:Subscription:Endpoint:experimenter-subs"
+
+
+def check_scorpio_status(ngsi: NGSILDClient):
+    """
+    Infinite loop that checks every 30 seconds
+    until Scorpio REST API becomes available
+    """
+    logger.info("Checking Scorpio REST API status ...")
+    while True:
+        if ngsi.checkScorpioHealth():
+            logger.info(
+                "Experimenter successfully connected to Scorpio REST API!")
+            break
+        else:
+            logger.warning("Could not connect to Scorpio REST API. "
+                           "Retrying in 30 seconds ...")
+            time.sleep(30)
+            continue
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -56,32 +77,6 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
-def check_scorpio_status(ngsi: NGSILDClient):
-    """
-    Infinite loop that checks every 30 seconds
-    until Scorpio REST API becomes available
-    """
-    logger.info("Checking Scorpio REST API status ...")
-    while True:
-        if ngsi.checkScorpioHealth():
-            logger.info(
-                "Experimenter successfully connected to Scorpio REST API!")
-            break
-        else:
-            logger.warning("Could not connect to Scorpio REST API. "
-                           "Retrying in 30 seconds ...")
-            time.sleep(30)
-            continue
-
-
-def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for MetricProcessor entity
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
-                       uri, "state")
-
-
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricSource entity
@@ -98,6 +93,14 @@ def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
                        uri, "state")
 
 
+def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for MetricProcessor entity
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
+                       uri, "state")
+
+
 def subscribeStreamApplication(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for StreamApplication entity
@@ -111,4 +114,28 @@ def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     Create subscription for TelemetrySource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "state")
+
+
+def subscribePrometheus(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Prometheus entity
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Prometheus,
+                       uri, "state")
+
+
+def subscribeDevice(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Device entity
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Device,
+                       uri, "state")
+
+
+def subscribeEndpoint(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Endpoint entity
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Endpoint,
                        uri, "state")
