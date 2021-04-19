@@ -32,7 +32,7 @@ The following steps show how this controller service can be configured manually 
 
 ## Uploading schemas to the registry
 
-HWX Schema Registry provides a friendly GUI that facilitates the management of schemas within the registry. In our dockerized prototype, this GUI is accessible at `http://localhost:9011` (Docker port mapping to the host).
+HWX Schema Registry provides a friendly GUI that facilitates the management of schemas within the registry. In our dockerized prototype, this GUI is accessible at `http://localhost:9010/ui` (Docker port mapping to the host).
 
 In order to upload a new schema, click on the `+` icon on the upper right corner, and introduce the schema along with all required metadata. In this guide, we won't go into the details of the schema, but we would like to remind the reader that HWX Schema Registry supports forward and backward schema evolution policies.
 
