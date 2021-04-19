@@ -50,7 +50,7 @@ def deleteMetricTarget(metricTarget: MetricTarget):
     """
     ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
-    logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricSource.id))
+    logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricTarget.id))
 
 
 def deleteTelemetrySource(telemetrySource: TelemetrySource):
@@ -179,7 +179,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
-    filename = '/gnmic-cfgs/cfg-kafka.json'
+    filename = '/gnmic-cfgs/cfg-subscriptions.json'
     subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)
@@ -448,7 +448,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
-    filename = '/gnmic-cfgs/cfg-kafka.json'
+    filename = '/gnmic-cfgs/cfg-subscriptions.json'
     subscription_name = ""
     with open(filename, 'r') as file:
         data = json.load(file)

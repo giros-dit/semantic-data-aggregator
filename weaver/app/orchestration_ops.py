@@ -142,7 +142,7 @@ def processMetricTargetState(metricTarget: MetricTarget, ngsi: NGSILDClient):
                 ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully stopped."})
             else:
                 logger.info(
-                    "New '{0}' NiFi flow to STOP.".format(
+                    "New '{0}' NiFi flow to stop.".format(
                         metricTarget.id)
                 )
                 nifi_ops.deployMetricTarget(metricTarget)
@@ -269,7 +269,7 @@ def processStreamApplicationState(streamApplication: StreamApplication, ngsi: NG
             # Delete current JAR and create another one with new configuration
             logger.info("Delete '{0}' stream processing application JAR.".format(streamApplication.id))
             flink.deleteJar(jarId)
-            logger.info("StreamApplication '{0}' with '{1}' JAR deleted in Flink engine.".format(streamApplication.id, streamApplication.fileName.value))
+            logger.info("StreamApplication '{0}' with '{1}' JAR deleted from Flink engine.".format(streamApplication.id, streamApplication.fileName.value))
             logger.info("Upgrade the previous '{0}' stream processing application JAR.".format(streamApplication.id))
             uploaded = flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
             if uploaded == True:
@@ -281,7 +281,7 @@ def processStreamApplicationState(streamApplication: StreamApplication, ngsi: NG
     elif streamApplication.action.value == "END":
         logger.info("Delete '{0}' stream processing application JAR.".format(streamApplication.id))
         flink.deleteJar(jarId)
-        logger.info("StreamApplication '{0}' with '{1}' JAR deleted in Flink engine.".format(streamApplication.id, streamApplication.fileName.value))
+        logger.info("StreamApplication '{0}' with '{1}' JAR deleted from Flink engine.".format(streamApplication.id, streamApplication.fileName.value))
         ngsi_ld_ops.stateToCleaned(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR successfully deleted."})
         logger.info("Delete the '{0}' StreamApplication entity.".format(streamApplication.id))
         ngsi.deleteEntity(streamApplication.id)
@@ -311,7 +311,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
                 logger.info("MetricProcessor '{0}' with '{1}' Job cancelled in Flink engine.".format(metricProcessor.id, metricProcessor.name.value))
                 logger.info("Upgrade the previous '{0}' stream processing application Job.".format(metricProcessor.id))
                 flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
-            ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully started."})
+            ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully upgraded."})
         else:
             if streamApplication_exists == False:
                 logger.info("Submit new '{0}' stream processing application Job. A processing error was found. The specified stream application does not exist.".format(metricProcessor.id))
@@ -434,7 +434,6 @@ def processDeviceState(device: Device, ngsi: NGSILDClient):
             stdout, stderr = capabilities.communicate()
             try:
                 output = json.loads(stdout)
-                yang_models = output['supportedModels']
 
                 version = output['gNMIVersion']
                 version_dict = {
@@ -444,49 +443,6 @@ def processDeviceState(device: Device, ngsi: NGSILDClient):
                     }
                 }
                 ngsi.appendEntityAttrs(device.id, version_dict)
-
-                encodings = output['supportedEncodings']
-                encodings_dict = {
-                    "encodings": {
-                        "type": "Property",
-                        "value": encodings
-                    }
-                }
-                ngsi.appendEntityAttrs(device.id, encodings_dict)
-
-                hasModule_array = []
-                modules_id = []
-
-                for i in range(0, len(yang_models)):
-                    modules_id.append("urn:ngsi-ld:Module:{0}".format(i+1))
-                    if 'version' in yang_models[i]:
-                        yang_models[i]['version'] = yang_models[i]['version']
-                    else:
-                        yang_models[i]['version'] = ""
-
-		    #Create as many module entities as YANG modules have the Device data source available
-                    """
-                    module = Module(
-                        id= modules_id[i],
-                        name={"value": yang_models[i]['name']},
-                        org={"value": yang_models[i]['organization']},
-                        version={"value": yang_models[i]['version']})
-
-                    ngsi.createEntity(module.dict(exclude_none=True))
-                    """
-
-                    hasModule_entry = {
-                        "type": "Relationship",
-                        "object": modules_id[i],
-                        "datasetId": "{0}:Module:{1}".format(device.id, i+1)
-                    }
-                    hasModule_array.append(hasModule_entry)
-
-                hasModule_dict ={
-                    "hasModule": hasModule_array
-                }
-                #Create one-to-many relationships between the Device entity and all Module entities
-                ngsi.appendEntityAttrs(device.id, hasModule_dict)
                 ngsi_ld_ops.stateToRunning(ngsi, device.id, {"value": "SUCCESS! Device data source context information entity started successfully."})
             except ValueError as err:
                 output = stdout.decode("utf-8")
