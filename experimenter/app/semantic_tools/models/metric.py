@@ -11,20 +11,20 @@ class Credentials(Entity):
     type: Literal["Credentials"] = "Credentials"
     authMethod: Property
 
-
+"""
 class Endpoint(Entity):
     type: Literal["Endpoint"] = "Endpoint"
     hasLogin: Optional[Relationship] = None
     name: Property
     uri: _URI
-
-
+"""
+"""
 class Prometheus(Entity):
     type: Literal["Prometheus"] = "Prometheus"
     hasEndpoint: Relationship
     name: Property
     version: Property
-
+"""
 
 class Action(Property):
     value: Literal["START", "STOP", "END"]
@@ -41,6 +41,20 @@ class Agent(Entity):
     state: Optional[State]
 
 
+class Endpoint(Agent):
+    type: Literal["Endpoint"] = "Endpoint"
+    hasLogin: Optional[Relationship] = None
+    name: Property
+    uri: _URI
+
+
+class Prometheus(Agent):
+    type: Literal["Prometheus"] = "Prometheus"
+    hasEndpoint: Relationship
+    name: Property
+    version: Optional[Property]
+
+
 class MetricSource(Agent):
     type: Literal["MetricSource"] = "MetricSource"
     expression: Optional[Property] = None
@@ -55,7 +69,7 @@ class MetricProcessor(Agent):
     hasApplication: Relationship
     name: Property
     arguments: Optional[Property] = None
-    jobId: Property
+    jobId: Optional[Property]
 
 
 class MetricTarget(Agent):
@@ -67,8 +81,8 @@ class MetricTarget(Agent):
 class StreamApplication(Agent):
     type: Literal["StreamApplication"] = "StreamApplication"
     fileName: Property
-    fileId: Property
-    entryClass: Property
+    fileId: Optional[Property]
+    entryClass: Optional[Property]
     description: Property
     uri: _URI
 

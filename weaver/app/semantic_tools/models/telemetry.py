@@ -1,6 +1,6 @@
-from .ngsi_ld.entity import Entity, Property, Relationship
+from .ngsi_ld.entity import Entity, Property, Relationship, Relationships
 from pydantic import AnyUrl
-from typing import Literal, Optional
+from typing import Literal, Optional, Union, List
 
 
 class _URI(Property):
@@ -11,20 +11,20 @@ class Credentials(Entity):
     type: Literal["Credentials"] = "Credentials"
     authMethod: Property
 
-
+"""
 class Endpoint(Entity):
     type: Literal["Endpoint"] = "Endpoint"
     hasLogin: Optional[Relationship] = None
     name: Property
     uri: _URI
-
-
+"""
+"""
 class Device(Entity):
     type: Literal["Device"] = "Device"
     hasEndpoint: Relationship
     name: Property
     protocol: Property
-
+"""
 
 class Action(Property):
     value: Literal["START", "STOP", "END"]
@@ -39,6 +39,27 @@ class Agent(Entity):
     type: Literal["Agent"] = "Agent"
     action: Action
     state: Optional[State]
+
+
+class Endpoint(Agent):
+    type: Literal["Endpoint"] = "Endpoint"
+    hasLogin: Optional[Relationship] = None
+    name: Property
+    uri: _URI
+
+
+class Device(Agent):
+    type: Literal["Device"] = "Device"
+    hasEndpoint: Relationship
+    name: Property
+    protocol: Property
+
+
+class Module(Entity):
+    type: Literal["Module"] = "Module"
+    name: Property
+    org: Property
+    version: Property
 
 
 class TelemetrySource(Agent):
