@@ -1,7 +1,6 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import State
-
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
@@ -16,6 +15,27 @@ class SubscriptionType(Enum):
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:weaver-subs"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:weaver-subs"
     TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:weaver-subs"
+    Prometheus = "urn:ngsi-ld:Subscription:Prometheus:weaver-subs"
+    Device = "urn:ngsi-ld:Subscription:Device:weaver-subs"
+    Endpoint = "urn:ngsi-ld:Subscription:Endpoint:weaver-subs"
+
+
+def check_scorpio_status(ngsi: NGSILDClient):
+    """
+    Infinite loop that checks every 30 seconds
+    until Scorpio REST API becomes available.
+    """
+    logger.info("Checking Scorpio REST API status ...")
+    while True:
+        if ngsi.checkScorpioHealth():
+            logger.info(
+                "Weaver successfully connected to Scorpio REST API!")
+            break
+        else:
+            logger.warning("Could not connect to Scorpio REST API. "
+                           "Retrying in 30 seconds ...")
+            time.sleep(30)
+            continue
 
 
 def _subscribeToEntity(ngsi: NGSILDClient,
@@ -56,7 +76,7 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
-def appendState(ngsi: NGSILDClient, entityId: str, _stateInfo: str):
+def appendState(ngsi: NGSILDClient, entityId: str, stateInfo_value: str):
     """
     It appends 'state' property to an entity.
     This property is set to 'BUILDING' by default.
@@ -65,38 +85,21 @@ def appendState(ngsi: NGSILDClient, entityId: str, _stateInfo: str):
         "state": State(
             value="BUILDING",
             stateInfo={
-                "value": _stateInfo #""
+                "value": stateInfo_value
             }
         ).dict(exclude_none=True)
     }
     ngsi.appendEntityAttrs(entityId, state)
 
 
-def check_scorpio_status(ngsi: NGSILDClient):
+def stateToBuilding(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Infinite loop that checks every 30 seconds
-    until Scorpio REST API becomes available
-    """
-    logger.info("Checking Scorpio REST API status ...")
-    while True:
-        if ngsi.checkScorpioHealth():
-            logger.info(
-                "Weaver successfully connected to Scorpio REST API!")
-            break
-        else:
-            logger.warning("Could not connect to Scorpio REST API. "
-                           "Retrying in 30 seconds ...")
-            time.sleep(30)
-            continue
-
-
-def stateToBuilding(ngsi: NGSILDClient, entityId: str):
-    """
-    Update state of a given agent entity to BUILDING
+    Update state of a given agent entity to BUILDING.
     """
     state = {
         "state": State(
-            value="BUILDING"
+            value="BUILDING",
+            stateInfo=stateInfo_dict
         ).dict(exclude_none=True)
     }
     ngsi.updateEntityAttrs(entityId, state)
@@ -104,12 +107,12 @@ def stateToBuilding(ngsi: NGSILDClient, entityId: str):
 
 def stateToFailed(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a given agent entity to FAILED
+    Update state of a given agent entity to FAILED.
     """
     state = {
         "state": State(
             value="FAILED",
-            stateInfo=stateInfo_dict #{"value": "ERROR. Add Python traceback here."}
+            stateInfo=stateInfo_dict
         ).dict(exclude_none=True)
     }
     ngsi.updateEntityAttrs(entityId, state)
@@ -117,7 +120,7 @@ def stateToFailed(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
 
 def stateToRunning(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a given agent entity to RUNNING
+    Update state of a given agent entity to RUNNING.
     """
     state = {
         "state": State(
@@ -129,7 +132,7 @@ def stateToRunning(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
 
 def stateToStopped(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a given agent entity to STOPPED
+    Update state of a given agent entity to STOPPED.
     """
     state = {
         "state": State(
@@ -141,7 +144,7 @@ def stateToStopped(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
 
 def stateToCleaned(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a given agent entity to CLEANED
+    Update state of a given agent entity to CLEANED.
     """
     state = {
         "state": State(
@@ -153,7 +156,7 @@ def stateToCleaned(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
 
 def stateToUploaded(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a stream application entity to UPLOADED
+    Update state of a stream application entity to UPLOADED.
     """
     state = {
         "state": State(
@@ -163,17 +166,10 @@ def stateToUploaded(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     }
     ngsi.updateEntityAttrs(entityId, state)
 
-def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for MetricProcessor entity
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
-                       uri, "action")
-
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
-    Create subscription for MetricSource entity
+    Create subscription for MetricSource entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricSource,
                        uri, "action")
@@ -181,28 +177,55 @@ def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
 
 def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
     """
-    Create subscription for MetricTarget entity
+    Create subscription for MetricTarget entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.MetricTarget,
                        uri, "action")
 
-"""
-def subscribeStreamApplication(ngsi: NGSILDClient, uri: str, attribute: str):
-    #Create subscription for StreamApplication entity
-    _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
-                       uri, attribute)
-"""
+
+def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for MetricProcessor entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
+                       uri, "action")
+
 
 def subscribeStreamApplication(ngsi: NGSILDClient, uri: str):
     """
-    Create subscription for StreamApplication entity
+    Create subscription for StreamApplication entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
                        uri, "action")
 
+
 def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     """
-    Create subscription for TelemetrySource entity
+    Create subscription for TelemetrySource entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "action")
+
+
+def subscribePrometheus(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Prometheus entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Prometheus,
+                       uri, "action")
+
+
+def subscribeDevice(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Device entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Device,
+                       uri, "action")
+
+
+def subscribeEndpoint(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Endpoint entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Endpoint,
                        uri, "action")

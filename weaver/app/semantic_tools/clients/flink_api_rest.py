@@ -4,10 +4,8 @@ from requests.packages.urllib3.util.retry import Retry
 import requests
 import os.path
 
-# Class built based on reference docs
-# for the Flink REST API
+# Class built based on reference docs for the Flink REST API.
 # See https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html#api
-
 
 class FlinkClient():
     def __init__(
@@ -50,21 +48,19 @@ class FlinkClient():
             requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.propagate = True
 
-
-    # Get WebUI configuration
-    def getWebUIConf(self):
+    # Get WebUI configuration to check Flink engine status
+    def checkFlinkHealth(self):
         """
-	Returns the configuration of the WebUI.
+        Checks Flink engine status is up.
         """
-        response = self._session.get("{0}/config".format(self.url),
-                                     verify=self.ssl_verification,
-                                     headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return response.raise_for_status()
+        response = self._session.get(
+            "{0}/config".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        return response.ok
 
-    # Get Flink application jars
+    # Get Flink application JARs -> /jars
     def getFlinkAppJars(self):
         """
 	Returns a list of all jars previously uploaded via '/jars/upload'.
@@ -72,13 +68,12 @@ class FlinkClient():
         response = self._session.get("{0}/jars".format(self.url),
                                      verify=self.ssl_verification,
                                      headers=self.headers)
-        print(response.json())
         if response.status_code == 200:
             return response.json()
         else:
             return response.raise_for_status()
 
-    # Get Flink job
+    # Get Flink job -> /jobs/{jobId}
     def getFlinkJob(self, jobId: str):
         """
         Returns a specific job.
@@ -91,7 +86,7 @@ class FlinkClient():
         else:
             return None
 
-    # Get Flink jobs
+    # Get Flink Jobs -> /jobs
     def getFlinkJobs(self):
         """
 	Returns a description over all jobs and their current state.
@@ -104,7 +99,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Get Flink jobs overview
+    # Get Flink Jobs overview -> /jobs/overview
     def getFlinkJobsOverview(self):
         """
 	Returns an overview over all jobs.
@@ -117,7 +112,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Get Flink jobs metrics
+    # Get Flink Jobs metrics -> /jobs/metrics
     def getFlinkJobsMetrics(self):
         """
 	Provides access to aggregated job metrics.
@@ -130,7 +125,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Upload an application jar to Flink cluster
+    # Upload an application JAR to the Flink engine -> /jars/upload
     def uploadJar(self, jarfile):
         """
         Uploads a jar to the cluster. The jar must be sent as multi-part data. Make sure that the "Content-Type" header is set to "application/x-java-archive",
@@ -147,7 +142,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Submit a Flink job
+    # Submit a Flink Job to the Flink engine -> /jars/{jarId}/run
     def submitJob(self, jarId: str, entryClass: str = None, programArg: str = None):
         """
 	Submits a job by running a jar previously uploaded via '/jars/upload'. Program arguments can be passed both via the JSON request (recommended) or query parameters.
@@ -177,7 +172,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Delete a Flink job
+    # Delete a Flink Job from Flink engine -> /jobs/{jobId}
     def deleteJob(self, jobId: str):
         """
 	Cancel/terminate a Flink job.
@@ -197,7 +192,7 @@ class FlinkClient():
         else:
             return response.raise_for_status()
 
-    # Delete an application jar from Flink cluster
+    # Delete an application JAR from Flink engine -> /jars/{jarId}
     def deleteJar(self, jarId: str):
         """
         Deletes a jar previously uploaded via '/jars/upload'.

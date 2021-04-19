@@ -3,14 +3,18 @@ from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication
+    MetricProcessor, StreamApplication,
+    Prometheus, Endpoint
 )
-from semantic_tools.models.telemetry import TelemetrySource
-import flink_ops
+from semantic_tools.models.telemetry import TelemetrySource, Device
+
 import logging
 import nifi_ops
+import flink_ops
+import orchestration_ops
 import nipyapi
 import ngsi_ld_ops
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -38,13 +42,14 @@ app = FastAPI(
     title="Weaver API",
     version="1.0.0")
 
-
 @app.on_event("startup")
 async def startup_event():
     # Check NiFi REST API is up
     nifi_ops.check_nifi_status()
     # Upload MetricSource and MetricTarget templates
     nifi_ops.upload_templates()
+    # Check Flink REST API is up
+    flink_ops.check_flink_status(flink)
     # Check Scorpio API is up
     ngsi_ld_ops.check_scorpio_status(ngsi)
     # Subscribe to data pipeline agent entities
@@ -53,6 +58,11 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
+    # Subscribe to data source entities
+    ngsi_ld_ops.subscribePrometheus(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeDevice(ngsi, weaver_uri)
+    # Subscribe to Endpoint entities
+    ngsi_ld_ops.subscribeEndpoint(ngsi, weaver_uri)
 
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
@@ -61,17 +71,25 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
-            nifi_ops.processMetricSourceState(metricSource, ngsi)
+            orchestration_ops.processMetricSourceState(metricSource, ngsi)
         if notification["type"] == "MetricTarget":
             metricTarget = MetricTarget.parse_obj(notification)
-            nifi_ops.processMetricTargetState(metricTarget, ngsi)
+            orchestration_ops.processMetricTargetState(metricTarget, ngsi)
         if notification["type"] == "MetricProcessor":
             metricProcessor = MetricProcessor.parse_obj(notification)
-            flink_ops.processMetricProcessorState(metricProcessor, ngsi, flink)
+            orchestration_ops.processMetricProcessorState(metricProcessor, ngsi, flink)
         if notification["type"] == "StreamApplication":
             streamApplication = StreamApplication.parse_obj(notification)
-            flink_ops.processStreamApplicationState(streamApplication, ngsi, flink)
+            orchestration_ops.processStreamApplicationState(streamApplication, ngsi, flink)
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
-            nifi_ops.processTelemetrySourceState(telemetrySource, ngsi)
-
+            orchestration_ops.processTelemetrySourceState(telemetrySource, ngsi)
+        if notification["type"] == "Prometheus":
+            prometheus = Prometheus.parse_obj(notification)
+            orchestration_ops.processPrometheusState(prometheus, ngsi)
+        if notification["type"] == "Device":
+            device = Device.parse_obj(notification)
+            orchestration_ops.processDeviceState(device, ngsi)
+        if notification["type"] == "Endpoint":
+            endpoint = Endpoint.parse_obj(notification)
+            orchestration_ops.processEndpointState(endpoint, ngsi)

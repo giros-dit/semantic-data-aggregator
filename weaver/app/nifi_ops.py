@@ -1,8 +1,8 @@
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
+from nipyapi.nifi.models.controller_service_entity import ControllerServiceEntity
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import Endpoint, MetricSource, MetricTarget, Prometheus
+from semantic_tools.models.metric import Endpoint, Prometheus, MetricSource, MetricTarget
 from semantic_tools.models.telemetry import Endpoint, Device, TelemetrySource
-from semantic_tools.models.ngsi_ld.entity import Entity
 from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
 
@@ -11,7 +11,6 @@ import nipyapi
 import ngsi_ld_ops
 import time
 import sys
-import ruamel.yaml
 import json
 import os
 
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 def check_nifi_status():
     """
     Infinite loop that checks every 30 seconds
-    until NiFi REST API becomes available
+    until NiFi REST API becomes available.
     """
     logger.info("Checking NiFi REST API status ...")
     while True:
@@ -38,30 +37,51 @@ def check_nifi_status():
 
 def deleteMetricSource(metricSource: MetricSource):
     """
-    Delete MetricSource flow
+    Delete MetricSource flow.
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
+    logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricSource.id))
+
 
 def deleteMetricTarget(metricTarget: MetricTarget):
     """
-    Delete MetricTarget flow
+    Delete MetricTarget flow.
     """
     ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
+    logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricSource.id))
+
 
 def deleteTelemetrySource(telemetrySource: TelemetrySource):
     """
-    Delete TelemetrySource flow
+    Delete TelemetrySource flow.
     """
-    ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
+    ts_pg = stopTelemetrySource(telemetrySource)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "HortonworksSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..." % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..." % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
+    # Delete TS PG
     nipyapi.canvas.delete_process_group(ts_pg, True)
+    logger.info("TelemetrySource '{0}' flow deleted in NiFi.".format(telemetrySource.id))
+
 
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
     """
     Deploys a MetricSource NiFi template
-    from a passed MetricSource NGSI-LD entity
+    from a passed MetricSource NGSI-LD entity.
     """
     # Get Endpoint
     prometheus_entity = ngsi.retrieveEntityById(metricSource.collectsFrom.object)
@@ -111,12 +131,14 @@ def deployMetricSource(metricSource: MetricSource,
         nipyapi.nifi.ProcessorConfigDTO(
             scheduling_period='{0}{1}'.format(metricSource.interval.value,
                                               interval_unit)))
+    logger.info("MetricSource '{0}' flow deployed in NiFi.".format(metricSource.id))
     return ms_pg
+
 
 def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
     Deploys a MetricTarget NiFi template
-    from a passed MetricTarget NGSI-LD entity
+    from a passed MetricTarget NGSI-LD entity.
     """
     # Get topic name from input ID
     input_id = metricTarget.hasInput.object.strip(
@@ -138,12 +160,14 @@ def deployMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
         mt_pg, [("topic", input_id)])
     nipyapi.canvas.update_variable_registry(
         mt_pg, [("consumer_url", metricTarget.uri.value)])
+    logger.info("MetricTarget '{0}' flow deployed in NiFi.".format(metricTarget.id))
     return mt_pg
+
 
 def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) -> ProcessGroupEntity:
     """
     Deploys a TelemetrySource NiFi template
-    from a passed TelemetrySource NGSI-LD entity
+    from a passed TelemetrySource NGSI-LD entity.
     """
     # Get gNMI server address from hasEndpoint relationship
     device_entity = ngsi.retrieveEntityById(telemetrySource.collectsFrom.object)
@@ -152,6 +176,7 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
@@ -159,7 +184,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     with open(filename, 'r') as file:
         data = json.load(file)
         data['address'] = endpoint.uri.value.split("://")[1]
-        data['outputs']['output']['topic'] = entity_id
+        data['outputs']['output']['topic'] = gnmic_topic
+        data['outputs']['output']['format'] = "protojson"
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
@@ -194,47 +220,72 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     source_id_number = int(telemetrySource.id.split(":")[-1])
     # Get root PG
     root_pg = nipyapi.canvas.get_process_group("root")
-    # Y multiply ID last integer by 200, X fixed to 500 for TS PGs
+    # Y multiply ID last integer by 200, X fixed to 750 for TS PGs
     ts_pg = nipyapi.canvas.create_process_group(
                     root_pg,
                     telemetrySource.id,
-                    (500, 200*source_id_number)
+                    (750, 200*source_id_number)
     )
     # Set variable for TS PG
+    # Avro schema hardcoded to openconfig-interfaces
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
-
     # Deploy TS template
     ts_template = nipyapi.templates.get_template("TelemetrySource")
     ts_pg_flow = nipyapi.templates.deploy_template(ts_pg.id, ts_template.id)
-
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller HortonworksSchemaRegistry...")
+    registry_controller = getControllerService(ts_pg, "HortonworksSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
+    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True)
+    logger.info("TelemetrySource '{0}' flow deployed in NiFi.".format(telemetrySource.id))
     return ts_pg
+
+
+def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerServiceEntity:
+    """
+    Get Controller Service by name within a given ProcessGroup.
+    """
+    controllers = nipyapi.canvas.list_all_controllers(pg.id, False)
+    for controller in controllers:
+        if controller.component.name == name:
+            return controller
+
 
 def getMetricSourcePG(metricSource: MetricSource) -> ProcessGroupEntity:
     """
-    Get NiFi flow (Process Group) from MetricSource
+    Get NiFi flow (Process Group) from MetricSource.
     """
     return nipyapi.canvas.get_process_group(metricSource.id)
 
 
 def getMetricTargetPG(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
-    Get NiFi flow (Process Group) from MetricTarget
+    Get NiFi flow (Process Group) from MetricTarget.
     """
     return nipyapi.canvas.get_process_group(metricTarget.id)
 
+
 def getTelemetrySourcePG(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     """
-    Get NiFi flow (Process Group) from TelemetrySource
+    Get NiFi flow (Process Group) from TelemetrySource.
     """
     return nipyapi.canvas.get_process_group(telemetrySource.id)
+
 
 def getQueryLabels(metricSource: MetricSource) -> str:
     """
     Print Prometheus labels to make them consumable
-    by Prometheus REST API
+    by Prometheus REST API.
     """
     expression = metricSource.expression.value
     labels = []
@@ -243,295 +294,78 @@ def getQueryLabels(metricSource: MetricSource) -> str:
 
     return ",".join(labels)
 
+
 def instantiateMetricSource(metricSource: MetricSource,
                             ngsi: NGSILDClient):
     """
     Deploys and starts MetricSource template given
-    a MetricSource entity
+    a MetricSource entity.
     """
     ms_pg = deployMetricSource(metricSource, ngsi)
     # Schedule MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, True)
     logger.info(
-        "MetricSource '{0}' scheduled in NiFi.".format(
+        "MetricSource '{0}' flow scheduled in NiFi.".format(
             metricSource.id))
 
 
 def instantiateMetricTarget(metricTarget: MetricTarget):
     """
     Deploys and starts MetricTarget template given
-    a MetricTarget entity
+    a MetricTarget entity.
     """
     mt_pg = deployMetricTarget(metricTarget)
     # Schedule MT PG
     nipyapi.canvas.schedule_process_group(mt_pg.id, True)
     logger.info(
-        "MetricTarget '{0}' scheduled in NiFi.".format(
+        "MetricTarget '{0}' flow scheduled in NiFi.".format(
             metricTarget.id))
+
 
 def instantiateTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
     """
     Deploys and starts TelemetrySource template given
-    a TelemetrySource entity
+    a TelemetrySource entity.
     """
     ts_pg = deployTelemetrySource(telemetrySource, ngsi)
     # Schedule TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, True)
     logger.info(
-        "TelemetrySource '{0}' scheduled in NiFi.".format(
+        "TelemetrySource '{0}' flow scheduled in NiFi.".format(
             telemetrySource.id))
 
-def processMetricSourceState(metricSource: MetricSource,
-                            ngsi: NGSILDClient):
-    """
-    Process MetricSource resources (i.e., NiFi flow)
-    based on the value of the action property
-    """
-    ngsi_ld_ops.appendState(ngsi, metricSource.id, "Building the collection agent...")
-    ms_pg = getMetricSourcePG(metricSource)
-    if metricSource.action.value == "START":
-        prometheus_id = metricSource.collectsFrom.object
-        prometheus_exists = checkSourceExistence(prometheus_id, ngsi)
-        if prometheus_exists == True:
-            prometheus_entity = ngsi.retrieveEntityById(prometheus_id)
-            prometheus = Prometheus.parse_obj(prometheus_entity)
-            endpoint_id = prometheus.hasEndpoint.object
-            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
-            if endpoint_exists == True:
-                if ms_pg:
-                    logger.info(
-                        "Upgrade '{0}' NiFi flow.".format(metricSource.id)
-                    )
-                    upgradeMetricSource(metricSource, ngsi)
-                else:
-                    logger.info(
-                        "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
-                    )
-                    instantiateMetricSource(metricSource, ngsi)
-                ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent started successfully."})
-            else:
-                logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-                ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
-                logger.info("Delete '{0}' entity".format(metricSource.id))
-                ngsi.deleteEntity(metricSource.id)
-
-        else:
-            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(prometheus_id)})
-            logger.info("Delete '{0}' entity".format(metricSource.id))
-            ngsi.deleteEntity(metricSource.id)
-    elif metricSource.action.value == "STOP":
-        prometheus_id = metricSource.collectsFrom.object
-        prometheus_exists = checkSourceExistence(prometheus_id, ngsi)
-        if prometheus_exists == True:
-            prometheus_entity = ngsi.retrieveEntityById(prometheus_id)
-            prometheus = Prometheus.parse_obj(prometheus_entity)
-            endpoint_id = prometheus.hasEndpoint.object
-            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
-            if endpoint_exists == True:
-                if ms_pg:
-                    logger.info(
-                        "Stop '{0}' NiFi flow.".format(metricSource.id)
-                    )
-                    stopMetricSource(metricSource)
-                else:
-                    logger.info(
-                        "New '{0}' NiFi flow to STOP.".format(metricSource.id)
-                    )
-                    deployMetricSource(metricSource, ngsi)
-                ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
-
-            else:
-                logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-                ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
-                logger.info("Delete '{0}' entity".format(metricSource.id))
-                ngsi.deleteEntity(metricSource.id)
-
-        else:
-            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricSource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(prometheus_id)})
-            logger.info("Delete '{0}' entity".format(metricSource.id))
-            ngsi.deleteEntity(metricSource.id)
-    elif metricSource.action.value == "END":
-        output_exists = checkOutputExistence(metricSource, ngsi)
-        if output_exists == False:
-            logger.info(
-                "Delete '{0}' NiFi flow.".format(
-                    metricSource.id)
-            )
-            deleteMetricSource(metricSource)
-            ngsi_ld_ops.stateToCleaned(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
-            logger.info("Delete '{0}' entity".format(metricSource.id))
-            ngsi.deleteEntity(metricSource.id)
-
-def processMetricTargetState(metricTarget: MetricTarget,
-                            ngsi: NGSILDClient):
-    """
-    Process MetricTarget resources (i.e., NiFi flow)
-    based on the value of the action property
-    """
-    ngsi_ld_ops.appendState(ngsi, metricTarget.id, "Building the collection agent...")
-    mt_pg = getMetricTargetPG(metricTarget)
-    if metricTarget.action.value == "START":
-        input_exists = checkInputExistence(metricTarget, ngsi)
-        if input_exists == True:
-            if mt_pg:
-                logger.info(
-                    "Upgrade '{0}' NiFi flow.".format(
-                        metricTarget.id)
-                )
-                upgradeMetricTarget(metricTarget)
-            else:
-                logger.info(
-                    "Instantiate new '{0}' NiFi flow.".format(
-                        metricTarget.id)
-                )
-                instantiateMetricTarget(metricTarget)
-            ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent started successfully."})
-        else:
-            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricTarget.hasInput.object)})
-            logger.info("Delete '{0}' entity".format(metricTarget.id))
-            ngsi.deleteEntity(metricTarget.id)
-    elif metricTarget.action.value == "STOP":
-        input_exists = checkInputExistence(metricTarget, ngsi)
-        if input_exists == True:
-            if mt_pg:
-                logger.info(
-                    "Stop '{0}' NiFi flow.".format(
-                        metricTarget.id)
-                )
-                stopMetricTarget(metricTarget)
-            else:
-                logger.info(
-                    "New '{0}' NiFi flow to STOP.".format(
-                        metricTarget.id)
-                )
-                deployMetricTarget(metricTarget)
-            ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent stopped successfully."})
-        else:
-            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(metricTarget.id))
-            ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input entity doesn't exist.".format(metricTarget.hasInput.object)})
-            logger.info("Delete '{0}' entity".format(metricTarget.id))
-            ngsi.deleteEntity(metricTarget.id)
-    elif metricTarget.action.value == "END":
-        logger.info(
-            "Delete '{0}' NiFi flow.".format(
-                metricTarget.id)
-        )
-        deleteMetricTarget(metricTarget)
-        ngsi_ld_ops.stateToCleaned(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent deleted successfully."})
-        logger.info("Delete '{0}' entity".format(metricTarget.id))
-        ngsi.deleteEntity(metricTarget.id)
-
-def processTelemetrySourceState(telemetrySource: TelemetrySource,
-                            ngsi: NGSILDClient):
-    """
-    Process TelemetrySource resources (i.e., NiFi flow)
-    based on the value of the action property
-    """
-    ngsi_ld_ops.appendState(ngsi, telemetrySource.id, "Building the collection agent...")
-    ts_pg = getTelemetrySourcePG(telemetrySource)
-    if telemetrySource.action.value == "START":
-        device_id = telemetrySource.collectsFrom.object
-        device_exists = checkSourceExistence(device_id, ngsi)
-        if device_exists == True:
-            device_entity = ngsi.retrieveEntityById(device_id)
-            device = Device.parse_obj(device_entity)
-            endpoint_id = device.hasEndpoint.object
-            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
-            if endpoint_exists == True:
-                if ts_pg:
-                    logger.info(
-                        "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
-                    )
-                    upgradeTelemetrySource(telemetrySource, ngsi)
-                else:
-                    logger.info(
-                        "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
-                    )
-                    instantiateTelemetrySource(telemetrySource, ngsi)
-                ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent started successfully."})
-            else:
-                logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-                ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
-                logger.info("Delete '{0}' entity".format(telemetrySource.id))
-                ngsi.deleteEntity(telemetrySource.id)
-
-        else:
-            logger.info("Instantiate '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(device_id)})
-            logger.info("Delete '{0}' entity".format(telemetrySource.id))
-            ngsi.deleteEntity(telemetrySource.id)
-    elif telemetrySource.action.value == "STOP":
-        device_id = telemetrySource.collectsFrom.object
-        device_exists = checkSourceExistence(device_id, ngsi)
-        if device_exists == True:
-            device_entity = ngsi.retrieveEntityById(device_id)
-            device = Device.parse_obj(device_entity)
-            endpoint_id = device.hasEndpoint.object
-            endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
-            if endpoint_exists == True:
-                if ts_pg:
-                    logger.info(
-                        "Stop '{0}' NiFi flow.".format(telemetrySource.id)
-                    )
-                    stopTelemetrySource(telemetrySource)
-                else:
-                    logger.info(
-                        "New '{0}' NiFi flow to STOP.".format(telemetrySource.id)
-                    )
-                    deployTelemetrySource(telemetrySource, ngsi)
-                ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
-
-            else:
-                logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-                ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity doesn't exist.".format(endpoint_id)})
-                logger.info("Delete '{0}' entity".format(telemetrySource.id))
-                ngsi.deleteEntity(telemetrySource.id)
-
-        else:
-            logger.info("Stop '{0}' NiFi flow. The processor execution failed.".format(telemetrySource.id))
-            ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Source entity doesn't exist.".format(device_id)})
-            logger.info("Delete '{0}' entity".format(telemetrySource.id))
-            ngsi.deleteEntity(telemetrySource.id)
-    elif telemetrySource.action.value == "END":
-        output_exists = checkOutputExistence(telemetrySource, ngsi)
-        if output_exists == False:
-            logger.info(
-                "Delete '{0}' NiFi flow.".format(
-                    telemetrySource.id)
-            )
-            deleteTelemetrySource(telemetrySource)
-            ngsi_ld_ops.stateToCleaned(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
-            logger.info("Delete '{0}' entity".format(telemetrySource.id))
-            ngsi.deleteEntity(telemetrySource.id)
 
 def stopMetricSource(metricSource: MetricSource) -> ProcessGroupEntity:
     """
-    Stop NiFi flow (Process Group) from MetricSource
+    Stop NiFi flow (Process Group) from MetricSource.
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
-    return nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    return ms_pg
+
 
 def stopMetricTarget(metricTarget: MetricTarget) -> ProcessGroupEntity:
     """
-    Stop NiFi flow (Process Group) from MetricTarget
+    Stop NiFi flow (Process Group) from MetricTarget.
     """
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
-    return nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+    nipyapi.canvas.schedule_process_group(mt_pg.id, False)
+    return mt_pg
+
 
 def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     """
-    Stop NiFi flow (Process Group) from TelemetrySource
+    Stop NiFi flow (Process Group) from TelemetrySource.
     """
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
-    return nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+    nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+    return ts_pg
+
 
 def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     """
     Stops flow, updates variables and re-starts flow
-    for a given MetricSource entity
+    for a given MetricSource entity.
     """
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     # Stop MS PG
@@ -572,11 +406,13 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
                                               interval_unit)))
     # Restart MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, True)
+    logger.info("MetricSource '{0}' flow upgraded in NiFi.".format(metricSource.id))
+
 
 def upgradeMetricTarget(metricTarget: MetricTarget):
     """
     Stops flow, updates variables and restarts flow
-    for a given MetricTarget entity
+    for a given MetricTarget entity.
     """
     mt_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     # Stop MT PG
@@ -591,11 +427,13 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
         mt_pg, [("consumer_url", metricTarget.uri.value)])
     # Restart MT PG
     nipyapi.canvas.schedule_process_group(mt_pg.id, True)
+    logger.info("MetricTarget '{0}' flow upgraded in NiFi.".format(metricTarget.id))
+
 
 def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
     """
     Stops flow, updates variables and restarts flow
-    for a given TelemetrySource entity
+    for a given TelemetrySource entity.
     """
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
     # Stop TS PG
@@ -607,6 +445,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     endpoint = Endpoint.parse_obj(endpoint_entity)
     # Get topic name from TelemetrySource entity ID
     entity_id = telemetrySource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    gnmic_topic = "gnmic-" + entity_id
     # Get subscription mode (sample or on-change)
     subscription_mode = telemetrySource.subscriptionMode.value
     filename = '/gnmic-cfgs/cfg-kafka.json'
@@ -614,7 +453,7 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     with open(filename, 'r') as file:
         data = json.load(file)
         data['address'] = endpoint.uri.value.split("://")[1]
-        data['outputs']['output']['topic'] = entity_id
+        data['outputs']['output']['topic'] = gnmic_topic
         if subscription_mode == "on-change":
             # Get the subscription mode name
             subscription_name = subscription_mode
@@ -644,18 +483,29 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     os.remove(filename)
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4)
+
     # Set variables for TS PG
+    # Avro schema hardcoded to openconfig-interfaces
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
     # Restart TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, True)
+    # Enable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    for controller in controllers:
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
+    logger.info("TelemetrySource '{0}' flow upgraded in NiFi.".format(telemetrySource.id))
+
 
 def upload_templates():
     """
     Upload MetricSource, MetricTarget and TelemetrySource templates
-    to the root process group
+    to the root process group.
     """
     # Get root PG
     root_pg = nipyapi.canvas.get_process_group("root")
@@ -664,141 +514,14 @@ def upload_templates():
         nipyapi.templates.upload_template(
             root_pg.id, "/app/config/templates/MetricSource.xml")
     except ValueError:
-        logger.info("MetricSource already uploaded in NiFi")
+        logger.info("MetricSource already uploaded in NiFi.")
     try:
         nipyapi.templates.upload_template(
             root_pg.id, "/app/config/templates/MetricTarget.xml")
     except ValueError:
-        logger.info("MetricTarget already uploaded in NiFi")
+        logger.info("MetricTarget already uploaded in NiFi.")
     try:
         nipyapi.templates.upload_template(
             root_pg.id, "/app/config/templates/TelemetrySource.xml")
     except ValueError:
-        logger.info("TelemetrySource already uploaded in NiFi")
-
-def checkEndpointExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
-    """
-    Checking if collection agent entity has an endpoint
-    """
-    endpoint_entities = ngsi.queryEntities(type="Endpoint")
-    endpoint_exists = False
-    if len(endpoint_entities) > 0:
-        for endpoint_entity in endpoint_entities:
-            if endpoint_entity['id'] == entity.hasEndpoint.object:
-                endpoint_exists = True
-                break
-            else:
-                endpoint_exists = False
-    else:
-        endpoint_exists = False
-
-    return endpoint_exists
-
-def checkEndpointExistence(endpoint_id: str, ngsi: NGSILDClient) -> bool:
-    """
-    Checking if collection agent entity has an endpoint
-    """
-    endpoint_entities = ngsi.queryEntities(type="Endpoint")
-    endpoint_exists = False
-    if len(endpoint_entities) > 0:
-        for endpoint_entity in endpoint_entities:
-            if endpoint_entity['id'] == endpoint_id:
-                endpoint_exists = True
-                break
-            else:
-                endpoint_exists = False
-    else:
-        endpoint_exists = False
-
-    return endpoint_exists
-
-def checkSourceExistence(source_id: str, ngsi: NGSILDClient) -> bool:
-    """
-    Checking if collection agent entity has a source (i.e., Prometheus, Device, ...)
-    """
-    source_entities = []
-    if source_id.split(":")[2] == "Prometheus":
-        source_entities = ngsi.queryEntities(type="Prometheus")
-    elif source_id.split(":")[2] == "Device":
-        source_entities = ngsi.queryEntities(type="Device")
-    source_exists = False
-    if len(source_entities) > 0:
-        for source_entity in source_entities:
-            if source_entity['id'] == source_id:
-                source_exists = True
-                break
-            else:
-                source_exists = False
-    else:
-        source_exists = False
-
-    return source_exists
-
-def checkInputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
-    """
-    Checking if dispatcher agent entity has an input
-    """
-    candidate_input_entities = []
-    input_id = entity.hasInput.object
-    if input_id.split(":")[2] == "MetricSource":
-        candidate_input_entities = ngsi.queryEntities(type="MetricSource")
-    elif input_id.split(":")[2] == "MetricProcessor":
-        candidate_input_entities = ngsi.queryEntities(type="MetricProcessor")
-    input_exists = False
-    if len(candidate_input_entities) > 0:
-        for candidate_input_entity in candidate_input_entities:
-            if candidate_input_entity['id'] == input_id:
-                input_exists = True
-                break
-            else:
-                input_exists = False
-    else:
-        input_exists = False
-
-    return input_exists
-
-def checkOutputExistence(entity: Entity, ngsi: NGSILDClient) -> bool:
-    """
-    Checking if collection agent entity has an output
-    """
-    target_entities = ngsi.queryEntities(type="MetricTarget")
-    processor_entities = ngsi.queryEntities(type="MetricProcessor")
-
-    target_output_entities_id = []
-    processor_output_entities_id = []
-    output_entities_id = []
-
-    target_output_exists = False
-    processor_output_exists = False
-    output_exists = False
-
-    if len(target_entities) > 0:
-        for target_entity in target_entities:
-            if target_entity['hasInput']['object'] == entity.id:
-                target_output_exists = True
-                target_output_entities_id.append(target_entity['id'])
-        if len(target_output_entities_id) > 0:
-            output_entities_id.extend(target_output_entities_id)
-        else:
-            target_output_exists = False
-    else:
-        target_output_exists = False
-
-    if len(processor_entities) > 0:
-        for processor_entity in processor_entities:
-            if processor_entity['hasInput']['object'] == entity.id:
-                processor_output_exists = True
-                processor_output_entities_id.append(processor_entity['id'])
-        if len(processor_output_entities_id) > 0:
-            output_entities_id.extend(processor_output_entities_id)
-        else:
-            processor_output_exists = False
-    else:
-        processor_output_exists = False
-
-    if target_output_exists == True or processor_output_exists == True:
-        logger.info("Delete '{0}' NiFi flow. The processor deletion failed.".format(entity.id))
-        ngsi_ld_ops.stateToFailed(ngsi, entity.id, {"value": "ERROR! The '{0}' entity has an output: '{1}'.".format(entity.id, output_entities_id)})
-        output_exists = True
-
-    return output_exists
+        logger.info("TelemetrySource already uploaded in NiFi.")

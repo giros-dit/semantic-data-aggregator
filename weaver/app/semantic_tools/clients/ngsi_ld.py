@@ -12,6 +12,8 @@ class Options(Enum):
     keyValues = "keyValues"
     sysAttrs = "sysAttrs"
 
+# Class built based on reference docs for the Scorpio Broker FIWARE NGSI-LD API Walktrough.
+# See https://scorpio.readthedocs.io/en/latest/API_walkthrough.html
 
 class NGSILDClient():
     def __init__(
@@ -61,23 +63,9 @@ class NGSILDClient():
             requests_log = logging.getLogger("requests.packages.urllib3")
             requests_log.propagate = True
 
-    # NGSI-LD Append Entity Attributes -> /entities/{entityId}/attrs
-    def appendEntityAttrs(self, entityId: str, fragment: dict):
-        """
-        Append attributes to existing Entity within an NGSI-LD system
-        """
-        response = self._session.post(
-            "{0}/ngsi-ld/v1/entities/{1}/attrs".format(self.url, entityId),
-            verify=self.ssl_verification,
-            headers=self.headers,
-            json=fragment
-        )
-        if response.status_code != 204:
-            response.raise_for_status()
-
     def checkOrionHealth(self):
         """
-        Checks NGSI-LD Orion-LD broker status is up
+        Checks NGSI-LD Orion-LD broker status is up.
         """
         response = self._session.get(
             "{0}/version".format(self.url),
@@ -88,7 +76,7 @@ class NGSILDClient():
 
     def checkScorpioHealth(self):
         """
-        Checks NGSI-LD Scorpio broker status is up
+        Checks NGSI-LD Scorpio broker status is up.
         """
         response = self._session.get(
             "{0}/scorpio/v1/info/health".format(self.url),
@@ -100,7 +88,7 @@ class NGSILDClient():
     # NGSI-LD Create Entity -> /entities
     def createEntity(self, entity: dict):
         """
-        Create a new Entity within an NGSI-LD system
+        Create a new Entity within an NGSI-LD system.
         """
         response = self._session.post(
             "{0}/ngsi-ld/v1/entities".format(self.url),
@@ -116,7 +104,7 @@ class NGSILDClient():
                       type: str = None, q: str = None, options: Options = None) -> dict:
         """
         Retrieve a set of entities which matches
-        a specific query from an NGSI-LD system
+        a specific query from an NGSI-LD system.
         """
         params = {}
         if attrs:
@@ -144,7 +132,7 @@ class NGSILDClient():
         """
         Retrieve an specific Entity from an NGSI-LD system.
         It's possible to specify the Entity attributes to be retrieved
-        by using query parameters
+        by using query parameters.
         """
         params = {}
         if attrs:
@@ -167,9 +155,23 @@ class NGSILDClient():
     # NGSI-LD Update Entity Attributes -> /entities/{entityId}/attrs
     def updateEntityAttrs(self, entityId: str, fragment: dict):
         """
-        Update existing Entity attributes within an NGSI-LD system
+        Update existing Entity attributes within an NGSI-LD system.
         """
         response = self._session.patch(
+            "{0}/ngsi-ld/v1/entities/{1}/attrs".format(self.url, entityId),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            json=fragment
+        )
+        if response.status_code != 204:
+            response.raise_for_status()
+
+    # NGSI-LD Append Entity Attributes -> /entities/{entityId}/attrs
+    def appendEntityAttrs(self, entityId: str, fragment: dict):
+        """
+        Append attributes to existing Entity within an NGSI-LD system.
+        """
+        response = self._session.post(
             "{0}/ngsi-ld/v1/entities/{1}/attrs".format(self.url, entityId),
             verify=self.ssl_verification,
             headers=self.headers,
@@ -194,7 +196,7 @@ class NGSILDClient():
     # NGSI-LD Create Subscription -> /subscriptions
     def createSubscription(self, subscription: dict):
         """
-        Creates a new Subscription within an NGSI-LD system
+        Creates a new Subscription within an NGSI-LD system.
         """
         response = self._session.post(
             "{0}/ngsi-ld/v1/subscriptions/".format(self.url),
@@ -208,7 +210,7 @@ class NGSILDClient():
     # NGSI-LD Retrieve Subscription -> /subscriptions/{subscriptionId}
     def retrieveSubscription(self, subscriptionId: str = None):
         """
-        Retrieves a specific Subscription from an NGSI-LD system
+        Retrieves a specific Subscription from an NGSI-LD system.
         """
         response = self._session.get(
             "{0}/ngsi-ld/v1/subscriptions/{1}".format(self.url,
@@ -224,7 +226,7 @@ class NGSILDClient():
     # NGSI-LD Retrieve Subscriptions -> /subscriptions
     def retrieveSubscriptions(self, limit: int = None):
         """
-        Retrieves the Subscriptions available in an NGSI-LD system
+        Retrieves the Subscriptions available in an NGSI-LD system.
         """
         params = {}
         if limit:
@@ -243,7 +245,7 @@ class NGSILDClient():
     # NGSI-LD Delete Subscription -> /subscriptions/{subscriptionId}
     def removeSubscription(self, subscriptionId: str):
         """
-        Removes a specific Subscription from an NGSI-LD system
+        Removes a specific Subscription from an NGSI-LD system.
         """
         response = self._session.delete(
             "{0}/ngsi-ld/v1/subscriptions/{1}".format(self.url,
