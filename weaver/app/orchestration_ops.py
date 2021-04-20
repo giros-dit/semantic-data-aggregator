@@ -33,18 +33,29 @@ def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
             endpoint_id = prometheus.hasEndpoint.object
             endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
             if endpoint_exists == True:
-                if ms_pg:
-                    logger.info(
-                        "Upgrade '{0}' NiFi flow.".format(metricSource.id)
-                    )
-                    nifi_ops.upgradeMetricSource(metricSource, ngsi)
-                    ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
+                endpoint_entity = ngsi.retrieveEntityById(endpoint_id)
+                endpoint = Endpoint.parse_obj(endpoint_entity)
+                response = requests.get("{0}?query={1}".format(endpoint.uri.value, metricSource.name.value))
+                if str(response.json()['data']['result']) != "[]":
+                    if ms_pg:
+                        logger.info(
+                            "Upgrade '{0}' NiFi flow.".format(metricSource.id)
+                        )
+                        nifi_ops.upgradeMetricSource(metricSource, ngsi)
+                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
+                    else:
+                        logger.info(
+                            "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
+                        )
+                        nifi_ops.instantiateMetricSource(metricSource, ngsi)
+                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully started."})
                 else:
                     logger.info(
-                        "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
+                        "The action failed. The requested Prometheus metric '{0}' is invalid.".format(metricSource.name.value)
                     )
-                    nifi_ops.instantiateMetricSource(metricSource, ngsi)
-                    ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully started."})
+                    ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The requested metric specified in the '{0}' MetricSource entity is not a correct Prometheus metric.".format(metricSource.id)})
+                    logger.info("Delete the '{0}' MetricSource collection agent entity.".format(metricSource.id))
+                    ngsi.deleteEntity(metricSource.id)
             else:
                 logger.info("Instantiate '{0}' NiFi flow. A processing error was found. The specified endpoint does not exist.".format(metricSource.id))
                 ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity does not exist.".format(endpoint_id)})
@@ -177,18 +188,43 @@ def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDCl
             endpoint_id = device.hasEndpoint.object
             endpoint_exists = checkEndpointExistence(endpoint_id, ngsi)
             if endpoint_exists == True:
-                if ts_pg:
+                endpoint_entity = ngsi.retrieveEntityById(endpoint_id)
+                endpoint = Endpoint.parse_obj(endpoint_entity)
+                filename = '/gnmic-cfgs/cfg-capabilities.json'
+                with open(filename, 'r') as file:
+                    data = json.load(file)
+                    data['address'] = endpoint.uri.value.split("://")[1]
+
+                os.remove(filename)
+
+                with open(filename, 'w') as file:
+                    json.dump(data, file, indent=4)
+
+                XPath = telemetrySource.XPath.value
+                get_XPath = subprocess.Popen(['gnmic', '--config', filename, 'get', '--path', XPath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                stdout, stderr = get_XPath.communicate()
+                try:
+                    output = json.loads(stdout)
+                    if ts_pg:
+                        logger.info(
+                            "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
+                        )
+                        nifi_ops.upgradeTelemetrySource(telemetrySource, ngsi)
+                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
+                    else:
+                        logger.info(
+                            "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
+                        )
+                        nifi_ops.instantiateTelemetrySource(telemetrySource, ngsi)
+                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully started."})
+                except ValueError as err:
+                    output = stdout.decode("utf-8")
                     logger.info(
-                        "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
+                        "The action failed. An error exception occurred: {0}".format(output)
                     )
-                    nifi_ops.upgradeTelemetrySource(telemetrySource, ngsi)
-                    ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
-                else:
-                    logger.info(
-                        "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
-                    )
-                    nifi_ops.instantiateTelemetrySource(telemetrySource, ngsi)
-                    ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully started."})
+                    ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The requested XPath specified in the '{0}' TelemetrySource entity is not a correct telemetry XPath.".format(telemetrySource.id)})
+                    logger.info("Delete the '{0}' TelemetrySource collection agent entity".format(telemetrySource.id))
+                    ngsi.deleteEntity(telemetrySource.id)
             else:
                 logger.info("Instantiate '{0}' NiFi flow. A processing error was found. The specified endpoint does not exist.".format(telemetrySource.id))
                 ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity does not exist.".format(endpoint_id)})
