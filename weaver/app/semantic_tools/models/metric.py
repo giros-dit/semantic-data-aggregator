@@ -17,7 +17,7 @@ class Action(Property):
 
 
 class State(Property):
-    value: Literal["BUILDING", "RUNNING", "STOPPED", "CLEANED", "FAILED", "UPLOADED"]
+    value: Literal["BUILDING", "FAILED", "RUNNING", "STOPPED", "CLEANED", "UPLOADED", "ENABLED", "DISABLED"]
     stateInfo: Optional[Property]
 
 

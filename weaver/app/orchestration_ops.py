@@ -419,7 +419,7 @@ def processPrometheusState(prometheus: Prometheus, ngsi: NGSILDClient):
                     }
                 }
                 ngsi.appendEntityAttrs(prometheus.id, version_dict)
-                ngsi_ld_ops.stateToRunning(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity started successfully."})
+                ngsi_ld_ops.stateToEnabled(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source enabled successfully."})
             except requests.exceptions.RequestException as err:
                 logger.info(
                     "The action failed. A request error exception occurred: '{0}'".format(err)
@@ -431,14 +431,14 @@ def processPrometheusState(prometheus: Prometheus, ngsi: NGSILDClient):
                 ngsi.deleteEntity(endpoint_id)
         else:
             logger.info(
-                "Create a new '{0}' Prometheus data source context source entity. The action failed. The specified endpoint does not exist.".format(prometheus.id)
+                "Create a new '{0}' Prometheus data source context information entity. The action failed. The specified endpoint does not exist.".format(prometheus.id)
             )
             ngsi_ld_ops.stateToFailed(ngsi, prometheus.id, {"value": "ERROR! The '{0}' Endpoint entity does not exist.".format(endpoint_id)})
             logger.info("Delete the '{0}' Prometheus data source entity.".format(prometheus.id))
             ngsi.deleteEntity(prometheus.id)
     elif prometheus.action.value == "END":
         logger.info("Delete the '{0}' Prometheus data source entity. ".format(prometheus.id))
-        ngsi_ld_ops.stateToCleaned(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity deleted successfully."})
+        ngsi_ld_ops.stateToDisabled(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source disabled successfully."})
         ngsi.deleteEntity(prometheus.id)
 
 
@@ -480,7 +480,7 @@ def processDeviceState(device: Device, ngsi: NGSILDClient):
                     }
                 }
                 ngsi.appendEntityAttrs(device.id, version_dict)
-                ngsi_ld_ops.stateToRunning(ngsi, device.id, {"value": "SUCCESS! Device data source context information entity started successfully."})
+                ngsi_ld_ops.stateToEnabled(ngsi, device.id, {"value": "SUCCESS! Device data source enabled successfully."})
             except ValueError as err:
                 output = stdout.decode("utf-8")
                 logger.info(
@@ -502,7 +502,7 @@ def processDeviceState(device: Device, ngsi: NGSILDClient):
         logger.info(
             "Delete the '{0}' Device data source entity. ".format(device.id)
         )
-        ngsi_ld_ops.stateToCleaned(ngsi, device.id, {"value": "SUCCESS! Device data source context information entity deleted successfully."})
+        ngsi_ld_ops.stateToDisabled(ngsi, device.id, {"value": "SUCCESS! Device data source disabled successfully."})
         ngsi.deleteEntity(device.id)
 
 
@@ -513,10 +513,10 @@ def processEndpointState(endpoint: Endpoint, ngsi: NGSILDClient):
     ngsi_ld_ops.appendState(ngsi, endpoint.id, "Building the Endpoint entity...")
     if endpoint.action.value == "START":
         logger.info("Create a new '{0}' Endpoint entity.".format(endpoint.id))
-        ngsi_ld_ops.stateToRunning(ngsi, endpoint.id, {"value": "SUCCESS! Endpoint entity started successfully."})
+        ngsi_ld_ops.stateToEnabled(ngsi, endpoint.id, {"value": "SUCCESS! Endpoint enabled successfully."})
     elif endpoint.action.value == "END":
         logger.info("Delete the '{0}' Endpoint entity. ".format(endpoint.id))
-        ngsi_ld_ops.stateToCleaned(ngsi, endpoint.id, {"value": "SUCCESS! Endpoint entity deleted successfully.".format(endpoint.id)})
+        ngsi_ld_ops.stateToDisabled(ngsi, endpoint.id, {"value": "SUCCESS! Endpoint disabled successfully.".format(endpoint.id)})
         ngsi.deleteEntity(endpoint.id)
 
 

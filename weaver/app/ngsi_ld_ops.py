@@ -130,6 +130,7 @@ def stateToRunning(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     }
     ngsi.updateEntityAttrs(entityId, state)
 
+
 def stateToStopped(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
     Update state of a given agent entity to STOPPED.
@@ -141,6 +142,7 @@ def stateToStopped(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
         ).dict(exclude_none=True)
     }
     ngsi.updateEntityAttrs(entityId, state)
+
 
 def stateToCleaned(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
@@ -154,13 +156,40 @@ def stateToCleaned(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     }
     ngsi.updateEntityAttrs(entityId, state)
 
+
 def stateToUploaded(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     """
-    Update state of a stream application entity to UPLOADED.
+    Update state of a StreamApplication entity to UPLOADED.
     """
     state = {
         "state": State(
             value="UPLOADED",
+            stateInfo=stateInfo_dict
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, state)
+
+
+def stateToEnabled(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
+    """
+    Update state of Endpoint or data source entity to ENABLED.
+    """
+    state = {
+        "state": State(
+            value="ENABLED",
+            stateInfo=stateInfo_dict
+        ).dict(exclude_none=True)
+    }
+    ngsi.updateEntityAttrs(entityId, state)
+
+
+def stateToDisabled(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
+    """
+    Update state of Endpoint or data source entity to DISABLED.
+    """
+    state = {
+        "state": State(
+            value="DISABLED",
             stateInfo=stateInfo_dict
         ).dict(exclude_none=True)
     }
