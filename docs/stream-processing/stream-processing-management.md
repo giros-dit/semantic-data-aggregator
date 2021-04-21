@@ -25,14 +25,6 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
         "type": "Property",
         "value": "flink.TrafficRate-0.0.1-SNAPSHOT.jar"
     },
-    "fileId": {
-        "type": "Property",
-        "value": ""
-    },
-    "entryClass": {
-        "type": "Property",
-        "value": ""
-    },
     "description": {
         "type": "Property",
         "value": "A Flink stream processing application that calculates the traffic packet rate sent through a specific interface of a device between two instants of time."
@@ -45,11 +37,13 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 ```
 
 The `StreamApplication` entity has the following properties:
+- `action`: a value set by users to change the JAR application state (for more information see ...).
 - `fileName`: the JAR application name.
-- `fileId`: the ID generated after uploading the JAR to the stream processing engine. 
-- `entryClass`: the name of the main Java class.
 - `description`: optional description of the stream processing application.
 - `URI`: the address of the external repository with JARs.
+- `fileId`: the ID generated after uploading the JAR to the stream processing engine. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
+- `entryClass`: the name of the main Java class. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the JAR uploading state (for more information see ...).
 
 3. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to fetch the JAR from the external repository and uploads its to the stream processing engine.
 
@@ -79,7 +73,7 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
     },
     "hasInput": {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:MetricSource:2"
+        "object": "urn:ngsi-ld:MetricSource:1"
     },
     "hasApplication": {
         "type": "Relationship",
@@ -88,10 +82,6 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
     "name": {
         "type": "Property",
         "value": "TrafficRate"
-    },
-    "jobId": {
-        "type": "Property",
-        "value": ""
     },
     "arguments": {
         "type": "Property",
@@ -105,16 +95,18 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 }'
 ```
 
-The `StreamApplication` entity has the following attributes:
-- `name` property: the Job name.
+The `MetricProcessor` entity has the following attributes:
+- `action` property: a value set by users to change the Job instance state (for more information see ...).
 - `hasInput` relationship:
   - `object`: `MetricSource` entity Id.
   - Data to be consumed (data delivery by `MetricSource:2` entity).
 - `hasApplication` relationship:
   - `object`: `StreamApplication` entity Id.
   - JAR application to be run (JAR ID of `StreamApplication:1` entity)
-- `jobId` property: the ID generated after submitting the Job instance to the stream processing engine.
-- `arguments` property: custom input arguments for the stream processing application execution (e.g., the type and class of window used or the interval and execution time). Argument values are expressed as a list of key-value pairs.
+- `name` property: the Job name.
+- `arguments` property: custom and optional input arguments for the stream processing application execution (e.g., the type and class of window used or the interval and execution time). Argument values are expressed as a list of key-value pairs.
+- `jobId` property: the ID generated after submitting the Job instance to the stream processing engine. This property with its value is appended to the `MetricProcessor` entity after the Job is submitted.
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the Job instantiation state (for more information see ...).
 
 2. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to retrieve the JAR ID from the `StreamApplication` entity previously created in the `Scorpio broker` and submit a Job instance execution for this JAR ID to the `Flink` engine.
 
