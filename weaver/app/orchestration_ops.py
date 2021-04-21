@@ -42,13 +42,13 @@ def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
                             "Upgrade '{0}' NiFi flow.".format(metricSource.id)
                         )
                         nifi_ops.upgradeMetricSource(metricSource, ngsi)
-                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
+                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent upgraded successfully."})
                     else:
                         logger.info(
                             "Instantiate new '{0}' NiFi flow.".format(metricSource.id)
                         )
                         nifi_ops.instantiateMetricSource(metricSource, ngsi)
-                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully started."})
+                        ngsi_ld_ops.stateToRunning(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent started successfully."})
                 else:
                     logger.info(
                         "The action failed. The requested Prometheus metric '{0}' is invalid.".format(metricSource.name.value)
@@ -81,13 +81,13 @@ def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
                     )
                     nifi_ops.stopMetricSource(metricSource)
                     logger.info("MetricSource '{0}' flow stopped in NiFi.".format(metricSource.id))
-                    ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully stopped."})
+                    ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
                 else:
                     logger.info(
                         "New '{0}' NiFi flow to stop.".format(metricSource.id)
                     )
                     nifi_ops.deployMetricSource(metricSource, ngsi)
-                    ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully deployed."})
+                    ngsi_ld_ops.stateToStopped(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent deployed successfully."})
             else:
                 logger.info("Stop '{0}' NiFi flow. A processing error was found. The specified endpoint does not exist.".format(metricSource.id))
                 ngsi_ld_ops.stateToFailed(ngsi, metricSource.id, {"value": "ERROR! The '{0}' Endpoint entity does not exist.".format(endpoint_id)})
@@ -105,7 +105,7 @@ def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
                 "Delete '{0}' NiFi flow.".format(metricSource.id)
             )
             nifi_ops.deleteMetricSource(metricSource)
-            ngsi_ld_ops.stateToCleaned(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent successfully deleted."})
+            ngsi_ld_ops.stateToCleaned(ngsi, metricSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
             logger.info("Delete the '{0}' MetricSource collection agent entity.".format(metricSource.id))
             ngsi.deleteEntity(metricSource.id)
         else:
@@ -127,14 +127,14 @@ def processMetricTargetState(metricTarget: MetricTarget, ngsi: NGSILDClient):
                         metricTarget.id)
                 )
                 nifi_ops.upgradeMetricTarget(metricTarget)
-                ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully upgraded."})
+                ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent upgraded successfully."})
             else:
                 logger.info(
                     "Instantiate new '{0}' NiFi flow.".format(
                         metricTarget.id)
                 )
                 nifi_ops.instantiateMetricTarget(metricTarget)
-                ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully started."})
+                ngsi_ld_ops.stateToRunning(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent started successfully."})
         else:
             logger.info("Instantiate '{0}' NiFi flow. A processing error was found. The specified input agent does not exist.".format(metricTarget.id))
             ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input agent entity does not exist.".format(metricTarget.hasInput.object)})
@@ -150,14 +150,14 @@ def processMetricTargetState(metricTarget: MetricTarget, ngsi: NGSILDClient):
                 )
                 nifi_ops.stopMetricTarget(metricTarget)
                 logger.info("MetricTarget '{0}' flow stopped in NiFi.".format(metricTarget.id))
-                ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully stopped."})
+                ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent stopped successfully."})
             else:
                 logger.info(
                     "New '{0}' NiFi flow to stop.".format(
                         metricTarget.id)
                 )
                 nifi_ops.deployMetricTarget(metricTarget)
-                ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully deployed."})
+                ngsi_ld_ops.stateToStopped(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent deployed successfully."})
         else:
             logger.info("Stop '{0}' NiFi flow. A processing error was found. The specified input agent does not exist.".format(metricTarget.id))
             ngsi_ld_ops.stateToFailed(ngsi, metricTarget.id, {"value": "ERROR! The '{0}' input agent entity does not exist.".format(metricTarget.hasInput.object)})
@@ -168,7 +168,7 @@ def processMetricTargetState(metricTarget: MetricTarget, ngsi: NGSILDClient):
             "Delete '{0}' NiFi flow.".format(metricTarget.id)
         )
         nifi_ops.deleteMetricTarget(metricTarget)
-        ngsi_ld_ops.stateToCleaned(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent successfully deleted."})
+        ngsi_ld_ops.stateToCleaned(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent deleted successfully."})
         logger.info("Delete the '{0}' MetricTarget dispatch agent entity.".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
 
@@ -210,13 +210,13 @@ def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDCl
                             "Upgrade '{0}' NiFi flow.".format(telemetrySource.id)
                         )
                         nifi_ops.upgradeTelemetrySource(telemetrySource, ngsi)
-                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully upgraded."})
+                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent upgraded successfully."})
                     else:
                         logger.info(
                             "Instantiate new '{0}' NiFi flow.".format(telemetrySource.id)
                         )
                         nifi_ops.instantiateTelemetrySource(telemetrySource, ngsi)
-                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully started."})
+                        ngsi_ld_ops.stateToRunning(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent started successfully."})
                 except ValueError as err:
                     output = stdout.decode("utf-8")
                     logger.info(
@@ -250,13 +250,13 @@ def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDCl
                     )
                     nifi_ops.stopTelemetrySource(telemetrySource)
                     logger.info("TelemetrySource '{0}' flow stopped in NiFi.".format(telemetrySource.id))
-                    ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully stopped."})
+                    ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
                 else:
                     logger.info(
                         "New '{0}' NiFi flow to stop.".format(telemetrySource.id)
                     )
                     nifi_ops.deployTelemetrySource(telemetrySource, ngsi)
-                    ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully deployed."})
+                    ngsi_ld_ops.stateToStopped(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent deployed successfully."})
             else:
                 logger.info("Stop '{0}' NiFi flow. A processing error was found. The specified endpoint does not exist.".format(telemetrySource.id))
                 ngsi_ld_ops.stateToFailed(ngsi, telemetrySource.id, {"value": "ERROR! The '{0}' Endpoint entity does not exist.".format(endpoint_id)})
@@ -274,7 +274,7 @@ def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDCl
                 "Delete '{0}' NiFi flow.".format(telemetrySource.id)
             )
             nifi_ops.deleteTelemetrySource(telemetrySource)
-            ngsi_ld_ops.stateToCleaned(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent successfully deleted."})
+            ngsi_ld_ops.stateToCleaned(ngsi, telemetrySource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
             logger.info("Delete the '{0}' TelemetrySource collection agent entity.".format(telemetrySource.id))
             ngsi.deleteEntity(telemetrySource.id)
         else:
@@ -296,7 +296,7 @@ def processStreamApplicationState(streamApplication: StreamApplication, ngsi: NG
             logger.info("Upload new '{0}' stream processing application JAR.".format(streamApplication.id))
             uploaded = flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
             if uploaded == True:
-                ngsi_ld_ops.stateToUploaded(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR successfully uploaded."})
+                ngsi_ld_ops.stateToUploaded(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR uploaded successfully."})
             else:
                 ngsi_ld_ops.stateToFailed(ngsi, streamApplication.id, {"value": "ERROR! Stream application JAR was not found in {0}.".format(streamApplication.uri.value)})
                 logger.info("Delete the '{0}' StreamApplication entity.".format(streamApplication.id))
@@ -309,7 +309,7 @@ def processStreamApplicationState(streamApplication: StreamApplication, ngsi: NG
             logger.info("Upgrade the previous '{0}' stream processing application JAR.".format(streamApplication.id))
             uploaded = flink_ops.uploadStreamApp(streamApplication, ngsi, flink)
             if uploaded == True:
-                ngsi_ld_ops.stateToUploaded(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR successfully upgraded."})
+                ngsi_ld_ops.stateToUploaded(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR upgraded successfully."})
             else:
                 ngsi_ld_ops.stateToFailed(ngsi, streamApplication.id, {"value": "ERROR! Stream application JAR was not found in {0}.".format(streamApplication.uri.value)})
                 logger.info("Delete the '{0}' StreamApplication entity.".format(streamApplication.id))
@@ -318,7 +318,7 @@ def processStreamApplicationState(streamApplication: StreamApplication, ngsi: NG
         logger.info("Delete '{0}' stream processing application JAR.".format(streamApplication.id))
         flink.deleteJar(jarId)
         logger.info("StreamApplication '{0}' with '{1}' JAR deleted from Flink engine.".format(streamApplication.id, streamApplication.fileName.value))
-        ngsi_ld_ops.stateToCleaned(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR successfully deleted."})
+        ngsi_ld_ops.stateToCleaned(ngsi, streamApplication.id, {"value": "SUCCESS! Stream application JAR deleted successfully."})
         logger.info("Delete the '{0}' StreamApplication entity.".format(streamApplication.id))
         ngsi.deleteEntity(streamApplication.id)
 
@@ -340,6 +340,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
             if job_exists == False or job['state'] == 'CANCELED':
                 logger.info("Submit new '{0}' stream processing application Job.".format(metricProcessor.id))
                 flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
+                ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent started successfully."})
             elif job_exists and job['state'] == 'RUNNING':
                 # Cancel the current Job and create another one with new configuration
                 logger.info("Cancel '{0}' stream processing application Job.".format(metricProcessor.id))
@@ -347,7 +348,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
                 logger.info("MetricProcessor '{0}' with '{1}' Job cancelled in Flink engine.".format(metricProcessor.id, metricProcessor.name.value))
                 logger.info("Upgrade the previous '{0}' stream processing application Job.".format(metricProcessor.id))
                 flink_ops.submitStreamJob(metricProcessor, ngsi, flink)
-            ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully upgraded."})
+                ngsi_ld_ops.stateToRunning(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent upgraded successfully."})
         else:
             if streamApplication_exists == False:
                 logger.info("Submit new '{0}' stream processing application Job. A processing error was found. The specified stream application does not exist.".format(metricProcessor.id))
@@ -362,7 +363,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
             logger.info(
                 "Define new '{0}' stream processing application Job.".format(metricProcessor.id)
             )
-            ngsi_ld_ops.stateToStopped(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully defined."})
+            ngsi_ld_ops.stateToStopped(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent defined successfully."})
         elif job['state'] == 'CANCELED':
             logger.info(
                 "Stop '{0}' stream processing application Job. The Job is already stopped.".format(metricProcessor.id)
@@ -376,7 +377,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
             logger.info(
                 "MetricProcessor '{0}' with '{1}' Job stopped in Flink engine.".format(metricProcessor.id, metricProcessor.name.value)
             )
-            ngsi_ld_ops.stateToStopped(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully stopped."})
+            ngsi_ld_ops.stateToStopped(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent stopped successfully."})
     elif metricProcessor.action.value == "END":
         output_exists = checkOutputExistence(metricProcessor, ngsi)
         if output_exists == False:
@@ -386,7 +387,7 @@ def processMetricProcessorState(metricProcessor: MetricProcessor, ngsi: NGSILDCl
                 logger.info("MetricProcessor '{0}' with '{1}' Job deleted from Flink engine.".format(metricProcessor.id, metricProcessor.name.value))
             else:
                 logger.info("Delete '{0}' stream processing application Job. The Job is not running.".format(metricProcessor.id))
-            ngsi_ld_ops.stateToCleaned(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent successfully deleted."})
+            ngsi_ld_ops.stateToCleaned(ngsi, metricProcessor.id, {"value": "SUCCESS! Aggregation agent deleted successfully."})
             logger.info("Delete the '{0}' MetricProcessor aggregation agent entity.".format(metricProcessor.id))
             ngsi.deleteEntity(metricProcessor.id)
         else:
@@ -418,7 +419,7 @@ def processPrometheusState(prometheus: Prometheus, ngsi: NGSILDClient):
                     }
                 }
                 ngsi.appendEntityAttrs(prometheus.id, version_dict)
-                ngsi_ld_ops.stateToRunning(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity successfully started."})
+                ngsi_ld_ops.stateToRunning(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity started successfully."})
             except requests.exceptions.RequestException as err:
                 logger.info(
                     "The action failed. A request error exception occurred: '{0}'".format(err)
@@ -437,7 +438,7 @@ def processPrometheusState(prometheus: Prometheus, ngsi: NGSILDClient):
             ngsi.deleteEntity(prometheus.id)
     elif prometheus.action.value == "END":
         logger.info("Delete the '{0}' Prometheus data source entity. ".format(prometheus.id))
-        ngsi_ld_ops.stateToCleaned(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity successfully deleted."})
+        ngsi_ld_ops.stateToCleaned(ngsi, prometheus.id, {"value": "SUCCESS! Prometheus data source context information entity deleted successfully."})
         ngsi.deleteEntity(prometheus.id)
 
 
