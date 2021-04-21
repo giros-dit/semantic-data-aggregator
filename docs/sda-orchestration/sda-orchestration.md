@@ -13,13 +13,19 @@ The `Agent` parent entity has the following properties:
 -	`state`: property value updated by the `Weaver` during the action triggered by users to indicate the agent state.
 - `stateInfo`: optional cross-domain property to describe errors when the processed action fails or feedback information about the agent state.
 
-The information model for the `Agent` parent entity is represented below.
+The information model for the `Agent` parent entity is depicted below.
 
 ![agent-model-Agent-entity](img/agent-model-Agent-entity.png)
 
-Next, the transition diagram between states is represented (different possible values that the `state` property of agent entities can take). The state transition is triggered through the operation determined by the value of the `action` property (transition actions).
+Also, a short version of the state transition diagram for these Agent-type entities is represented (different possible values that the `state` property of `Agent` entities can take). The transition between states is triggered through the operation determined by the value of the `action` property (transition action).
 
 ![agent-model-state-transitions-short-version](img/agent-model-state-transitions-short-version.png)
+
+Furthermore, it is important to note that among the desired states for these agent entities (shown in the previous diagram), there are intermediate transition states to determine the possibility or not of changing the state of the entity. These intermediate transition states are `BUILDING` and `FAILED`. The following is a part of the state transition diagram to give an example of the state changes made for the start and the end of an `Agent` entity. 
+
+![agent-model-state-transitions-building-failed-states](img/agent-model-state-transitions-building-failed-states.png)
+
+When there is no error in the processing activities to trigger a new state change in the entity (for example, from the `RUNNING` state to the `CLEANED` state), the `BUILDING` state serves as an intermediate transition state. If an error occurs to carry out this change of state, it will go from the `BUILDING` state to the `FAILED` state, indicating the cause of the error in the `stateInfo` property, to finally return to the original state.
 
 
 ## Collector and Dispatcher Agents Orchestration
@@ -64,7 +70,7 @@ The previous sequence diagram shows the steps that the framework follows to allo
 
 ### II - Deploy and stop collection agent
 
-![SDA-orchestration-sequence-diagrams-collection-agent-instantiation-stopped](img/SDA-orchestration-sequence-diagrams-collection-agent-instantiation-stopped.png)
+![SDA-orchestration-sequence-diagrams-collection-agent-stop-deployment](img/SDA-orchestration-sequence-diagrams-collection-agent-stop-deployment.png)
 
 The previous sequence diagram shows the steps that the `SDA` framework follows to allow the collection agent deployment (deploy stopped agent). This diagram corresponds to the `STOP(0)` transition action of the state transition diagram. The steps are the following:
 
