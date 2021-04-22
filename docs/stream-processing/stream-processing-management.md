@@ -1,6 +1,6 @@
 # Stream Processing Applications Management
 
-In `Apache Flink` engine, the stream processing applications are packaged as JAR files. These JAR files can be uploaded to the stream processing engine via REST API or GUI.
+In `Apache Flink` engine, the stream processing applications are packaged as JAR files. These JAR files can be uploaded to the stream processing engine via RESTful API or graphical user interface (GUI).
 
 ![`data-aggregator-stream-app-sequence`](../data-aggregator-stream-app-sequence.png)
 
@@ -37,13 +37,13 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 ```
 
 The `StreamApplication` entity has the following properties:
-- `action`: a value set by users to change the JAR application state (for more information see ...).
+- `action`: a value set by users to change the JAR application state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/sda-orchestration.md)).
 - `fileName`: the JAR application name.
 - `description`: optional description of the stream processing application.
 - `URI`: the address of the external repository with JARs.
 - `fileId`: the ID generated after uploading the JAR to the stream processing engine. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
 - `entryClass`: the name of the main Java class. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
-- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the JAR uploading state (for more information see ...).
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the JAR uploading state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/sda-orchestration.md#aggregation-agents-orchestration)).
 
 3. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to fetch the JAR from the external repository and uploads its to the stream processing engine.
 
@@ -96,7 +96,7 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
 ```
 
 The `MetricProcessor` entity has the following attributes:
-- `action` property: a value set by users to change the Job instance state (for more information see ...).
+- `action` property: a value set by users to change the Job instance state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/sda-orchestration.md)).
 - `hasInput` relationship:
   - `object`: `MetricSource` entity Id.
   - Data to be consumed (data delivery by `MetricSource:2` entity).
@@ -106,7 +106,7 @@ The `MetricProcessor` entity has the following attributes:
 - `name` property: the Job name.
 - `arguments` property: custom and optional input arguments for the stream processing application execution (e.g., the type and class of window used or the interval and execution time). Argument values are expressed as a list of key-value pairs.
 - `jobId` property: the ID generated after submitting the Job instance to the stream processing engine. This property with its value is appended to the `MetricProcessor` entity after the Job is submitted.
-- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the Job instantiation state (for more information see ...).
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the Job instantiation state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/sda-orchestration.md#aggregation-agents-orchestration)).
 
 2. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to retrieve the JAR ID from the `StreamApplication` entity previously created in the `Scorpio broker` and submit a Job instance execution for this JAR ID to the `Flink` engine.
 
@@ -114,3 +114,5 @@ The `MetricProcessor` entity has the following attributes:
 
 4. Finally, the user is notified that the Job instance has been successfully submitted and the stream application is running on the `Flink` engine.
 
+
+[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of sample requests to create `StreamApplication` and `MetricProcessor` entities that can be used to model a NGSI-LD datapipeline and manage the execution of stream processing applications.
