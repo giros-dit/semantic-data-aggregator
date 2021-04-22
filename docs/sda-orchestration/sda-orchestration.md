@@ -38,7 +38,7 @@ When there is no error in the processing activities to trigger a new state chang
 
 ## Collection and Dispatch Agents Orchestration
 
-`Collector` and `Dispatcher` are two of the types of agents that `SDA` orchestrates, managing the life cycle of these agents that works as a NiFi processing flows using metadata from the information models.
+`Collector` and `Dispatcher` are two of the types of agents that `SDA` orchestrates, managing the life cycle of these agents that works as a `NiFi` processing flows using metadata from the information models.
 
 In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities that represent the metadata for the collection agents.
 
@@ -131,7 +131,7 @@ The steps followed by `SDA` for the collection agent deletion are as follows:
 
 ## Aggregation Agents Orchestration
 
-`Aggregator` is the other type of agent that `SDA` orchestrates, managing the life cycle of this agents that works as a stream processing engine (`Flink`) using metadata from the information models.
+`Aggregator` is the other type of agent that `SDA` orchestrates, managing the life cycle of this agents that works as a stream processing applications running on the `Flink` engine using metadata from the information models.
 
 The aggregation agents are in charge of managing both the upload of stream processing applications (defined as JAR files) and the execution of their instances (defined as Job instances) within the `Flink` engine.
 
@@ -295,4 +295,4 @@ Finally, the full version of the state transition diagram is presented depending
 
 ![agent-model-state-transitions-full-version](img/agent-model-state-transitions-full-version.png)
 
-[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the NGSI-LD API.
+[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the `NGSI-LD API.
