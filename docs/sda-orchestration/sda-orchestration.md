@@ -295,4 +295,4 @@ Finally, the full version of the state transition diagram is presented depending
 
 ![agent-model-state-transitions-full-version](img/agent-model-state-transitions-full-version.png)
 
-[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the `NGSI-LD API.
+[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the `NGSI-LD API`.
