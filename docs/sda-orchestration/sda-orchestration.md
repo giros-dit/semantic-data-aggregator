@@ -27,11 +27,12 @@ Furthermore, it is important to note that among the desired states for these age
 
 When there is no error in the processing activities to trigger a new state change in the entity (for example, from the `RUNNING` state to the `CLEANED` state), the `BUILDING` state serves as an intermediate transition state. If an error occurs to carry out this change of state, it will go from the `BUILDING` state to the `FAILED` state, indicating the cause of the error in the `stateInfo` property, to finally return to the original state.
 
+
 ## Table of Contents
 
 1. [Collection and Dispatch Agents Orchestration](#collection-and-dispatch-agents-orchestration)
 2. [Aggregation Agents Orchestration](#aggregation-agents-orchestration)
-3. [Enpoint and Data Source context information entities Orchestration](#endpoints-and-data-sources-context-information-entities-orchestration)
+3. [Endpoint and Data Source context information entities Orchestration](#endpoint-and-data-source-context-information-entities-orchestration)
 4. [Final thoughts on SDA orchestration](#final-thoughts-on-sda-orchestration)
 
 
@@ -267,7 +268,7 @@ The steps followed by `SDA` for the Job instance deletion are as follows:
 5.	Finally, the user is notified that the Job instance has been successfully cancelled and deleted.
 
 
-## Enpoint and Data Source context information entities Orchestration
+## Endpoint and Data Source context information entities Orchestration
 
 In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from NiFi processing flows), as well as data aggregation (from Flink stream processing applications), `SDA` must manage the life cycle of those NGSI-LD entities that define the context information for the input data sources and their endpoint services. 
 
