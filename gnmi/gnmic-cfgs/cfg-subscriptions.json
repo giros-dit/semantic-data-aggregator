@@ -7,7 +7,8 @@
     "subscriptions": {
         "sample": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets",
+                "/interfaces/interface[name=Ethernet1]/state/counters/out-octets"
             ],
             "stream-mode": "sample",
             "sample-interval": "5s",
@@ -15,7 +16,7 @@
         },
         "on-change": {
             "paths": [
-                "/interfaces/interface[name=Ethernet1]/state/admin-status"
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
             ],
             "stream-mode": "on-change"
         }

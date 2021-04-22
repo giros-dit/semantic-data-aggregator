@@ -7,6 +7,7 @@ tags_metadata = [
     }
 ]
 
+# Init FastAPI server
 app = FastAPI(
     title="Dummy Consumer API",
     version="1.0.0",

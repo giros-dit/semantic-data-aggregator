@@ -34,40 +34,24 @@ class Endpoint(Agent):
     uri: _URI
 
 
-class Prometheus(Agent):
-    type: Literal["Prometheus"] = "Prometheus"
+class Device(Agent):
+    type: Literal["Device"] = "Device"
     hasEndpoint: Relationship
     name: Property
+    protocol: Property
     version: Optional[Property]
 
 
-class MetricSource(Agent):
-    type: Literal["MetricSource"] = "MetricSource"
-    expression: Optional[Property] = None
+class Module(Entity):
+    type: Literal["Module"] = "Module"
+    name: Property
+    org: Property
+    version: Property
+
+
+class TelemetrySource(Agent):
+    type: Literal["TelemetrySource"] = "TelemetrySource"
     collectsFrom: Relationship
-    interval: Property
-    name: Property
-
-
-class MetricProcessor(Agent):
-    type: Literal["MetricProcessor"] = "MetricProcessor"
-    hasInput: Relationship
-    hasApplication: Relationship
-    name: Property
-    arguments: Optional[Property] = None
-    jobId: Optional[Property]
-
-
-class MetricTarget(Agent):
-    type: Literal["MetricTarget"] = "MetricTarget"
-    hasInput: Relationship
-    uri: _URI
-
-
-class StreamApplication(Agent):
-    type: Literal["StreamApplication"] = "StreamApplication"
-    fileName: Property
-    fileId: Optional[Property]
-    entryClass: Optional[Property]
-    description: Property
-    uri: _URI
+    XPath: Property
+    subscriptionMode: Property
+    #interval: Optional[Property] = None

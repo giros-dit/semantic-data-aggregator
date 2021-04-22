@@ -71,3 +71,4 @@ class StreamApplication(Agent):
     entryClass: Optional[Property]
     description: Property
     uri: _URI
+

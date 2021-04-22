@@ -2,7 +2,8 @@ FROM apache/nifi
 
 USER root
 
-RUN curl -sL https://github.com/karimra/gnmic/raw/master/install.sh | bash
+# Install gNMIc
+RUN bash -c "$(curl -sL https://get-gnmic.kmrd.dev)"
 
 RUN apt-get update
 
@@ -11,3 +12,5 @@ RUN apt-get install -y python3 python3-pip
 
 # Install pyangbind
 RUN pip3 install pyang pyangbind
+
+

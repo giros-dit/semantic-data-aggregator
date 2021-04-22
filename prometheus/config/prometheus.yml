@@ -31,14 +31,14 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-    - targets: ['node-exporter-1:9100']
+      - targets: ['node-exporter-1:9100']
 
   - job_name: 'node-2'
 
     scrape_interval: 5s
 
     static_configs:
-    - targets: ['node-exporter-2:9100']
+      - targets: ['node-exporter-2:9100']
  
   # REQUIRES configuring docker daemon.json
   # - job_name: 'docker'

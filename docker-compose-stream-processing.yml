@@ -18,6 +18,16 @@ services:
       - "8082:8080"
     volumes:
       - ./context-catalog:/web
+  experimenter:
+    build:
+      context: ./experimenter
+      dockerfile: Dockerfile
+    hostname: experimenter
+    container_name: experimenter
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./experimenter/app:/app
   flink-jobmanager:
     image: flink:latest
     hostname: flink-jobmanager
