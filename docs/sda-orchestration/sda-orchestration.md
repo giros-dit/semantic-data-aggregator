@@ -27,6 +27,13 @@ Furthermore, it is important to note that among the desired states for these age
 
 When there is no error in the processing activities to trigger a new state change in the entity (for example, from the `RUNNING` state to the `CLEANED` state), the `BUILDING` state serves as an intermediate transition state. If an error occurs to carry out this change of state, it will go from the `BUILDING` state to the `FAILED` state, indicating the cause of the error in the `stateInfo` property, to finally return to the original state.
 
+## Table of Contents
+
+1. [Collection and Dispatch Agents Orchestration](#collection-and-dispatch-agents-orchestration)
+2. [Aggregation Agents Orchestration](#aggregation-agents-orchestration)
+3. [Enpoint and Data Source context information entities Orchestration](#endpoints-and-data-sources-context-information-entities-orchestration)
+4. [Final thoughts on SDA orchestration](#final-thoughts-on-sda-orchestration)
+
 
 ## Collection and Dispatch Agents Orchestration
 
@@ -125,7 +132,9 @@ The steps followed by `SDA` for the collection agent deletion are as follows:
 
 `Aggregator` is the other type of agent that `SDA` orchestrates, managing the life cycle of this agents that works as a stream processing engine (`Flink`) using metadata from the information models.
 
-The aggregation agents are in charge of managing both the upload of stream processing applications (defined as JAR files) and the execution of their instances (defined as Job instances) within the Flink engine.
+The aggregation agents are in charge of managing both the upload of stream processing applications (defined as JAR files) and the execution of their instances (defined as Job instances) within the `Flink` engine.
+
+For more information on how `SDA` internally manages the uploading and execution of stream processing applications, see [`Stream Processing Applications Management`](../stream-processing/stream-processing-management.md).
 
 In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities (i.e., `StreamApplication` and `MetricProcessor` entities) that represent the metadata for the aggregation agents.
 
@@ -258,7 +267,7 @@ The steps followed by `SDA` for the Job instance deletion are as follows:
 5.	Finally, the user is notified that the Job instance has been successfully cancelled and deleted.
 
 
-## Enpoints and data sources context information entities Orchestration
+## Enpoint and Data Source context information entities Orchestration
 
 In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from NiFi processing flows), as well as data aggregation (from Flink stream processing applications), `SDA` must manage the life cycle of those NGSI-LD entities that define the context information for the input data sources and their endpoint services. 
 
@@ -276,10 +285,13 @@ Then, a short version of the state transition diagram for these data sources and
 
 Two states are defined to determine whether the entities are enabled or not (`ENABLED` and `DISABLED`). The `START` action allows entities to be created and enabled, while the `END` action allows them to be deleted and disabled. 
 
-When data source entities are created (e.g., `Prometheus` or `Device` entities), it is determined whether they are reachable from their associated endpoint service (related `Endpoint` entity). In case the data source is available and accessible from its endpoint, it will be enabled (the `state` property will change to ENABLED). Otherwise, the `state` property of this entity will be changed to FAILED and the cause of failure will be notified (from the `stateInfo` cross-domain property)
+When data source entities are created (e.g., `Prometheus` or `Device` entities), it is determined whether they are reachable from their associated endpoint service (related `Endpoint` entity). In case the data source is available and accessible from its endpoint, it will be enabled (the `state` property will change to `ENABLED`). Otherwise, the `state` property of this entity will be changed to `FAILED` and the cause of failure will be notified (from the `stateInfo` cross-domain property)
 
+
+## Final thoughts on SDA orchestration
 
 Finally, the full version of the state transition diagram is presented depending on the associated entity domain. In addition, the transition actions carried out by `Weaver` to manage the change of states are detailed.
 
 ![agent-model-state-transitions-full-version](img/agent-model-state-transitions-full-version.png)
 
+[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the NGSI-LD API.
