@@ -1,10 +1,10 @@
 # Semantic Data Aggregator Orchestration
 
-A mechanism to orchestrate the `Semantic Data Aggregator` (SDA) life cycle management by an external application or system using the NGSI-LD API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the NGSI-LD data model for that.
+A mechanism to orchestrate the `Semantic Data Aggregator` (SDA) life cycle management by an external application or system using the `NGSI-LD API` like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the NGSI-LD data model for that.
 
 This is an approach to orchestrate the state transitions of those NGSI-LD entities that represent the different stages in the data pipelines and model the actions of the Data Aggregator agents.
 
-To deal with the life cycle management of the data aggregator we define the `Agent` NGSI-LD Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication`.
+To deal with the life cycle management of the data aggregator we define the `Agent` NGSI-LD Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication` entities.
 
 Users or applications can declaratively express the desired state for each agent of the Data Aggregator (`collector`, `aggregator` and `dispatcher`).
 
@@ -270,7 +270,7 @@ The steps followed by `SDA` for the Job instance deletion are as follows:
 
 ## Endpoint and Data Source context information entities Orchestration
 
-In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from NiFi processing flows), as well as data aggregation (from Flink stream processing applications), `SDA` must manage the life cycle of those NGSI-LD entities that define the context information for the input data sources and their endpoint services. 
+In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from `NiFi` processing flows), as well as data aggregation (from `Flink` stream processing applications), `SDA` must manage the life cycle of those NGSI-LD entities that define the context information for the input data sources and their endpoint services. 
 
 So far there are two types of data source entities defined:
 1.	`Prometheus`: Prometheus-based data source context information entities for metric collection.
