@@ -39,8 +39,7 @@ def deleteMetricSource(metricSource: MetricSource):
     """
     Delete MetricSource flow.
     """
-    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
-
+    ms_pg = stopMetricSource(metricSource)
     # Disable controller services
     controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
     registry_controller = None
@@ -67,7 +66,6 @@ def deleteMetricTarget(metricTarget: MetricTarget):
     ms_pg = nipyapi.canvas.get_process_group(metricTarget.id)
     nipyapi.canvas.delete_process_group(ms_pg, True)
     logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricTarget.id))
-
 
 
 def deleteTelemetrySource(telemetrySource: TelemetrySource):
