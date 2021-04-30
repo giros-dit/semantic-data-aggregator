@@ -11,6 +11,18 @@ loggers:
   nipyapi:
     level: WARNING
     handlers: [console]
+  uvicorn.error:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  uvicorn.access:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  uvicorn.:
+    level: INFO
+    handlers: [console]
+    propagate: no
 root:
   level: INFO
   handlers: [console]

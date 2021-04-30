@@ -39,7 +39,22 @@ def deleteMetricSource(metricSource: MetricSource):
     """
     Delete MetricSource flow.
     """
-    ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
+    ms_pg = stopMetricSource(metricSource)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "HortonworksSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..." % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..." % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
+    # Delete MS PG
     nipyapi.canvas.delete_process_group(ms_pg, True)
     logger.info("MetricSource '{0}' flow deleted in NiFi.".format(metricSource.id))
 
@@ -112,11 +127,25 @@ def deployMetricSource(metricSource: MetricSource,
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    # Deploy MS template
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "openmetrics")])
+
+     # Deploy MS template
     ms_template = nipyapi.templates.get_template("MetricSource")
     ms_pg_flow = nipyapi.templates.deploy_template(ms_pg.id,
                                                    ms_template.id,
                                                    -250, 200)
+
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller HortonworksSchemaRegistry...")
+    registry_controller = getControllerService(ms_pg, "HortonworksSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
+    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True)
+
     # Retrieve GET Prometheus API processor
     http_ps = None
     for ps in ms_pg_flow.flow.processors:
@@ -389,6 +418,8 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "openmetrics")])
+
     # Retrieve GET Prometheus API processor
     http_ps = None
     ms_pg_flow = nipyapi.canvas.get_flow(ms_pg.id).process_group_flow
@@ -407,6 +438,11 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     # Restart MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, True)
     logger.info("MetricSource '{0}' flow upgraded in NiFi.".format(metricSource.id))
+    # Enable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
+    for controller in controllers:
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
 
 
 def upgradeMetricTarget(metricTarget: MetricTarget):
