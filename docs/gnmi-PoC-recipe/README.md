@@ -1,28 +1,28 @@
 # gNMI Telemetry Proof of Concept - Recipe
 
-The purpose of this prototype is collect data of [gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the semantic data aggregator. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+The purpose of this prototype is collect data of [`gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the `Semantic Data Aggregator` (`SDA`). For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
 
-Here are the most important steps to be able to run the gNMI-based data collection prototype and extract telemetry information of Arista cEOS routers using the gNMIc client from the semantic data aggregator:
+Here are the most important steps to be able to run the gNMI-based data collection prototype and extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from the `SDA`:
 
-1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.24.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
+1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available `Arista cEOS` versions `cEOS-lab-4.24.5M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
 
 2) The command to import the image is:
 ```bash
-docker import cEOS-lab-4.24.4M.tar ceos-image:4.24.4M
+docker import cEOS-lab-4.24.5M.tar ceos-image:4.24.5M
 ```
 
-3) Then you can start the docker-compose, which raises two instances of `Arista cEOS` routers (`ceos1` and `ceos2` docker services). These docker services are responsible for configuring environment variables, configuring TCP access ports for gNMI, and creating two P2P networks between both routers. The command to start the docker-compose is:
+3) Then you can start the docker-compose, which raises two instances of `Arista cEOS` routers (`ceos1` and `ceos2` docker services). These docker services are responsible for configuring environment variables, configuring TCP access ports for `gNMI`, and creating two P2P networks between both routers. The command to start the docker-compose is:
 ```bash
 docker-compose -f docker-compose-arista.yml up
 ```
 
-4) Once the docker-compose is up, it is necessary to perform a very basic configuration of the `ceos1` and `ceos2` routers to enable the gNMI protocol. Example for `ceos1`:
+4) Once the docker-compose is up, it is necessary to perform a very basic configuration of the `ceos1` and `ceos2` routers to enable the `gNMI` protocol. Example for `ceos1`:
 - To access the CLI of ceos1:
 ```bash
 docker exec -it ceos1 Cli
 localhost>enable
 ```
-- GRPC/gNMI configuration:
+- `gRPC/gNMI` configuration:
 
 ```bash
 localhost#configure terminal
@@ -36,7 +36,7 @@ ceos1#write memory
 
 5) In order to play with the `gNMIc` client, a series of steps and RPCs execution examples are shown:
 - The `nifi` docker container has `gNMIc` installed.
-- To learn about the gNMI capabilities of `ceos1` (which gNMI version the device runs, what models it is loaded with and which encoding it understands).
+- To learn about the `gNMI` capabilities of `ceos1` (which `gNMI` version the device runs, what models it is loaded with and which encoding it understands).
 ```bash
 root@nifi:/opt/nifi/nifi-current# gnmic -a ceos1:6030 -u admin -p xxxx --insecure capabilities
 Capabilities Response:
@@ -87,4 +87,4 @@ Get Response:
 (2) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name on-change
 ```
 In the message bus of the `kafka` docker container, a new topic will appear where new entries will be written according to the type of subscription chosen.
-- [`NGSI-LD Prometheus and gNMI`](../../postman_collections/NGSI-LD%20Prometheus%20and%20gNMI.postman_collection.json) Postman collection has a set of requests that can be used to model a NGSI-LD datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the semantic data aggregator using `gNMIc`. 
+- [`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a `NGSI-LD` datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the `Semantic Data Aggregator` using `gNMIc`. 

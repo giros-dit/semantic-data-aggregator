@@ -1,21 +1,21 @@
 # Stream Processing Applications Management
 
-In `Apache Flink` engine, the stream processing applications are packaged as JAR files. These JAR files can be uploaded to the stream processing engine via RESTful API or graphical user interface (GUI).
+In [`Apache Flink`](https://flink.apache.org/) engine, the stream processing applications are packaged as JAR files. These JAR files can be uploaded to the stream processing engine via RESTful API or graphical user interface (GUI).
 
 ![`data-aggregator-stream-app-sequence`](../data-aggregator-stream-app-sequence.png)
 
-The previous sequence diagram shows the steps that the `Semantic Data Aggregator` (SDA) framework follows to allow the upload of the stream applications to the `Flink` engine. The steps are the following:
+The previous sequence diagram shows the steps that the `Semantic Data Aggregator` (`SDA`) framework follows to allow the upload of the stream applications to the `Flink` engine. The steps are the following:
 
 1. First of all, the obvious but most important thing is that a properly compiled and packaged `Flink` stream processing application is available as a JAR file. To do this, the application developer or the own user must upload the JAR application to a secure external repository. A docker service called `stream-catalog` is available in the framework that works as a repository accessible via HTTP where the stream processing applications can be uploaded and downloaded at the time the user wishes. In this way, the user can upload the JAR applications in the `stream-catalog` repository to be uploaded to the `Flink` engine later.
 
-2. Secondly, the user has to model and create a new `StreamApplication` NGSI-LD entity in `Scorpio Broker` to describe the JAR application metadata. The `StreamApplication` entity creation looks like this:
+2. Secondly, the user has to model and create a new `StreamApplication` `NGSI-LD` entity in `Scorpio Broker` to describe the JAR application metadata. The `StreamApplication` entity creation looks like this:
 
 ```
-curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
+curl --location --request POST 'http://localhost:9090/`NGSI-LD`/v1/entities/' \
 --header 'Content-Type: application/json' \
 --header 'Link: <https://fiware.github.io/data-models/full-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
-    "id": "urn:ngsi-ld:StreamApplication:1",
+    "id": "urn:`NGSI-LD`:StreamApplication:1",
     "type": "StreamApplication",
     "action": {
         "type": "Property",
@@ -58,14 +58,14 @@ To run the stream processing applications, a related Job instance must be submit
 
 The previous sequence diagram shows the steps that the framework follows to allow the submit of a Job instance to the `Flink` engine. The steps are the following:
 
-1. First of all, the user has to model and create a new `MetricProcessor` NGSI-LD entity in `Scorpio Broker` to describe the Job instance metadata. The `MetricProcessor` entity creation looks like this:
+1. First of all, the user has to model and create a new `MetricProcessor` `NGSI-LD` entity in `Scorpio Broker` to describe the Job instance metadata. The `MetricProcessor` entity creation looks like this:
 
 ```
-curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
+curl --location --request POST 'http://localhost:9090/`NGSI-LD`/v1/entities/' \
 --header 'Content-Type: application/json' \
 --header 'Link: <https://fiware.github.io/data-models/full-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
-    "id": "urn:ngsi-ld:MetricProcessor:1",
+    "id": "urn:`NGSI-LD`:MetricProcessor:1",
     "type": "MetricProcessor",
     "action": {
         "type": "Property",
@@ -73,11 +73,11 @@ curl --location --request POST 'http://localhost:9090/ngsi-ld/v1/entities/' \
     },
     "hasInput": {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:MetricSource:1"
+        "object": "urn:`NGSI-LD`:MetricSource:1"
     },
     "hasApplication": {
         "type": "Relationship",
-        "object": "urn:ngsi-ld:StreamApplication:1"
+        "object": "urn:`NGSI-LD`:StreamApplication:1"
     },
     "name": {
         "type": "Property",
@@ -115,4 +115,4 @@ The `MetricProcessor` entity has the following attributes:
 4. Finally, the user is notified that the Job instance has been successfully submitted and the stream application is running on the `Flink` engine.
 
 
-[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of sample requests to create `StreamApplication` and `MetricProcessor` entities that can be used to model a NGSI-LD datapipeline and manage the execution of stream processing applications.
+[``NGSI-LD` API Orchestrator`](../../postman_collections/`NGSI-LD`%20API%20Orchestrator.postman_collection.json) Postman collection has a set of sample requests to create `StreamApplication` and `MetricProcessor` entities that can be used to model a `NGSI-LD` datapipeline and manage the execution of stream processing applications.

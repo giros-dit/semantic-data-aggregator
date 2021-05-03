@@ -2,13 +2,13 @@
 
 Docker-based prototype that deploys the `Semantic Data Aggregator` (`SDA`).
 
-The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the Scorpio Broker while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by Kafka. These agents are dynamically configured by the weaver which subscribes to the context broker for news definitions of data sources and data consumers.
+The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by `Kafka`. These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
 
-The weaver leverages Apache NiFi to distribute data among data sources and data consumers that are attached to the semantic data aggregator. NiFi enables the definition of graph flows that implement data ingestion mechanisms such as retrieving Prometheus metrics by polling Prometheus REST API, or data delivery mechanisms such as fetching data from Kafka and sending it out to HTTP-based data consumers.
+The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute data among data sources and data consumers that are attached to the `Semantic Data Aggregator`. `NiFi` enables the definition of graph flows that implement data ingestion mechanisms such as retrieving `Prometheus` metrics by polling Prometheus REST API, or data delivery mechanisms such as fetching data from [`Kafka`](https://kafka.apache.org/) and sending it out to HTTP-based `data consumers`.
 
-Kafka plays the role of the data substrate in the `SDA`, hence NiFi relies on Kafka as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures NiFi processors to connect to the same Kafka instance that Scorpio runs for its internal communication bus.
+`Kafka` plays the role of the data substrate in the `SDA`, hence `NiFi` relies on `Kafka` as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures `NiFi` processors to connect to the same Kafka instance that `Scorpio` runs for its internal communication bus.
 
-Additionally, a dummy context consumer is deployed based on a simple docker image that runs a FastAPI webserver. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from HTTP subscriptions.
+Additionally, a dummy context consumer is deployed based on a simple docker image that runs a [FastAPI](https://fastapi.tiangolo.com/) webserver. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from HTTP subscriptions.
 
 ![Docker Prototype](docs/data-aggregator-prototype.png)
 
@@ -34,7 +34,7 @@ Start the prototype by running docker-compose:
 docker-compose up
 ```
 
-In case you are interested in running the prototype in background (kafka or scorpio logs may be annoying), use the following command:
+In case you are interested in running the prototype in background (`kafka` or `scorpio` logs may be annoying), use the following command:
 ```bash
 docker-compose up -d
 ```
@@ -45,7 +45,7 @@ If you are interested to run the gNMI-based data collection prototype, follow th
 
 2) The command to import the image is:
 ```bash
-docker import cEOS-lab-4.24.4M.tar ceos-image:4.24.4M
+docker import cEOS-lab-4.24.5M.tar ceos-image:4.24.5M
 ```
 
 3) Then you can start the docker-compose:
@@ -73,9 +73,9 @@ Note that the SDA only supports the `openconfig-interfaces` YANG model for gNMI-
 
 # SDA Orchestration
 
-In order to orchestrate the life cycle management of the `Semantic Data Aggregator` by an external application or system, the prototype uses he `NGSI-LD API` like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the NGSI-LD data model for that. This is an approach to orchestrate the state of those NGSI-LD entities that represent the different stages in the data pipelines and model the activity of the Data Aggregator agents.
+In order to orchestrate the life cycle management of the `Semantic Data Aggregator` by an external application or system, the prototype uses he `NGSI-LD` API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the `NGSI-LD` data model for that. This is an approach to orchestrate the state of those `NGSI-LD` entities that represent the different stages in the data pipelines and model the activity of the Data Aggregator agents.
 
-To get a full view of the `SDA` orchestration process and to be able to build a full data pipeline for data aggregation, see [`Semantic Data Aggregator Orchestration`](docs/sda-orchestration/sda-orchestration.md)).
+To get a full view of the `SDA` orchestration process and to be able to build a full data pipeline for data aggregation, see [`Semantic Data Aggregator Orchestration`](docs/sda-orchestration/sda-orchestration.md).
 
 # Stream Processing Aplications Management
 
@@ -87,8 +87,8 @@ For more information on how `SDA` internally manages the uploading and execution
 
 This repository contains Postman collections that you can use to play with the REST APIs of some of the components present in the prototype. We recommend downloading [Postman Desktop](https://www.postman.com/downloads/) for an better user experience.
 
-- [`NGSI-LD API Orchestrator`](postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to interact with the [NGSI-LD Scorpio Broker](https://github.com/ScorpioBroker/ScorpioBroker) in order to model a full NGSI-LD datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD API`. This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in NGSI-LD. The requests contained in this collection can be utilized with other NGSI-LD compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
+- [`NGSI-LD API Orchestrator`](postman_collections/`NGSI-LD`%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to interact with the [`NGSI-LD Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) in order to model a full `NGSI-LD` datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD` API. This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in `NGSI-LD`. The requests contained in this collection can be utilized with other `NGSI-LD` compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
 
-- [`API REST Flink`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
+- [`Flink REST API`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
 
 - [`YANG Catalog REST API`](postman_collections/yangcatalog.postman_collection.json) provides a collection of sample requests for interacting with the REST API of [YANG Catalog](https://yangcatalog.org). For more details, visit [Contribute to YANG Catalog](https://yangcatalog.org/contribute.html) webpage.

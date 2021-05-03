@@ -1,16 +1,16 @@
 # Semantic Data Aggregator Orchestration
 
-A mechanism to orchestrate the `Semantic Data Aggregator` (SDA) life cycle management by an external application or system using the `NGSI-LD API` like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the NGSI-LD data model for that.
+A mechanism to orchestrate the `Semantic Data Aggregator` (`SDA`) life cycle management by an external application or system using the `NGSI-LD` API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the `NGSI-LD` data model for that.
 
-This is an approach to orchestrate the state transitions of those NGSI-LD entities that represent the different stages in the data pipelines and model the actions of the Data Aggregator agents.
+This is an approach to orchestrate the state transitions of those `NGSI-LD` entities that represent the different stages in the data pipelines and model the actions of the Data Aggregator agents.
 
-To deal with the life cycle management of the data aggregator we define the `Agent` NGSI-LD Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication` entities.
+To deal with the life cycle management of the data aggregator we define the `Agent` `NGSI-LD` Entity. This is a parent entity for every life cycle stage of the agent entities in the data pipeline: `MetricSource`, `TelemetrySource`, `MetricTarget`, `MetricProcessor` and `StreamApplication` entities.
 
 Users or applications can declaratively express the desired state for each agent of the Data Aggregator (`collector`, `aggregator` and `dispatcher`).
 
 The `Agent` parent entity has the following properties:
--	`action`: property value set by users to change the agent state.
--	`state`: property value updated by the `Weaver` during the action triggered by users to indicate the agent state.
+- `action`: property value set by users to change the agent state.
+- `state`: property value updated by the `Weaver` during the action triggered by users to indicate the agent state.
 - `stateInfo`: optional cross-domain property to describe errors when the processed action fails or feedback information about the agent state.
 
 The information model for the `Agent` parent entity is depicted below.
@@ -40,7 +40,7 @@ When there is no error in the processing activities to trigger a new state chang
 
 `Collector` and `Dispatcher` are two of the types of agents that `SDA` orchestrates, managing the life cycle of these agents that works as a `NiFi` processing flows using metadata from the information models.
 
-In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities that represent the metadata for the collection agents.
+In the following subsections, different sequence diagrams are detailed to show the state transition management of those `NGSI-LD` entities that represent the metadata for the collection agents.
 
 ### I - Instantiate and upgrade collection agent
 
@@ -50,7 +50,7 @@ The following sequence diagram shows the steps that the `SDA` framework follows 
 
 The steps followed by `SDA` for the collection agent instantiation are as follows:
 
-1.	First of all, the user has to model and create a new NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker` to describe collection agent metadata. In the entity the user have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
+1.	First of all, the user has to model and create a new `NGSI-LD` collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker` to describe collection agent metadata. In the entity the user have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
 
 2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent initialization is being processed. 
 
@@ -68,7 +68,7 @@ The previous sequence diagram shows an example of `Endpoint` error detection. Af
 
 The previous sequence diagram shows the steps that the framework follows to allow the collection agent upgrade. This diagram corresponds to the `START(1)` or the `START(3)` transition action of the state transition diagram. The steps are the following:
 
-1.	First of all, user has to update the previously created NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `START` value.
+1.	First of all, user has to update the previously created `NGSI-LD` collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `START` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent upgrade is being processed. 
 
@@ -86,7 +86,7 @@ The following sequence diagram shows the steps that the `SDA` framework follows 
 
 The steps followed by `SDA` for the collection agent deployment are as follows:
 
-1.	First of all, the user has to model and create a new NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker` to describe collection agent metadata. In the entity the user has to define the `action` property (inherited from the `Agent` parent entity) initialized to the `STOP` value.
+1.	First of all, the user has to model and create a new `NGSI-LD` collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker` to describe collection agent metadata. In the entity the user has to define the `action` property (inherited from the `Agent` parent entity) initialized to the `STOP` value.
 
 2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent deployment is being processed. 
 
@@ -100,7 +100,7 @@ The steps followed by `SDA` for the collection agent deployment are as follows:
 
 The previous sequence diagram shows the steps that the framework follows to allow the collection agent to stop. This diagram corresponds to the `STOP(2)` transition action of the state transition diagram. The steps are the following:
 
-1.	First of all, user has to update the previously created NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `STOP` value.
+1.	First of all, user has to update the previously created `NGSI-LD` collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `STOP` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The Weaver then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent stop is being processed. 
 
@@ -118,7 +118,7 @@ The following sequence diagram shows the steps that the `SDA` framework follows 
 
 The steps followed by `SDA` for the collection agent deletion are as follows:
 
-1.	First of all, user has to update the previously created NGSI-LD collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
+1.	First of all, user has to update the previously created `NGSI-LD` collection agent entity (e.g., `MetriSource` or `TelemetrySource` entity) in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the collection agent deletion is being processed. 
 
@@ -137,11 +137,11 @@ The aggregation agents are in charge of managing both the upload of stream proce
 
 For more information on how `SDA` internally manages the uploading and execution of stream processing applications, see [`Stream Processing Applications Management`](../stream-processing/stream-processing-management.md).
 
-In the following subsections, different sequence diagrams are detailed to show the state transition management of those NGSI-LD entities (i.e., `StreamApplication` and `MetricProcessor` entities) that represent the metadata for the aggregation agents.
+In the following subsections, different sequence diagrams are detailed to show the state transition management of those `NGSI-LD` entities (i.e., `StreamApplication` and `MetricProcessor` entities) that represent the metadata for the aggregation agents.
 
 ### I - Upload and delete stream application JAR 
 
-It should be noted that to orchestrate the upload of stream application JARs to the `Flink` engine, and allow `SDA` to manage the life cycle of NGSI-LD `StreamApplication` entities that contain context information necessary for this operation, a new `UPLOADED` value is defined for the `state` property of the `Agent` parent entity.
+It should be noted that to orchestrate the upload of stream application JARs to the `Flink` engine, and allow `SDA` to manage the life cycle of `NGSI-LD` `StreamApplication` entities that contain context information necessary for this operation, a new `UPLOADED` value is defined for the `state` property of the `Agent` parent entity.
 
 `SDA` is responsible for orchestrating the creation and deletion of these `StreamApplication` entities and determining the availability of the associated JAR files, as well as uploading them to the stream processing engine (`Flink`).
 
@@ -157,7 +157,7 @@ The following sequence diagram shows the steps that the `SDA` framework follows 
 
 The steps followed by `SDA` for the stream application JAR upload are as follows:
 
-1.	First of all, the user has to model and create a new NGSI-LD `StreamApplication` entity in `Scorpio Broker` to describe stream processing application metadata. In the entity the user has to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
+1.	First of all, the user has to model and create a new `NGSI-LD` `StreamApplication` entity in `Scorpio Broker` to describe stream processing application metadata. In the entity the user has to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
 
 2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the upload of the streaming application is being processed.
 
@@ -171,7 +171,7 @@ The steps followed by `SDA` for the stream application JAR upload are as follows
 
 The previous sequence diagram shows the steps that the framework follows to allow deleting a stream processing application JAR from the aggregation agent. The steps are the following:
 
-1.	First of all, the user has to update the previously created NGSI-LD `StreamApplication` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
+1.	First of all, the user has to update the previously created `NGSI-LD` `StreamApplication` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the stream application deletion is being processed. 
 
@@ -189,7 +189,7 @@ The previous sequence diagram shows the steps that the `SDA` framework follows t
 
 The steps followed by `SDA` for submitting the Job instance are as follows:
 
-1.	First of all, the user has to model and create a new NGSI-LD `MetricProcessor` entity in `Scorpio Broker` to describe stream processing Job metadata. In the entity we have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
+1.	First of all, the user has to model and create a new `NGSI-LD` `MetricProcessor` entity in `Scorpio Broker` to describe stream processing Job metadata. In the entity we have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `START` value.
 
 2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the submit of the Job instance is being processed. 
 
@@ -207,7 +207,7 @@ The previous sequence diagram shows an example of `StreamApplication` error dete
 
 The previous sequence diagram shows the steps that the framework follows to allow the Job instance upgrade to the aggregation agent. This diagram corresponds to the `START(1)` or `START(3)` transition action of the state transition diagram. The steps are the following:
 
-1.	First of all, the user has to update the previously created NGSI-LD `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `START` value.
+1.	First of all, the user has to update the previously created `NGSI-LD` `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `START` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the Job instance upgrade is being processed.
 
@@ -225,7 +225,7 @@ The previous sequence diagram shows the steps that the `SDA` framework follows t
 
 The steps followed by `SDA` for the Job instance definition are as follows:
 
-1.	First of all, the user has to model and create a new NGSI-LD `MetricProcessor` entity in `Scorpio Broker` to describe stream processing Job metadata. In the entity we have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `STOP` value.
+1.	First of all, the user has to model and create a new `NGSI-LD` `MetricProcessor` entity in `Scorpio Broker` to describe stream processing Job metadata. In the entity we have to define the `action` property (inherited from the `Agent` parent entity) initialized to the `STOP` value.
 
 2.	The entity creation triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the definition of the Job instance is being processed. 
 
@@ -239,7 +239,7 @@ The steps followed by `SDA` for the Job instance definition are as follows:
 
 The previous sequence diagram shows the steps that the framework follows to allow stopping the Job instance from the aggregation agent. This diagram corresponds to the `STOP(2)` transition action of the state transition diagram. The steps are the following:
 
-1.	First of all, the user has to update the previously created NGSI-LD `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `STOP` value.
+1.	First of all, the user has to update the previously created `NGSI-LD` `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `STOP` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the Job instance stop is being processed.
 
@@ -257,7 +257,7 @@ The previous sequence diagram shows the steps that the `SDA` framework follows t
 
 The steps followed by `SDA` for the Job instance deletion are as follows:
 
-1.	First of all, user has to update the previously created NGSI-LD `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
+1.	First of all, user has to update the previously created `NGSI-LD` `MetricProcessor` entity in `Scorpio Broker`. To do this, the `action` property must be updated to the `END` value.
 
 2.	The entity upgrade triggers a notification to the `Weaver` component. The `Weaver` then update the entity with the `state` property initialized to the `BUILDING` value while the Job instance deletion is being processed.
 
@@ -270,7 +270,7 @@ The steps followed by `SDA` for the Job instance deletion are as follows:
 
 ## Endpoint and Data Source context information entities Orchestration
 
-In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from `NiFi` processing flows), as well as data aggregation (from `Flink` stream processing applications), `SDA` must manage the life cycle of those NGSI-LD entities that define the context information for the input data sources and their endpoint services. 
+In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from `NiFi` processing flows), as well as data aggregation (from `Flink` stream processing applications), `SDA` must manage the life cycle of those `NGSI-LD` entities that define the context information for the input data sources and their endpoint services. 
 
 So far there are two types of data source entities defined:
 1.	`Prometheus`: Prometheus-based data source context information entities for metric collection.
@@ -295,4 +295,4 @@ Finally, the full version of the state transition diagram is presented depending
 
 ![agent-model-state-transitions-full-version](img/agent-model-state-transitions-full-version.png)
 
-[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full NGSI-LD datapipeline and orchestrate the life cycle of the entities involved based on the `NGSI-LD API`.
+[``NGSI-LD` API Orchestrator`](../../postman_collections/`NGSI-LD`%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a full `NGSI-LD` datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD` API.
