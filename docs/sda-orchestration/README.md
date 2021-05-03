@@ -135,7 +135,7 @@ The steps followed by `SDA` for the collection agent deletion are as follows:
 
 The aggregation agents are in charge of managing both the upload of stream processing applications (defined as JAR files) and the execution of their instances (defined as Job instances) within the `Flink` engine.
 
-For more information on how `SDA` internally manages the uploading and execution of stream processing applications, see [`Stream Processing Applications Management`](../stream-processing/stream-processing-management.md).
+For more information on how `SDA` internally manages the uploading and execution of stream processing applications, see [`Stream Processing Applications Management`](../stream-processing/README.md).
 
 In the following subsections, different sequence diagrams are detailed to show the state transition management of those `NGSI-LD` entities (i.e., `StreamApplication` and `MetricProcessor` entities) that represent the metadata for the aggregation agents.
 
@@ -273,7 +273,7 @@ The steps followed by `SDA` for the Job instance deletion are as follows:
 In addition to orchestrating through state changes the agents that allow managing the collection and delivery of data (from `NiFi` processing flows), as well as data aggregation (from `Flink` stream processing applications), `SDA` must manage the life cycle of those `NGSI-LD` entities that define the context information for the input data sources and their endpoint services. 
 
 So far there are two types of data source entities defined:
-1.	`Prometheus`: Prometheus-based data source context information entities for metric collection.
+1.  `Prometheus`: Prometheus-based data source context information entities for metric collection.
 2.  `Device`: Telemetry-based data source context information entities for telemetry data collection.
 
 In addition, `Endpoint` type entities allow you to define the connection point with the data sources.

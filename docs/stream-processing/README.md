@@ -2,7 +2,7 @@
 
 In [`Apache Flink`](https://flink.apache.org/) engine, the stream processing applications are packaged as JAR files. These JAR files can be uploaded to the stream processing engine via RESTful API or graphical user interface (GUI).
 
-![`data-aggregator-stream-app-sequence`](../data-aggregator-stream-app-sequence.png)
+![`data-aggregator-stream-app-sequence`](img/data-aggregator-stream-app-sequence.png)
 
 The previous sequence diagram shows the steps that the `Semantic Data Aggregator` (`SDA`) framework follows to allow the upload of the stream applications to the `Flink` engine. The steps are the following:
 
@@ -37,13 +37,13 @@ curl --location --request POST 'http://localhost:9090/`NGSI-LD`/v1/entities/' \
 ```
 
 The `StreamApplication` entity has the following properties:
-- `action`: a value set by users to change the JAR application state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/sda-orchestration.md)).
+- `action`: a value set by users to change the JAR application state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/README.md)).
 - `fileName`: the JAR application name.
 - `description`: optional description of the stream processing application.
 - `URI`: the address of the external repository with JARs.
 - `fileId`: the ID generated after uploading the JAR to the stream processing engine. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
 - `entryClass`: the name of the main Java class. This property with its value is appended to the `StreamApplication` entity after the JAR is uploaded.
-- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the JAR uploading state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/sda-orchestration.md#aggregation-agents-orchestration)).
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the JAR uploading state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/README.md#aggregation-agents-orchestration)).
 
 3. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to fetch the JAR from the external repository and uploads its to the stream processing engine.
 
@@ -54,7 +54,7 @@ The `StreamApplication` entity has the following properties:
 
 To run the stream processing applications, a related Job instance must be submitted to the `Flink` engine. A `Flink` application can be uploaded to run one or multiple `Flink` Jobs. 
 
-![`data-aggregator-stream-job-sequence`](../data-aggregator-stream-job-sequence.png)
+![`data-aggregator-stream-job-sequence`](img/data-aggregator-stream-job-sequence.png)
 
 The previous sequence diagram shows the steps that the framework follows to allow the submit of a Job instance to the `Flink` engine. The steps are the following:
 
@@ -96,7 +96,7 @@ curl --location --request POST 'http://localhost:9090/`NGSI-LD`/v1/entities/' \
 ```
 
 The `MetricProcessor` entity has the following attributes:
-- `action` property: a value set by users to change the Job instance state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/sda-orchestration.md)).
+- `action` property: a value set by users to change the Job instance state (for more information see [`Semantic Data Aggregator Orchestration`](../sda-orchestration/README.md)).
 - `hasInput` relationship:
   - `object`: `MetricSource` entity Id.
   - Data to be consumed (data delivery by `MetricSource:2` entity).
@@ -106,7 +106,7 @@ The `MetricProcessor` entity has the following attributes:
 - `name` property: the Job name.
 - `arguments` property: custom and optional input arguments for the stream processing application execution (e.g., the type and class of window used or the interval and execution time). Argument values are expressed as a list of key-value pairs.
 - `jobId` property: the ID generated after submitting the Job instance to the stream processing engine. This property with its value is appended to the `MetricProcessor` entity after the Job is submitted.
-- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the Job instantiation state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/sda-orchestration.md#aggregation-agents-orchestration)).
+- `state`: a value updated by the `Weaver` during the action triggered by users (`action` property) to indicate the Job instantiation state (for more information see [`Aggregation Agents Orchestration`](../sda-orchestration/README.md#aggregation-agents-orchestration)).
 
 2. The entity creation triggers a notification to the `Weaver` component. The `Weaver` then manages the JAR application metadata to retrieve the JAR ID from the `StreamApplication` entity previously created in the `Scorpio broker` and submit a Job instance execution for this JAR ID to the `Flink` engine.
 
