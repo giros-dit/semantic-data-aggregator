@@ -52,7 +52,7 @@ supported encodings:
   - JSON_IETF
   - ASCII
 ```
-- Arista community publishes its YANG models in a [GitHub repository](https://github.com/aristanetworks/yang.git). To analyze and understand the structure of YANG models, the Python tool [`pyang`](https://github.com/mbj4668/pyang) is very useful (they have not published the updated models for version `4.24.4M`, and `4.24.2F` is the latest available). As an example, we can parse the `openconfig-interfaces.yang` module using the `pyang` command:
+- Arista community publishes its YANG models in a [GitHub repository](https://github.com/aristanetworks/yang.git). To analyze and understand the structure of YANG models, the Python tool [`pyang`](https://github.com/mbj4668/pyang) is very useful (they have not published the updated models for version `4.24.5M`, and `4.24.2F` is the latest available). As an example, we can parse the `openconfig-interfaces.yang` module using the `pyang` command:
 ```bash
 pyang -f tree -p yang yang/EOS-4.24.2F/openconfig/public/release/models/interfaces/openconfig-interfaces.yang
 ```
