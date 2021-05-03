@@ -1,6 +1,6 @@
 # gNMI Telemetry Proof of Concept - Recipe
 
-The purpose of this prototype is collect data of [`gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the `Semantic Data Aggregator` (`SDA`). For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+The purpose of this prototype is collect data of [`gNMI`](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) sources from the `Semantic Data Aggregator` (`SDA`). For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
 
 Here are the most important steps to be able to run the gNMI-based data collection prototype and extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from the `SDA`:
 
@@ -80,11 +80,11 @@ Get Response:
 
 (2) root@nifi:/opt/nifi/nifi-current# gnmic -a ceos1:6030 -u admin -p xxxx --insecure subscribe --path "/interfaces/interface[name=Ethernet1]/state/counters/in-octets" --stream-mode sample --sample-interval 5s --qos 0
 ```
-- [`/gnmic-cfgs/cfg-kafka.json`](../../gnmic-cfgs/cfg-kafka.json) is the configuration file used to automate the gNMI subscriptions and store the information monitored in the Kafka data data substrate of the aggregator. Weaver is the building block in charge of parameterizing the file values regarding the type and subscription interval, the YANG path of the data to be monitored, the address and port of the endpoint and the Kafka topic. To be able to do a subscription test with `gNMIc` using this configuration file, you can run the following example commands ((1) `sample` or (2) `on-change` subscription modes):
+- [`/gnmi/gnmic-cfgs/cfg-subscriptions.json`](../../gnmi/gnmic-cfgs/cfg-subscriptions.json) is the configuration file used to automate the `gNMI` subscriptions and store the information monitored in the `Kafka` data data substrate of the aggregator. `Weaver` is the building block in charge of parameterizing the file values regarding the type and subscription interval, the YANG path of the data to be monitored, the address and port of the endpoint and the `Kafka` topic. To be able to do a subscription test with `gNMIc` using this configuration file, you can run the following example commands ((1) `sample` or (2) `on-change` subscription modes):
 ```bash
-(1) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name sample
+(1) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-subscriptions.json subscribe --name sample
 
-(2) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-kafka.json subscribe --name on-change
+(2) root@nifi:/opt/nifi/nifi-current# gnmic --config /gnmic-cfgs/cfg-subscriptions.json subscribe --name on-change
 ```
 In the message bus of the `kafka` docker container, a new topic will appear where new entries will be written according to the type of subscription chosen.
 - [`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to model a `NGSI-LD` datapipeline with `TelemetrySource` entities and extract the telemetry information of the `Arista cEOS` devices from the `Semantic Data Aggregator` using `gNMIc`. 

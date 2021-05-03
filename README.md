@@ -2,9 +2,9 @@
 
 Docker-based prototype that deploys the `Semantic Data Aggregator` (`SDA`).
 
-The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by `Kafka`. These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
+The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by [`Kafka`](https://kafka.apache.org/). These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
 
-The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute data among data sources and data consumers that are attached to the `Semantic Data Aggregator`. `NiFi` enables the definition of graph flows that implement data ingestion mechanisms such as retrieving `Prometheus` metrics by polling Prometheus REST API, or data delivery mechanisms such as fetching data from [`Kafka`](https://kafka.apache.org/) and sending it out to HTTP-based `data consumers`.
+The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute data among data sources and data consumers that are attached to the `Semantic Data Aggregator`. `NiFi` enables the definition of graph flows that implement data ingestion mechanisms such as retrieving [`Prometheus`](https://`Prometheus`.io/) metrics by polling `Prometheus` REST API, or data delivery mechanisms such as fetching data from `Kafka` and sending it out to HTTP-based `data consumers`.
 
 `Kafka` plays the role of the data substrate in the `SDA`, hence `NiFi` relies on `Kafka` as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures `NiFi` processors to connect to the same Kafka instance that `Scorpio` runs for its internal communication bus.
 
@@ -53,15 +53,15 @@ docker import cEOS-lab-4.24.5M.tar ceos-image:4.24.5M
 docker-compose -f docker-compose-arista.yml up
 ```
 
-The purpose of this prototype is collect data of [gNMI](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) telemetry-based sources from the `Semantic Data Aggregator`. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of `Arista cEOS` routers as network devices and YANG-based data sources that support the gNMI management protocol and a CLI client that provides a full support of gNMI RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+The purpose of this prototype is collect data of [`gNMI`](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) telemetry-based sources from the `Semantic Data Aggregator`. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of `Arista cEOS` routers as network devices and YANG-based data sources that support the `gNMI` management protocol and a CLI client that provides a full support of `gNMI` RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
 
-To get a fine-grained view on how to extract telemetry information of Arista cEOS routers using the gNMIc client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-PoC-recipe/README.md).
+To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-PoC-recipe/README.md).
 
 ## Upload Avro schemas
 
-Every data source supported by the SDA has one or more Avro schemas associated. The collection agent of the SDA implements drivers responsible for transforming the collected raw data into a pre-defined Avro schema. Before interacting with the SDA, make sure that these Avro schemas are uploaded in the schema registry. The SDA prototype currently leverages HWX Schema Registry to store Avro schemas. More details on how to upload schemas can be found [here](https://github.com/giros-dit/semantic-data-aggregator/blob/develop/docs/nifi-schemas/nifi-schema-registry.md#uploading-schemas-to-the-registry).
+Every data source supported by the `SDA` has one or more [`Avro schemas`](https://avro.apache.org/) associated. The collection agent of the `SDA` implements drivers responsible for transforming the collected raw data into a pre-defined `Avro` schema. Before interacting with the `SDA`, make sure that these `Avro` schemas are uploaded in the schema registry. The `SDA` prototype currently leverages [`HWX Schema Registry`](https://github.com/hortonworks/registry) to store Avro schemas. More details on how to upload schemas can be found [here](https://github.com/giros-dit/semantic-data-aggregator/blob/develop/docs/nifi-schemas/nifi-schema-registry.md#uploading-schemas-to-the-registry).
 
-For now, the data sources supported by the SDA are Prometheus and gNMI-based devices. The respective Avro schemas can be fetched from the following links:
+For now, the data sources supported by the `SDA` are `Prometheus` and gNMI-based devices. The respective `Avro` schemas can be fetched from the following links:
 
 > __IMPORTANT__: Notice the name specified when uploading the schemas to the registry
 >
@@ -69,7 +69,7 @@ For now, the data sources supported by the SDA are Prometheus and gNMI-based dev
 1. [Prometeus - Openmetrics schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/openmetrics/avro/openmetrics.avsc): Store schema with `openmetrics` name
 2. [gNMI - Openconfig-interfaces schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/openconfig/avro/openconfig-interfaces.avsc): Store schema with `openconfig-interfaces` name
 
-Note that the SDA only supports the `openconfig-interfaces` YANG model for gNMI-based data sources. Once we add support for the rest of YANG models, new Avro schemas will be defined for this data source.
+Note that the `SDA` only supports the `openconfig-interfaces` YANG model for gNMI-based data sources. Once we add support for the rest of YANG models, new `Avro` schemas will be defined for this data source.
 
 # SDA Orchestration
 
@@ -87,7 +87,7 @@ For more information on how `SDA` internally manages the uploading and execution
 
 This repository contains Postman collections that you can use to play with the REST APIs of some of the components present in the prototype. We recommend downloading [Postman Desktop](https://www.postman.com/downloads/) for an better user experience.
 
-- [`NGSI-LD API Orchestrator`](postman_collections/`NGSI-LD`%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to interact with the [`NGSI-LD Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) in order to model a full `NGSI-LD` datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD` API. This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in `NGSI-LD`. The requests contained in this collection can be utilized with other `NGSI-LD` compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
+- [`NGSI-LD API Orchestrator`](postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to interact with the [`NGSI-LD Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) in order to model a full `NGSI-LD` datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD` API. This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in `NGSI-LD`. The requests contained in this collection can be utilized with other `NGSI-LD` compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
 
 - [`Flink REST API`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
 

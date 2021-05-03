@@ -115,4 +115,4 @@ The `MetricProcessor` entity has the following attributes:
 4. Finally, the user is notified that the Job instance has been successfully submitted and the stream application is running on the `Flink` engine.
 
 
-[``NGSI-LD` API Orchestrator`](../../postman_collections/`NGSI-LD`%20API%20Orchestrator.postman_collection.json) Postman collection has a set of sample requests to create `StreamApplication` and `MetricProcessor` entities that can be used to model a `NGSI-LD` datapipeline and manage the execution of stream processing applications.
+[`NGSI-LD API Orchestrator`](../../postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of sample requests to create `StreamApplication` and `MetricProcessor` entities that can be used to model a `NGSI-LD` datapipeline and manage the execution of stream processing applications.
