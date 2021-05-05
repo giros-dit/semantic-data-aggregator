@@ -66,7 +66,7 @@ For now, the data sources supported by the `SDA` are `Prometheus` and gNMI-based
 > __IMPORTANT__: Notice the name specified when uploading the schemas to the registry
 >
 
-1. [Prometeus - Openmetrics schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/openmetrics/avro/openmetrics.avsc): Store schema with `openmetrics` name
+1. [Prometeus schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/prometheus/avro/prometheus.avsc): Store schema with `prometheus` name
 2. [gNMI - Openconfig-interfaces schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/openconfig/avro/openconfig-interfaces.avsc): Store schema with `openconfig-interfaces` name
 
 Note that the `SDA` only supports the `openconfig-interfaces` YANG model for gNMI-based data sources. Once we add support for the rest of YANG models, new `Avro` schemas will be defined for this data source.
