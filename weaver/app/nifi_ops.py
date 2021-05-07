@@ -540,24 +540,15 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
 
 def upload_templates():
     """
-    Upload MetricSource, MetricTarget and TelemetrySource templates
-    to the root process group.
+    Upload NiFi templates to the root process group.
     """
     # Get root PG
     root_pg = nipyapi.canvas.get_process_group("root")
     # Upload templates
-    try:
-        nipyapi.templates.upload_template(
-            root_pg.id, "/app/config/templates/MetricSource.xml")
-    except ValueError:
-        logger.info("MetricSource already uploaded in NiFi.")
-    try:
-        nipyapi.templates.upload_template(
-            root_pg.id, "/app/config/templates/MetricTarget.xml")
-    except ValueError:
-        logger.info("MetricTarget already uploaded in NiFi.")
-    try:
-        nipyapi.templates.upload_template(
-            root_pg.id, "/app/config/templates/TelemetrySource.xml")
-    except ValueError:
-        logger.info("TelemetrySource already uploaded in NiFi.")
+    templates_path = "/app/config/templates"
+    for template in os.listdir(templates_path):
+        try:
+            nipyapi.templates.upload_template(
+                root_pg.id, templates_path + "/" + template)
+        except ValueError:
+            logger.info("%s already uploaded in NiFi." % template)
