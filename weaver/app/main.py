@@ -1,12 +1,15 @@
 from fastapi import FastAPI, status, Request
 from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
     MetricProcessor, StreamApplication,
-    Prometheus, Endpoint
+    Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
+from semantic_tools.models.stream import EVESource
+
 
 import logging
 import nifi_ops
@@ -14,7 +17,6 @@ import flink_ops
 import orchestration_ops
 import nipyapi
 import ngsi_ld_ops
-import json
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +55,7 @@ async def startup_event():
     # Check Scorpio API is up
     ngsi_ld_ops.check_scorpio_status(ngsi)
     # Subscribe to data pipeline agent entities
+    ngsi_ld_ops.subscribeEVESource(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
@@ -69,6 +72,9 @@ async def startup_event():
 async def receiveNotification(request: Request):
     notifications = await request.json()
     for notification in notifications["data"]:
+        if notification["type"] == "EVESource":
+            eveSource = EVESource.parse_obj(notification)
+            orchestration_ops.processEVESourceState(eveSource, ngsi)
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
             orchestration_ops.processMetricSourceState(metricSource, ngsi)

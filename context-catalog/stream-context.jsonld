@@ -1,0 +1,13 @@
+{
+    "@context": {
+        "KafkaBroker": "http://example.org/KafkaBroker",
+        "hasEndpoint": "http://example.org/hasEndpoint",
+        "version": "http://example.org/version",
+        "EVESource": "http://example.org/EVESource",
+        "collectsFrom": "http://example.org/collectsFrom",
+        "groupId": "http://example.org/groupId",
+        "nameFormat": "http://example.org/nameFormat",
+        "offset": "http://example.org/offset",
+        "topicName": "http://example.org/topicName"
+    }
+}

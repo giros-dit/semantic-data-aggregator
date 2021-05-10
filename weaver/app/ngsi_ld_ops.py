@@ -1,6 +1,6 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import State
+from semantic_tools.models.common import State
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
+    EVESource = "urn:ngsi-ld:Subscription:EVESource:weaver-subs"
     MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:weaver-subs"
     MetricSource = "urn:ngsi-ld:Subscription:MetricSource:weaver-subs"
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:weaver-subs"
@@ -194,6 +195,14 @@ def stateToDisabled(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
         ).dict(exclude_none=True)
     }
     ngsi.updateEntityAttrs(entityId, state)
+
+
+def subscribeEVESource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for EVESource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.EVESource,
+                       uri, "action")
 
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
