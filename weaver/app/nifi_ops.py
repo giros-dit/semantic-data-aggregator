@@ -127,7 +127,7 @@ def deployMetricSource(metricSource: MetricSource,
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "openmetrics")])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
 
      # Deploy MS template
     ms_template = nipyapi.templates.get_template("MetricSource")
@@ -418,7 +418,7 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "openmetrics")])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
 
     # Retrieve GET Prometheus API processor
     http_ps = None
