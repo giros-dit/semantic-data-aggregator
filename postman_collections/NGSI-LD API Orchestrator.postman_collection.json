@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aea0be6d-2dae-4ced-b4d6-78e8ba18c23d",
+		"_postman_id": "0b582567-e1af-4517-bcbc-21c68f1cdb8f",
 		"name": "NGSI-LD API Orchestrator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1714,7 +1714,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Endpoint:3",
+							"name": "Create Endpoint EVE",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -1741,7 +1741,54 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:3\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-broker\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:3\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-EVE\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Endpoint SDA",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Endpoint:4\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-SDA\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2193,7 +2240,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:2\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:3\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:2\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:4\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
