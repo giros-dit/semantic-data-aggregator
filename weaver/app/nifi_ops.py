@@ -3,7 +3,7 @@ from nipyapi.nifi.models.controller_service_entity import ControllerServiceEntit
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus, MetricSource, MetricTarget
-from semantic_tools.models.stream import EVESource, KafkaBroker
+from semantic_tools.models.stream import EVESource, KafkaBroker, KafkaTopic
 from semantic_tools.models.telemetry import Device, TelemetrySource
 from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
@@ -124,13 +124,24 @@ def deployEVESource(eveSource: EVESource,
     Deploys a EVESource NiFi template
     from a passed EVESource NGSI-LD entity.
     """
-    # Get Endpoint
-    kafka_broker_entity = ngsi.retrieveEntityById(eveSource.collectsFrom.object)
-    kafka_broker = KafkaBroker.parse_obj(kafka_broker_entity)
-    endpoint_entity = ngsi.retrieveEntityById(kafka_broker.hasEndpoint.object)
-    endpoint = Endpoint.parse_obj(endpoint_entity)
-    # Get topic name from eveSource entity ID
-    entity_id = eveSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(eveSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(eveSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
     # We assume last string is an integer value
     source_id_number = int(eveSource.id.split(":")[-1])
     # Get root PG
@@ -143,13 +154,16 @@ def deployEVESource(eveSource: EVESource,
     )
     # Set variable for ES PG
     group_id = eveSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
     source_topics = eveSource.topicName.value
-    brokers = endpoint.uri.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value 
     nipyapi.canvas.update_variable_registry(es_pg, [("avro_schema", "eve")])
-    nipyapi.canvas.update_variable_registry(es_pg, [("brokers", brokers)])
     nipyapi.canvas.update_variable_registry(es_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_broker_url", source_broker_url)])
     nipyapi.canvas.update_variable_registry(es_pg, [("source_topics", source_topics)])
-    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", entity_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", sink_topic_name)])
 
     # Deploy ES template
     es_template = nipyapi.templates.get_template("EVESource")
@@ -511,22 +525,39 @@ def upgradeEVESource(eveSource: EVESource,
     es_pg = nipyapi.canvas.get_process_group(eveSource.id)
     # Stop MS PG
     nipyapi.canvas.schedule_process_group(es_pg.id, False)
-    # Get Endpoint
-    kafka_broker_entity = ngsi.retrieveEntityById(eveSource.collectsFrom.object)
-    kafka_broker = KafkaBroker.parse_obj(kafka_broker_entity)
-    endpoint_entity = ngsi.retrieveEntityById(kafka_broker.hasEndpoint.object)
-    endpoint = Endpoint.parse_obj(endpoint_entity)
-    # Get topic name from eveSource entity ID
-    entity_id = eveSource.id.strip("urn:ngsi-ld:").replace(":", "-").lower()
+
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(eveSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(eveSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+
     # Set variable for ES PG
     group_id = eveSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
     source_topics = eveSource.topicName.value
-    brokers = endpoint.uri.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value 
     nipyapi.canvas.update_variable_registry(es_pg, [("avro_schema", "eve")])
-    nipyapi.canvas.update_variable_registry(es_pg, [("brokers", brokers)])
     nipyapi.canvas.update_variable_registry(es_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_broker_url", source_broker_url)])
     nipyapi.canvas.update_variable_registry(es_pg, [("source_topics", source_topics)])
-    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", entity_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", sink_topic_name)])
+
     # Restart ES PG
     nipyapi.canvas.schedule_process_group(es_pg.id, True)
     logger.info("EVESource '{0}' flow upgraded in NiFi.".format(eveSource.id))

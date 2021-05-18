@@ -3,10 +3,13 @@
         "KafkaBroker": "http://example.org/KafkaBroker",
         "hasEndpoint": "http://example.org/hasEndpoint",
         "version": "http://example.org/version",
+        "KafkaTopic": "http://example.org/KafkaTopic",
+        "hasKafkaBroker": "http://example.org/hasKafkaBroker",
+        "schemaURL": "http://example.org/schemaURL",
         "EVESource": "http://example.org/EVESource",
-        "collectsFrom": "http://example.org/collectsFrom",
+        "hasInput": "http://example.org/hasInput",
+        "hasOutput": "http://example.org/hasOutput",
         "groupId": "http://example.org/groupId",
-        "nameFormat": "http://example.org/nameFormat",
         "offset": "http://example.org/offset",
         "topicName": "http://example.org/topicName"
     }

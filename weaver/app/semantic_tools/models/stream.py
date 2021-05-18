@@ -3,9 +3,6 @@ from .common import Agent
 from typing import Literal, Optional
 
 
-class NameFormat(Property):
-    value: Literal["names", "pattern"]
-
 
 class Offset(Property):
     value: Literal["earliest", "latest", "none"]
@@ -13,9 +10,9 @@ class Offset(Property):
 
 class EVESource(Agent):
     type: Literal["EVESource"] = "EVESource"
-    collectsFrom: Relationship
+    hasInput: Relationship
+    hasOutput: Relationship
     groupId: Property
-    nameFormat: NameFormat
     offset: Offset
     topicName: Property
 
@@ -25,3 +22,11 @@ class KafkaBroker(Entity):
     hasEndpoint: Relationship
     name: Property
     version: Optional[Property]
+
+
+class KafkaTopic(Entity):
+    type: Literal["KafkaTopic"] = "KafkaTopic"
+    hasKafkaBroker: Relationship
+    description: Optional[Property]
+    name: Property
+    schemaURL: Optional[Property]

@@ -31,4 +31,7 @@ class Endpoint(Agent):
     type: Literal["Endpoint"] = "Endpoint"
     hasLogin: Optional[Relationship] = None
     name: Property
-    uri: URI
+    # Do not enforce uri in order to support 
+    # use cases such as Kafka broker address
+    # uri: URI
+    uri: Property
