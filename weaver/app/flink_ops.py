@@ -86,7 +86,7 @@ def uploadStreamApp(streamApplication: StreamApplication,
             output += output_line
         logger.info(
             "StreamApplication '{0}' with '{1}' JAR not uploaded in Flink engine. The download operation from the '{2}' URL failed: '{3}'"
-	    .format(streamApplication.id, streamApplication.fileName.value, streamApplication.uri.value, output)
+            .format(streamApplication.id, streamApplication.fileName.value, streamApplication.uri.value, output)
         )
         uploaded = False
 
@@ -155,4 +155,3 @@ def getStreamAppArguments(metricProcessor: MetricProcessor,
             arguments += arguments_list[i]
 
     return arguments
-
