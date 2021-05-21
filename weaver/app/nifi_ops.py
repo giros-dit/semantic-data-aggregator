@@ -157,7 +157,7 @@ def deployEVESource(eveSource: EVESource,
     source_broker_url = source_endpoint.uri.value
     source_topics = eveSource.topicName.value
     sink_broker_url = sink_endpoint.uri.value
-    sink_topic_name = sink_topic.name.value 
+    sink_topic_name = sink_topic.name.value
     nipyapi.canvas.update_variable_registry(es_pg, [("avro_schema", "eve")])
     nipyapi.canvas.update_variable_registry(es_pg, [("group_id", group_id)])
     nipyapi.canvas.update_variable_registry(es_pg, [("source_broker_url", source_broker_url)])
@@ -221,7 +221,8 @@ def deployMetricSource(metricSource: MetricSource,
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
+    #nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", entity_id)])
 
     # Deploy MS template
     ms_template = nipyapi.templates.get_template("MetricSource")
@@ -351,7 +352,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     )
     # Set variable for TS PG
     # Avro schema hardcoded to openconfig-interfaces
-    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    #nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
@@ -598,7 +600,8 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
+    #nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", entity_id)])
 
     # Retrieve GET Prometheus API processor
     http_ps = None
@@ -702,7 +705,8 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
 
     # Set variables for TS PG
     # Avro schema hardcoded to openconfig-interfaces
-    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    #nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", "openconfig-interfaces")])
+    nipyapi.canvas.update_variable_registry(ts_pg, [("avro_schema", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ts_pg, [("command", "gnmic")])
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
