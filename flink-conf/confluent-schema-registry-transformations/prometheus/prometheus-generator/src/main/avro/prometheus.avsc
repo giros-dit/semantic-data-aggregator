@@ -1,0 +1,70 @@
+{
+    "type": "record",
+    "name": "Metric",
+    "namespace": "giros.org",
+    "fields": [
+        {
+            "name": "timestamp",
+            "type": {
+                "type": "string",
+                "logicalType": "local-timestamp-millis"
+            },
+            "doc": "/metric/timestamp"
+        },
+        {
+            "name": "value",
+            "type": {
+                "type": "double",
+                "logicalType": "decimal",
+                "precision": "3"
+            },
+            "doc": "/metric/value"
+        },
+        {
+            "name": "name",
+            "type": "string",
+            "doc": "/metric/name"
+        },
+        {
+            "name": "labels",
+            "doc": "/metric/labels",
+            "type": [
+                "null",
+                {
+                    "type": "record",
+                    "name": "Labels",
+                    "aliases": ["labelsType"],
+                    "fields": [
+                        {
+                            "name": "label",
+                            "doc": "/metric/labels/label",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "record",
+                                        "name": "Label",
+                                        "aliases": ["labelType"],
+                                        "fields": [
+                                            {
+                                                "name": "name",
+                                                "type": "string",
+                                                "doc": "/metric/labels/label/name"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "string",
+                                                "doc": "/metric/labels/label/value"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

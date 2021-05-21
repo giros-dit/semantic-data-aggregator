@@ -39,7 +39,7 @@ public class OpenconfigInterfacesGeneratorJob {
 		FlinkKafkaProducer<Interfaces> kafkaSink = new FlinkKafkaProducer<>("telemetrysource-1", schema, props,
 				FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
 
-		DataStream<Interfaces> input = env.addSource(new DataGeneratorSource()).name("Data Generator Source");
+		DataStream<Interfaces> input = env.addSource(new DataGeneratorSource()).name("Openconfig Interfaces Generator Source");
 
 		input.addSink(kafkaSink).name("Kafka Sink").uid("Kafka Sink");
 

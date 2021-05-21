@@ -11,6 +11,9 @@ import giros.org.SoLog;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Generates random SoLogs to a Kafka topic.
+ */
 public class SoLogGeneratorJob {
 
 	public static void main(String[] args) throws Exception {
@@ -18,13 +21,13 @@ public class SoLogGeneratorJob {
 		props.setProperty("bootstrap.servers", "kafka:9092");
 		props.setProperty("group.id", "so-logs");
 		String schemaRegistryUrl = "http://schema-registry-confluent:8081";
-		String subject = "so-log";
+		String subject = "so-log-1";
 
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
 		FlinkKafkaProducer<SoLog> avroFlinkKafkaProducer = new FlinkKafkaProducer<>("so-log-1",
 				ConfluentRegistryAvroSerializationSchema.forSpecific(SoLog.class, subject, schemaRegistryUrl), props);
-		DataStream<SoLog> input = env.addSource(new DataGeneratorSource()).name("Data Generator Source");
+		DataStream<SoLog> input = env.addSource(new DataGeneratorSource()).name("SO Log Parser Generator Source");
 		input.addSink(avroFlinkKafkaProducer);
 
 		env.execute("Avro SO Log Parser Generator Job");

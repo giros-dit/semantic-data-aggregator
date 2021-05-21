@@ -2,6 +2,7 @@ package giros.org;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.flink.api.common.functions.MapFunction;
 import java.util.Properties;
 
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -12,6 +13,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import giros.org.Message;
+import org.apache.avro.specific.SpecificRecordBase;
 
 public class AvroDataConsumerJob {
 	public static void main(String[] args) throws Exception {
@@ -31,7 +33,8 @@ public class AvroDataConsumerJob {
 		FlinkKafkaConsumer<Message> kafkaSource = new FlinkKafkaConsumer<>("message", schema, props);
 
 		DataStream<String> source = env.addSource(kafkaSource).name("Kafka Source").uid("Kafka Source")
-				.map(record -> record.getId() + "," + record.getName() + "," + record.getDescription())
+				//.map(record -> record.getId() + "," + record.getName() + "," + record.getDescription())
+                                .map((MapFunction<Message, String>) SpecificRecordBase::toString)
 				.name("ToOutputString");
 
 		// Produce data stream for Kafka topic
