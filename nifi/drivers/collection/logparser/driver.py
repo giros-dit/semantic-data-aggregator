@@ -3,10 +3,8 @@ from binding import logparser as logparser_model
 def parse_event(obj):
     logparser = logparser_model()
     logparser.so_log._set_current_time(obj['current_time'])
-    if 'nsID' in obj:
-        logparser.so_log._set_nsID(obj['nsID'])
-    if 'nsdID' in obj:
-        logparser.so_log._set_nsdID(obj['nsdID'])
+    logparser.so_log._set_nsID(obj['nsID'])
+    logparser.so_log._set_nsdID(obj['nsdID'])
     if 'total_instantiation_time' in obj:
         logparser.so_log._set_total_instantiation_time(obj['total_instantiation_time'])
     if 'operation_ID_for_instantiation_op_datetime_difference' in obj:
