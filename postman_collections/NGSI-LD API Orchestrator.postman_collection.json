@@ -39,7 +39,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:EVESource:1\",\n    \"type\": \"EVESource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:1\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:2\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"testing\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic-1\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:EVESource:1\",\n    \"type\": \"EVESource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:1\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:2\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-1\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-source\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic-1\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -192,7 +192,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:1\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:3\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:4\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-log-topic-1\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:1\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:3\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:4\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"so-log-1\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-log-topic-1\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2297,7 +2297,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:1\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"5tonic-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:3\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:1\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"EVE-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:3\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2652,7 +2652,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:2\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"evesource-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:2\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
