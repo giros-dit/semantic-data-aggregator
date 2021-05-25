@@ -8,7 +8,7 @@ from semantic_tools.models.metric import (
     Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.stream import EVESource
+from semantic_tools.models.stream import EVESource, SOLogSource
 
 
 import logging
@@ -61,6 +61,7 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeSOLogSource(ngsi, weaver_uri)
     # Subscribe to data source entities
     ngsi_ld_ops.subscribePrometheus(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeDevice(ngsi, weaver_uri)
@@ -99,3 +100,6 @@ async def receiveNotification(request: Request):
         if notification["type"] == "Endpoint":
             endpoint = Endpoint.parse_obj(notification)
             orchestration_ops.processEndpointState(endpoint, ngsi)
+        if notification["type"] == "SOLogSource":
+            soLogSource = SOLogSource.parse_obj(notification)
+            orchestration_ops.processSOLogSourceState(soLogSource, ngsi)

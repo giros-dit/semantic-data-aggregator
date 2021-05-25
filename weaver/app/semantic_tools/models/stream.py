@@ -17,6 +17,15 @@ class EVESource(Agent):
     topicName: Property
 
 
+class SOLogSource(Agent):
+    type: Literal["SOLogSource"] = "SOLogSource"
+    hasInput: Relationship
+    hasOutput: Relationship
+    groupId: Property
+    offset: Offset
+    topicName: Property
+
+
 class KafkaBroker(Entity):
     type: Literal["KafkaBroker"] = "KafkaBroker"
     hasEndpoint: Relationship

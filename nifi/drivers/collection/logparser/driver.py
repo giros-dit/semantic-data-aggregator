@@ -41,8 +41,8 @@ def parse_event(obj):
         logparser.so_log._set_create_AIML_alerts_start_datetime_difference(obj['create_AIML_alerts_start_datetime_difference'])
     if 'wrapper_time_start_datetime_difference' in obj:
         logparser.so_log._set_wrapper_time_start_datetime_difference(obj['wrapper_time_start_datetime_difference'])
-    if 'SOA_time' in obj:
-        logparser.so_log._set_SOA_time(obj['SOA_time'])
+    if 'SOE_time' in obj:
+        logparser.so_log._set_SOE_time(obj['SOE_time'])
     if 'ROE_time' in obj:
         logparser.so_log._set_ROE_time(obj['ROE_time'])
 

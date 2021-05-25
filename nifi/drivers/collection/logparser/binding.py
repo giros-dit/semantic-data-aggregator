@@ -28,10 +28,9 @@ class yc_so_log_logparser__so_log(PybindBase):
   the container is represented as a class variable - with a specific
   YANG type.
 
-  YANG Description: Enclosing container for the record
-of a given log.
+  YANG Description: Enclosing container for the time metrics of a given 5Growth Service Orchestrator log.
   """
-  __slots__ = ('_path_helper', '_extmethods', '__current_time','__nsID','__nsdID','__total_instantiation_time','__operation_ID_for_instantiation_op_datetime_difference','__hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference','__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference','__ROE_parsing_NSDs_start_datetime_difference','__ROE_retrieve_RL_resources_start_datetime_difference','__PA_calculation_start_datetime_difference','__creating_networks_at_OSM_wrapper_start_datetime_difference','__creating_VNFs_at_OSM_wrapper_start_datetime_difference','__OSM_wrapper_updating_DBs_start_datetime_difference','__ROE_extract_VLs_start_datetime_difference','__ROE_created_VLs_start_datetime_difference','__ROE_updating_DBs_start_datetime_difference','__create_monitoring_jobs_start_datetime_difference','__create_threshold_based_alerts_start_datetime_difference','__create_AIML_alerts_start_datetime_difference','__wrapper_time_start_datetime_difference','__SOA_time','__ROE_time',)
+  __slots__ = ('_path_helper', '_extmethods', '__current_time','__nsID','__nsdID','__total_instantiation_time','__operation_ID_for_instantiation_op_datetime_difference','__hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference','__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference','__ROE_parsing_NSDs_start_datetime_difference','__ROE_retrieve_RL_resources_start_datetime_difference','__PA_calculation_start_datetime_difference','__creating_networks_at_OSM_wrapper_start_datetime_difference','__creating_VNFs_at_OSM_wrapper_start_datetime_difference','__OSM_wrapper_updating_DBs_start_datetime_difference','__ROE_extract_VLs_start_datetime_difference','__ROE_created_VLs_start_datetime_difference','__ROE_updating_DBs_start_datetime_difference','__create_monitoring_jobs_start_datetime_difference','__create_threshold_based_alerts_start_datetime_difference','__create_AIML_alerts_start_datetime_difference','__wrapper_time_start_datetime_difference','__SOE_time','__ROE_time',)
 
   _yang_name = 'so-log'
   _yang_namespace = 'http://data-aggregator.com/ns/so-log-parser'
@@ -72,7 +71,7 @@ of a given log.
     self.__create_threshold_based_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_threshold_based_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
     self.__create_AIML_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_AIML_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
     self.__wrapper_time_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="wrapper_time_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
-    self.__SOA_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOA_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
+    self.__SOE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
     self.__ROE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
 
     load = kwargs.pop("load", None)
@@ -106,8 +105,7 @@ of a given log.
     """
     Getter method for current_time, mapped from YANG variable /so_log/current_time (date-and-time)
 
-    YANG Description: Time in which value has been captured.
-ISO 8601 format with millisecond accuracy.
+    YANG Description: Date time in which time metric values has been captured following the ISO 8601 format.
     """
     return self.__current_time
       
@@ -119,8 +117,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_current_time() directly.
 
-    YANG Description: Time in which value has been captured.
-ISO 8601 format with millisecond accuracy.
+    YANG Description: Date time in which time metric values has been captured following the ISO 8601 format.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -256,7 +253,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for operation_ID_for_instantiation_op_datetime_difference, mapped from YANG variable /so_log/operation_ID_for_instantiation_op_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time it takes the NBI to generate an ID to identify the instantiation operation.
     """
     return self.__operation_ID_for_instantiation_op_datetime_difference
       
@@ -268,7 +265,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_operation_ID_for_instantiation_op_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time it takes the NBI to generate an ID to identify the instantiation operation.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -293,7 +290,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference, mapped from YANG variable /so_log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation process based on the nature of the service (single NS, composite NS).
     """
     return self.__hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference
       
@@ -305,7 +302,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation process based on the nature of the service (single NS, composite NS).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -330,7 +327,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, mapped from YANG variable /so_log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time to collect the descriptor from the network service descriptor (NSD) catalogue.
     """
     return self.__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference
       
@@ -342,7 +339,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time to collect the descriptor from the network service descriptor (NSD) catalogue.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -367,7 +364,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for ROE_parsing_NSDs_start_datetime_difference, mapped from YANG variable /so_log/ROE_parsing_NSDs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time at Resource Orchestration Engine (ROE) submodule to parse NSD and VNFDs of an NS to get the required information for Placement Algorithm (PA).
     """
     return self.__ROE_parsing_NSDs_start_datetime_difference
       
@@ -379,7 +376,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_parsing_NSDs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time at Resource Orchestration Engine (ROE) submodule to parse NSD and VNFDs of an NS to get the required information for Placement Algorithm (PA).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -404,7 +401,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for ROE_retrieve_RL_resources_start_datetime_difference, mapped from YANG variable /so_log/ROE_retrieve_RL_resources_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time to recollect the information from the Resource Layer (RL).
     """
     return self.__ROE_retrieve_RL_resources_start_datetime_difference
       
@@ -416,7 +413,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_retrieve_RL_resources_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time to recollect the information from the Resource Layer (RL).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -441,7 +438,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for PA_calculation_start_datetime_difference, mapped from YANG variable /so_log/PA_calculation_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time to build the request to the Placement Algorithm (PA) (with the information of the previous two steps), send it to the external PA service and receive its answers.
     """
     return self.__PA_calculation_start_datetime_difference
       
@@ -453,7 +450,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_PA_calculation_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time to build the request to the Placement Algorithm (PA) (with the information of the previous two steps), send it to the external PA service and receive its answers.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -478,7 +475,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for creating_networks_at_OSM_wrapper_start_datetime_difference, mapped from YANG variable /so_log/creating_networks_at_OSM_wrapper_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Based on the answer of the Placement Algorithm (PA), the time it takes to the OSM wrapper to create the virtual networks at the selected VIMs by making requests to the Reource Layer (RL).
     """
     return self.__creating_networks_at_OSM_wrapper_start_datetime_difference
       
@@ -490,7 +487,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_creating_networks_at_OSM_wrapper_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Based on the answer of the Placement Algorithm (PA), the time it takes to the OSM wrapper to create the virtual networks at the selected VIMs by making requests to the Reource Layer (RL).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -515,7 +512,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for creating_VNFs_at_OSM_wrapper_start_datetime_difference, mapped from YANG variable /so_log/creating_VNFs_at_OSM_wrapper_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time it takes to OSM wrapper to create the VNFs at the determined VIMs using OSM software.
     """
     return self.__creating_VNFs_at_OSM_wrapper_start_datetime_difference
       
@@ -527,7 +524,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_creating_VNFs_at_OSM_wrapper_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time it takes to OSM wrapper to create the VNFs at the determined VIMs using OSM software.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -552,7 +549,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for OSM_wrapper_updating_DBs_start_datetime_difference, mapped from YANG variable /so_log/OSM_wrapper_updating_DBs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time the OSM wrapper takes to update Network Service Instantiation Resource (NSIR) DB with information of the created virtual networks and VNFs.
     """
     return self.__OSM_wrapper_updating_DBs_start_datetime_difference
       
@@ -564,7 +561,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_OSM_wrapper_updating_DBs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time the OSM wrapper takes to update Network Service Instantiation Resource (NSIR) DB with information of the created virtual networks and VNFs.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -589,7 +586,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for ROE_extract_VLs_start_datetime_difference, mapped from YANG variable /so_log/ROE_extract_VLs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: The time it takes the Resource Orchestration Engine (ROE) to determine the request of the different Virtual Links (VLs) needing resources in the Logical links (LLs) because connected VNFs have been deployed in multiple VIMs.
     """
     return self.__ROE_extract_VLs_start_datetime_difference
       
@@ -601,7 +598,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_extract_VLs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: The time it takes the Resource Orchestration Engine (ROE) to determine the request of the different Virtual Links (VLs) needing resources in the Logical links (LLs) because connected VNFs have been deployed in multiple VIMs.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -626,7 +623,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for ROE_created_VLs_start_datetime_difference, mapped from YANG variable /so_log/ROE_created_VLs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time in the interaction between Resource Orchestration Engine (ROE) and Resource Layer (RL) to allocate resources in the LLs based on the ROE extract request.
     """
     return self.__ROE_created_VLs_start_datetime_difference
       
@@ -638,7 +635,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_created_VLs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time in the interaction between Resource Orchestration Engine (ROE) and Resource Layer (RL) to allocate resources in the LLs based on the ROE extract request.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -663,7 +660,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for ROE_updating_DBs_start_datetime_difference, mapped from YANG variable /so_log/ROE_updating_DBs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time to update databases (DBs) to declare the network service (NS) as operative and the instantiation operation as successful.
     """
     return self.__ROE_updating_DBs_start_datetime_difference
       
@@ -675,7 +672,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_updating_DBs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time to update databases (DBs) to declare the network service (NS) as operative and the instantiation operation as successful.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -700,7 +697,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for create_monitoring_jobs_start_datetime_difference, mapped from YANG variable /so_log/create_monitoring_jobs_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time interaction SOE-Monitoring Manager modules of 5Gr-SO to determine the monitoring jobs (exporters) and dashboards to be configured at the 5Gr-VoMS plus the interaction to configure them and receive the associated object identifiers and update the information in NSIR DB
     """
     return self.__create_monitoring_jobs_start_datetime_difference
       
@@ -712,7 +709,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_create_monitoring_jobs_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time interaction SOE-Monitoring Manager modules of 5Gr-SO to determine the monitoring jobs (exporters) and dashboards to be configured at the 5Gr-VoMS plus the interaction to configure them and receive the associated object identifiers and update the information in NSIR DB
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -737,7 +734,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for create_threshold_based_alerts_start_datetime_difference, mapped from YANG variable /so_log/create_threshold_based_alerts_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time interaction between SOE-SLA Manager modules of the 5Gr-SO to determine the threshold-alerts objects (if there is not AIML treatment) to be configured at the 5Gr-VoMS plus the interaction to configure them at the 5GR-VoMs and receive the associated object identifiers and update the information in NSIR DB.
     """
     return self.__create_threshold_based_alerts_start_datetime_difference
       
@@ -749,7 +746,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_create_threshold_based_alerts_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time interaction between SOE-SLA Manager modules of the 5Gr-SO to determine the threshold-alerts objects (if there is not AIML treatment) to be configured at the 5Gr-VoMS plus the interaction to configure them at the 5GR-VoMs and receive the associated object identifiers and update the information in NSIR DB.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -774,7 +771,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for create_AIML_alerts_start_datetime_difference, mapped from YANG variable /so_log/create_AIML_alerts_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time interaction between SOE-SLA Manager to configure the AIML workflow to drive scaling operations (creation and configuration of data engineering pipeline: interaction with 5Gr-VoMs to create Topic, with the AIML platform to download the model, creation of inference job at Apache Spark, update of NSIR DB).
     """
     return self.__create_AIML_alerts_start_datetime_difference
       
@@ -786,7 +783,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_create_AIML_alerts_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time interaction between SOE-SLA Manager to configure the AIML workflow to drive scaling operations (creation and configuration of data engineering pipeline: interaction with 5Gr-VoMs to create Topic, with the AIML platform to download the model, creation of inference job at Apache Spark, update of NSIR DB).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -811,7 +808,7 @@ ISO 8601 format with millisecond accuracy.
     """
     Getter method for wrapper_time_start_datetime_difference, mapped from YANG variable /so_log/wrapper_time_start_datetime_difference (int64)
 
-    YANG Description: ...
+    YANG Description: Time spent in the Core MANO Wrapper module during the instantiation process.
     """
     return self.__wrapper_time_start_datetime_difference
       
@@ -823,7 +820,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_wrapper_time_start_datetime_difference() directly.
 
-    YANG Description: ...
+    YANG Description: Time spent in the Core MANO Wrapper module during the instantiation process.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -844,48 +841,48 @@ ISO 8601 format with millisecond accuracy.
     self.__wrapper_time_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="wrapper_time_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
 
 
-  def _get_SOA_time(self):
+  def _get_SOE_time(self):
     """
-    Getter method for SOA_time, mapped from YANG variable /so_log/SOA_time (int64)
+    Getter method for SOE_time, mapped from YANG variable /so_log/SOE_time (int64)
 
-    YANG Description: ...
+    YANG Description: Time spent in the Service Orchestration Engine (SOE) module during the instantiation process.
     """
-    return self.__SOA_time
+    return self.__SOE_time
       
-  def _set_SOA_time(self, v, load=False):
+  def _set_SOE_time(self, v, load=False):
     """
-    Setter method for SOA_time, mapped from YANG variable /so_log/SOA_time (int64)
+    Setter method for SOE_time, mapped from YANG variable /so_log/SOE_time (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_SOA_time is considered as a private
+    source YANG file, then _set_SOE_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_SOA_time() directly.
+    do so via calling thisObj._set_SOE_time() directly.
 
-    YANG Description: ...
+    YANG Description: Time spent in the Service Orchestration Engine (SOE) module during the instantiation process.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOA_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """SOA_time must be of a type compatible with int64""",
+          'error-string': """SOE_time must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOA_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)""",
         })
 
-    self.__SOA_time = t
+    self.__SOE_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_SOA_time(self):
-    self.__SOA_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOA_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
+  def _unset_SOE_time(self):
+    self.__SOE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser', defining_module='logparser', yang_type='int64', is_config=False)
 
 
   def _get_ROE_time(self):
     """
     Getter method for ROE_time, mapped from YANG variable /so_log/ROE_time (int64)
 
-    YANG Description: ...
+    YANG Description: Time spent in the Resource Orchestration Engine (ROE) module during the instantiation process.
     """
     return self.__ROE_time
       
@@ -897,7 +894,7 @@ ISO 8601 format with millisecond accuracy.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_ROE_time() directly.
 
-    YANG Description: ...
+    YANG Description: Time spent in the Resource Orchestration Engine (ROE) module during the instantiation process.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
@@ -937,11 +934,11 @@ ISO 8601 format with millisecond accuracy.
   create_threshold_based_alerts_start_datetime_difference = __builtin__.property(_get_create_threshold_based_alerts_start_datetime_difference)
   create_AIML_alerts_start_datetime_difference = __builtin__.property(_get_create_AIML_alerts_start_datetime_difference)
   wrapper_time_start_datetime_difference = __builtin__.property(_get_wrapper_time_start_datetime_difference)
-  SOA_time = __builtin__.property(_get_SOA_time)
+  SOE_time = __builtin__.property(_get_SOE_time)
   ROE_time = __builtin__.property(_get_ROE_time)
 
 
-  _pyangbind_elements = OrderedDict([('current_time', current_time), ('nsID', nsID), ('nsdID', nsdID), ('total_instantiation_time', total_instantiation_time), ('operation_ID_for_instantiation_op_datetime_difference', operation_ID_for_instantiation_op_datetime_difference), ('hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference', hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference), ('retrieving_descriptor_from_catalogue_DBs_start_datetime_difference', retrieving_descriptor_from_catalogue_DBs_start_datetime_difference), ('ROE_parsing_NSDs_start_datetime_difference', ROE_parsing_NSDs_start_datetime_difference), ('ROE_retrieve_RL_resources_start_datetime_difference', ROE_retrieve_RL_resources_start_datetime_difference), ('PA_calculation_start_datetime_difference', PA_calculation_start_datetime_difference), ('creating_networks_at_OSM_wrapper_start_datetime_difference', creating_networks_at_OSM_wrapper_start_datetime_difference), ('creating_VNFs_at_OSM_wrapper_start_datetime_difference', creating_VNFs_at_OSM_wrapper_start_datetime_difference), ('OSM_wrapper_updating_DBs_start_datetime_difference', OSM_wrapper_updating_DBs_start_datetime_difference), ('ROE_extract_VLs_start_datetime_difference', ROE_extract_VLs_start_datetime_difference), ('ROE_created_VLs_start_datetime_difference', ROE_created_VLs_start_datetime_difference), ('ROE_updating_DBs_start_datetime_difference', ROE_updating_DBs_start_datetime_difference), ('create_monitoring_jobs_start_datetime_difference', create_monitoring_jobs_start_datetime_difference), ('create_threshold_based_alerts_start_datetime_difference', create_threshold_based_alerts_start_datetime_difference), ('create_AIML_alerts_start_datetime_difference', create_AIML_alerts_start_datetime_difference), ('wrapper_time_start_datetime_difference', wrapper_time_start_datetime_difference), ('SOA_time', SOA_time), ('ROE_time', ROE_time), ])
+  _pyangbind_elements = OrderedDict([('current_time', current_time), ('nsID', nsID), ('nsdID', nsdID), ('total_instantiation_time', total_instantiation_time), ('operation_ID_for_instantiation_op_datetime_difference', operation_ID_for_instantiation_op_datetime_difference), ('hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference', hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference), ('retrieving_descriptor_from_catalogue_DBs_start_datetime_difference', retrieving_descriptor_from_catalogue_DBs_start_datetime_difference), ('ROE_parsing_NSDs_start_datetime_difference', ROE_parsing_NSDs_start_datetime_difference), ('ROE_retrieve_RL_resources_start_datetime_difference', ROE_retrieve_RL_resources_start_datetime_difference), ('PA_calculation_start_datetime_difference', PA_calculation_start_datetime_difference), ('creating_networks_at_OSM_wrapper_start_datetime_difference', creating_networks_at_OSM_wrapper_start_datetime_difference), ('creating_VNFs_at_OSM_wrapper_start_datetime_difference', creating_VNFs_at_OSM_wrapper_start_datetime_difference), ('OSM_wrapper_updating_DBs_start_datetime_difference', OSM_wrapper_updating_DBs_start_datetime_difference), ('ROE_extract_VLs_start_datetime_difference', ROE_extract_VLs_start_datetime_difference), ('ROE_created_VLs_start_datetime_difference', ROE_created_VLs_start_datetime_difference), ('ROE_updating_DBs_start_datetime_difference', ROE_updating_DBs_start_datetime_difference), ('create_monitoring_jobs_start_datetime_difference', create_monitoring_jobs_start_datetime_difference), ('create_threshold_based_alerts_start_datetime_difference', create_threshold_based_alerts_start_datetime_difference), ('create_AIML_alerts_start_datetime_difference', create_AIML_alerts_start_datetime_difference), ('wrapper_time_start_datetime_difference', wrapper_time_start_datetime_difference), ('SOE_time', SOE_time), ('ROE_time', ROE_time), ])
 
 
 class logparser(PybindBase):
@@ -951,7 +948,7 @@ class logparser(PybindBase):
   the container is represented as a class variable - with a specific
   YANG type.
 
-  YANG Description: YANG module to represent 5Growth Service Orchestrator log parser.
+  YANG Description: YANG module to represent time metric logs from the 5Growth Service Orchestrator (5Gr-SO).
   """
   __slots__ = ('_path_helper', '_extmethods', '__so_log',)
 
@@ -1007,8 +1004,7 @@ class logparser(PybindBase):
     """
     Getter method for so_log, mapped from YANG variable /so_log (container)
 
-    YANG Description: Enclosing container for the record
-of a given log.
+    YANG Description: Enclosing container for the time metrics of a given 5Growth Service Orchestrator log.
     """
     return self.__so_log
       
@@ -1020,8 +1016,7 @@ of a given log.
     method. Backends looking to populate this variable should
     do so via calling thisObj._set_so_log() directly.
 
-    YANG Description: Enclosing container for the record
-of a given log.
+    YANG Description: Enclosing container for the time metrics of a given 5Growth Service Orchestrator log.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)

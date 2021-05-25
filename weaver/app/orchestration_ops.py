@@ -3,7 +3,7 @@ from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus, MetricSource, MetricTarget, StreamApplication, MetricProcessor
 from semantic_tools.models.telemetry import Device, TelemetrySource
-from semantic_tools.models.stream import EVESource
+from semantic_tools.models.stream import EVESource, SOLogSource
 from semantic_tools.models.ngsi_ld.entity import Entity
 
 import logging
@@ -44,7 +44,7 @@ def processEVESourceState(eveSource: EVESource, ngsi: NGSILDClient):
                 "Stop '{0}' NiFi flow.".format(eveSource.id)
             )
             nifi_ops.stopEVESource(eveSource)
-            logger.info("eveSource '{0}' flow stopped in NiFi.".format(eveSource.id))
+            logger.info("EVESource '{0}' flow stopped in NiFi.".format(eveSource.id))
             ngsi_ld_ops.stateToStopped(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
         else:
             logger.info(
@@ -61,10 +61,59 @@ def processEVESourceState(eveSource: EVESource, ngsi: NGSILDClient):
             )
             nifi_ops.deleteEVESource(eveSource)
             ngsi_ld_ops.stateToCleaned(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
-            logger.info("Delete the '{0}' eveSource collection agent entity.".format(eveSource.id))
+            logger.info("Delete the '{0}' EVESource collection agent entity.".format(eveSource.id))
             ngsi.deleteEntity(eveSource.id)
         else:
             logger.info("Delete '{0}' NiFi flow. A processing error was found. The NiFi flow is being used by output agent entities.".format(eveSource.id))
+
+
+def processSOLogSourceState(soLogSource: SOLogSource, ngsi: NGSILDClient):
+    """
+    Process SOLogSource entity resources (i.e., NiFi flows) based on the value of the action property.
+    """
+    ngsi_ld_ops.appendState(ngsi, soLogSource.id, "Building the collection agent...")
+    soLogSource_pg = nifi_ops.getSOLogSourcePG(soLogSource)
+    if soLogSource.action.value == "START":
+        if soLogSource_pg:
+            logger.info(
+                "Upgrade '{0}' NiFi flow.".format(soLogSource.id)
+            )
+            nifi_ops.upgradeSOLogSource(soLogSource, ngsi)
+            ngsi_ld_ops.stateToRunning(ngsi, soLogSource.id, {"value": "SUCCESS! Collection agent upgraded successfully."})
+        else:
+            logger.info(
+                "Instantiate new '{0}' NiFi flow.".format(soLogSource.id)
+            )
+            nifi_ops.instantiateSOLogSource(soLogSource, ngsi)
+            ngsi_ld_ops.stateToRunning(ngsi, soLogSource.id, {"value": "SUCCESS! Collection agent started successfully."})
+
+    elif soLogSource.action.value == "STOP":
+        if soLogSource_pg:
+            logger.info(
+                "Stop '{0}' NiFi flow.".format(soLogSource.id)
+            )
+            nifi_ops.stopSOLogSource(soLogSource)
+            logger.info("SOLogSource '{0}' flow stopped in NiFi.".format(soLogSource.id))
+            ngsi_ld_ops.stateToStopped(ngsi, soLogSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+        else:
+            logger.info(
+                "New '{0}' NiFi flow to stop.".format(soLogSource.id)
+            )
+            nifi_ops.deploySOLogSource(soLogSource, ngsi)
+            ngsi_ld_ops.stateToStopped(ngsi, soLogSource.id, {"value": "SUCCESS! Collection agent deployed successfully."})
+
+    elif soLogSource.action.value == "END":
+        output_exists = checkOutputExistence(soLogSource, ngsi)
+        if output_exists == False:
+            logger.info(
+                "Delete '{0}' NiFi flow.".format(soLogSource.id)
+            )
+            nifi_ops.deleteSOLogSource(soLogSource)
+            ngsi_ld_ops.stateToCleaned(ngsi, soLogSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
+            logger.info("Delete the '{0}' SOLogSource collection agent entity.".format(soLogSource.id))
+            ngsi.deleteEntity(soLogSource.id)
+        else:
+            logger.info("Delete '{0}' NiFi flow. A processing error was found. The NiFi flow is being used by output agent entities.".format(soLogSource.id))
 
 
 def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
