@@ -5,6 +5,7 @@ from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus, MetricSource, MetricTarget
 from semantic_tools.models.stream import EVESource, SOLogSource, KafkaBroker, KafkaTopic
 from semantic_tools.models.telemetry import Device, TelemetrySource
+from semantic_tools.models.ngsi_ld.entity import Entity
 from semantic_tools.utils.units import UnitCode
 from urllib3.exceptions import MaxRetryError
 
@@ -33,6 +34,32 @@ def check_nifi_status():
             continue
         logger.info("Weaver successfully connected to NiFi REST API!")
         break
+
+
+def deleteStreamSource(streamSource: Entity):
+    """
+    Delete StreamSource flow.
+    """
+    streamSource_pg = stopStreamSource(streamSource)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "HortonworksSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..."
+                         % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..."
+                 % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
+    # Delete StreamSource PG
+    nipyapi.canvas.delete_process_group(streamSource_pg, True)
+    logger.info("StreamSource '{0}' flow deleted in NiFi.".format(streamSource.id))
 
 
 def deleteEVESource(eveSource: EVESource):
@@ -140,6 +167,80 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     # Delete TS PG
     nipyapi.canvas.delete_process_group(ts_pg, True)
     logger.info("TelemetrySource '{0}' flow deleted in NiFi.".format(telemetrySource.id))
+
+
+def deployStreamSource(streamSource: Entity,
+                    ngsi: NGSILDClient) -> ProcessGroupEntity:
+    """
+    Deploys a StreamSource NiFi template
+    from a passed StreamSource NGSI-LD entity.
+    """
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(streamSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(streamSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+    # We assume last string is an integer value
+    source_id_number = int(streamSource.id.split(":")[-1])
+    # Get root PG
+    root_pg = nipyapi.canvas.get_process_group("root")
+    # Y multiply ID last integer by 200, X fixed to -250 for MS PGs
+    streamSource_pg = nipyapi.canvas.create_process_group(
+                    root_pg,
+                    streamSource.id,
+                    (-250, 200*source_id_number)
+    )
+    # Set variable for StreamSource PG
+    avro_schema = streamSource.schemaName.value
+    group_id = streamSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
+    source_topics = streamSource.topicName.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value
+    
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("avro_schema", avro_schema)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("source_broker_url", source_broker_url)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("source_topics", source_topics)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_topic", sink_topic_name)])
+
+    # Deploy StreamSource template
+    if streamSource.type == "EVESource":
+        template = "EVESource"
+    else:
+        template = "SOLogSource"
+    streamSource_template = nipyapi.templates.get_template(template)
+    streamSource_pg_flow = nipyapi.templates.deploy_template(streamSource_pg.id,
+                                                   streamSource_template.id,
+                                                   -250, 200)
+
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller HortonworksSchemaRegistry...")
+    registry_controller = getControllerService(streamSource_pg, "HortonworksSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
+    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True)
+
+    logger.info("StreamSource '{0}' flow deployed in NiFi.".format(streamSource.id))
+    return streamSource_pg
 
 
 def deployEVESource(eveSource: EVESource,
@@ -477,6 +578,13 @@ def getControllerService(pg: ProcessGroupEntity, name: str) -> ControllerService
             return controller
 
 
+def getStreamSourcePG(streamSource: Entity) -> ProcessGroupEntity:
+    """
+    Get NiFi flow (Process Group) from StreamSource.
+    """
+    return nipyapi.canvas.get_process_group(streamSource.id)
+
+
 def getEVESourcePG(eveSource: EVESource) -> ProcessGroupEntity:
     """
     Get NiFi flow (Process Group) from EVESource.
@@ -523,6 +631,20 @@ def getQueryLabels(metricSource: MetricSource) -> str:
         labels.append("{0}='{1}'".format(label, value))
 
     return ",".join(labels)
+
+
+def instantiateStreamSource(streamSource: Entity,
+                         ngsi: NGSILDClient):
+    """
+    Deploys and starts StreamSource template given
+    a StreamSource entity.
+    """
+    streamSource_pg = deployStreamSource(streamSource, ngsi)
+    # Schedule StreamSource PG
+    nipyapi.canvas.schedule_process_group(streamSource_pg.id, True)
+    logger.info(
+        "StreamSource '{0}' flow scheduled in NiFi.".format(
+            streamSource.id))
 
 
 def instantiateEVESource(eveSource: EVESource,
@@ -594,6 +716,15 @@ def instantiateTelemetrySource(telemetrySource: TelemetrySource,
             telemetrySource.id))
 
 
+def stopStreamSource(streamSource: Entity) -> ProcessGroupEntity:
+    """
+    Stop NiFi flow (Process Group) from StreamSource.
+    """
+    streamSource_pg = nipyapi.canvas.get_process_group(streamSource.id)
+    nipyapi.canvas.schedule_process_group(streamSource_pg.id, False)
+    return streamSource_pg
+
+
 def stopEVESource(eveSource: EVESource) -> ProcessGroupEntity:
     """
     Stop NiFi flow (Process Group) from EVESource.
@@ -637,6 +768,63 @@ def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
     nipyapi.canvas.schedule_process_group(ts_pg.id, False)
     return ts_pg
+
+
+def upgradeStreamSource(streamSource: Entity,
+                     ngsi: NGSILDClient) -> ProcessGroupEntity:
+    """
+    Stops flow, updates variables and re-starts flow
+    for a given StreamSource entity.
+    """
+    streamSource_pg = nipyapi.canvas.get_process_group(streamSource.id)
+    # Stop StreamSource PG
+    nipyapi.canvas.schedule_process_group(streamSource_pg.id, False)
+
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(streamSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(streamSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+
+    # Set variable for SOLogSource PG
+    avro_schema = streamSource.schemaName.value
+    group_id = streamSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
+    source_topics = streamSource.topicName.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value
+
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("avro_schema", avro_schema)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("source_broker_url", source_broker_url)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("source_topics", source_topics)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_topic", sink_topic_name)])
+
+    # Restart StreamSource PG
+    nipyapi.canvas.schedule_process_group(streamSource_pg.id, True)
+    logger.info("StreamSource '{0}' flow upgraded in NiFi.".format(streamSource.id))
+    # Enable controller services
+    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
+    for controller in controllers:
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
+
+    logger.info("SOLogSource '{0}' flow deployed in NiFi.".format(streamSource.id))
+    return streamSource_pg
 
 
 def upgradeEVESource(eveSource: EVESource,
@@ -729,7 +917,7 @@ def upgradeSOLogSource(soLogSource: SOLogSource,
     source_topics = soLogSource.topicName.value
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
-    nipyapi.canvas.update_variable_registry(soLogSource_pg, [("avro_schema", "eve")])
+    nipyapi.canvas.update_variable_registry(soLogSource_pg, [("avro_schema", "so-log-1")])
     nipyapi.canvas.update_variable_registry(soLogSource_pg, [("group_id", group_id)])
     nipyapi.canvas.update_variable_registry(soLogSource_pg, [("source_broker_url", source_broker_url)])
     nipyapi.canvas.update_variable_registry(soLogSource_pg, [("source_topics", source_topics)])

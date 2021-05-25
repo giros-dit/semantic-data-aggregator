@@ -75,7 +75,8 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "EVESource":
             eveSource = EVESource.parse_obj(notification)
-            orchestration_ops.processEVESourceState(eveSource, ngsi)
+            orchestration_ops.processStreamSourceState(eveSource, ngsi)
+            #orchestration_ops.processEVESourceState(eveSource, ngsi)
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
             orchestration_ops.processMetricSourceState(metricSource, ngsi)
@@ -91,6 +92,10 @@ async def receiveNotification(request: Request):
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
             orchestration_ops.processTelemetrySourceState(telemetrySource, ngsi)
+        if notification["type"] == "SOLogSource":
+            soLogSource = SOLogSource.parse_obj(notification)
+            orchestration_ops.processStreamSourceState(soLogSource, ngsi)
+            #orchestration_ops.processSOLogSourceState(soLogSource, ngsi)
         if notification["type"] == "Prometheus":
             prometheus = Prometheus.parse_obj(notification)
             orchestration_ops.processPrometheusState(prometheus, ngsi)
@@ -100,6 +105,4 @@ async def receiveNotification(request: Request):
         if notification["type"] == "Endpoint":
             endpoint = Endpoint.parse_obj(notification)
             orchestration_ops.processEndpointState(endpoint, ngsi)
-        if notification["type"] == "SOLogSource":
-            soLogSource = SOLogSource.parse_obj(notification)
-            orchestration_ops.processSOLogSourceState(soLogSource, ngsi)
+
