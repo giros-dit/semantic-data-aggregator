@@ -63,11 +63,11 @@ public class SoLogGeneratorJob {
 		        long create_threshold_based_alerts_start_datetime_difference = 9;
 		        long create_AIML_alerts_start_datetime_difference = 1474;
 		        long wrapper_time_start_datetime_difference = 38661;
-		        long SOA_time = 1637;
+		        long SOE_time = 1637;
 		        long ROE_time = 2331;
 			while (isRunning) {
 				synchronized (ctx.getCheckpointLock()) {
-					ctx.collect(new SoLog(current_time, nsID, nsdID, total_instantiation_time, operation_ID_for_instantiation_op_datetime_difference, hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference, retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, ROE_parsing_NSDs_start_datetime_difference, ROE_retrieve_RL_resources_start_datetime_difference, PA_calculation_start_datetime_difference, creating_networks_at_OSM_wrapper_start_datetime_difference, creating_VNFs_at_OSM_wrapper_start_datetime_difference, OSM_wrapper_updating_DBs_start_datetime_difference, ROE_extract_VLs_start_datetime_difference, ROE_created_VLs_start_datetime_difference, ROE_updating_DBs_start_datetime_difference, create_monitoring_jobs_start_datetime_difference, create_threshold_based_alerts_start_datetime_difference, create_AIML_alerts_start_datetime_difference, wrapper_time_start_datetime_difference, SOA_time, ROE_time));
+					ctx.collect(new SoLog(current_time, nsID, nsdID, total_instantiation_time, operation_ID_for_instantiation_op_datetime_difference, hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference, retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, ROE_parsing_NSDs_start_datetime_difference, ROE_retrieve_RL_resources_start_datetime_difference, PA_calculation_start_datetime_difference, creating_networks_at_OSM_wrapper_start_datetime_difference, creating_VNFs_at_OSM_wrapper_start_datetime_difference, OSM_wrapper_updating_DBs_start_datetime_difference, ROE_extract_VLs_start_datetime_difference, ROE_created_VLs_start_datetime_difference, ROE_updating_DBs_start_datetime_difference, create_monitoring_jobs_start_datetime_difference, create_threshold_based_alerts_start_datetime_difference, create_AIML_alerts_start_datetime_difference, wrapper_time_start_datetime_difference, SOE_time, ROE_time));
 				}
 
 				Thread.sleep(Math.abs(rnd.nextInt()) % 1000);

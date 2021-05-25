@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class SoLog extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 8059710858431071507L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SoLog\",\"namespace\":\"giros.org\",\"fields\":[{\"name\":\"current_time\",\"type\":\"string\",\"doc\":\"/so-log/current_time\",\"logicalType\":\"date\"},{\"name\":\"nsID\",\"type\":\"string\",\"doc\":\"/so-log/nsID\"},{\"name\":\"nsdID\",\"type\":\"string\",\"doc\":\"/so-log/nsdID\"},{\"name\":\"total_instantiation_time\",\"type\":\"long\",\"doc\":\"/so-log/total_instantiation_time\"},{\"name\":\"operation_ID_for_instantiation_op_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/operation_ID_for_instantiation_op_datetime_difference\"},{\"name\":\"hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference\"},{\"name\":\"retrieving_descriptor_from_catalogue_DBs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference\"},{\"name\":\"ROE_parsing_NSDs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/ROE_parsing_NSDs_start_datetime_difference\"},{\"name\":\"ROE_retrieve_RL_resources_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/ROE_retrieve_RL_resources_start_datetime_difference\"},{\"name\":\"PA_calculation_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/PA_calculation_start_datetime_difference\"},{\"name\":\"creating_networks_at_OSM_wrapper_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/creating_networks_at_OSM_wrapper_start_datetime_difference\"},{\"name\":\"creating_VNFs_at_OSM_wrapper_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference\"},{\"name\":\"OSM_wrapper_updating_DBs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/OSM_wrapper_updating_DBs_start_datetime_difference\"},{\"name\":\"ROE_extract_VLs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/ROE_extract_VLs_start_datetime_difference\"},{\"name\":\"ROE_created_VLs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/ROE_created_VLs_start_datetime_difference\"},{\"name\":\"ROE_updating_DBs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/ROE_updating_DBs_start_datetime_difference\"},{\"name\":\"create_monitoring_jobs_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/create_monitoring_jobs_start_datetime_difference\"},{\"name\":\"create_threshold_based_alerts_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/create_threshold_based_alerts_start_datetime_difference\"},{\"name\":\"create_AIML_alerts_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/create_AIML_alerts_start_datetime_difference\"},{\"name\":\"wrapper_time_start_datetime_difference\",\"type\":\"long\",\"doc\":\"/so-log/wrapper_time_start_datetime_difference\"},{\"name\":\"SOA_time\",\"type\":\"long\",\"doc\":\"/so-log/SOA_time\"},{\"name\":\"ROE_time\",\"type\":\"long\",\"doc\":\"/so-log/ROE_time\"}]}");
+  private static final long serialVersionUID = -1182969281298569019L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"SoLog\",\"namespace\":\"giros.org\",\"fields\":[{\"name\":\"current_time\",\"type\":\"string\",\"doc\":\"/so-log/current_time\",\"logicalType\":\"date\"},{\"name\":\"nsID\",\"type\":\"string\",\"doc\":\"/so-log/nsID\"},{\"name\":\"nsdID\",\"type\":\"string\",\"doc\":\"/so-log/nsdID\"},{\"name\":\"total_instantiation_time\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/total_instantiation_time\"},{\"name\":\"operation_ID_for_instantiation_op_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/operation_ID_for_instantiation_op_datetime_difference\"},{\"name\":\"hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference\"},{\"name\":\"retrieving_descriptor_from_catalogue_DBs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference\"},{\"name\":\"ROE_parsing_NSDs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_parsing_NSDs_start_datetime_difference\"},{\"name\":\"ROE_retrieve_RL_resources_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_retrieve_RL_resources_start_datetime_difference\"},{\"name\":\"PA_calculation_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/PA_calculation_start_datetime_difference\"},{\"name\":\"creating_networks_at_OSM_wrapper_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/creating_networks_at_OSM_wrapper_start_datetime_difference\"},{\"name\":\"creating_VNFs_at_OSM_wrapper_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference\"},{\"name\":\"OSM_wrapper_updating_DBs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/OSM_wrapper_updating_DBs_start_datetime_difference\"},{\"name\":\"ROE_extract_VLs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_extract_VLs_start_datetime_difference\"},{\"name\":\"ROE_created_VLs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_created_VLs_start_datetime_difference\"},{\"name\":\"ROE_updating_DBs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_updating_DBs_start_datetime_difference\"},{\"name\":\"create_monitoring_jobs_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/create_monitoring_jobs_start_datetime_difference\"},{\"name\":\"create_threshold_based_alerts_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/create_threshold_based_alerts_start_datetime_difference\"},{\"name\":\"create_AIML_alerts_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/create_AIML_alerts_start_datetime_difference\"},{\"name\":\"wrapper_time_start_datetime_difference\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/wrapper_time_start_datetime_difference\"},{\"name\":\"SOE_time\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/SOA_time\"},{\"name\":\"ROE_time\",\"type\":[\"null\",\"long\"],\"doc\":\"/so-log/ROE_time\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -78,43 +78,43 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
   /** /so-log/nsdID */
    private java.lang.CharSequence nsdID;
   /** /so-log/total_instantiation_time */
-   private long total_instantiation_time;
+   private java.lang.Long total_instantiation_time;
   /** /so-log/operation_ID_for_instantiation_op_datetime_difference */
-   private long operation_ID_for_instantiation_op_datetime_difference;
+   private java.lang.Long operation_ID_for_instantiation_op_datetime_difference;
   /** /so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference */
-   private long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
+   private java.lang.Long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
   /** /so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference */
-   private long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
+   private java.lang.Long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
   /** /so-log/ROE_parsing_NSDs_start_datetime_difference */
-   private long ROE_parsing_NSDs_start_datetime_difference;
+   private java.lang.Long ROE_parsing_NSDs_start_datetime_difference;
   /** /so-log/ROE_retrieve_RL_resources_start_datetime_difference */
-   private long ROE_retrieve_RL_resources_start_datetime_difference;
+   private java.lang.Long ROE_retrieve_RL_resources_start_datetime_difference;
   /** /so-log/PA_calculation_start_datetime_difference */
-   private long PA_calculation_start_datetime_difference;
+   private java.lang.Long PA_calculation_start_datetime_difference;
   /** /so-log/creating_networks_at_OSM_wrapper_start_datetime_difference */
-   private long creating_networks_at_OSM_wrapper_start_datetime_difference;
+   private java.lang.Long creating_networks_at_OSM_wrapper_start_datetime_difference;
   /** /so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference */
-   private long creating_VNFs_at_OSM_wrapper_start_datetime_difference;
+   private java.lang.Long creating_VNFs_at_OSM_wrapper_start_datetime_difference;
   /** /so-log/OSM_wrapper_updating_DBs_start_datetime_difference */
-   private long OSM_wrapper_updating_DBs_start_datetime_difference;
+   private java.lang.Long OSM_wrapper_updating_DBs_start_datetime_difference;
   /** /so-log/ROE_extract_VLs_start_datetime_difference */
-   private long ROE_extract_VLs_start_datetime_difference;
+   private java.lang.Long ROE_extract_VLs_start_datetime_difference;
   /** /so-log/ROE_created_VLs_start_datetime_difference */
-   private long ROE_created_VLs_start_datetime_difference;
+   private java.lang.Long ROE_created_VLs_start_datetime_difference;
   /** /so-log/ROE_updating_DBs_start_datetime_difference */
-   private long ROE_updating_DBs_start_datetime_difference;
+   private java.lang.Long ROE_updating_DBs_start_datetime_difference;
   /** /so-log/create_monitoring_jobs_start_datetime_difference */
-   private long create_monitoring_jobs_start_datetime_difference;
+   private java.lang.Long create_monitoring_jobs_start_datetime_difference;
   /** /so-log/create_threshold_based_alerts_start_datetime_difference */
-   private long create_threshold_based_alerts_start_datetime_difference;
+   private java.lang.Long create_threshold_based_alerts_start_datetime_difference;
   /** /so-log/create_AIML_alerts_start_datetime_difference */
-   private long create_AIML_alerts_start_datetime_difference;
+   private java.lang.Long create_AIML_alerts_start_datetime_difference;
   /** /so-log/wrapper_time_start_datetime_difference */
-   private long wrapper_time_start_datetime_difference;
+   private java.lang.Long wrapper_time_start_datetime_difference;
   /** /so-log/SOA_time */
-   private long SOA_time;
+   private java.lang.Long SOE_time;
   /** /so-log/ROE_time */
-   private long ROE_time;
+   private java.lang.Long ROE_time;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -145,10 +145,10 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * @param create_threshold_based_alerts_start_datetime_difference /so-log/create_threshold_based_alerts_start_datetime_difference
    * @param create_AIML_alerts_start_datetime_difference /so-log/create_AIML_alerts_start_datetime_difference
    * @param wrapper_time_start_datetime_difference /so-log/wrapper_time_start_datetime_difference
-   * @param SOA_time /so-log/SOA_time
+   * @param SOE_time /so-log/SOA_time
    * @param ROE_time /so-log/ROE_time
    */
-  public SoLog(java.lang.CharSequence current_time, java.lang.CharSequence nsID, java.lang.CharSequence nsdID, java.lang.Long total_instantiation_time, java.lang.Long operation_ID_for_instantiation_op_datetime_difference, java.lang.Long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference, java.lang.Long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, java.lang.Long ROE_parsing_NSDs_start_datetime_difference, java.lang.Long ROE_retrieve_RL_resources_start_datetime_difference, java.lang.Long PA_calculation_start_datetime_difference, java.lang.Long creating_networks_at_OSM_wrapper_start_datetime_difference, java.lang.Long creating_VNFs_at_OSM_wrapper_start_datetime_difference, java.lang.Long OSM_wrapper_updating_DBs_start_datetime_difference, java.lang.Long ROE_extract_VLs_start_datetime_difference, java.lang.Long ROE_created_VLs_start_datetime_difference, java.lang.Long ROE_updating_DBs_start_datetime_difference, java.lang.Long create_monitoring_jobs_start_datetime_difference, java.lang.Long create_threshold_based_alerts_start_datetime_difference, java.lang.Long create_AIML_alerts_start_datetime_difference, java.lang.Long wrapper_time_start_datetime_difference, java.lang.Long SOA_time, java.lang.Long ROE_time) {
+  public SoLog(java.lang.CharSequence current_time, java.lang.CharSequence nsID, java.lang.CharSequence nsdID, java.lang.Long total_instantiation_time, java.lang.Long operation_ID_for_instantiation_op_datetime_difference, java.lang.Long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference, java.lang.Long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, java.lang.Long ROE_parsing_NSDs_start_datetime_difference, java.lang.Long ROE_retrieve_RL_resources_start_datetime_difference, java.lang.Long PA_calculation_start_datetime_difference, java.lang.Long creating_networks_at_OSM_wrapper_start_datetime_difference, java.lang.Long creating_VNFs_at_OSM_wrapper_start_datetime_difference, java.lang.Long OSM_wrapper_updating_DBs_start_datetime_difference, java.lang.Long ROE_extract_VLs_start_datetime_difference, java.lang.Long ROE_created_VLs_start_datetime_difference, java.lang.Long ROE_updating_DBs_start_datetime_difference, java.lang.Long create_monitoring_jobs_start_datetime_difference, java.lang.Long create_threshold_based_alerts_start_datetime_difference, java.lang.Long create_AIML_alerts_start_datetime_difference, java.lang.Long wrapper_time_start_datetime_difference, java.lang.Long SOE_time, java.lang.Long ROE_time) {
     this.current_time = current_time;
     this.nsID = nsID;
     this.nsdID = nsdID;
@@ -169,7 +169,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
     this.create_threshold_based_alerts_start_datetime_difference = create_threshold_based_alerts_start_datetime_difference;
     this.create_AIML_alerts_start_datetime_difference = create_AIML_alerts_start_datetime_difference;
     this.wrapper_time_start_datetime_difference = wrapper_time_start_datetime_difference;
-    this.SOA_time = SOA_time;
+    this.SOE_time = SOE_time;
     this.ROE_time = ROE_time;
   }
 
@@ -198,7 +198,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
     case 17: return create_threshold_based_alerts_start_datetime_difference;
     case 18: return create_AIML_alerts_start_datetime_difference;
     case 19: return wrapper_time_start_datetime_difference;
-    case 20: return SOA_time;
+    case 20: return SOE_time;
     case 21: return ROE_time;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
@@ -228,7 +228,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
     case 17: create_threshold_based_alerts_start_datetime_difference = (java.lang.Long)value$; break;
     case 18: create_AIML_alerts_start_datetime_difference = (java.lang.Long)value$; break;
     case 19: wrapper_time_start_datetime_difference = (java.lang.Long)value$; break;
-    case 20: SOA_time = (java.lang.Long)value$; break;
+    case 20: SOE_time = (java.lang.Long)value$; break;
     case 21: ROE_time = (java.lang.Long)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
@@ -292,7 +292,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'total_instantiation_time' field.
    * @return /so-log/total_instantiation_time
    */
-  public long getTotalInstantiationTime() {
+  public java.lang.Long getTotalInstantiationTime() {
     return total_instantiation_time;
   }
 
@@ -302,7 +302,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/total_instantiation_time
    * @param value the value to set.
    */
-  public void setTotalInstantiationTime(long value) {
+  public void setTotalInstantiationTime(java.lang.Long value) {
     this.total_instantiation_time = value;
   }
 
@@ -310,7 +310,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'operation_ID_for_instantiation_op_datetime_difference' field.
    * @return /so-log/operation_ID_for_instantiation_op_datetime_difference
    */
-  public long getOperationIDForInstantiationOpDatetimeDifference() {
+  public java.lang.Long getOperationIDForInstantiationOpDatetimeDifference() {
     return operation_ID_for_instantiation_op_datetime_difference;
   }
 
@@ -320,7 +320,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/operation_ID_for_instantiation_op_datetime_difference
    * @param value the value to set.
    */
-  public void setOperationIDForInstantiationOpDatetimeDifference(long value) {
+  public void setOperationIDForInstantiationOpDatetimeDifference(java.lang.Long value) {
     this.operation_ID_for_instantiation_op_datetime_difference = value;
   }
 
@@ -328,7 +328,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference' field.
    * @return /so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference
    */
-  public long getHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference() {
+  public java.lang.Long getHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference() {
     return hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
   }
 
@@ -338,7 +338,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference
    * @param value the value to set.
    */
-  public void setHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference(long value) {
+  public void setHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference(java.lang.Long value) {
     this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = value;
   }
 
@@ -346,7 +346,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'retrieving_descriptor_from_catalogue_DBs_start_datetime_difference' field.
    * @return /so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference
    */
-  public long getRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference() {
+  public java.lang.Long getRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference() {
     return retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
   }
 
@@ -356,7 +356,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference(long value) {
+  public void setRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference(java.lang.Long value) {
     this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = value;
   }
 
@@ -364,7 +364,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'ROE_parsing_NSDs_start_datetime_difference' field.
    * @return /so-log/ROE_parsing_NSDs_start_datetime_difference
    */
-  public long getROEParsingNSDsStartDatetimeDifference() {
+  public java.lang.Long getROEParsingNSDsStartDatetimeDifference() {
     return ROE_parsing_NSDs_start_datetime_difference;
   }
 
@@ -374,7 +374,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_parsing_NSDs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setROEParsingNSDsStartDatetimeDifference(long value) {
+  public void setROEParsingNSDsStartDatetimeDifference(java.lang.Long value) {
     this.ROE_parsing_NSDs_start_datetime_difference = value;
   }
 
@@ -382,7 +382,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'ROE_retrieve_RL_resources_start_datetime_difference' field.
    * @return /so-log/ROE_retrieve_RL_resources_start_datetime_difference
    */
-  public long getROERetrieveRLResourcesStartDatetimeDifference() {
+  public java.lang.Long getROERetrieveRLResourcesStartDatetimeDifference() {
     return ROE_retrieve_RL_resources_start_datetime_difference;
   }
 
@@ -392,7 +392,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_retrieve_RL_resources_start_datetime_difference
    * @param value the value to set.
    */
-  public void setROERetrieveRLResourcesStartDatetimeDifference(long value) {
+  public void setROERetrieveRLResourcesStartDatetimeDifference(java.lang.Long value) {
     this.ROE_retrieve_RL_resources_start_datetime_difference = value;
   }
 
@@ -400,7 +400,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'PA_calculation_start_datetime_difference' field.
    * @return /so-log/PA_calculation_start_datetime_difference
    */
-  public long getPACalculationStartDatetimeDifference() {
+  public java.lang.Long getPACalculationStartDatetimeDifference() {
     return PA_calculation_start_datetime_difference;
   }
 
@@ -410,7 +410,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/PA_calculation_start_datetime_difference
    * @param value the value to set.
    */
-  public void setPACalculationStartDatetimeDifference(long value) {
+  public void setPACalculationStartDatetimeDifference(java.lang.Long value) {
     this.PA_calculation_start_datetime_difference = value;
   }
 
@@ -418,7 +418,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'creating_networks_at_OSM_wrapper_start_datetime_difference' field.
    * @return /so-log/creating_networks_at_OSM_wrapper_start_datetime_difference
    */
-  public long getCreatingNetworksAtOSMWrapperStartDatetimeDifference() {
+  public java.lang.Long getCreatingNetworksAtOSMWrapperStartDatetimeDifference() {
     return creating_networks_at_OSM_wrapper_start_datetime_difference;
   }
 
@@ -428,7 +428,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/creating_networks_at_OSM_wrapper_start_datetime_difference
    * @param value the value to set.
    */
-  public void setCreatingNetworksAtOSMWrapperStartDatetimeDifference(long value) {
+  public void setCreatingNetworksAtOSMWrapperStartDatetimeDifference(java.lang.Long value) {
     this.creating_networks_at_OSM_wrapper_start_datetime_difference = value;
   }
 
@@ -436,7 +436,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'creating_VNFs_at_OSM_wrapper_start_datetime_difference' field.
    * @return /so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference
    */
-  public long getCreatingVNFsAtOSMWrapperStartDatetimeDifference() {
+  public java.lang.Long getCreatingVNFsAtOSMWrapperStartDatetimeDifference() {
     return creating_VNFs_at_OSM_wrapper_start_datetime_difference;
   }
 
@@ -446,7 +446,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference
    * @param value the value to set.
    */
-  public void setCreatingVNFsAtOSMWrapperStartDatetimeDifference(long value) {
+  public void setCreatingVNFsAtOSMWrapperStartDatetimeDifference(java.lang.Long value) {
     this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = value;
   }
 
@@ -454,7 +454,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'OSM_wrapper_updating_DBs_start_datetime_difference' field.
    * @return /so-log/OSM_wrapper_updating_DBs_start_datetime_difference
    */
-  public long getOSMWrapperUpdatingDBsStartDatetimeDifference() {
+  public java.lang.Long getOSMWrapperUpdatingDBsStartDatetimeDifference() {
     return OSM_wrapper_updating_DBs_start_datetime_difference;
   }
 
@@ -464,7 +464,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/OSM_wrapper_updating_DBs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setOSMWrapperUpdatingDBsStartDatetimeDifference(long value) {
+  public void setOSMWrapperUpdatingDBsStartDatetimeDifference(java.lang.Long value) {
     this.OSM_wrapper_updating_DBs_start_datetime_difference = value;
   }
 
@@ -472,7 +472,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'ROE_extract_VLs_start_datetime_difference' field.
    * @return /so-log/ROE_extract_VLs_start_datetime_difference
    */
-  public long getROEExtractVLsStartDatetimeDifference() {
+  public java.lang.Long getROEExtractVLsStartDatetimeDifference() {
     return ROE_extract_VLs_start_datetime_difference;
   }
 
@@ -482,7 +482,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_extract_VLs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setROEExtractVLsStartDatetimeDifference(long value) {
+  public void setROEExtractVLsStartDatetimeDifference(java.lang.Long value) {
     this.ROE_extract_VLs_start_datetime_difference = value;
   }
 
@@ -490,7 +490,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'ROE_created_VLs_start_datetime_difference' field.
    * @return /so-log/ROE_created_VLs_start_datetime_difference
    */
-  public long getROECreatedVLsStartDatetimeDifference() {
+  public java.lang.Long getROECreatedVLsStartDatetimeDifference() {
     return ROE_created_VLs_start_datetime_difference;
   }
 
@@ -500,7 +500,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_created_VLs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setROECreatedVLsStartDatetimeDifference(long value) {
+  public void setROECreatedVLsStartDatetimeDifference(java.lang.Long value) {
     this.ROE_created_VLs_start_datetime_difference = value;
   }
 
@@ -508,7 +508,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'ROE_updating_DBs_start_datetime_difference' field.
    * @return /so-log/ROE_updating_DBs_start_datetime_difference
    */
-  public long getROEUpdatingDBsStartDatetimeDifference() {
+  public java.lang.Long getROEUpdatingDBsStartDatetimeDifference() {
     return ROE_updating_DBs_start_datetime_difference;
   }
 
@@ -518,7 +518,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_updating_DBs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setROEUpdatingDBsStartDatetimeDifference(long value) {
+  public void setROEUpdatingDBsStartDatetimeDifference(java.lang.Long value) {
     this.ROE_updating_DBs_start_datetime_difference = value;
   }
 
@@ -526,7 +526,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'create_monitoring_jobs_start_datetime_difference' field.
    * @return /so-log/create_monitoring_jobs_start_datetime_difference
    */
-  public long getCreateMonitoringJobsStartDatetimeDifference() {
+  public java.lang.Long getCreateMonitoringJobsStartDatetimeDifference() {
     return create_monitoring_jobs_start_datetime_difference;
   }
 
@@ -536,7 +536,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/create_monitoring_jobs_start_datetime_difference
    * @param value the value to set.
    */
-  public void setCreateMonitoringJobsStartDatetimeDifference(long value) {
+  public void setCreateMonitoringJobsStartDatetimeDifference(java.lang.Long value) {
     this.create_monitoring_jobs_start_datetime_difference = value;
   }
 
@@ -544,7 +544,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'create_threshold_based_alerts_start_datetime_difference' field.
    * @return /so-log/create_threshold_based_alerts_start_datetime_difference
    */
-  public long getCreateThresholdBasedAlertsStartDatetimeDifference() {
+  public java.lang.Long getCreateThresholdBasedAlertsStartDatetimeDifference() {
     return create_threshold_based_alerts_start_datetime_difference;
   }
 
@@ -554,7 +554,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/create_threshold_based_alerts_start_datetime_difference
    * @param value the value to set.
    */
-  public void setCreateThresholdBasedAlertsStartDatetimeDifference(long value) {
+  public void setCreateThresholdBasedAlertsStartDatetimeDifference(java.lang.Long value) {
     this.create_threshold_based_alerts_start_datetime_difference = value;
   }
 
@@ -562,7 +562,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'create_AIML_alerts_start_datetime_difference' field.
    * @return /so-log/create_AIML_alerts_start_datetime_difference
    */
-  public long getCreateAIMLAlertsStartDatetimeDifference() {
+  public java.lang.Long getCreateAIMLAlertsStartDatetimeDifference() {
     return create_AIML_alerts_start_datetime_difference;
   }
 
@@ -572,7 +572,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/create_AIML_alerts_start_datetime_difference
    * @param value the value to set.
    */
-  public void setCreateAIMLAlertsStartDatetimeDifference(long value) {
+  public void setCreateAIMLAlertsStartDatetimeDifference(java.lang.Long value) {
     this.create_AIML_alerts_start_datetime_difference = value;
   }
 
@@ -580,7 +580,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * Gets the value of the 'wrapper_time_start_datetime_difference' field.
    * @return /so-log/wrapper_time_start_datetime_difference
    */
-  public long getWrapperTimeStartDatetimeDifference() {
+  public java.lang.Long getWrapperTimeStartDatetimeDifference() {
     return wrapper_time_start_datetime_difference;
   }
 
@@ -590,33 +590,33 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/wrapper_time_start_datetime_difference
    * @param value the value to set.
    */
-  public void setWrapperTimeStartDatetimeDifference(long value) {
+  public void setWrapperTimeStartDatetimeDifference(java.lang.Long value) {
     this.wrapper_time_start_datetime_difference = value;
   }
 
   /**
-   * Gets the value of the 'SOA_time' field.
+   * Gets the value of the 'SOE_time' field.
    * @return /so-log/SOA_time
    */
-  public long getSOATime() {
-    return SOA_time;
+  public java.lang.Long getSOETime() {
+    return SOE_time;
   }
 
 
   /**
-   * Sets the value of the 'SOA_time' field.
+   * Sets the value of the 'SOE_time' field.
    * /so-log/SOA_time
    * @param value the value to set.
    */
-  public void setSOATime(long value) {
-    this.SOA_time = value;
+  public void setSOETime(java.lang.Long value) {
+    this.SOE_time = value;
   }
 
   /**
    * Gets the value of the 'ROE_time' field.
    * @return /so-log/ROE_time
    */
-  public long getROETime() {
+  public java.lang.Long getROETime() {
     return ROE_time;
   }
 
@@ -626,7 +626,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
    * /so-log/ROE_time
    * @param value the value to set.
    */
-  public void setROETime(long value) {
+  public void setROETime(java.lang.Long value) {
     this.ROE_time = value;
   }
 
@@ -678,43 +678,43 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
     /** /so-log/nsdID */
     private java.lang.CharSequence nsdID;
     /** /so-log/total_instantiation_time */
-    private long total_instantiation_time;
+    private java.lang.Long total_instantiation_time;
     /** /so-log/operation_ID_for_instantiation_op_datetime_difference */
-    private long operation_ID_for_instantiation_op_datetime_difference;
+    private java.lang.Long operation_ID_for_instantiation_op_datetime_difference;
     /** /so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference */
-    private long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
+    private java.lang.Long hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
     /** /so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference */
-    private long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
+    private java.lang.Long retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
     /** /so-log/ROE_parsing_NSDs_start_datetime_difference */
-    private long ROE_parsing_NSDs_start_datetime_difference;
+    private java.lang.Long ROE_parsing_NSDs_start_datetime_difference;
     /** /so-log/ROE_retrieve_RL_resources_start_datetime_difference */
-    private long ROE_retrieve_RL_resources_start_datetime_difference;
+    private java.lang.Long ROE_retrieve_RL_resources_start_datetime_difference;
     /** /so-log/PA_calculation_start_datetime_difference */
-    private long PA_calculation_start_datetime_difference;
+    private java.lang.Long PA_calculation_start_datetime_difference;
     /** /so-log/creating_networks_at_OSM_wrapper_start_datetime_difference */
-    private long creating_networks_at_OSM_wrapper_start_datetime_difference;
+    private java.lang.Long creating_networks_at_OSM_wrapper_start_datetime_difference;
     /** /so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference */
-    private long creating_VNFs_at_OSM_wrapper_start_datetime_difference;
+    private java.lang.Long creating_VNFs_at_OSM_wrapper_start_datetime_difference;
     /** /so-log/OSM_wrapper_updating_DBs_start_datetime_difference */
-    private long OSM_wrapper_updating_DBs_start_datetime_difference;
+    private java.lang.Long OSM_wrapper_updating_DBs_start_datetime_difference;
     /** /so-log/ROE_extract_VLs_start_datetime_difference */
-    private long ROE_extract_VLs_start_datetime_difference;
+    private java.lang.Long ROE_extract_VLs_start_datetime_difference;
     /** /so-log/ROE_created_VLs_start_datetime_difference */
-    private long ROE_created_VLs_start_datetime_difference;
+    private java.lang.Long ROE_created_VLs_start_datetime_difference;
     /** /so-log/ROE_updating_DBs_start_datetime_difference */
-    private long ROE_updating_DBs_start_datetime_difference;
+    private java.lang.Long ROE_updating_DBs_start_datetime_difference;
     /** /so-log/create_monitoring_jobs_start_datetime_difference */
-    private long create_monitoring_jobs_start_datetime_difference;
+    private java.lang.Long create_monitoring_jobs_start_datetime_difference;
     /** /so-log/create_threshold_based_alerts_start_datetime_difference */
-    private long create_threshold_based_alerts_start_datetime_difference;
+    private java.lang.Long create_threshold_based_alerts_start_datetime_difference;
     /** /so-log/create_AIML_alerts_start_datetime_difference */
-    private long create_AIML_alerts_start_datetime_difference;
+    private java.lang.Long create_AIML_alerts_start_datetime_difference;
     /** /so-log/wrapper_time_start_datetime_difference */
-    private long wrapper_time_start_datetime_difference;
+    private java.lang.Long wrapper_time_start_datetime_difference;
     /** /so-log/SOA_time */
-    private long SOA_time;
+    private java.lang.Long SOE_time;
     /** /so-log/ROE_time */
-    private long ROE_time;
+    private java.lang.Long ROE_time;
 
     /** Creates a new Builder */
     private Builder() {
@@ -807,8 +807,8 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
         this.wrapper_time_start_datetime_difference = data().deepCopy(fields()[19].schema(), other.wrapper_time_start_datetime_difference);
         fieldSetFlags()[19] = other.fieldSetFlags()[19];
       }
-      if (isValidValue(fields()[20], other.SOA_time)) {
-        this.SOA_time = data().deepCopy(fields()[20].schema(), other.SOA_time);
+      if (isValidValue(fields()[20], other.SOE_time)) {
+        this.SOE_time = data().deepCopy(fields()[20].schema(), other.SOE_time);
         fieldSetFlags()[20] = other.fieldSetFlags()[20];
       }
       if (isValidValue(fields()[21], other.ROE_time)) {
@@ -903,8 +903,8 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
         this.wrapper_time_start_datetime_difference = data().deepCopy(fields()[19].schema(), other.wrapper_time_start_datetime_difference);
         fieldSetFlags()[19] = true;
       }
-      if (isValidValue(fields()[20], other.SOA_time)) {
-        this.SOA_time = data().deepCopy(fields()[20].schema(), other.SOA_time);
+      if (isValidValue(fields()[20], other.SOE_time)) {
+        this.SOE_time = data().deepCopy(fields()[20].schema(), other.SOE_time);
         fieldSetFlags()[20] = true;
       }
       if (isValidValue(fields()[21], other.ROE_time)) {
@@ -1050,7 +1050,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/total_instantiation_time
       * @return The value.
       */
-    public long getTotalInstantiationTime() {
+    public java.lang.Long getTotalInstantiationTime() {
       return total_instantiation_time;
     }
 
@@ -1061,7 +1061,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'total_instantiation_time'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setTotalInstantiationTime(long value) {
+    public giros.org.SoLog.Builder setTotalInstantiationTime(java.lang.Long value) {
       validate(fields()[3], value);
       this.total_instantiation_time = value;
       fieldSetFlags()[3] = true;
@@ -1084,6 +1084,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearTotalInstantiationTime() {
+      total_instantiation_time = null;
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -1093,7 +1094,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/operation_ID_for_instantiation_op_datetime_difference
       * @return The value.
       */
-    public long getOperationIDForInstantiationOpDatetimeDifference() {
+    public java.lang.Long getOperationIDForInstantiationOpDatetimeDifference() {
       return operation_ID_for_instantiation_op_datetime_difference;
     }
 
@@ -1104,7 +1105,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'operation_ID_for_instantiation_op_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setOperationIDForInstantiationOpDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setOperationIDForInstantiationOpDatetimeDifference(java.lang.Long value) {
       validate(fields()[4], value);
       this.operation_ID_for_instantiation_op_datetime_difference = value;
       fieldSetFlags()[4] = true;
@@ -1127,6 +1128,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearOperationIDForInstantiationOpDatetimeDifference() {
+      operation_ID_for_instantiation_op_datetime_difference = null;
       fieldSetFlags()[4] = false;
       return this;
     }
@@ -1136,7 +1138,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference
       * @return The value.
       */
-    public long getHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference() {
+    public java.lang.Long getHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference() {
       return hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference;
     }
 
@@ -1147,7 +1149,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference(java.lang.Long value) {
       validate(fields()[5], value);
       this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = value;
       fieldSetFlags()[5] = true;
@@ -1170,6 +1172,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearHierarchicalSOEDispatchingSOEpSOEcDatetimeDifference() {
+      hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = null;
       fieldSetFlags()[5] = false;
       return this;
     }
@@ -1179,7 +1182,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference
       * @return The value.
       */
-    public long getRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference() {
+    public java.lang.Long getRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference() {
       return retrieving_descriptor_from_catalogue_DBs_start_datetime_difference;
     }
 
@@ -1190,7 +1193,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'retrieving_descriptor_from_catalogue_DBs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[6], value);
       this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = value;
       fieldSetFlags()[6] = true;
@@ -1213,6 +1216,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearRetrievingDescriptorFromCatalogueDBsStartDatetimeDifference() {
+      retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = null;
       fieldSetFlags()[6] = false;
       return this;
     }
@@ -1222,7 +1226,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_parsing_NSDs_start_datetime_difference
       * @return The value.
       */
-    public long getROEParsingNSDsStartDatetimeDifference() {
+    public java.lang.Long getROEParsingNSDsStartDatetimeDifference() {
       return ROE_parsing_NSDs_start_datetime_difference;
     }
 
@@ -1233,7 +1237,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_parsing_NSDs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROEParsingNSDsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setROEParsingNSDsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[7], value);
       this.ROE_parsing_NSDs_start_datetime_difference = value;
       fieldSetFlags()[7] = true;
@@ -1256,6 +1260,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROEParsingNSDsStartDatetimeDifference() {
+      ROE_parsing_NSDs_start_datetime_difference = null;
       fieldSetFlags()[7] = false;
       return this;
     }
@@ -1265,7 +1270,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_retrieve_RL_resources_start_datetime_difference
       * @return The value.
       */
-    public long getROERetrieveRLResourcesStartDatetimeDifference() {
+    public java.lang.Long getROERetrieveRLResourcesStartDatetimeDifference() {
       return ROE_retrieve_RL_resources_start_datetime_difference;
     }
 
@@ -1276,7 +1281,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_retrieve_RL_resources_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROERetrieveRLResourcesStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setROERetrieveRLResourcesStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[8], value);
       this.ROE_retrieve_RL_resources_start_datetime_difference = value;
       fieldSetFlags()[8] = true;
@@ -1299,6 +1304,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROERetrieveRLResourcesStartDatetimeDifference() {
+      ROE_retrieve_RL_resources_start_datetime_difference = null;
       fieldSetFlags()[8] = false;
       return this;
     }
@@ -1308,7 +1314,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/PA_calculation_start_datetime_difference
       * @return The value.
       */
-    public long getPACalculationStartDatetimeDifference() {
+    public java.lang.Long getPACalculationStartDatetimeDifference() {
       return PA_calculation_start_datetime_difference;
     }
 
@@ -1319,7 +1325,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'PA_calculation_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setPACalculationStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setPACalculationStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[9], value);
       this.PA_calculation_start_datetime_difference = value;
       fieldSetFlags()[9] = true;
@@ -1342,6 +1348,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearPACalculationStartDatetimeDifference() {
+      PA_calculation_start_datetime_difference = null;
       fieldSetFlags()[9] = false;
       return this;
     }
@@ -1351,7 +1358,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/creating_networks_at_OSM_wrapper_start_datetime_difference
       * @return The value.
       */
-    public long getCreatingNetworksAtOSMWrapperStartDatetimeDifference() {
+    public java.lang.Long getCreatingNetworksAtOSMWrapperStartDatetimeDifference() {
       return creating_networks_at_OSM_wrapper_start_datetime_difference;
     }
 
@@ -1362,7 +1369,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'creating_networks_at_OSM_wrapper_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setCreatingNetworksAtOSMWrapperStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setCreatingNetworksAtOSMWrapperStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[10], value);
       this.creating_networks_at_OSM_wrapper_start_datetime_difference = value;
       fieldSetFlags()[10] = true;
@@ -1385,6 +1392,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearCreatingNetworksAtOSMWrapperStartDatetimeDifference() {
+      creating_networks_at_OSM_wrapper_start_datetime_difference = null;
       fieldSetFlags()[10] = false;
       return this;
     }
@@ -1394,7 +1402,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference
       * @return The value.
       */
-    public long getCreatingVNFsAtOSMWrapperStartDatetimeDifference() {
+    public java.lang.Long getCreatingVNFsAtOSMWrapperStartDatetimeDifference() {
       return creating_VNFs_at_OSM_wrapper_start_datetime_difference;
     }
 
@@ -1405,7 +1413,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'creating_VNFs_at_OSM_wrapper_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setCreatingVNFsAtOSMWrapperStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setCreatingVNFsAtOSMWrapperStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[11], value);
       this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = value;
       fieldSetFlags()[11] = true;
@@ -1428,6 +1436,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearCreatingVNFsAtOSMWrapperStartDatetimeDifference() {
+      creating_VNFs_at_OSM_wrapper_start_datetime_difference = null;
       fieldSetFlags()[11] = false;
       return this;
     }
@@ -1437,7 +1446,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/OSM_wrapper_updating_DBs_start_datetime_difference
       * @return The value.
       */
-    public long getOSMWrapperUpdatingDBsStartDatetimeDifference() {
+    public java.lang.Long getOSMWrapperUpdatingDBsStartDatetimeDifference() {
       return OSM_wrapper_updating_DBs_start_datetime_difference;
     }
 
@@ -1448,7 +1457,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'OSM_wrapper_updating_DBs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setOSMWrapperUpdatingDBsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setOSMWrapperUpdatingDBsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[12], value);
       this.OSM_wrapper_updating_DBs_start_datetime_difference = value;
       fieldSetFlags()[12] = true;
@@ -1471,6 +1480,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearOSMWrapperUpdatingDBsStartDatetimeDifference() {
+      OSM_wrapper_updating_DBs_start_datetime_difference = null;
       fieldSetFlags()[12] = false;
       return this;
     }
@@ -1480,7 +1490,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_extract_VLs_start_datetime_difference
       * @return The value.
       */
-    public long getROEExtractVLsStartDatetimeDifference() {
+    public java.lang.Long getROEExtractVLsStartDatetimeDifference() {
       return ROE_extract_VLs_start_datetime_difference;
     }
 
@@ -1491,7 +1501,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_extract_VLs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROEExtractVLsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setROEExtractVLsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[13], value);
       this.ROE_extract_VLs_start_datetime_difference = value;
       fieldSetFlags()[13] = true;
@@ -1514,6 +1524,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROEExtractVLsStartDatetimeDifference() {
+      ROE_extract_VLs_start_datetime_difference = null;
       fieldSetFlags()[13] = false;
       return this;
     }
@@ -1523,7 +1534,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_created_VLs_start_datetime_difference
       * @return The value.
       */
-    public long getROECreatedVLsStartDatetimeDifference() {
+    public java.lang.Long getROECreatedVLsStartDatetimeDifference() {
       return ROE_created_VLs_start_datetime_difference;
     }
 
@@ -1534,7 +1545,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_created_VLs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROECreatedVLsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setROECreatedVLsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[14], value);
       this.ROE_created_VLs_start_datetime_difference = value;
       fieldSetFlags()[14] = true;
@@ -1557,6 +1568,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROECreatedVLsStartDatetimeDifference() {
+      ROE_created_VLs_start_datetime_difference = null;
       fieldSetFlags()[14] = false;
       return this;
     }
@@ -1566,7 +1578,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_updating_DBs_start_datetime_difference
       * @return The value.
       */
-    public long getROEUpdatingDBsStartDatetimeDifference() {
+    public java.lang.Long getROEUpdatingDBsStartDatetimeDifference() {
       return ROE_updating_DBs_start_datetime_difference;
     }
 
@@ -1577,7 +1589,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_updating_DBs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROEUpdatingDBsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setROEUpdatingDBsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[15], value);
       this.ROE_updating_DBs_start_datetime_difference = value;
       fieldSetFlags()[15] = true;
@@ -1600,6 +1612,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROEUpdatingDBsStartDatetimeDifference() {
+      ROE_updating_DBs_start_datetime_difference = null;
       fieldSetFlags()[15] = false;
       return this;
     }
@@ -1609,7 +1622,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/create_monitoring_jobs_start_datetime_difference
       * @return The value.
       */
-    public long getCreateMonitoringJobsStartDatetimeDifference() {
+    public java.lang.Long getCreateMonitoringJobsStartDatetimeDifference() {
       return create_monitoring_jobs_start_datetime_difference;
     }
 
@@ -1620,7 +1633,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'create_monitoring_jobs_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setCreateMonitoringJobsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setCreateMonitoringJobsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[16], value);
       this.create_monitoring_jobs_start_datetime_difference = value;
       fieldSetFlags()[16] = true;
@@ -1643,6 +1656,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearCreateMonitoringJobsStartDatetimeDifference() {
+      create_monitoring_jobs_start_datetime_difference = null;
       fieldSetFlags()[16] = false;
       return this;
     }
@@ -1652,7 +1666,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/create_threshold_based_alerts_start_datetime_difference
       * @return The value.
       */
-    public long getCreateThresholdBasedAlertsStartDatetimeDifference() {
+    public java.lang.Long getCreateThresholdBasedAlertsStartDatetimeDifference() {
       return create_threshold_based_alerts_start_datetime_difference;
     }
 
@@ -1663,7 +1677,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'create_threshold_based_alerts_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setCreateThresholdBasedAlertsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setCreateThresholdBasedAlertsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[17], value);
       this.create_threshold_based_alerts_start_datetime_difference = value;
       fieldSetFlags()[17] = true;
@@ -1686,6 +1700,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearCreateThresholdBasedAlertsStartDatetimeDifference() {
+      create_threshold_based_alerts_start_datetime_difference = null;
       fieldSetFlags()[17] = false;
       return this;
     }
@@ -1695,7 +1710,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/create_AIML_alerts_start_datetime_difference
       * @return The value.
       */
-    public long getCreateAIMLAlertsStartDatetimeDifference() {
+    public java.lang.Long getCreateAIMLAlertsStartDatetimeDifference() {
       return create_AIML_alerts_start_datetime_difference;
     }
 
@@ -1706,7 +1721,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'create_AIML_alerts_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setCreateAIMLAlertsStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setCreateAIMLAlertsStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[18], value);
       this.create_AIML_alerts_start_datetime_difference = value;
       fieldSetFlags()[18] = true;
@@ -1729,6 +1744,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearCreateAIMLAlertsStartDatetimeDifference() {
+      create_AIML_alerts_start_datetime_difference = null;
       fieldSetFlags()[18] = false;
       return this;
     }
@@ -1738,7 +1754,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/wrapper_time_start_datetime_difference
       * @return The value.
       */
-    public long getWrapperTimeStartDatetimeDifference() {
+    public java.lang.Long getWrapperTimeStartDatetimeDifference() {
       return wrapper_time_start_datetime_difference;
     }
 
@@ -1749,7 +1765,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'wrapper_time_start_datetime_difference'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setWrapperTimeStartDatetimeDifference(long value) {
+    public giros.org.SoLog.Builder setWrapperTimeStartDatetimeDifference(java.lang.Long value) {
       validate(fields()[19], value);
       this.wrapper_time_start_datetime_difference = value;
       fieldSetFlags()[19] = true;
@@ -1772,49 +1788,51 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearWrapperTimeStartDatetimeDifference() {
+      wrapper_time_start_datetime_difference = null;
       fieldSetFlags()[19] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'SOA_time' field.
+      * Gets the value of the 'SOE_time' field.
       * /so-log/SOA_time
       * @return The value.
       */
-    public long getSOATime() {
-      return SOA_time;
+    public java.lang.Long getSOETime() {
+      return SOE_time;
     }
 
 
     /**
-      * Sets the value of the 'SOA_time' field.
+      * Sets the value of the 'SOE_time' field.
       * /so-log/SOA_time
-      * @param value The value of 'SOA_time'.
+      * @param value The value of 'SOE_time'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setSOATime(long value) {
+    public giros.org.SoLog.Builder setSOETime(java.lang.Long value) {
       validate(fields()[20], value);
-      this.SOA_time = value;
+      this.SOE_time = value;
       fieldSetFlags()[20] = true;
       return this;
     }
 
     /**
-      * Checks whether the 'SOA_time' field has been set.
+      * Checks whether the 'SOE_time' field has been set.
       * /so-log/SOA_time
-      * @return True if the 'SOA_time' field has been set, false otherwise.
+      * @return True if the 'SOE_time' field has been set, false otherwise.
       */
-    public boolean hasSOATime() {
+    public boolean hasSOETime() {
       return fieldSetFlags()[20];
     }
 
 
     /**
-      * Clears the value of the 'SOA_time' field.
+      * Clears the value of the 'SOE_time' field.
       * /so-log/SOA_time
       * @return This builder.
       */
-    public giros.org.SoLog.Builder clearSOATime() {
+    public giros.org.SoLog.Builder clearSOETime() {
+      SOE_time = null;
       fieldSetFlags()[20] = false;
       return this;
     }
@@ -1824,7 +1842,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * /so-log/ROE_time
       * @return The value.
       */
-    public long getROETime() {
+    public java.lang.Long getROETime() {
       return ROE_time;
     }
 
@@ -1835,7 +1853,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'ROE_time'.
       * @return This builder.
       */
-    public giros.org.SoLog.Builder setROETime(long value) {
+    public giros.org.SoLog.Builder setROETime(java.lang.Long value) {
       validate(fields()[21], value);
       this.ROE_time = value;
       fieldSetFlags()[21] = true;
@@ -1858,6 +1876,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public giros.org.SoLog.Builder clearROETime() {
+      ROE_time = null;
       fieldSetFlags()[21] = false;
       return this;
     }
@@ -1887,7 +1906,7 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
         record.create_threshold_based_alerts_start_datetime_difference = fieldSetFlags()[17] ? this.create_threshold_based_alerts_start_datetime_difference : (java.lang.Long) defaultValue(fields()[17]);
         record.create_AIML_alerts_start_datetime_difference = fieldSetFlags()[18] ? this.create_AIML_alerts_start_datetime_difference : (java.lang.Long) defaultValue(fields()[18]);
         record.wrapper_time_start_datetime_difference = fieldSetFlags()[19] ? this.wrapper_time_start_datetime_difference : (java.lang.Long) defaultValue(fields()[19]);
-        record.SOA_time = fieldSetFlags()[20] ? this.SOA_time : (java.lang.Long) defaultValue(fields()[20]);
+        record.SOE_time = fieldSetFlags()[20] ? this.SOE_time : (java.lang.Long) defaultValue(fields()[20]);
         record.ROE_time = fieldSetFlags()[21] ? this.ROE_time : (java.lang.Long) defaultValue(fields()[21]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
@@ -1927,43 +1946,157 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
 
     out.writeString(this.nsdID);
 
-    out.writeLong(this.total_instantiation_time);
+    if (this.total_instantiation_time == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.total_instantiation_time);
+    }
 
-    out.writeLong(this.operation_ID_for_instantiation_op_datetime_difference);
+    if (this.operation_ID_for_instantiation_op_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.operation_ID_for_instantiation_op_datetime_difference);
+    }
 
-    out.writeLong(this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference);
+    if (this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference);
+    }
 
-    out.writeLong(this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference);
+    if (this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference);
+    }
 
-    out.writeLong(this.ROE_parsing_NSDs_start_datetime_difference);
+    if (this.ROE_parsing_NSDs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_parsing_NSDs_start_datetime_difference);
+    }
 
-    out.writeLong(this.ROE_retrieve_RL_resources_start_datetime_difference);
+    if (this.ROE_retrieve_RL_resources_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_retrieve_RL_resources_start_datetime_difference);
+    }
 
-    out.writeLong(this.PA_calculation_start_datetime_difference);
+    if (this.PA_calculation_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.PA_calculation_start_datetime_difference);
+    }
 
-    out.writeLong(this.creating_networks_at_OSM_wrapper_start_datetime_difference);
+    if (this.creating_networks_at_OSM_wrapper_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.creating_networks_at_OSM_wrapper_start_datetime_difference);
+    }
 
-    out.writeLong(this.creating_VNFs_at_OSM_wrapper_start_datetime_difference);
+    if (this.creating_VNFs_at_OSM_wrapper_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.creating_VNFs_at_OSM_wrapper_start_datetime_difference);
+    }
 
-    out.writeLong(this.OSM_wrapper_updating_DBs_start_datetime_difference);
+    if (this.OSM_wrapper_updating_DBs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.OSM_wrapper_updating_DBs_start_datetime_difference);
+    }
 
-    out.writeLong(this.ROE_extract_VLs_start_datetime_difference);
+    if (this.ROE_extract_VLs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_extract_VLs_start_datetime_difference);
+    }
 
-    out.writeLong(this.ROE_created_VLs_start_datetime_difference);
+    if (this.ROE_created_VLs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_created_VLs_start_datetime_difference);
+    }
 
-    out.writeLong(this.ROE_updating_DBs_start_datetime_difference);
+    if (this.ROE_updating_DBs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_updating_DBs_start_datetime_difference);
+    }
 
-    out.writeLong(this.create_monitoring_jobs_start_datetime_difference);
+    if (this.create_monitoring_jobs_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.create_monitoring_jobs_start_datetime_difference);
+    }
 
-    out.writeLong(this.create_threshold_based_alerts_start_datetime_difference);
+    if (this.create_threshold_based_alerts_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.create_threshold_based_alerts_start_datetime_difference);
+    }
 
-    out.writeLong(this.create_AIML_alerts_start_datetime_difference);
+    if (this.create_AIML_alerts_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.create_AIML_alerts_start_datetime_difference);
+    }
 
-    out.writeLong(this.wrapper_time_start_datetime_difference);
+    if (this.wrapper_time_start_datetime_difference == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.wrapper_time_start_datetime_difference);
+    }
 
-    out.writeLong(this.SOA_time);
+    if (this.SOE_time == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.SOE_time);
+    }
 
-    out.writeLong(this.ROE_time);
+    if (this.ROE_time == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeLong(this.ROE_time);
+    }
 
   }
 
@@ -1978,43 +2111,138 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
 
       this.nsdID = in.readString(this.nsdID instanceof Utf8 ? (Utf8)this.nsdID : null);
 
-      this.total_instantiation_time = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.total_instantiation_time = null;
+      } else {
+        this.total_instantiation_time = in.readLong();
+      }
 
-      this.operation_ID_for_instantiation_op_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.operation_ID_for_instantiation_op_datetime_difference = null;
+      } else {
+        this.operation_ID_for_instantiation_op_datetime_difference = in.readLong();
+      }
 
-      this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = null;
+      } else {
+        this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = in.readLong();
+      }
 
-      this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = null;
+      } else {
+        this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = in.readLong();
+      }
 
-      this.ROE_parsing_NSDs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_parsing_NSDs_start_datetime_difference = null;
+      } else {
+        this.ROE_parsing_NSDs_start_datetime_difference = in.readLong();
+      }
 
-      this.ROE_retrieve_RL_resources_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_retrieve_RL_resources_start_datetime_difference = null;
+      } else {
+        this.ROE_retrieve_RL_resources_start_datetime_difference = in.readLong();
+      }
 
-      this.PA_calculation_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.PA_calculation_start_datetime_difference = null;
+      } else {
+        this.PA_calculation_start_datetime_difference = in.readLong();
+      }
 
-      this.creating_networks_at_OSM_wrapper_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.creating_networks_at_OSM_wrapper_start_datetime_difference = null;
+      } else {
+        this.creating_networks_at_OSM_wrapper_start_datetime_difference = in.readLong();
+      }
 
-      this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = null;
+      } else {
+        this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = in.readLong();
+      }
 
-      this.OSM_wrapper_updating_DBs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.OSM_wrapper_updating_DBs_start_datetime_difference = null;
+      } else {
+        this.OSM_wrapper_updating_DBs_start_datetime_difference = in.readLong();
+      }
 
-      this.ROE_extract_VLs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_extract_VLs_start_datetime_difference = null;
+      } else {
+        this.ROE_extract_VLs_start_datetime_difference = in.readLong();
+      }
 
-      this.ROE_created_VLs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_created_VLs_start_datetime_difference = null;
+      } else {
+        this.ROE_created_VLs_start_datetime_difference = in.readLong();
+      }
 
-      this.ROE_updating_DBs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_updating_DBs_start_datetime_difference = null;
+      } else {
+        this.ROE_updating_DBs_start_datetime_difference = in.readLong();
+      }
 
-      this.create_monitoring_jobs_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.create_monitoring_jobs_start_datetime_difference = null;
+      } else {
+        this.create_monitoring_jobs_start_datetime_difference = in.readLong();
+      }
 
-      this.create_threshold_based_alerts_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.create_threshold_based_alerts_start_datetime_difference = null;
+      } else {
+        this.create_threshold_based_alerts_start_datetime_difference = in.readLong();
+      }
 
-      this.create_AIML_alerts_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.create_AIML_alerts_start_datetime_difference = null;
+      } else {
+        this.create_AIML_alerts_start_datetime_difference = in.readLong();
+      }
 
-      this.wrapper_time_start_datetime_difference = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.wrapper_time_start_datetime_difference = null;
+      } else {
+        this.wrapper_time_start_datetime_difference = in.readLong();
+      }
 
-      this.SOA_time = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.SOE_time = null;
+      } else {
+        this.SOE_time = in.readLong();
+      }
 
-      this.ROE_time = in.readLong();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.ROE_time = null;
+      } else {
+        this.ROE_time = in.readLong();
+      }
 
     } else {
       for (int i = 0; i < 22; i++) {
@@ -2032,79 +2260,174 @@ public class SoLog extends org.apache.avro.specific.SpecificRecordBase implement
           break;
 
         case 3:
-          this.total_instantiation_time = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.total_instantiation_time = null;
+          } else {
+            this.total_instantiation_time = in.readLong();
+          }
           break;
 
         case 4:
-          this.operation_ID_for_instantiation_op_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.operation_ID_for_instantiation_op_datetime_difference = null;
+          } else {
+            this.operation_ID_for_instantiation_op_datetime_difference = in.readLong();
+          }
           break;
 
         case 5:
-          this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = null;
+          } else {
+            this.hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference = in.readLong();
+          }
           break;
 
         case 6:
-          this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = null;
+          } else {
+            this.retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 7:
-          this.ROE_parsing_NSDs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_parsing_NSDs_start_datetime_difference = null;
+          } else {
+            this.ROE_parsing_NSDs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 8:
-          this.ROE_retrieve_RL_resources_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_retrieve_RL_resources_start_datetime_difference = null;
+          } else {
+            this.ROE_retrieve_RL_resources_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 9:
-          this.PA_calculation_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.PA_calculation_start_datetime_difference = null;
+          } else {
+            this.PA_calculation_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 10:
-          this.creating_networks_at_OSM_wrapper_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.creating_networks_at_OSM_wrapper_start_datetime_difference = null;
+          } else {
+            this.creating_networks_at_OSM_wrapper_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 11:
-          this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = null;
+          } else {
+            this.creating_VNFs_at_OSM_wrapper_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 12:
-          this.OSM_wrapper_updating_DBs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.OSM_wrapper_updating_DBs_start_datetime_difference = null;
+          } else {
+            this.OSM_wrapper_updating_DBs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 13:
-          this.ROE_extract_VLs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_extract_VLs_start_datetime_difference = null;
+          } else {
+            this.ROE_extract_VLs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 14:
-          this.ROE_created_VLs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_created_VLs_start_datetime_difference = null;
+          } else {
+            this.ROE_created_VLs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 15:
-          this.ROE_updating_DBs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_updating_DBs_start_datetime_difference = null;
+          } else {
+            this.ROE_updating_DBs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 16:
-          this.create_monitoring_jobs_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.create_monitoring_jobs_start_datetime_difference = null;
+          } else {
+            this.create_monitoring_jobs_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 17:
-          this.create_threshold_based_alerts_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.create_threshold_based_alerts_start_datetime_difference = null;
+          } else {
+            this.create_threshold_based_alerts_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 18:
-          this.create_AIML_alerts_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.create_AIML_alerts_start_datetime_difference = null;
+          } else {
+            this.create_AIML_alerts_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 19:
-          this.wrapper_time_start_datetime_difference = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.wrapper_time_start_datetime_difference = null;
+          } else {
+            this.wrapper_time_start_datetime_difference = in.readLong();
+          }
           break;
 
         case 20:
-          this.SOA_time = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.SOE_time = null;
+          } else {
+            this.SOE_time = in.readLong();
+          }
           break;
 
         case 21:
-          this.ROE_time = in.readLong();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.ROE_time = null;
+          } else {
+            this.ROE_time = in.readLong();
+          }
           break;
 
         default:

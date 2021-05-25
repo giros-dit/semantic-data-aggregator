@@ -45,7 +45,7 @@ public class SoLogConsumerJob {
 
 		source.print();
 
-		env.execute("Avro SO Log Pareser Consumer Job");
+		env.execute("Avro SO Log Parser Consumer Job");
 	}
 }
 

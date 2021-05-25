@@ -21,97 +21,97 @@
         },
         {
             "name": "total_instantiation_time",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/total_instantiation_time"
         },
         {
             "name": "operation_ID_for_instantiation_op_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/operation_ID_for_instantiation_op_datetime_difference"
         },
         {
             "name": "hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/hierarchical_SOE_dispatching_SOEpSOEc_datetime_difference"
         },
         {
             "name": "retrieving_descriptor_from_catalogue_DBs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference"
         },
         {
             "name": "ROE_parsing_NSDs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_parsing_NSDs_start_datetime_difference"
         },
         {
             "name": "ROE_retrieve_RL_resources_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_retrieve_RL_resources_start_datetime_difference"
         },
         {
             "name": "PA_calculation_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/PA_calculation_start_datetime_difference"
         },
         {
             "name": "creating_networks_at_OSM_wrapper_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/creating_networks_at_OSM_wrapper_start_datetime_difference"
         },
         {
             "name": "creating_VNFs_at_OSM_wrapper_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/creating_VNFs_at_OSM_wrapper_start_datetime_difference"
         },
         {
             "name": "OSM_wrapper_updating_DBs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/OSM_wrapper_updating_DBs_start_datetime_difference"
         },
         {
             "name": "ROE_extract_VLs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_extract_VLs_start_datetime_difference"
         },
         {
             "name": "ROE_created_VLs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_created_VLs_start_datetime_difference"
         },
         {
             "name": "ROE_updating_DBs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_updating_DBs_start_datetime_difference"
         },
         {
             "name": "create_monitoring_jobs_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/create_monitoring_jobs_start_datetime_difference"
         },
         {
             "name": "create_threshold_based_alerts_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/create_threshold_based_alerts_start_datetime_difference"
         },
         {
             "name": "create_AIML_alerts_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/create_AIML_alerts_start_datetime_difference"
         },
         {
             "name": "wrapper_time_start_datetime_difference",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/wrapper_time_start_datetime_difference"
         },
         {
-            "name": "SOA_time",
-            "type": "long",
+            "name": "SOE_time",
+            "type": ["null", "long"],
             "doc": "/so-log/SOA_time"
         },
         {
             "name": "ROE_time",
-            "type": "long",
+            "type": ["null", "long"],
             "doc": "/so-log/ROE_time"
         }
     ]
