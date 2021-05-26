@@ -48,7 +48,7 @@ app = FastAPI(
 async def startup_event():
     # Check NiFi REST API is up
     nifi_ops.check_nifi_status()
-    # Upload MetricSource and MetricTarget templates
+    # Upload NiFi templates
     nifi_ops.upload_templates()
     # Check Flink REST API is up
     flink_ops.check_flink_status(flink)

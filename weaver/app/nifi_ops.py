@@ -49,6 +49,9 @@ def deleteMetricSource(metricSource: MetricSource):
         if controller.component.name == "HortonworksSchemaRegistry":
             registry_controller = controller
             continue
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
         if controller.status.run_status == 'ENABLED':
             logger.debug("Disabling controller %s ..." % controller.component.name)
             nipyapi.canvas.schedule_controller(controller, False, True)
@@ -82,6 +85,9 @@ def deleteStreamSource(streamSource: Entity):
         if controller.component.name == "HortonworksSchemaRegistry":
             registry_controller = controller
             continue
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
         if controller.status.run_status == 'ENABLED':
             logger.debug("Disabling controller %s ..."
                          % controller.component.name)
@@ -106,6 +112,9 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     for controller in controllers:
         # Registry cannot be disabled as it has dependants
         if controller.component.name == "HortonworksSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.component.name == "ConfluentSchemaRegistry":
             registry_controller = controller
             continue
         if controller.status.run_status == 'ENABLED':
@@ -167,6 +176,8 @@ def deployMetricSource(metricSource: MetricSource,
     # Start with the registry controller
     logger.debug("Enabling controller HortonworksSchemaRegistry...")
     registry_controller = getControllerService(ms_pg, "HortonworksSchemaRegistry")
+    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    #registry_controller = getControllerService(ms_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
     for controller in controllers:
@@ -262,7 +273,7 @@ def deployStreamSource(streamSource: Entity,
     source_topics = streamSource.topicName.value
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
-    
+
     nipyapi.canvas.update_variable_registry(streamSource_pg, [("avro_schema", avro_schema)])
     nipyapi.canvas.update_variable_registry(streamSource_pg, [("group_id", group_id)])
     nipyapi.canvas.update_variable_registry(streamSource_pg, [("source_broker_url", source_broker_url)])
@@ -284,6 +295,8 @@ def deployStreamSource(streamSource: Entity,
     # Start with the registry controller
     logger.debug("Enabling controller HortonworksSchemaRegistry...")
     registry_controller = getControllerService(streamSource_pg, "HortonworksSchemaRegistry")
+    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    #registry_controller = getControllerService(streamSource_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
     for controller in controllers:
@@ -373,6 +386,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     # Start with the registry controller
     logger.debug("Enabling controller HortonworksSchemaRegistry...")
     registry_controller = getControllerService(ts_pg, "HortonworksSchemaRegistry")
+    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    #registry_controller = getControllerService(ts_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
     for controller in controllers:
@@ -737,7 +752,8 @@ def upload_templates():
     # Get root PG
     root_pg = nipyapi.canvas.get_process_group("root")
     # Upload templates
-    templates_path = "/app/config/templates"
+    templates_path = "/app/config/templates/HortonworksSchemaRegistry"
+    #templates_path = "/app/config/templates/ConfluentSchemaRegistry"
     for template in os.listdir(templates_path):
         try:
             nipyapi.templates.upload_template(

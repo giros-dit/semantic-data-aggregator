@@ -221,7 +221,7 @@ def processStreamSourceState(streamSource: Entity, ngsi: NGSILDClient):
         else:
             logger.info("Delete '{0}' NiFi flow. A processing error was found. The NiFi flow is being used by output agent entities.".format(streamSource.id))
 
-            
+
 def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
     """
     Process TelemetrySource entity resources (i.e., NiFi flows) based on the value of the action property.
