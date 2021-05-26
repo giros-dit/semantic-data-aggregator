@@ -1,0 +1,75 @@
+{
+    "type": "record",
+    "name": "EveRecord",
+    "namespace": "giros.org",
+    "fields": [
+        {
+            "name": "timestamp",
+            "type": "string",
+            "logicalType": "local-timestamp-millis",
+            "doc": "/eve-record/timestamp"
+        },
+        {
+
+            "name": "value",
+            "type": "double",
+            "logicalType": "decimal",
+            "precision": "6",
+            "doc": "/eve-record/value"
+        },
+        {
+
+            "name": "unit",
+            "type": "string",
+            "doc": "/eve-record/unit"
+        },
+        {
+
+            "name": "device_id",
+            "type":  ["null", "string"],
+            "doc": "/eve-record/device-id",
+            "aliases": ["device-id"]
+        },
+        {
+            "name": "labels",
+            "doc": "/eve-record/labels",
+            "type": [
+                "null",
+                {
+                    "type": "record",
+                    "name": "Labels",
+                    "aliases": ["labelsType"],
+                    "fields": [
+                        {
+                            "name": "label",
+                            "doc": "/eve-record/labels/label",
+                            "type": [
+                                "null",
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "record",
+                                        "name": "Label",
+                                        "aliases": ["labelType"],
+                                        "fields": [
+                                            {
+                                                "name": "name",
+                                                "type": "string",
+                                                "doc": "/eve-record/labels/label/name"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "string",
+                                                "doc": "/eve-record/labels/label/value"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
