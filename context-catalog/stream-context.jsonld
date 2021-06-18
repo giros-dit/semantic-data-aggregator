@@ -5,14 +5,6 @@
         "version": "http://example.org/version",
         "KafkaTopic": "http://example.org/KafkaTopic",
         "hasKafkaBroker": "http://example.org/hasKafkaBroker",
-        "schemaURL": "http://example.org/schemaURL",
-        "EVESource": "http://example.org/EVESource",
-        "SOLogSource": "http://example.org/SOLogSource",
-        "hasInput": "http://example.org/hasInput",
-        "hasOutput": "http://example.org/hasOutput",
-        "schemaName": "http://example.org/schemaName",
-        "groupId": "http://example.org/groupId",
-        "offset": "http://example.org/offset",
-        "topicName": "http://example.org/topicName"
+        "schemaURL": "http://example.org/schemaURL"
     }
 }
