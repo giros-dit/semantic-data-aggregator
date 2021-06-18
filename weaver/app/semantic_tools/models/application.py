@@ -1,20 +1,10 @@
-from .common import Asset, URI
+from .common import Asset, StatefulAsset, URI
 from .ngsi_ld.entity import Property, Relationship
 from typing import Literal, Optional
 
 
-class Action(Property):
-    value: Literal["START", "STOP", "END"]
-
-
 class ApplicationType(Property):
     value: Literal["FLINK", "NIFI"]
-
-
-class State(Property):
-    value: Literal["BUILDING", "FAILED", "RUNNING", "STOPPED", "CLEANED",
-                   "UPLOADED", "ENABLED", "DISABLED"]
-    stateInfo: Optional[Property]
 
 
 class Application(Asset):
@@ -24,12 +14,10 @@ class Application(Asset):
     uri: URI
 
 
-class Task(Asset):
+class Task(StatefulAsset):
     type: Literal["Task"] = "Task"
-    action: Action
     arguments: Optional[Property]
     hasApplication: Relationship
     hasInput: Relationship
     hasOutput: Relationship
-    state: State
     taskId: Property

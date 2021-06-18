@@ -1,9 +1,9 @@
 from .ngsi_ld.entity import Property, Relationship
-from .common import Asset
+from .common import Asset, StatefulAsset
 from typing import Literal, Optional
 
 
-class Device(Asset):
+class Device(StatefulAsset):
     type: Literal["Device"] = "Device"
     hasEndpoint: Relationship
     protocol: Property

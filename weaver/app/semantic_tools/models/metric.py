@@ -1,5 +1,5 @@
 from .ngsi_ld.entity import Property, Relationship
-from .common import Asset
+from .common import Asset, StatefulAsset
 from typing import Literal, Optional
 
 
@@ -17,7 +17,7 @@ class MetricFamily(Asset):
     unit: Optional[Property]
 
 
-class Prometheus(Asset):
+class Prometheus(StatefulAsset):
     type: Literal["Prometheus"] = "Prometheus"
     hasEndpoint: Relationship
     version: Optional[Property]
