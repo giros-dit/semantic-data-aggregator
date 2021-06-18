@@ -1,8 +1,8 @@
-from .ngsi_ld.entity import Entity, Property, Relationship
+from .ngsi_ld.entity import Asset, Property, Relationship
 from typing import Literal, Optional
 
 
-class VNF(Entity):
+class VNF(Asset):
     type: Literal["VNF"] = "VNF"
     descriptorId: Property
     hasMetrics: Optional[Relationship] = None
