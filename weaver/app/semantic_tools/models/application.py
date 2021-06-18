@@ -1,5 +1,5 @@
-from .common import URI
-from .ngsi_ld.entity import Asset, Property, Relationship
+from .common import Asset, URI
+from .ngsi_ld.entity import Property, Relationship
 from typing import Literal, Optional
 
 

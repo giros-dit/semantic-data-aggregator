@@ -1,4 +1,5 @@
-from .ngsi_ld.entity import Asset, Property, Relationship
+from .ngsi_ld.entity import Property, Relationship
+from .common import Asset
 from typing import Literal, Optional
 
 
