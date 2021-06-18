@@ -1,16 +1,10 @@
 {
     "@context": {
-        "Endpoint": "http://example.org/Endpoint",
-        "hasLogin": "http://example.org/hasLogin",
         "Device": "http://example.org/Device",
+        "hasEndpoint": "http://example.org/hasEndpoint",
         "protocol": "http://example.org/protocol",
         "version": "http://example.org/version",
-        "hasEndpoint": "http://example.org/hasEndpoint",
-        "TelemetrySource": "http://example.org/TelemetrySource",
-        "XPath": "http://example.org/XPath",
-        "subscriptionMode": "http://example.org/subscriptionMode",
-        "collectsFrom": "http://example.org/collectsFrom",
-        "MetricTarget": "http://example.org/MetricTarget",
-        "hasInput": "http://example.org/hasInput"
+        "Module": "http://example.org/Module",
+        "org": "http://example.org/org"
     }
 }

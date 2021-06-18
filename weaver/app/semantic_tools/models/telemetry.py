@@ -1,26 +1,16 @@
-from .ngsi_ld.entity import Entity, Property, Relationship
-from .common import Agent
+from .ngsi_ld.entity import Property, Relationship
+from .common import Asset
 from typing import Literal, Optional
 
 
-class Device(Agent):
+class Device(Asset):
     type: Literal["Device"] = "Device"
     hasEndpoint: Relationship
-    name: Property
     protocol: Property
     version: Optional[Property]
 
 
-class Module(Entity):
+class Module(Asset):
     type: Literal["Module"] = "Module"
-    name: Property
     org: Property
     version: Property
-
-
-class TelemetrySource(Agent):
-    type: Literal["TelemetrySource"] = "TelemetrySource"
-    collectsFrom: Relationship
-    XPath: Property
-    subscriptionMode: Property
-    #interval: Optional[Property] = None
