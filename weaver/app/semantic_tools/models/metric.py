@@ -12,7 +12,6 @@ class Metric(Asset):
 
 class MetricFamily(Asset):
     type: Literal["MetricFamily"] = "MetricFamily"
-    familyName: Property
     familyType: Property
     help: Optional[Property]
     unit: Optional[Property]

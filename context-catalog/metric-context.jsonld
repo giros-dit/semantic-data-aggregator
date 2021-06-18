@@ -5,7 +5,6 @@
         "hasMetricFamily": "http://example.org/hasMetricFamily",
         "hasPrometheus": "http://example.org/hasPrometheus",
         "MetricFamily": "http://example.org/MetricFamily",
-        "familyName": "http://example.org/familyName",
         "familyType": "http://example.org/familyType",
         "help": "http://example.org/help",
         "unit": "http://example.org/unit",
