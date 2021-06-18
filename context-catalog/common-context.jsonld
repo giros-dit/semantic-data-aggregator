@@ -1,12 +1,12 @@
 {
     "@context": {
-        "Agent": "http://example.org/Agent",
-        "action": "http://example.org/action",
-        "state": "http://example.org/state",
-        "stateInfo": "http://example.org/stateInfo",
+        "Asset": "http://example.org/Asset",
+        "owner": "http://example.org/owner",
+        "tags": "http://example.org/tags",
         "Credentials": "http://example.org/Credentials",
         "authMethod": "http://example.org/authMethod",
         "Endpoint": "http://example.org/Endpoint",
+        "hasCredentials": "http://example.org/hasCredentials",
         "hasLogin": "http://example.org/hasLogin"
     }
 }
