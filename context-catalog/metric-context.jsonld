@@ -1,21 +1,16 @@
 {
     "@context": {
+        "Metric": "http://example.org/Metric",
+        "labels": "http://example.org/labels",
+        "hasMetricFamily": "http://example.org/hasMetricFamily",
+        "hasPrometheus": "http://example.org/hasPrometheus",
+        "MetricFamily": "http://example.org/MetricFamily",
+        "familyName": "http://example.org/familyName",
+        "familyType": "http://example.org/familyType",
+        "help": "http://example.org/help",
+        "unit": "http://example.org/unit",
         "Prometheus": "http://example.org/Prometheus",
         "hasEndpoint": "http://example.org/hasEndpoint",
-        "version": "http://example.org/version",
-        "MetricSource": "http://example.org/MetricSource",
-        "collectsFrom": "http://example.org/collectsFrom",
-        "expression": "http://example.org/expression",
-        "interval": "http://example.org/interval",
-        "MetricTarget": "http://example.org/MetricTarget",
-        "hasInput": "http://example.org/hasInput",
-        "MetricProcessor": "http://example.org/MetricProcessor",
-        "hasApplication": "http://example.org/hasApplication",
-        "jobId": "http://example.org/jobId",
-        "arguments": "http://example.org/arguments",
-	"StreamApplication": "http://example.org/StreamApplication",
-	"fileName": "http://example.org/fileName",
-	"fileId": "http://example.org/fileId",
-	"entryClass": "http://example.org/entryClass"
+        "version": "http://example.org/version"
     }
 }
