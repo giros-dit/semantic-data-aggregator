@@ -1,5 +1,43 @@
 version: '3'
 services:
+  ceos1:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos1
+    container_name: ceos1
+    ports:
+      - "6030:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  ceos2:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos2
+    container_name: ceos2
+    ports:
+      - "6031:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
   consumer:
     build:
       context: ./consumer
@@ -69,40 +107,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
-#  kafka-streams:
-#    image: ubuntu:18.04
-#    hostname: kafka-streams
-#    container_name: kafka-streams
-#    build:
-#      context: ./kafka/streams
-#    depends_on:
-#      - kafka
-#      - zookeeper
-#    volumes:
-#      - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
-#    command: tail -f /dev/null
   nifi:
-    image: apache/nifi
+    build:
+      context: ./nifi
+      dockerfile: Dockerfile
     hostname: nifi
     container_name: nifi
+    user: root
     ports:
       - "8080:8080"
-  node-exporter-1:
-    image: prom/node-exporter
-    hostname: node-exporter-1
-    container_name: node-exporter-1
-    ports:
-      - "9100:9100"
-    depends_on:
-      - prometheus
-  node-exporter-2:
-    image: prom/node-exporter
-    hostname: node-exporter-2
-    container_name: node-exporter-2
-    ports:
-      - "9101:9100"
-    depends_on:
-      - prometheus
+    volumes:
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./nifi:/opt/aggregator
   postgres:
     image: mdillon/postgis
     hostname: postgres
@@ -115,14 +131,6 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
-    ports:
-      - "9099:9090"
-    volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   schema-registry-confluent:
     image: confluentinc/cp-schema-registry:6.1.1
     hostname: schema-registry-confluent
@@ -152,7 +160,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - schema-registry
+      - schema-registry-confluent
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
@@ -162,21 +170,15 @@ services:
     depends_on:
       - kafka
       - postgres
-  stream-catalog:
-    image: halverneus/static-file-server
-    hostname: stream-catalog
-    container_name: stream-catalog
-    ports:
-      - "8083:8080"
-    volumes:
-      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver
     hostname: weaver
     container_name: weaver
+    user: root
     volumes:
       - ./weaver/app:/app
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
@@ -189,3 +191,6 @@ services:
     logging:
       driver: none
     working_dir: /
+networks:
+  net1:
+  net2:

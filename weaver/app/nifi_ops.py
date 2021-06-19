@@ -46,9 +46,6 @@ def deleteMetricSource(metricSource: MetricSource):
     registry_controller = None
     for controller in controllers:
         # Registry cannot be disabled as it has dependants
-        if controller.component.name == "HortonworksSchemaRegistry":
-            registry_controller = controller
-            continue
         if controller.component.name == "ConfluentSchemaRegistry":
             registry_controller = controller
             continue
@@ -82,9 +79,6 @@ def deleteStreamSource(streamSource: Entity):
     registry_controller = None
     for controller in controllers:
         # Registry cannot be disabled as it has dependants
-        if controller.component.name == "HortonworksSchemaRegistry":
-            registry_controller = controller
-            continue
         if controller.component.name == "ConfluentSchemaRegistry":
             registry_controller = controller
             continue
@@ -111,9 +105,6 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     registry_controller = None
     for controller in controllers:
         # Registry cannot be disabled as it has dependants
-        if controller.component.name == "HortonworksSchemaRegistry":
-            registry_controller = controller
-            continue
         if controller.component.name == "ConfluentSchemaRegistry":
             registry_controller = controller
             continue
@@ -174,10 +165,8 @@ def deployMetricSource(metricSource: MetricSource,
 
     # Enable controller services
     # Start with the registry controller
-    logger.debug("Enabling controller HortonworksSchemaRegistry...")
-    registry_controller = getControllerService(ms_pg, "HortonworksSchemaRegistry")
-    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
-    #registry_controller = getControllerService(ms_pg, "ConfluentSchemaRegistry")
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(ms_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
     for controller in controllers:
@@ -293,10 +282,8 @@ def deployStreamSource(streamSource: Entity,
 
     # Enable controller services
     # Start with the registry controller
-    logger.debug("Enabling controller HortonworksSchemaRegistry...")
-    registry_controller = getControllerService(streamSource_pg, "HortonworksSchemaRegistry")
-    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
-    #registry_controller = getControllerService(streamSource_pg, "ConfluentSchemaRegistry")
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(streamSource_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
     for controller in controllers:
@@ -384,10 +371,8 @@ def deployTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient) 
     ts_pg_flow = nipyapi.templates.deploy_template(ts_pg.id, ts_template.id)
     # Enable controller services
     # Start with the registry controller
-    logger.debug("Enabling controller HortonworksSchemaRegistry...")
-    registry_controller = getControllerService(ts_pg, "HortonworksSchemaRegistry")
-    #logger.debug("Enabling controller ConfluentSchemaRegistry...")
-    #registry_controller = getControllerService(ts_pg, "ConfluentSchemaRegistry")
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(ts_pg, "ConfluentSchemaRegistry")
     nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
     for controller in controllers:
@@ -548,6 +533,20 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
     ms_pg = nipyapi.canvas.get_process_group(metricSource.id)
     # Stop MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, False)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..." % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..." % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
     # Get Endpoint
     prometheus_entity = ngsi.retrieveEntityById(metricSource.collectsFrom.object)
     prometheus = Prometheus.parse_obj(prometheus_entity)
@@ -584,14 +583,19 @@ def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
         nipyapi.nifi.ProcessorConfigDTO(
             scheduling_period='{0}{1}'.format(metricSource.interval.value,
                                               interval_unit)))
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(ms_pg, "ConfluentSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True, True)
+    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
     # Restart MS PG
     nipyapi.canvas.schedule_process_group(ms_pg.id, True)
     logger.info("MetricSource '{0}' flow upgraded in NiFi.".format(metricSource.id))
-    # Enable controller services
-    controllers = nipyapi.canvas.list_all_controllers(ms_pg.id, False)
-    for controller in controllers:
-        if controller.status.run_status != 'ENABLED':
-            nipyapi.canvas.schedule_controller(controller, True, True)
 
 
 def upgradeMetricTarget(metricTarget: MetricTarget):
@@ -615,8 +619,7 @@ def upgradeMetricTarget(metricTarget: MetricTarget):
     logger.info("MetricTarget '{0}' flow upgraded in NiFi.".format(metricTarget.id))
 
 
-def upgradeStreamSource(streamSource: Entity,
-                     ngsi: NGSILDClient) -> ProcessGroupEntity:
+def upgradeStreamSource(streamSource: Entity, ngsi: NGSILDClient):
     """
     Stops flow, updates variables and re-starts flow
     for a given StreamSource entity (i.e., EVESource or SOLogSource).
@@ -624,7 +627,22 @@ def upgradeStreamSource(streamSource: Entity,
     streamSource_pg = nipyapi.canvas.get_process_group(streamSource.id)
     # Stop StreamSource PG
     nipyapi.canvas.schedule_process_group(streamSource_pg.id, False)
-
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..."
+                         % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..."
+                 % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
     # Get source Kafka topic
     source_topic_entity = ngsi.retrieveEntityById(streamSource.hasInput.object)
     source_topic = KafkaTopic.parse_obj(source_topic_entity)
@@ -659,17 +677,19 @@ def upgradeStreamSource(streamSource: Entity,
     nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_broker_url", sink_broker_url)])
     nipyapi.canvas.update_variable_registry(streamSource_pg, [("sink_topic", sink_topic_name)])
 
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(streamSource_pg, "ConfluentSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True, True)
+    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
     # Restart StreamSource PG
     nipyapi.canvas.schedule_process_group(streamSource_pg.id, True)
     logger.info("StreamSource '{0}' flow upgraded in NiFi.".format(streamSource.id))
-    # Enable controller services
-    controllers = nipyapi.canvas.list_all_controllers(streamSource_pg.id, False)
-    for controller in controllers:
-        if controller.status.run_status != 'ENABLED':
-            nipyapi.canvas.schedule_controller(controller, True, True)
-
-    logger.info("StreamSource '{0}' flow deployed in NiFi.".format(streamSource.id))
-    return streamSource_pg
 
 
 def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
@@ -680,6 +700,20 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
     # Stop TS PG
     nipyapi.canvas.schedule_process_group(ts_pg.id, False)
+     # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..." % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..." % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
     # Get gNMI server address from hasEndpoint relationship
     device_entity = ngsi.retrieveEntityById(telemetrySource.collectsFrom.object)
     device = Device.parse_obj(device_entity)
@@ -735,13 +769,18 @@ def upgradeTelemetrySource(telemetrySource: TelemetrySource, ngsi: NGSILDClient)
     # arguments = telemetrySource.arguments.value+" --name {0}".format(subscription_mode)
     arguments = "--config {0} subscribe --name {1}".format(filename, subscription_name)
     nipyapi.canvas.update_variable_registry(ts_pg, [("arguments", arguments)])
-    # Restart TS PG
-    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
     # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(ts_pg, "ConfluentSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
     controllers = nipyapi.canvas.list_all_controllers(ts_pg.id, False)
     for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
         if controller.status.run_status != 'ENABLED':
             nipyapi.canvas.schedule_controller(controller, True, True)
+    # Restart TS PG
+    nipyapi.canvas.schedule_process_group(ts_pg.id, True)
     logger.info("TelemetrySource '{0}' flow upgraded in NiFi.".format(telemetrySource.id))
 
 
@@ -752,8 +791,7 @@ def upload_templates():
     # Get root PG
     root_pg = nipyapi.canvas.get_process_group("root")
     # Upload templates
-    templates_path = "/app/config/templates/HortonworksSchemaRegistry"
-    #templates_path = "/app/config/templates/ConfluentSchemaRegistry"
+    templates_path = "/app/config/templates"
     for template in os.listdir(templates_path):
         try:
             nipyapi.templates.upload_template(

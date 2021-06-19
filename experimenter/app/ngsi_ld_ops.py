@@ -1,7 +1,6 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import State
-
+from semantic_tools.models.common import State
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
@@ -11,11 +10,13 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
+    EVESource = "urn:ngsi-ld:Subscription:EVESource:experimenter-subs"
     MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:experimenter-subs"
     MetricSource = "urn:ngsi-ld:Subscription:MetricSource:experimenter-subs"
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-subs"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:experimenter-subs"
     TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:experimenter-subs"
+    SOLogSource = "urn:ngsi-ld:Subscription:SOLogSource:experimenter-subs"
     Prometheus = "urn:ngsi-ld:Subscription:Prometheus:experimenter-subs"
     Device = "urn:ngsi-ld:Subscription:Device:experimenter-subs"
     Endpoint = "urn:ngsi-ld:Subscription:Endpoint:experimenter-subs"
@@ -77,6 +78,14 @@ def _subscribeToEntity(ngsi: NGSILDClient,
         )
 
 
+def subscribeEVESource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for EVESource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.EVESource,
+                       uri, "state")
+
+
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for MetricSource entity
@@ -114,6 +123,14 @@ def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     Create subscription for TelemetrySource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "state")
+
+
+def subscribeSOLogSource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for SOLogSource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.SOLogSource,
                        uri, "state")
 
 

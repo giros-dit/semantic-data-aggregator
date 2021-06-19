@@ -1,0 +1,17 @@
+{
+     "current_time":"2021-05-17T07:53:13Z",
+     "operation":"termination",
+     "nsID":"fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413",
+     "nsdID":"vCDN_aiml",
+     "total_termination_time":42631,
+     "SOE_time":1637,
+     "ROE_time":2331,
+     "operation_ID_for_termination_op_datetime_difference":4,
+     "hierarchical_SOE_dispatching_datetime_difference":6,
+     "ROE_deleting_LLs_stop_datetime_difference":0,
+     "ROE_updating_DBs_stop_datetime_difference":12,
+     "terminating_threshold_based_alerts_stop_datetime_difference":122,
+     "terminating_monitoring_jobs_stop_datetime_difference":144,
+     "terminating_AIML_jobs_stop_datetime_difference":1474,
+     "CoreMANO_wrapper_time":38661
+}

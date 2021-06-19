@@ -10,7 +10,6 @@ from semantic_tools.models.metric import (
 from semantic_tools.models.telemetry import TelemetrySource, Device
 from semantic_tools.models.stream import EVESource, SOLogSource
 
-
 import logging
 import nifi_ops
 import flink_ops
