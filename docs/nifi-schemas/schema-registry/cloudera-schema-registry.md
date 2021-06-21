@@ -1,6 +1,6 @@
 # HWX Schema Registry and Apache NiFi
 
-Hortonworks - now part of Cloudera - provides an open source implementation of a [schema registry](http://registry-project.readthedocs.io/en/latest/). As of this writing, the registry only supports Avro schemas, atlhough there are future plans to add support for other types such as Protobuf or JSON schema.
+Hortonworks - now part of `Cloudera` - provides an open source implementation of a [schema registry](http://registry-project.readthedocs.io/en/latest/). As of this writing, the registry only supports Avro schemas, although there are future plans to add support for other types such as Protobuf or JSON schema.
 
 For our prototype, the registry is deployed as another Docker service. To this end, we build a custom Docker image that containerizes the registry service, and then we deploy it along with a Postgres database as the storage backend. It is worth noting that the registry supports other storage backends such as MySQL or Oracle database, but we chose Postgres as it is already used by the Scorpio Context Broker.
 
