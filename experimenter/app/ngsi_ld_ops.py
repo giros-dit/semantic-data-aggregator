@@ -1,7 +1,6 @@
 from enum import Enum
 from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import State
-
+from semantic_tools.models.common import State
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 
 import logging
@@ -11,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
+    EVESource = "urn:ngsi-ld:Subscription:EVESource:experimenter-subs"
     MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:experimenter-subs"
     MetricSource = "urn:ngsi-ld:Subscription:MetricSource:experimenter-subs"
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-subs"
@@ -75,6 +75,14 @@ def _subscribeToEntity(ngsi: NGSILDClient,
             "Experimenter is already subscribed to %s entities!"
             % subscriptionType.name
         )
+
+
+def subscribeEVESource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for EVESource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.EVESource,
+                       uri, "state")
 
 
 def subscribeMetricSource(ngsi: NGSILDClient, uri: str):

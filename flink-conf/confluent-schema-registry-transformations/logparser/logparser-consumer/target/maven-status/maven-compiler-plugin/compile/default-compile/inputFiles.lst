@@ -1,2 +1,3 @@
-/home/daniel/Escritorio/update/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-consumer/src/main/java/giros/org/SoLog.java
-/home/daniel/Escritorio/update/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-consumer/src/main/java/giros/org/SoLogConsumerJob.java
+/home/daniel/Escritorio/update/fix/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-consumer/src/main/java/giros/org/SoInstatiationMetrics.java
+/home/daniel/Escritorio/update/fix/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-consumer/src/main/java/giros/org/SoInstantiationMetrics.java
+/home/daniel/Escritorio/update/fix/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-consumer/src/main/java/giros/org/SoLogParserConsumerJob.java

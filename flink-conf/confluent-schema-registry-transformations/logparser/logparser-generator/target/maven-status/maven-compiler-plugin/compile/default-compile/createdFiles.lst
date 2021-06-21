@@ -1,4 +1,4 @@
-giros/org/SoLog$Builder.class
-giros/org/SoLog.class
-giros/org/SoLogGeneratorJob$DataGeneratorSource.class
-giros/org/SoLogGeneratorJob.class
+giros/org/SoLogParserGeneratorJob$DataGeneratorSource.class
+giros/org/SoInstantiationMetrics.class
+giros/org/SoInstantiationMetrics$Builder.class
+giros/org/SoLogParserGeneratorJob.class

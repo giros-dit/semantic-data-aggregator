@@ -3,7 +3,6 @@ from .common import Agent
 from typing import Literal, Optional
 
 
-
 class Offset(Property):
     value: Literal["earliest", "latest", "none"]
 

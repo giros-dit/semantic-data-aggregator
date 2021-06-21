@@ -1,2 +1,2 @@
-/home/daniel/Escritorio/update/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-generator/src/main/java/giros/org/SoLogGeneratorJob.java
-/home/daniel/Escritorio/update/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-generator/src/main/java/giros/org/SoLog.java
+/home/daniel/Escritorio/update/fix/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-generator/src/main/java/giros/org/SoInstantiationMetrics.java
+/home/daniel/Escritorio/update/fix/s-82/semantic-data-aggregator/flink-conf/confluent-schema-registry-transformations/logparser/logparser-generator/src/main/java/giros/org/SoLogParserGeneratorJob.java
