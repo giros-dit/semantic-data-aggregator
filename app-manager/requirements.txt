@@ -6,3 +6,4 @@ python-multipart
 pyyaml
 requests
 uvicorn
+xml

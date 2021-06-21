@@ -1,7 +1,7 @@
 {
     "@context": {
         "Application": "http://example.org/Application",
-        "applicationId": "http://example.org/applicationId",
+        "internalId": "http://example.org/internalId",
         "applicationType": "http://example.org/applicationType",
         "Task": "http://example.org/Task",
         "action": "http://example.org/action",

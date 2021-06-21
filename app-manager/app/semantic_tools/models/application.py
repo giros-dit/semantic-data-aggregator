@@ -9,7 +9,7 @@ class ApplicationType(Property):
 
 class Application(Asset):
     type: Literal["Application"] = "Application"
-    applicationId: Property
+    internalId: Property
     applicationType: ApplicationType
     uri: URI
 
