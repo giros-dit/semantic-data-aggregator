@@ -66,32 +66,6 @@ services:
       - "8085:8080"
     volumes:
       - ./experimenter/app:/app
-  flink-jobmanager:
-    image: flink:latest
-    hostname: flink-jobmanager
-    container_name: flink-jobmanager
-    ports:
-      - "8084:8081"
-    command: jobmanager
-    environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-jobmanager
-    volumes:
-      - ./flink-conf:/flink-conf
-  flink-taskmanager:
-    image: flink:latest
-    hostname: flink-taskmanager
-    container_name: flink-taskmanager
-    depends_on:
-      - flink-jobmanager
-    command: taskmanager
-    scale: 1
-    environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: flink-jobmanager
-        taskmanager.numberOfTaskSlots: 2
   kafka:
     image: wurstmeister/kafka:latest
     hostname: kafka
@@ -137,7 +111,7 @@ services:
     container_name: schema-registry-confluent
     restart: always
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-confluent
       SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO

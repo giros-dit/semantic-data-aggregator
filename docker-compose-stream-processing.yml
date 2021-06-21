@@ -69,24 +69,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
-#  kafka-streams:
-#    image: ubuntu:18.04
-#    hostname: kafka-streams
-#    container_name: kafka-streams
-#    build:
-#      context: ./kafka/streams
-#    depends_on:
-#      - kafka
-#      - zookeeper
-#    volumes:
-#      - ./kafka/streams/streams.examples:/kafka_2.13-2.7.0/streams.examples
-#    command: tail -f /dev/null
   nifi:
-    image: apache/nifi
+    build:
+      context: ./nifi
+      dockerfile: Dockerfile
     hostname: nifi
     container_name: nifi
+    user: root
     ports:
       - "8080:8080"
+    volumes:
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./nifi:/opt/aggregator
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
@@ -129,7 +123,7 @@ services:
     container_name: schema-registry-confluent
     restart: always
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-confluent
       SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
@@ -152,7 +146,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - schema-registry
+      - schema-registry-confluent
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
