@@ -1,5 +1,43 @@
 version: '3'
 services:
+  ceos1:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos1
+    container_name: ceos1
+    ports:
+      - "6030:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  ceos2:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos2
+    container_name: ceos2
+    ports:
+      - "6031:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
   consumer:
     build:
       context: ./consumer
@@ -18,6 +56,10 @@ services:
       - "8082:8080"
     volumes:
       - ./context-catalog:/web
+  complex-publisher:
+    image: complex_publisher
+    hostname: complex-publisher
+    container_name: complex-publisher
   experimenter:
     build:
       context: ./experimenter
@@ -28,8 +70,34 @@ services:
       - "8085:8080"
     volumes:
       - ./experimenter/app:/app
+  flink-jobmanager:
+    image: flink:latest
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - "8084:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+    volumes:
+      - ./flink-conf:/flink-conf
+  flink-taskmanager:
+    image: flink:latest
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 2
   kafka:
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:latest
     hostname: kafka
     container_name: kafka
     ports:
@@ -43,15 +111,49 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
+  kafka-rest-proxy:
+    image: confluentinc/cp-kafka-rest:latest
+    hostname: kafka-rest-proxy
+    container_name: kafka-rest-proxy
+    restart: always
+    environment:
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry-confluent:8081/
+    ports:
+      - "8087:8082"
+    depends_on:
+      - kafka
+      - schema-registry-confluent
+      - zookeeper
+  kafka-topics-ui:
+    image: landoop/kafka-topics-ui:0.9.4
+    hostname: kafka-topics-ui
+    container_name: kafka-topics-ui
+    restart: always
+    environment:
+      KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082/
+      PROXY: "true"
+    ports:
+      - "18000:8000"
+    depends_on:
+      - kafka
+      - kafka-rest-proxy
+      - schema-registry-confluent
+      - zookeeper
   nifi:
     build:
       context: ./nifi
       dockerfile: Dockerfile
     hostname: nifi
     container_name: nifi
+    user: root
     ports:
       - "8080:8080"
     volumes:
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./nifi:/opt/aggregator
   node-exporter-1:
     image: prom/node-exporter
@@ -89,22 +191,36 @@ services:
       - "9099:9090"
     volumes:
       - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
-  schema-registry:
-    image: schema-registry:0.9.0
-    hostname: schema-registry
-    container_name: schema-registry
+  schema-registry-confluent:
+    image: confluentinc/cp-schema-registry:6.1.1
+    hostname: schema-registry-confluent
+    container_name: schema-registry-confluent
+    restart: always
     environment:
-      DB_TYPE: "postgresql"
-      DATA_SRC_CLASS_NAME: "org.postgresql.ds.PGSimpleDataSource"
-      DB_URL: "jdbc:postgresql://postgres/ngb"
-      DB_USER: ngb
-      DB_PASSWORD: ngb
-      REGISTRY_HEAP_OPTS: "-Xmx1G -Xms1G"
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-confluent
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
     ports:
-      - "9010:9090"
-      - "9011:9091"
+      - 8086:8081
     depends_on:
-      - postgres
+      - zookeeper
+  schema-registry-confluent-ui:
+    image: landoop/schema-registry-ui:latest
+    hostname: schema-registry-confluent-ui
+    container_name: schema-registry-confluent-ui
+    environment:
+      SCHEMAREGISTRY_URL: http://schema-registry-confluent:8081
+      ALLOW_GLOBAL: "true"
+      ALLOW_TRANSITIVE: "true"
+      ALLOW_DELETION: "true"
+      READONLY_MODE: "true"
+      PROXY: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - schema-registry-confluent
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
@@ -114,13 +230,23 @@ services:
     depends_on:
       - kafka
       - postgres
+  stream-catalog:
+    image: halverneus/static-file-server
+    hostname: stream-catalog
+    container_name: stream-catalog
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver
     hostname: weaver
     container_name: weaver
+    user: root
     volumes:
       - ./weaver/app:/app
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
@@ -133,3 +259,6 @@ services:
     logging:
       driver: none
     working_dir: /
+networks:
+  net1:
+  net2:

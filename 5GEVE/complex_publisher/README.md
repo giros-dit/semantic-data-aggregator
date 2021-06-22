@@ -26,3 +26,5 @@ Where:
 * **port:** port to which Kafka is listening in that network (e.g. 9092).
 * **topic:** Kafka topic in which the publisher will publish the data.
 * **n_metrics:** Number of publish operations performed by this publisher.
+
+Also, the docker compose file `docker-compose.yml` automates the execution of a docker service with the `complex_publisher` image.

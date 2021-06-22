@@ -1,11 +1,14 @@
 from fastapi import FastAPI, status, Request
 from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import (
     MetricSource, MetricTarget,
     MetricProcessor, StreamApplication,
-    Prometheus, Endpoint
+    Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
+from semantic_tools.models.telemetry import TelemetrySource, Device
+from semantic_tools.models.stream import EVESource
 
 import logging
 import ngsi_ld_ops
@@ -39,6 +42,7 @@ async def startup_event():
     # Check Scorpio API is up
     ngsi_ld_ops.check_scorpio_status(ngsi)
     # Subscribe to data pipeline agent entities
+    ngsi_ld_ops.subscribeEVESource(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeMetricSource(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeMetricProcessor(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeStreamApplication(ngsi, experimenter_uri)
@@ -56,6 +60,10 @@ async def startup_event():
 async def receiveNotification(request: Request):
     notifications = await request.json()
     for notification in notifications["data"]:
+        if notification["type"] == "EVESource":
+            eveSource = EVESource.parse_obj(notification)
+            logger.info(eveSource.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(eveSource.state.value, eveSource.state.stateInfo.value))
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
             logger.info(metricSource.json(indent=4, sort_keys=True, exclude_unset=True))

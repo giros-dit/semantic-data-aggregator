@@ -1,0 +1,170 @@
+version: '3'
+services:
+  ceos1:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos1
+    container_name: ceos1
+    ports:
+      - "6030:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  ceos2:
+    image: "ceos-image:4.24.5M"
+    hostname: ceos2
+    container_name: ceos2
+    ports:
+      - "6031:6030"
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+    networks:
+      default:
+      net1:
+      net2:
+  consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
+    hostname: consumer
+    container_name: consumer
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./consumer/app:/app
+  context-catalog:
+    image: halverneus/static-file-server
+    hostname: context-catalog
+    container_name: context-catalog
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./context-catalog:/web
+  experimenter:
+    build:
+      context: ./experimenter
+      dockerfile: Dockerfile
+    hostname: experimenter
+    container_name: experimenter
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./experimenter/app:/app
+  kafka:
+    image: wurstmeister/kafka:latest
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_LOG_DIRS: "/tmp/kafka-logs"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zookeeper
+  nifi:
+    build:
+      context: ./nifi
+      dockerfile: Dockerfile
+    hostname: nifi
+    container_name: nifi
+    user: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./nifi:/opt/aggregator
+  postgres:
+    image: mdillon/postgis
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+    logging:
+      driver: none
+  schema-registry-confluent:
+    image: confluentinc/cp-schema-registry:6.1.1
+    hostname: schema-registry-confluent
+    container_name: schema-registry-confluent
+    restart: always
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-confluent
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
+    ports:
+      - 8086:8081
+    depends_on:
+      - zookeeper
+  schema-registry-confluent-ui:
+    image: landoop/schema-registry-ui:latest
+    hostname: schema-registry-confluent-ui
+    container_name: schema-registry-confluent-ui
+    environment:
+      SCHEMAREGISTRY_URL: http://schema-registry-confluent:8081
+      ALLOW_GLOBAL: "true"
+      ALLOW_TRANSITIVE: "true"
+      ALLOW_DELETION: "true"
+      READONLY_MODE: "true"
+      PROXY: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - schema-registry-confluent
+  scorpio:
+    image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
+    hostname: scorpio
+    container_name: scorpio
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kafka
+      - postgres
+  weaver:
+    build:
+      context: ./weaver
+    hostname: weaver
+    container_name: weaver
+    user: root
+    volumes:
+      - ./weaver/app:/app
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+    depends_on:
+      - nifi
+      - scorpio
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181"
+    logging:
+      driver: none
+    working_dir: /
+networks:
+  net1:
+  net2:
