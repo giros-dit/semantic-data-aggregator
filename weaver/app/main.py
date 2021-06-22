@@ -1,21 +1,29 @@
 from fastapi import FastAPI, status, Request
 from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.models.application import Task
 from semantic_tools.models.common import Endpoint
-from semantic_tools.models.metric import (
-    MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication,
-    Prometheus
+from semantic_tools.models.metric import Prometheus
+from semantic_tools.models.telemetry import Device
+from weaver.health import (
+    processDeviceState,
+    processEndpointState,
+    processPrometheusState
 )
-from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.stream import EVESource, SOLogSource
+from weaver.orchestration import process_task
+from weaver.flink.utils import check_flink_status
+from weaver.nifi.utils import check_nifi_status
+from weaver.ngsi_ld.utils import (
+    check_scorpio_status,
+    subscribeTask,
+    subscribeDevice,
+    subscribeEndpoint,
+    subscribePrometheus
+)
+
 
 import logging
-import nifi_ops
-import flink_ops
-import orchestration_ops
 import nipyapi
-import ngsi_ld_ops
 
 logger = logging.getLogger(__name__)
 
@@ -43,63 +51,43 @@ app = FastAPI(
     title="Weaver API",
     version="1.0.0")
 
+
 @app.on_event("startup")
 async def startup_event():
     # Check NiFi REST API is up
-    nifi_ops.check_nifi_status()
-    # Upload NiFi templates
-    nifi_ops.upload_templates()
+    check_nifi_status()
     # Check Flink REST API is up
-    flink_ops.check_flink_status(flink)
+    check_flink_status(flink)
     # Check Scorpio API is up
-    ngsi_ld_ops.check_scorpio_status(ngsi)
+    check_scorpio_status(ngsi)
     # Subscribe to data pipeline agent entities
-    ngsi_ld_ops.subscribeEVESource(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeMetricSource(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeMetricProcessor(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeSOLogSource(ngsi, weaver_uri)
+    subscribeTask(ngsi, weaver_uri)
     # Subscribe to data source entities
-    ngsi_ld_ops.subscribePrometheus(ngsi, weaver_uri)
-    ngsi_ld_ops.subscribeDevice(ngsi, weaver_uri)
+    subscribePrometheus(ngsi, weaver_uri)
+    subscribeDevice(ngsi, weaver_uri)
     # Subscribe to Endpoint entities
-    ngsi_ld_ops.subscribeEndpoint(ngsi, weaver_uri)
+    subscribeEndpoint(ngsi, weaver_uri)
+
 
 @app.post("/notify",
           status_code=status.HTTP_200_OK)
 async def receiveNotification(request: Request):
     notifications = await request.json()
     for notification in notifications["data"]:
-        if notification["type"] == "EVESource":
-            eveSource = EVESource.parse_obj(notification)
-            orchestration_ops.processStreamSourceState(eveSource, ngsi)
-        if notification["type"] == "MetricSource":
-            metricSource = MetricSource.parse_obj(notification)
-            orchestration_ops.processMetricSourceState(metricSource, ngsi)
-        if notification["type"] == "MetricTarget":
-            metricTarget = MetricTarget.parse_obj(notification)
-            orchestration_ops.processMetricTargetState(metricTarget, ngsi)
-        if notification["type"] == "MetricProcessor":
-            metricProcessor = MetricProcessor.parse_obj(notification)
-            orchestration_ops.processMetricProcessorState(metricProcessor, ngsi, flink)
-        if notification["type"] == "StreamApplication":
-            streamApplication = StreamApplication.parse_obj(notification)
-            orchestration_ops.processStreamApplicationState(streamApplication, ngsi, flink)
-        if notification["type"] == "TelemetrySource":
-            telemetrySource = TelemetrySource.parse_obj(notification)
-            orchestration_ops.processTelemetrySourceState(telemetrySource, ngsi)
-        if notification["type"] == "SOLogSource":
-            soLogSource = SOLogSource.parse_obj(notification)
-            orchestration_ops.processStreamSourceState(soLogSource, ngsi)
-        if notification["type"] == "Prometheus":
-            prometheus = Prometheus.parse_obj(notification)
-            orchestration_ops.processPrometheusState(prometheus, ngsi)
+        if notification["type"] == "Task":
+            task = Task.parse_obj(notification)
+            process_task(task, ngsi, flink)
         if notification["type"] == "Device":
             device = Device.parse_obj(notification)
-            orchestration_ops.processDeviceState(device, ngsi)
+            processDeviceState(device, ngsi)
         if notification["type"] == "Endpoint":
             endpoint = Endpoint.parse_obj(notification)
-            orchestration_ops.processEndpointState(endpoint, ngsi)
+            processEndpointState(endpoint, ngsi)
+        if notification["type"] == "Prometheus":
+            prometheus = Prometheus.parse_obj(notification)
+            processPrometheusState(prometheus, ngsi)
+        else:
+            logger.error(
+                "Weaver does not support %s entity type."
+                % notification["type"])
 

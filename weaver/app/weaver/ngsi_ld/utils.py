@@ -10,16 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 class SubscriptionType(Enum):
-    EVESource = "urn:ngsi-ld:Subscription:EVESource:weaver-subs"
-    MetricProcessor = "urn:ngsi-ld:Subscription:MetricProcessor:weaver-subs"
-    MetricSource = "urn:ngsi-ld:Subscription:MetricSource:weaver-subs"
-    MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:weaver-subs"
-    StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:weaver-subs"
-    TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:weaver-subs"
-    SOLogSource = "urn:ngsi-ld:Subscription:SOLogSource:weaver-subs"
-    Prometheus = "urn:ngsi-ld:Subscription:Prometheus:weaver-subs"
     Device = "urn:ngsi-ld:Subscription:Device:weaver-subs"
     Endpoint = "urn:ngsi-ld:Subscription:Endpoint:weaver-subs"
+    Prometheus = "urn:ngsi-ld:Subscription:Prometheus:weaver-subs"
+    Task = "urn:ngsi-ld:Subscription:Task:weaver-subs"
+
 
 def check_scorpio_status(ngsi: NGSILDClient):
     """
@@ -197,70 +192,6 @@ def stateToDisabled(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):
     ngsi.updateEntityAttrs(entityId, state)
 
 
-def subscribeEVESource(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for EVESource entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.EVESource,
-                       uri, "action")
-
-
-def subscribeMetricSource(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for MetricSource entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricSource,
-                       uri, "action")
-
-
-def subscribeMetricTarget(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for MetricTarget entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricTarget,
-                       uri, "action")
-
-
-def subscribeMetricProcessor(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for MetricProcessor entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.MetricProcessor,
-                       uri, "action")
-
-
-def subscribeStreamApplication(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for StreamApplication entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.StreamApplication,
-                       uri, "action")
-
-
-def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for TelemetrySource entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
-                       uri, "action")
-
-
-def subscribeSOLogSource(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for SOLogSource entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.SOLogSource,
-                       uri, "action")
-
-
-def subscribePrometheus(ngsi: NGSILDClient, uri: str):
-    """
-    Create subscription for Prometheus entity.
-    """
-    _subscribeToEntity(ngsi, SubscriptionType.Prometheus,
-                       uri, "action")
-
-
 def subscribeDevice(ngsi: NGSILDClient, uri: str):
     """
     Create subscription for Device entity.
@@ -274,4 +205,20 @@ def subscribeEndpoint(ngsi: NGSILDClient, uri: str):
     Create subscription for Endpoint entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.Endpoint,
+                       uri, "action")
+
+
+def subscribePrometheus(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Prometheus entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Prometheus,
+                       uri, "action")
+
+
+def subscribeTask(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for Task entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.Task,
                        uri, "action")
