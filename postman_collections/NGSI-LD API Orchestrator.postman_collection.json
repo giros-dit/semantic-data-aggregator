@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0b582567-e1af-4517-bcbc-21c68f1cdb8f",
+		"_postman_id": "c397e8a4-6428-42b3-84a4-31c78cc4f313",
 		"name": "NGSI-LD API Orchestrator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -39,7 +39,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:EVESource:1\",\n    \"type\": \"EVESource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:1\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:2\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-1\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-source\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic-1\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:EVESource:1\",\n    \"type\": \"EVESource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:1\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:2\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-source\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -165,7 +165,7 @@
 					"name": "SOLogSource",
 					"item": [
 						{
-							"name": "Create SOLogSource:1",
+							"name": "Create SOLogSource:1 - 5Gr-SO instantiation metrics",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -192,7 +192,101 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:1\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:3\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:4\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"so-log-1\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-log-topic-1\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:1\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:3\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:4\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"so-instantiation-metrics\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-instantiation-metrics-topic\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create SOLogSource:2 - 5Gr-SO scaling metrics",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:2\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:6\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:5\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"so-scaling-metrics\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-scaling-metrics-topic\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create SOLogSource:3 - 5Gr-SO termination metrics",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:SOLogSource:3\",\n    \"type\": \"SOLogSource\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:8\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaTopic:7\"\n    },\n    \"schemaName\": {\n        \"type\": \"Property\",\n        \"value\": \"so-termination-metrics\"\n    },\n    \"groupId\": {\n        \"type\": \"Property\",\n        \"value\": \"so-logs\"\n    },\n    \"offset\": {\n        \"type\": \"Property\",\n        \"value\": \"latest\"\n    },\n    \"topicName\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-termination-metrics-topic\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -271,6 +365,84 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:SOLogSource:1/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"urn:ngsi-ld:SOLogSource:1",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes - 5Gr-SO scaling metrics",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"schemaName\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"so-scaling-metrics\"\r\n    },\r\n    \"topicName\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"spain-5tonic.so-scaling-metrics-topic\"\r\n    },\r\n    \"hasInput\": {\r\n        \"type\": \"Relationship\",\r\n        \"object\": \"urn:ngsi-ld:KafkaTopic:6\"\r\n    },\r\n    \"hasOutput\": {\r\n        \"type\": \"Relationship\",\r\n        \"object\": \"urn:ngsi-ld:KafkaTopic:5\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:SOLogSource:1/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"urn:ngsi-ld:SOLogSource:1",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes - 5Gr-SO termination metrics",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"schemaName\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"so-termination-metrics\"\r\n    },\r\n    \"topicName\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"spain-5tonic.so-termination-metrics-topic\"\r\n    },\r\n    \"hasInput\": {\r\n        \"type\": \"Relationship\",\r\n        \"object\": \"urn:ngsi-ld:KafkaTopic:8\"\r\n    },\r\n    \"hasOutput\": {\r\n        \"type\": \"Relationship\",\r\n        \"object\": \"urn:ngsi-ld:KafkaTopic:7\"\r\n    }\r\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:SOLogSource:1/attrs",
@@ -565,6 +737,45 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metricsource1}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Entity Attributes - Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"START\"\r\n    },\r\n    \"name\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"node_network_transmit_packets_total\"\r\n    },\r\n    \"expression\": {\r\n        \"type\": \"Property\",\r\n        \"value\": {\r\n            \"job\": \"node-1\",\r\n            \"device\":\"eth0\"\r\n        }\r\n    }\r\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metricsource1}}/attrs",
@@ -2366,7 +2577,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:1\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:1\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:1\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.eve-topic\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:1\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2482,7 +2693,7 @@
 									"response": []
 								},
 								{
-									"name": "Create KafkaTopic:3",
+									"name": "Create KafkaTopic:3 - 5Gr-SO instantiation metrics topic",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2509,7 +2720,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:3\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-log-topic-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:3\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:3\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-instantiation-metrics-topic\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:3\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2549,6 +2760,144 @@
 										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
 									},
 									"response": []
+								},
+								{
+									"name": "Create KafkaTopic:6 - 5Gr-SO scaling metrics topic",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Link",
+												"type": "text",
+												"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:6\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-scaling-metrics-topic\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:3\"\n    }\n}"
+										},
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												""
+											]
+										},
+										"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+									},
+									"response": []
+								},
+								{
+									"name": "Delete KafkaTopic:6",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:KafkaTopic:6",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												"urn:ngsi-ld:KafkaTopic:6"
+											]
+										},
+										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+									},
+									"response": []
+								},
+								{
+									"name": "Create KafkaTopic:8 - 5Gr-SO termination metrics topic",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Link",
+												"type": "text",
+												"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:8\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"spain-5tonic.so-termination-metrics-topic\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:3\"\n    }\n}"
+										},
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												""
+											]
+										},
+										"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+									},
+									"response": []
+								},
+								{
+									"name": "Delete KafkaTopic:8",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:KafkaTopic:8",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												"urn:ngsi-ld:KafkaTopic:8"
+											]
+										},
+										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+									},
+									"response": []
 								}
 							]
 						},
@@ -2583,7 +2932,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:2\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:4\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaBroker:2\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"SDA-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Endpoint:4\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2652,7 +3001,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:2\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"eve-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:2\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"eve\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2694,7 +3043,7 @@
 									"response": []
 								},
 								{
-									"name": "Create KafkaTopic:4",
+									"name": "Create KafkaTopic:4 - 5Gr-SO instantiation metrics topic",
 									"event": [
 										{
 											"listen": "prerequest",
@@ -2721,7 +3070,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:4\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"so-log-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:4\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"so-instantiation-metrics\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
 										},
 										"url": {
 											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -2756,6 +3105,144 @@
 												"v1",
 												"entities",
 												"urn:ngsi-ld:KafkaTopic:4"
+											]
+										},
+										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+									},
+									"response": []
+								},
+								{
+									"name": "Create KafkaTopic:5 - 5Gr-SO scaling metrics topic",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Link",
+												"type": "text",
+												"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:5\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"so-scaling-metrics\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
+										},
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												""
+											]
+										},
+										"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+									},
+									"response": []
+								},
+								{
+									"name": "Delete KafkaTopic:5",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:KafkaTopic:5",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												"urn:ngsi-ld:KafkaTopic:5"
+											]
+										},
+										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+									},
+									"response": []
+								},
+								{
+									"name": "Create KafkaTopic:7 - 5Gr-SO termination metrics topic",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Link",
+												"type": "text",
+												"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"urn:ngsi-ld:KafkaTopic:7\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"so-termination-metrics\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:KafkaBroker:2\"\n    }\n}"
+										},
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												""
+											]
+										},
+										"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+									},
+									"response": []
+								},
+								{
+									"name": "Delete KafkaTopic:7",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:KafkaTopic:7",
+											"protocol": "http",
+											"host": [
+												"{{broker}}"
+											],
+											"path": [
+												"ngsi-ld",
+												"v1",
+												"entities",
+												"urn:ngsi-ld:KafkaTopic:7"
 											]
 										},
 										"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -4004,11 +4491,7 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "138.4.7.159:9090"
-		},
-		{
-			"key": "broker",
-			"value": "localhost:1026"
+			"value": "localhost:9090"
 		},
 		{
 			"key": "context.jsonld",
