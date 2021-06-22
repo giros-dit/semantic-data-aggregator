@@ -40,3 +40,4 @@ class KafkaTopic(Entity):
     description: Optional[Property]
     name: Property
     schemaURL: Optional[Property]
+

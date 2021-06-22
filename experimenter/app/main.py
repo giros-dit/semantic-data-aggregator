@@ -7,7 +7,6 @@ from semantic_tools.models.metric import (
     Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.telemetry import TelemetrySource, Device
 from semantic_tools.models.stream import EVESource, SOLogSource
 
 import logging

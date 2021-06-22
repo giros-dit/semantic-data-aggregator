@@ -3,7 +3,7 @@ from nipyapi.nifi.models.controller_service_entity import ControllerServiceEntit
 from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus, MetricSource, MetricTarget
-from semantic_tools.models.stream import EVESource, SOLogSource, KafkaBroker, KafkaTopic
+from semantic_tools.models.stream import EVESource, KafkaBroker, KafkaTopic, SOLogSource
 from semantic_tools.models.telemetry import Device, TelemetrySource
 from semantic_tools.models.ngsi_ld.entity import Entity
 from semantic_tools.utils.units import UnitCode
