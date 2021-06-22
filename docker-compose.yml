@@ -111,6 +111,38 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
+  kafka-rest-proxy:
+    image: confluentinc/cp-kafka-rest:latest
+    hostname: kafka-rest-proxy
+    container_name: kafka-rest-proxy
+    restart: always
+    environment:
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry-confluent:8081/
+    ports:
+      - "8087:8082"
+    depends_on:
+      - kafka
+      - schema-registry-confluent
+      - zookeeper
+  kafka-topics-ui:
+    image: landoop/kafka-topics-ui:0.9.4
+    hostname: kafka-topics-ui
+    container_name: kafka-topics-ui
+    restart: always
+    environment:
+      KAFKA_REST_PROXY_URL: http://kafka-rest-proxy:8082/
+      PROXY: "true"
+    ports:
+      - "18000:8000"
+    depends_on:
+      - kafka
+      - kafka-rest-proxy
+      - schema-registry-confluent
+      - zookeeper
   nifi:
     build:
       context: ./nifi

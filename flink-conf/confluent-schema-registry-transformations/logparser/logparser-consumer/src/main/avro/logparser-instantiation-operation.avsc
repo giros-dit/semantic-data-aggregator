@@ -1,0 +1,108 @@
+{
+    "type": "record",
+    "name": "SoInstantiationMetrics",
+    "namespace": "giros.org",
+    "fields": [
+        {
+            "name": "current_time",
+            "type": "string",
+            "logicalType": "date",
+            "doc": "/so-instantiation-metrics/current_time"
+        },
+        {
+            "name": "operation",
+            "type": "string",
+            "doc": "/so-instantiation-metrics/operation"
+        },
+        {
+            "name": "nsID",
+            "type": "string",
+            "doc": "/so-instantiation-metrics/nsID"
+        },
+        {
+            "name": "nsdID",
+            "type": "string",
+            "doc": "/so-instantiation-metrics/nsdID"
+        },
+        {
+            "name": "total_instantiation_time",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/total_instantiation_time"
+        },
+        {
+            "name": "SOE_time",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/SOE_time"
+        },
+        {
+            "name": "ROE_time",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_time"
+        },
+        {
+            "name": "operation_ID_for_instantiation_op_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/operation_ID_for_instantiation_op_datetime_difference"
+        },
+        {
+            "name": "hierarchical_SOE_dispatching_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/hierarchical_SOE_dispatching_datetime_difference"
+        },
+        {
+            "name": "ROE_created_VLs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_created_VLs_start_datetime_difference"
+        },
+        {
+            "name": "ROE_retrieve_RL_resources_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_retrieve_RL_resources_start_datetime_difference"
+        },
+        {
+            "name": "ROE_parsing_NSDs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_parsing_NSDs_start_datetime_difference"
+        },
+        {
+            "name": "ROE_updating_DBs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_updating_DBs_start_datetime_difference"
+        },
+        {
+            "name": "ROE_extract_VLs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/ROE_extract_VLs_start_datetime_difference"
+        },
+        {
+            "name": "retrieving_descriptor_from_catalogue_DBs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference"
+        },
+        {
+            "name": "PA_calculation_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/PA_calculation_start_datetime_difference"
+        },
+        {
+            "name": "create_threshold_based_alerts_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/create_threshold_based_alerts_start_datetime_difference"
+        },
+        {
+            "name": "create_monitoring_jobs_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/create_monitoring_jobs_start_datetime_difference"
+        },
+        {
+            "name": "create_AIML_alerts_start_datetime_difference",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/create_AIML_alerts_start_datetime_difference"
+        },
+        {
+            "name": "CoreMANO_wrapper_time",
+            "type": "long",
+            "doc": "/so-instantiation-metrics/CoreMANO_wrapper_time"
+        }
+    ]
+}

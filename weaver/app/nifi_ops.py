@@ -36,6 +36,32 @@ def check_nifi_status():
         break
 
 
+def deleteEVESource(eveSource: EVESource):
+    """
+    Delete EVESource flow.
+    """
+    eve_pg = stopEVESource(eveSource)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(eve_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..."
+                         % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..."
+                 % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
+    # Delete MS PG
+    nipyapi.canvas.delete_process_group(eve_pg, True)
+    logger.info("EVESource '{0}' flow deleted in NiFi.".format(eveSource.id))
+
+
 def deleteMetricSource(metricSource: MetricSource):
     """
     Delete MetricSource flow.
@@ -119,6 +145,74 @@ def deleteTelemetrySource(telemetrySource: TelemetrySource):
     logger.info("TelemetrySource '{0}' flow deleted in NiFi.".format(telemetrySource.id))
 
 
+def deployEVESource(eveSource: EVESource,
+                    ngsi: NGSILDClient) -> ProcessGroupEntity:
+    """
+    Deploys a EVESource NiFi template
+    from a passed EVESource NGSI-LD entity.
+    """
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(eveSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(eveSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+    # We assume last string is an integer value
+    source_id_number = int(eveSource.id.split(":")[-1])
+    # Get root PG
+    root_pg = nipyapi.canvas.get_process_group("root")
+    # Y multiply ID last integer by 200, X fixed to -250 for MS PGs
+    es_pg = nipyapi.canvas.create_process_group(
+                    root_pg,
+                    eveSource.id,
+                    (-250, 200*source_id_number)
+    )
+    # Set variable for ES PG
+    group_id = eveSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
+    source_topics = eveSource.topicName.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value
+    nipyapi.canvas.update_variable_registry(es_pg, [("avro_schema", "eve")])
+    nipyapi.canvas.update_variable_registry(es_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_broker_url", source_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_topics", source_topics)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", sink_topic_name)])
+
+    # Deploy ES template
+    es_template = nipyapi.templates.get_template("EVESource")
+    es_pg_flow = nipyapi.templates.deploy_template(es_pg.id,
+                                                   es_template.id,
+                                                   -250, 200)
+
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(es_pg, "ConfluentSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True)
+    controllers = nipyapi.canvas.list_all_controllers(es_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True)
+
+    logger.info("EVESource '{0}' flow deployed in NiFi.".format(eveSource.id))
+    return es_pg
+
+
 def deployMetricSource(metricSource: MetricSource,
                        ngsi: NGSILDClient) -> ProcessGroupEntity:
     """
@@ -154,8 +248,8 @@ def deployMetricSource(metricSource: MetricSource,
     nipyapi.canvas.update_variable_registry(ms_pg, [("topic", entity_id)])
     nipyapi.canvas.update_variable_registry(ms_pg,
                                             [("prometheus_request", url)])
-    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", entity_id)])
     #nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", "prometheus")])
+    nipyapi.canvas.update_variable_registry(ms_pg, [("avro_schema", entity_id)])
 
     # Deploy MS template
     ms_template = nipyapi.templates.get_template("MetricSource")
@@ -523,6 +617,77 @@ def stopTelemetrySource(telemetrySource: TelemetrySource) -> ProcessGroupEntity:
     ts_pg = nipyapi.canvas.get_process_group(telemetrySource.id)
     nipyapi.canvas.schedule_process_group(ts_pg.id, False)
     return ts_pg
+
+
+def upgradeEVESource(eveSource: EVESource, ngsi: NGSILDClient):
+    """
+    Stops flow, updates variables and re-starts flow
+    for a given EVESource entity.
+    """
+    es_pg = nipyapi.canvas.get_process_group(eveSource.id)
+    # Stop ES PG
+    nipyapi.canvas.schedule_process_group(es_pg.id, False)
+    # Disable controller services
+    controllers = nipyapi.canvas.list_all_controllers(es_pg.id, False)
+    registry_controller = None
+    for controller in controllers:
+        # Registry cannot be disabled as it has dependants
+        if controller.component.name == "ConfluentSchemaRegistry":
+            registry_controller = controller
+            continue
+        if controller.status.run_status == 'ENABLED':
+            logger.debug("Disabling controller %s ..."
+                         % controller.component.name)
+            nipyapi.canvas.schedule_controller(controller, False, True)
+    # Disable registry controller
+    logger.debug("Disabling controller %s ..."
+                 % registry_controller.component.name)
+    nipyapi.canvas.schedule_controller(registry_controller, False, True)
+    # Get source Kafka topic
+    source_topic_entity = ngsi.retrieveEntityById(eveSource.hasInput.object)
+    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    # Get source Kafka broker
+    source_broker_entity = ngsi.retrieveEntityById(source_topic.hasKafkaBroker.object)
+    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    # Get Endpoint for source Kafka broker
+    source_endpoint_entity = ngsi.retrieveEntityById(source_broker.hasEndpoint.object)
+    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Get sink Kafka topic
+    sink_topic_entity = ngsi.retrieveEntityById(eveSource.hasOutput.object)
+    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    # Get sink Kafka broker
+    sink_broker_entity = ngsi.retrieveEntityById(sink_topic.hasKafkaBroker.object)
+    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint_entity = ngsi.retrieveEntityById(sink_broker.hasEndpoint.object)
+    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+
+    # Set variable for ES PG
+    group_id = eveSource.groupId.value
+    source_broker_url = source_endpoint.uri.value
+    source_topics = eveSource.topicName.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value
+    nipyapi.canvas.update_variable_registry(es_pg, [("avro_schema", "eve")])
+    nipyapi.canvas.update_variable_registry(es_pg, [("group_id", group_id)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_broker_url", source_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("source_topics", source_topics)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_broker_url", sink_broker_url)])
+    nipyapi.canvas.update_variable_registry(es_pg, [("sink_topic", sink_topic_name)])
+
+    # Enable controller services
+    # Start with the registry controller
+    logger.debug("Enabling controller ConfluentSchemaRegistry...")
+    registry_controller = getControllerService(es_pg, "ConfluentSchemaRegistry")
+    nipyapi.canvas.schedule_controller(registry_controller, True, True)
+    controllers = nipyapi.canvas.list_all_controllers(es_pg.id, False)
+    for controller in controllers:
+        logger.debug("Enabling controller %s ..." % controller.component.name)
+        if controller.status.run_status != 'ENABLED':
+            nipyapi.canvas.schedule_controller(controller, True, True)
+    # Restart StreamSource PG
+    nipyapi.canvas.schedule_process_group(es_pg.id, True)
+    logger.info("EVESource '{0}' flow upgraded in NiFi.".format(eveSource.id))
 
 
 def upgradeMetricSource(metricSource: MetricSource, ngsi: NGSILDClient):
