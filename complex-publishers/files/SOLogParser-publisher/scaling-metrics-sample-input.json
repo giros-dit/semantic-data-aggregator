@@ -1,0 +1,19 @@
+{
+     "current_time":"2021-05-17T07:53:13Z",
+     "operation":"scaling",
+     "nsID":"fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413",
+     "nsdID":"vCDN_aiml",
+     "total_scaling_time":42631,
+     "SOE_time":1637,
+     "ROE_time":2331,
+     "operation_ID_for_scaling_op_datetime_difference":4,
+     "hierarchical_SOE_dispatching_datetime_difference":6,
+     "SOEc_preparing_info_for_scaling_scale_datetime_difference":12,
+     "ROE_checking_resource_availability_scale_datetime_difference":3,
+     "ROE_extracted_scaled_VLs_at_RL_scale_datetime_difference":2310,
+     "ROE_scaled_LLs_at_RL_scale_datetime_difference":0,
+     "ROE_updating_DBs_scale_datetime_difference":12,
+     "scale_monitoring_jobs_scale_datetime_difference":144,
+     "scale_AIML_jobs_scale_datetime_difference":1474,
+     "CoreMANO_wrapper_time":38661
+}

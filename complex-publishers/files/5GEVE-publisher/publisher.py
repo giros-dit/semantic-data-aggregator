@@ -8,7 +8,7 @@ import re
 import csv
 import sys
 
-# usage: python3 publisher.py {broker_ip_address}:{port} {topic} {metrics_published}
+# usage: python3 publisher.py {broker_ip_address}:{port} {topic} {number_metrics_published}
 # e.g.   python3 publisher.py 192.168.11.51:9092 uc.4.france_nice.infrastructure_metric.expb_metricId 10
 
 def publish(producer, topic_name, metric_value, timestamp, unit, device_id, context):

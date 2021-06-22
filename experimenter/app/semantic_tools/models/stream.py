@@ -11,6 +11,17 @@ class EVESource(Agent):
     type: Literal["EVESource"] = "EVESource"
     hasInput: Relationship
     hasOutput: Relationship
+    schemaName: Property
+    groupId: Property
+    offset: Offset
+    topicName: Property
+
+
+class SOLogSource(Agent):
+    type: Literal["SOLogSource"] = "SOLogSource"
+    hasInput: Relationship
+    hasOutput: Relationship
+    schemaName: Property
     groupId: Property
     offset: Offset
     topicName: Property

@@ -7,8 +7,7 @@ from semantic_tools.models.metric import (
     Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.stream import EVESource
+from semantic_tools.models.stream import EVESource, SOLogSource
 
 import logging
 import ngsi_ld_ops
@@ -48,6 +47,7 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeSOLogSource(ngsi, experimenter_uri)
     # Subscribe to data sources entities
     ngsi_ld_ops.subscribePrometheus(ngsi, experimenter_uri)
     ngsi_ld_ops.subscribeDevice(ngsi, experimenter_uri)
@@ -84,6 +84,10 @@ async def receiveNotification(request: Request):
             telemetrySource = TelemetrySource.parse_obj(notification)
             logger.info(telemetrySource.json(indent=4, sort_keys=True, exclude_unset=True))
             logger.info("Notification! State: '{0}' -  State information: '{1}'".format(telemetrySource.state.value, telemetrySource.state.stateInfo.value))
+        if notification["type"] == "SOLogSource":
+            soLogSource = SOLogSource.parse_obj(notification)
+            logger.info(soLogSource.json(indent=4, sort_keys=True, exclude_unset=True))
+            logger.info("Notification! State: '{0}' -  State information: '{1}'".format(soLogSource.state.value, soLogSource.state.stateInfo.value))
         if notification["type"] == "Prometheus":
             prometheus = Prometheus.parse_obj(notification)
             logger.info(prometheus.json(indent=4, sort_keys=True, exclude_unset=True))

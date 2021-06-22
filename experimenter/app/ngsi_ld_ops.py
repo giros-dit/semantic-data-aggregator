@@ -16,6 +16,7 @@ class SubscriptionType(Enum):
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:experimenter-subs"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:experimenter-subs"
     TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:experimenter-subs"
+    SOLogSource = "urn:ngsi-ld:Subscription:SOLogSource:experimenter-subs"
     Prometheus = "urn:ngsi-ld:Subscription:Prometheus:experimenter-subs"
     Device = "urn:ngsi-ld:Subscription:Device:experimenter-subs"
     Endpoint = "urn:ngsi-ld:Subscription:Endpoint:experimenter-subs"
@@ -122,6 +123,14 @@ def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     Create subscription for TelemetrySource entity
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "state")
+
+
+def subscribeSOLogSource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for SOLogSource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.SOLogSource,
                        uri, "state")
 
 

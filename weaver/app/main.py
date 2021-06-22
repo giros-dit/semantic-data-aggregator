@@ -8,8 +8,7 @@ from semantic_tools.models.metric import (
     Prometheus
 )
 from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.stream import EVESource
-
+from semantic_tools.models.stream import EVESource, SOLogSource
 
 import logging
 import nifi_ops
@@ -48,7 +47,7 @@ app = FastAPI(
 async def startup_event():
     # Check NiFi REST API is up
     nifi_ops.check_nifi_status()
-    # Upload MetricSource and MetricTarget templates
+    # Upload NiFi templates
     nifi_ops.upload_templates()
     # Check Flink REST API is up
     flink_ops.check_flink_status(flink)
@@ -61,6 +60,7 @@ async def startup_event():
     ngsi_ld_ops.subscribeStreamApplication(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeMetricTarget(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeTelemetrySource(ngsi, weaver_uri)
+    ngsi_ld_ops.subscribeSOLogSource(ngsi, weaver_uri)
     # Subscribe to data source entities
     ngsi_ld_ops.subscribePrometheus(ngsi, weaver_uri)
     ngsi_ld_ops.subscribeDevice(ngsi, weaver_uri)
@@ -74,7 +74,7 @@ async def receiveNotification(request: Request):
     for notification in notifications["data"]:
         if notification["type"] == "EVESource":
             eveSource = EVESource.parse_obj(notification)
-            orchestration_ops.processEVESourceState(eveSource, ngsi)
+            orchestration_ops.processStreamSourceState(eveSource, ngsi)
         if notification["type"] == "MetricSource":
             metricSource = MetricSource.parse_obj(notification)
             orchestration_ops.processMetricSourceState(metricSource, ngsi)
@@ -90,6 +90,9 @@ async def receiveNotification(request: Request):
         if notification["type"] == "TelemetrySource":
             telemetrySource = TelemetrySource.parse_obj(notification)
             orchestration_ops.processTelemetrySourceState(telemetrySource, ngsi)
+        if notification["type"] == "SOLogSource":
+            soLogSource = SOLogSource.parse_obj(notification)
+            orchestration_ops.processStreamSourceState(soLogSource, ngsi)
         if notification["type"] == "Prometheus":
             prometheus = Prometheus.parse_obj(notification)
             orchestration_ops.processPrometheusState(prometheus, ngsi)
@@ -99,3 +102,4 @@ async def receiveNotification(request: Request):
         if notification["type"] == "Endpoint":
             endpoint = Endpoint.parse_obj(notification)
             orchestration_ops.processEndpointState(endpoint, ngsi)
+

@@ -8,7 +8,8 @@ RUN apt-get install -y openjdk-8-jdk python3 python3-pip curl locales nano git i
 RUN pip3 install kafka-python
 
 # Copy files
-COPY files/publisher.py /
+COPY files/5GEVE-publisher /5GEVE-publisher
+COPY files/SOLogParser-publisher /SOLogParser-publisher
 
 # Entrypoint script
 COPY files/entrypoint.sh /

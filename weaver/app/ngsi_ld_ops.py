@@ -16,10 +16,10 @@ class SubscriptionType(Enum):
     MetricTarget = "urn:ngsi-ld:Subscription:MetricTarget:weaver-subs"
     StreamApplication = "urn:ngsi-ld:Subscription:StreamApplication:weaver-subs"
     TelemetrySource = "urn:ngsi-ld:Subscription:TelemetrySource:weaver-subs"
+    SOLogSource = "urn:ngsi-ld:Subscription:SOLogSource:weaver-subs"
     Prometheus = "urn:ngsi-ld:Subscription:Prometheus:weaver-subs"
     Device = "urn:ngsi-ld:Subscription:Device:weaver-subs"
     Endpoint = "urn:ngsi-ld:Subscription:Endpoint:weaver-subs"
-
 
 def check_scorpio_status(ngsi: NGSILDClient):
     """
@@ -242,6 +242,14 @@ def subscribeTelemetrySource(ngsi: NGSILDClient, uri: str):
     Create subscription for TelemetrySource entity.
     """
     _subscribeToEntity(ngsi, SubscriptionType.TelemetrySource,
+                       uri, "action")
+
+
+def subscribeSOLogSource(ngsi: NGSILDClient, uri: str):
+    """
+    Create subscription for SOLogSource entity.
+    """
+    _subscribeToEntity(ngsi, SubscriptionType.SOLogSource,
                        uri, "action")
 
 

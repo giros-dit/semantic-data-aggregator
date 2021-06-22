@@ -3,7 +3,7 @@ from semantic_tools.clients.flink_api_rest import FlinkClient
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus, MetricSource, MetricTarget, StreamApplication, MetricProcessor
 from semantic_tools.models.telemetry import Device, TelemetrySource
-from semantic_tools.models.stream import EVESource
+from semantic_tools.models.stream import EVESource, SOLogSource
 from semantic_tools.models.ngsi_ld.entity import Entity
 
 import logging
@@ -16,55 +16,6 @@ import requests
 import subprocess
 
 logger = logging.getLogger(__name__)
-
-
-def processEVESourceState(eveSource: EVESource, ngsi: NGSILDClient):
-    """
-    Process EVESource entity resources (i.e., NiFi flows) based on the value of the action property.
-    """
-    ngsi_ld_ops.appendState(ngsi, eveSource.id, "Building the collection agent...")
-    es_pg = nifi_ops.getEVESourcePG(eveSource)
-    if eveSource.action.value == "START":
-        if es_pg:
-            logger.info(
-                "Upgrade '{0}' NiFi flow.".format(eveSource.id)
-            )
-            nifi_ops.upgradeEVESource(eveSource, ngsi)
-            ngsi_ld_ops.stateToRunning(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent upgraded successfully."})
-        else:
-            logger.info(
-                "Instantiate new '{0}' NiFi flow.".format(eveSource.id)
-            )
-            nifi_ops.instantiateEVESource(eveSource, ngsi)
-            ngsi_ld_ops.stateToRunning(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent started successfully."})
-
-    elif eveSource.action.value == "STOP":
-        if es_pg:
-            logger.info(
-                "Stop '{0}' NiFi flow.".format(eveSource.id)
-            )
-            nifi_ops.stopEVESource(eveSource)
-            logger.info("eveSource '{0}' flow stopped in NiFi.".format(eveSource.id))
-            ngsi_ld_ops.stateToStopped(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
-        else:
-            logger.info(
-                "New '{0}' NiFi flow to stop.".format(eveSource.id)
-            )
-            nifi_ops.deployEVESource(eveSource, ngsi)
-            ngsi_ld_ops.stateToStopped(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent deployed successfully."})
-
-    elif eveSource.action.value == "END":
-        output_exists = checkOutputExistence(eveSource, ngsi)
-        if output_exists == False:
-            logger.info(
-                "Delete '{0}' NiFi flow.".format(eveSource.id)
-            )
-            nifi_ops.deleteEVESource(eveSource)
-            ngsi_ld_ops.stateToCleaned(ngsi, eveSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
-            logger.info("Delete the '{0}' eveSource collection agent entity.".format(eveSource.id))
-            ngsi.deleteEntity(eveSource.id)
-        else:
-            logger.info("Delete '{0}' NiFi flow. A processing error was found. The NiFi flow is being used by output agent entities.".format(eveSource.id))
 
 
 def processMetricSourceState(metricSource: MetricSource, ngsi: NGSILDClient):
@@ -220,6 +171,55 @@ def processMetricTargetState(metricTarget: MetricTarget, ngsi: NGSILDClient):
         ngsi_ld_ops.stateToCleaned(ngsi, metricTarget.id, {"value": "SUCCESS! Dispatch agent deleted successfully."})
         logger.info("Delete the '{0}' MetricTarget dispatch agent entity.".format(metricTarget.id))
         ngsi.deleteEntity(metricTarget.id)
+
+
+def processStreamSourceState(streamSource: Entity, ngsi: NGSILDClient):
+    """
+    Process StreamSource entities (EVESource or SOLogSource) resources (i.e., NiFi flows) based on the value of the action property.
+    """
+    ngsi_ld_ops.appendState(ngsi, streamSource.id, "Building the collection agent...")
+    streamSource_pg = nifi_ops.getStreamSourcePG(streamSource)
+    if streamSource.action.value == "START":
+        if streamSource_pg:
+            logger.info(
+                "Upgrade '{0}' NiFi flow.".format(streamSource.id)
+            )
+            nifi_ops.upgradeStreamSource(streamSource, ngsi)
+            ngsi_ld_ops.stateToRunning(ngsi, streamSource.id, {"value": "SUCCESS! Collection agent upgraded successfully."})
+        else:
+            logger.info(
+                "Instantiate new '{0}' NiFi flow.".format(streamSource.id)
+            )
+            nifi_ops.instantiateStreamSource(streamSource, ngsi)
+            ngsi_ld_ops.stateToRunning(ngsi, streamSource.id, {"value": "SUCCESS! Collection agent started successfully."})
+
+    elif streamSource.action.value == "STOP":
+        if streamSource_pg:
+            logger.info(
+                "Stop '{0}' NiFi flow.".format(streamSource.id)
+            )
+            nifi_ops.stopStreamSource(streamSource)
+            logger.info("StreamSource '{0}' flow stopped in NiFi.".format(streamSource.id))
+            ngsi_ld_ops.stateToStopped(ngsi, streamSource.id, {"value": "SUCCESS! Collection agent stopped successfully."})
+        else:
+            logger.info(
+                "New '{0}' NiFi flow to stop.".format(streamSource.id)
+            )
+            nifi_ops.deployStreamSource(streamSource, ngsi)
+            ngsi_ld_ops.stateToStopped(ngsi, streamSource.id, {"value": "SUCCESS! Collection agent deployed successfully."})
+
+    elif streamSource.action.value == "END":
+        output_exists = checkOutputExistence(streamSource, ngsi)
+        if output_exists == False:
+            logger.info(
+                "Delete '{0}' NiFi flow.".format(streamSource.id)
+            )
+            nifi_ops.deleteStreamSource(streamSource)
+            ngsi_ld_ops.stateToCleaned(ngsi, streamSource.id, {"value": "SUCCESS! Collection agent deleted successfully."})
+            logger.info("Delete the '{0}' StreamSource collection agent entity.".format(streamSource.id))
+            ngsi.deleteEntity(streamSource.id)
+        else:
+            logger.info("Delete '{0}' NiFi flow. A processing error was found. The NiFi flow is being used by output agent entities.".format(streamSource.id))
 
 
 def processTelemetrySourceState(telemetrySource: TelemetrySource, ngsi: NGSILDClient):
