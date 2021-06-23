@@ -1,7 +1,8 @@
 from enum import Enum
-from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.common import State
 from semantic_tools.models.ngsi_ld.subscription import Subscription
+from semantic_tools.ngsi_ld.client import NGSILDClient
+
 
 import logging
 import time

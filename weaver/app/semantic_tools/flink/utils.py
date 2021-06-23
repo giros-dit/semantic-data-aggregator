@@ -1,9 +1,8 @@
-from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.clients.flink_api_rest import FlinkClient
+from semantic_tools.flink.client import FlinkClient
 from semantic_tools.models.application import Application, Task
+from semantic_tools.ngsi_ld.client import NGSILDClient
 
 import logging
-import subprocess
 import time
 
 logger = logging.getLogger(__name__)
@@ -18,7 +17,7 @@ def check_flink_status(flink: FlinkClient):
     while True:
         if flink.checkFlinkHealth():
             logger.info(
-                "Weaver successfully connected to Flink REST API!")
+                "Successfully connected to Flink REST API!")
             break
         else:
             logger.warning("Could not connect to Flink REST API. "
@@ -31,7 +30,8 @@ def submitStreamJob(task: Task,
                     ngsi: NGSILDClient,
                     flink: FlinkClient) -> str:
     """
-    Submits a stream processing Job instance to the stream processing engine (i.e., the Flink engine).
+    Submits a stream processing Job instance to the
+    stream processing engine (i.e., the Flink engine).
     """
     application_entity = ngsi.retrieveEntityById(
                                 task.hasApplication.object)
@@ -72,7 +72,8 @@ def getStreamAppArguments(task: Task,
                           input_topic: str,
                           output_topic: str) -> str:
     """
-    Gets all the attributes of the 'arguments' property from a specific task entity.
+    Gets all the attributes of the 'arguments'
+    property from a specific task entity.
     """
     arguments_list = []
     arguments_list.append(input_topic)

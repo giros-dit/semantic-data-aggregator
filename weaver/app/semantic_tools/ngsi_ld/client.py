@@ -7,13 +7,16 @@ import requests
 
 logger = logging.getLogger(__name__)
 
+CORE_CONTEXT = "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
 
 class Options(Enum):
     keyValues = "keyValues"
     sysAttrs = "sysAttrs"
 
-# Class built based on reference docs for the Scorpio Broker FIWARE NGSI-LD API Walktrough.
+# Class built based on reference docs for the
+# Scorpio Broker FIWARE NGSI-LD API Walktrough.
 # See https://scorpio.readthedocs.io/en/latest/API_walkthrough.html
+
 
 class NGSILDClient():
     def __init__(
@@ -21,7 +24,7 @@ class NGSILDClient():
             headers: dict = {},
             disable_ssl: bool = False,
             debug: bool = False,
-            context: str = "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"):
+            context: str = CORE_CONTEXT):
 
         self.headers = headers
         self.url = url
@@ -101,7 +104,8 @@ class NGSILDClient():
 
     # NGSI-LD Query Entity -> /entities
     def queryEntities(self, entityId: str = None, attrs: str = None,
-                      type: str = None, q: str = None, options: Options = None) -> dict:
+                      type: str = None, q: str = None,
+                      options: Options = None) -> dict:
         """
         Retrieve a set of entities which matches
         a specific query from an NGSI-LD system.
