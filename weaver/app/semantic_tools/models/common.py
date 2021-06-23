@@ -35,7 +35,7 @@ class Asset(Entity):
 class StatefulAsset(Asset):
     type: Literal["StatefulAsset"] = "StatefulAsset"
     action: Action
-    state: State
+    state: Optional[State]
 
 
 class Credentials(Asset):

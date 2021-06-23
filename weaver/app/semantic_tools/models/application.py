@@ -9,7 +9,7 @@ class ApplicationType(Property):
 
 class Application(Asset):
     type: Literal["Application"] = "Application"
-    applicationId: Property
+    internalId: Property
     applicationType: ApplicationType
     uri: URI
 
@@ -17,7 +17,7 @@ class Application(Asset):
 class Task(StatefulAsset):
     type: Literal["Task"] = "Task"
     arguments: Optional[Property]
+    internalId: Optional[Property]
     hasApplication: Relationship
     hasInput: Relationship
     hasOutput: Relationship
-    taskId: Property

@@ -1,7 +1,8 @@
-from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from nipyapi.nifi.models.controller_service_entity import (
     ControllerServiceEntity
 )
+from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
+from nipyapi.nifi.models.process_group_flow_entity import ProcessGroupFlowEntity
 from semantic_tools.models.application import Task
 from urllib3.exceptions import MaxRetryError
 
@@ -38,18 +39,17 @@ def deleteTask(task: Task):
     # Disable controller services (if any)
     controllers = nipyapi.canvas.list_all_controllers(task_pg.id, False)
     if controllers:
-        registry_controllers = None
+        registry_controller = None
         for controller in controllers:
             # Registry cannot be disabled as it has dependants
-            if "Registry" in controller.component.name:
-                registry_controllers.append[controller]
+            if "ConfluentSchemaRegistry" == controller.component.name:
+                registry_controller = controller
                 continue
             if controller.status.run_status == 'ENABLED':
                 logger.debug("Disabling controller %s ..."
                              % controller.component.name)
                 nipyapi.canvas.schedule_controller(controller, False, True)
-    # Disable registry controllers
-    for registry_controller in registry_controllers:
+        # Disable registry controller
         logger.debug("Disabling controller %s ..."
                      % registry_controller.component.name)
         nipyapi.canvas.schedule_controller(registry_controller, False, True)
@@ -58,7 +58,8 @@ def deleteTask(task: Task):
     logger.info("'{0}' flow deleted in NiFi.".format(task.id))
 
 
-def deployTask(task: Task, templateName, args) -> ProcessGroupEntity:
+def deployTask(task: Task, templateName: str,
+               args: dict) -> ProcessGroupEntity:
     """
     Deploys a NiFi template
     from a passed Task NGSI-LD entity.
@@ -73,39 +74,44 @@ def deployTask(task: Task, templateName, args) -> ProcessGroupEntity:
                     task.id,
                     (-250, 200*source_id_number)
     )
+    logger.info("Deploy with arguments %s" % args)
     # Set variables for Task PG
-    for argument, value in args:
+    for argument, value in args.items():
         nipyapi.canvas.update_variable_registry(task_pg, [(argument, value)])
 
     # Deploy Task template
     task_template = nipyapi.templates.get_template(templateName)
-    _ = nipyapi.templates.deploy_template(task_pg.id,
-                                          task_template.id,
-                                          -250, 200)
+    task_pg_flow = nipyapi.templates.deploy_template(
+                                        task_pg.id,
+                                        task_template.id,
+                                        -250, 200)
     # Enable controller services (if any)
     controllers = nipyapi.canvas.list_all_controllers(task_pg.id, False)
     if controllers:
-        # Start with the registry controllers
+        # Enable controller services
+        # Start with the registry controller
+        logger.debug("Enabling controller ConfluentSchemaRegistry...")
+        registry_controller = getControllerService(
+            task_pg, "ConfluentSchemaRegistry")
+        nipyapi.canvas.schedule_controller(registry_controller, True)
         for controller in controllers:
-            # Rely on component name for now
-            if "Registry" in controller.component.name:
-                logger.debug(
-                    "Enabling controller %s..." % controller.component.name)
-                registry_controller = getControllerService(
-                    task_pg, controller.component.name)
-                nipyapi.canvas.schedule_controller(registry_controller, True)
-        for controller in controllers:
+            if controller.id == registry_controller.id:
+                continue
+            logger.debug(
+                "Enabling controller %s ..."
+                % controller.component.name)
             if controller.status.run_status != 'ENABLED':
                 nipyapi.canvas.schedule_controller(controller, True)
     # Hack to support scheduling for a given processor
     if "interval" in args:
-        setPollingInterval(args["interval"])
+        setPollingInterval(task_pg_flow, args["interval"])
 
     logger.info("'{0}' flow deployed in NiFi.".format(task.id))
     return task_pg
 
 
-def instantiateTask(task: Task, templateName, args):
+def instantiateTask(task: Task, templateName: str,
+                    args: dict) -> ProcessGroupEntity:
     """
     Deploys and starts NiFi template given
     a Task entity.
@@ -115,6 +121,7 @@ def instantiateTask(task: Task, templateName, args):
     nipyapi.canvas.schedule_process_group(task_pg.id, True)
     logger.info(
         "'{0}' flow scheduled in NiFi.".format(task.id))
+    return task_pg
 
 
 def getControllerService(pg: ProcessGroupEntity,
@@ -135,12 +142,14 @@ def getTaskPG(task: Task) -> ProcessGroupEntity:
     return nipyapi.canvas.get_process_group(task.id)
 
 
-def setPollingInterval(pg_flow, interval):
+def setPollingInterval(pg_flow: ProcessGroupFlowEntity, interval: str):
+    logger.info("Set polling interval to %s milliseconds" % interval)
     # Retrieve Polling processor
     # so far rely on "Polling" string
     http_ps = None
     for ps in pg_flow.flow.processors:
         if "Polling" in ps.status.name:
+            logger.info("Updating %s processor" % ps.status.name)
             http_ps = ps
             break
     # Enforce interval unit to miliseconds

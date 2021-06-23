@@ -1,8 +1,8 @@
-from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.ngsi_ld import utils as ngsi_ld_ops
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Prometheus
 from semantic_tools.models.telemetry import Device
-from ops import ngsi_ld_ops
 
 import json
 import logging

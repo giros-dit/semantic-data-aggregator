@@ -1,5 +1,6 @@
 from enum import Enum
 from semantic_tools.models.common import State
+from semantic_tools.models.ngsi_ld.entity import Property
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 from semantic_tools.ngsi_ld.client import NGSILDClient
 
@@ -17,6 +18,24 @@ class SubscriptionType(Enum):
     Task = "urn:ngsi-ld:Subscription:Task:weaver-subs"
 
 
+def check_orion_status(ngsi: NGSILDClient):
+    """
+    Infinite loop that checks every 30 seconds
+    until Orion REST API becomes available.
+    """
+    logger.info("Checking Orion-LD REST API status ...")
+    while True:
+        if ngsi.checkOrionHealth():
+            logger.info(
+                "Successfully connected to Orion-LD REST API!")
+            break
+        else:
+            logger.warning("Could not connect to Orion-LD REST API. "
+                           "Retrying in 30 seconds ...")
+            time.sleep(30)
+            continue
+
+
 def check_scorpio_status(ngsi: NGSILDClient):
     """
     Infinite loop that checks every 30 seconds
@@ -26,7 +45,7 @@ def check_scorpio_status(ngsi: NGSILDClient):
     while True:
         if ngsi.checkScorpioHealth():
             logger.info(
-                "Weaver successfully connected to Scorpio REST API!")
+                "Successfully connected to Scorpio REST API!")
             break
         else:
             logger.warning("Could not connect to Scorpio REST API. "
@@ -87,6 +106,19 @@ def appendState(ngsi: NGSILDClient, entityId: str, stateInfo_value: str):
         ).dict(exclude_none=True)
     }
     ngsi.appendEntityAttrs(entityId, state)
+
+
+def appendInternalId(ngsi: NGSILDClient, entityId: str, internalId_value: str):
+    """
+    It appends 'state' property to an entity.
+    This property is set to 'BUILDING' by default.
+    """
+    internal_id = {
+        "internalId": Property(
+            value=internalId_value,
+        ).dict(exclude_none=True)
+    }
+    ngsi.appendEntityAttrs(entityId, internal_id)
 
 
 def stateToBuilding(ngsi: NGSILDClient, entityId: str, stateInfo_dict: dict):

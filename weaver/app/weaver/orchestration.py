@@ -1,12 +1,10 @@
-
-from semantic_tools.clients.flink_api_rest import FlinkClient
-from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.flink.client import FlinkClient
+from semantic_tools.flink import utils as flink_ops
 from semantic_tools.models.application import Application, Task
-from weaver.flink import utils as flink_ops
-from weaver.nifi import utils as nifi_ops
-from weaver.ngsi_ld import utils as ngsi_ld_ops
+from semantic_tools.nifi import utils as nifi_ops
+from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.ngsi_ld import utils as ngsi_ld_ops
 from weaver.applications import application_configs
-
 
 import logging
 
@@ -19,6 +17,8 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
     """
     application_entity = ngsi.retrieveEntityById(task.hasApplication.object)
     application = Application.parse_obj(application_entity)
+    logger.info("Processing task %s with application %s" % (
+        task.id, application.name.value))
     ngsi_ld_ops.appendState(ngsi, task.id, "Configuring task...")
     if task.action.value == "START":
         logger.info(
@@ -28,13 +28,12 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
         # by an intermidiate microservice
         # Weaver should only receive the final list of arguments
         # and configure the task with them
-        user_arguments = task.arguments.value
-        context_arguments = application_configs[
+        arguments = application_configs[
             application.name.value](task, ngsi)
-        arguments = {**user_arguments, **context_arguments}
         if application.applicationType.value == "NIFI":
-            nifi_ops.instantiateTask(
+            task_pg = nifi_ops.instantiateTask(
                 task, application.name.value, arguments)
+            ngsi_ld_ops.appendInternalId(ngsi, task.id, task_pg.id)
         elif application.applicationType.value == "FLINK":
             flink_ops.submitStreamJob(task, ngsi, flink)
         ngsi_ld_ops.stateToRunning(

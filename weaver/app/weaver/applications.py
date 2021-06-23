@@ -1,9 +1,9 @@
-from semantic_tools.clients.ngsi_ld import NGSILDClient
 from semantic_tools.models.application import Task
 from semantic_tools.models.common import Endpoint
 from semantic_tools.models.metric import Metric, Prometheus
 from semantic_tools.models.telemetry import Device, Module
 from semantic_tools.models.stream import KafkaBroker, KafkaTopic
+from semantic_tools.ngsi_ld.client import NGSILDClient
 
 import json
 import logging
@@ -25,6 +25,8 @@ def _getQueryLabels(expression: dict) -> str:
 
 
 def configEVESource(task: Task, ngsi: NGSILDClient) -> dict:
+    # Collect lineage information
+    # Task Input
     # Get source Kafka topic
     source_topic_entity = ngsi.retrieveEntityById(task.hasInput.object)
     source_topic = KafkaTopic.parse_obj(source_topic_entity)
@@ -36,6 +38,7 @@ def configEVESource(task: Task, ngsi: NGSILDClient) -> dict:
     source_endpoint_entity = ngsi.retrieveEntityById(
         source_broker.hasEndpoint.object)
     source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    # Task Output
     # Get sink Kafka topic
     sink_topic_entity = ngsi.retrieveEntityById(task.hasOutput.object)
     sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
@@ -48,26 +51,29 @@ def configEVESource(task: Task, ngsi: NGSILDClient) -> dict:
         sink_broker.hasEndpoint.object)
     sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
 
-    # Collect variables for EVESource
-    source_broker_url = source_endpoint.uri.value
+    # Prepare variables from context arguments
     # Only supports one input Kafka topic
     # although NiFi allows passing multiple
-    # topic names for consumption
+    # broker urls and multiple topic names
+    source_broker_url = source_endpoint.uri.value
     source_topic_name = source_topic.name.value
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
 
-    arguments = {
+    context_arguments = {
         # Avro schema hardcoded
         # although should be discovered
         # by asking registry with context information
         "avro_schema": "eve",
-        "group_id": task.arguments.value["group_id"],
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
         "sink_broker_url": sink_broker_url,
         "sink_topic": sink_topic_name
     }
+    # Combine context arguments with user arguments
+    user_arguments = task.arguments.value
+    arguments = {**context_arguments, **user_arguments}
+
     return arguments
 
 
@@ -99,9 +105,13 @@ def configMetricSource(task: Task, ngsi: NGSILDClient) -> dict:
     prometheus_request = ""
     if "expression" in task.arguments.value:
         labels = _getQueryLabels(task.arguments.value["expression"])
-        prometheus_request = (source_endpoint.uri.value + "?query=" + task.name.value + "{" + labels + "}")
+        prometheus_request = (
+            source_endpoint.uri.value +
+            "?query=" + source_metric.name.value +
+            "{" + labels + "}")
     else:
-        prometheus_request = source_endpoint.uri.value + "?query=" + task.name.value
+        prometheus_request = (source_endpoint.uri.value +
+                              "?query=" + source_metric.name.value)
 
     # Collect variables for MetricSource
     sink_broker_url = sink_endpoint.uri.value
@@ -112,7 +122,8 @@ def configMetricSource(task: Task, ngsi: NGSILDClient) -> dict:
         # although should be discovered
         # by asking registry with context information
         "avro_schema": "prometheus",
-        "promtheus_request": prometheus_request,
+        "interval": task.arguments.value["interval"],
+        "prometheus_request": prometheus_request,
         "sink_broker_url": sink_broker_url,
         "sink_topic": sink_topic_name
     }
