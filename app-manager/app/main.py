@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Init NGSI-LD API Client
 ngsi = NGSILDClient(
-            url="http://orion:1026",
+            url="http://scorpio:9090",
             headers={"Accept": "application/json"},
             context="http://context-catalog:8080/context.jsonld")
 
@@ -44,7 +44,7 @@ app.mount("/catalog", StaticFiles(directory="/catalog"), name="catalog")
 @app.on_event("startup")
 async def startup_event():
     # Check Orion-LD API is up
-    app_manager.check_orion_status(ngsi)
+    app_manager.check_scorpio_status(ngsi)
     # Check NiFi REST API is up
     app_manager.check_nifi_status()
     # Upload NiFi admin templates
