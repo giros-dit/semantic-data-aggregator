@@ -1,5 +1,16 @@
 version: '3'
 services:
+  app-manager:
+    build:
+        context: ./app-manager
+        dockerfile: Dockerfile
+    hostname: app-manager
+    container_name: app-manager
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./app-manager/app:/app
+      - ./app-manager/catalog:/catalog
   ceos1:
     image: "ceos-image:4.24.5M"
     hostname: ceos1
@@ -45,7 +56,7 @@ services:
     hostname: consumer
     container_name: consumer
     ports:
-      - "8081:8080"
+      - "8080"
     volumes:
       - ./consumer/app:/app
   context-catalog:
@@ -53,7 +64,7 @@ services:
     hostname: context-catalog
     container_name: context-catalog
     ports:
-      - "8082:8080"
+      - "8080"
     volumes:
       - ./context-catalog:/web
   complex-publisher:
@@ -230,14 +241,6 @@ services:
     depends_on:
       - kafka
       - postgres
-  stream-catalog:
-    image: halverneus/static-file-server
-    hostname: stream-catalog
-    container_name: stream-catalog
-    ports:
-      - "8083:8080"
-    volumes:
-      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver

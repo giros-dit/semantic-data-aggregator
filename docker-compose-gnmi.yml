@@ -1,5 +1,16 @@
 version: '3'
 services:
+  app-manager:
+    build:
+        context: ./app-manager
+        dockerfile: Dockerfile
+    hostname: app-manager
+    container_name: app-manager
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./app-manager/app:/app
+      - ./app-manager/catalog:/catalog
   ceos1:
     image: "ceos-image:4.24.5M"
     hostname: ceos1
