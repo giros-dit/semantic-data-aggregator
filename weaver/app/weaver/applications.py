@@ -1,8 +1,4 @@
 from semantic_tools.models.application import Task
-from semantic_tools.models.common import Endpoint
-from semantic_tools.models.metric import Metric, Prometheus
-from semantic_tools.models.telemetry import Device, Module
-from semantic_tools.models.stream import KafkaBroker, KafkaTopic
 from semantic_tools.ngsi_ld.client import NGSILDClient
 
 import json
@@ -24,32 +20,33 @@ def _getQueryLabels(expression: dict) -> str:
     return ",".join(labels)
 
 
-def configEVESource(task: Task, ngsi: NGSILDClient) -> dict:
+def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
+    """
+    Builds configuration arguments for EVESource application (NiFi)
+    """
     # Collect lineage information
+
     # Task Input
     # Get source Kafka topic
-    source_topic_entity = ngsi.retrieveEntityById(task.hasInput.object)
-    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    source_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
     # Get source Kafka broker
-    source_broker_entity = ngsi.retrieveEntityById(
-        source_topic.hasKafkaBroker.object)
-    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    source_broker = ngsi_ld.get_kafka_broker_from_topic(
+        source_topic)
     # Get Endpoint for source Kafka broker
-    source_endpoint_entity = ngsi.retrieveEntityById(
-        source_broker.hasEndpoint.object)
-    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        source_broker)
+
     # Task Output
     # Get sink Kafka topic
-    sink_topic_entity = ngsi.retrieveEntityById(task.hasOutput.object)
-    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
     # Get sink Kafka broker
-    sink_broker_entity = ngsi.retrieveEntityById(
-        sink_topic.hasKafkaBroker.object)
-    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    sink_broker = ngsi_ld.get_kafka_broker_from_topic(
+        sink_topic)
     # Get Endpoint for sink Kafka broker
-    sink_endpoint_entity = ngsi.retrieveEntityById(
-        sink_broker.hasEndpoint.object)
-    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        sink_broker)
 
     # Prepare variables from context arguments
     # Only supports one input Kafka topic
@@ -77,29 +74,36 @@ def configEVESource(task: Task, ngsi: NGSILDClient) -> dict:
     return arguments
 
 
-def configMetricSource(task: Task, ngsi: NGSILDClient) -> dict:
+def config_metric_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
+    """
+    Builds configuration arguments for MetricSource application (NiFi)
+    """
+    # Collect lineage information
+
+    # Task Input
     # Get source Metric
-    source_metric_entity = ngsi.retrieveEntityById(task.hasInput.object)
-    source_metric = Metric.parse_obj(source_metric_entity)
+    source_metric = ngsi_ld.get_metric(
+        task.hasInput.object)
     # Get source Prometheus
-    source_prom_entity = ngsi.retrieveEntityById(
-        source_metric.hasPrometheus.object)
-    source_prom = Prometheus.parse_obj(source_prom_entity)
+    source_prom = ngsi_ld.get_prometheus_from_metric(
+        source_metric)
     # Get Endpoint for source Kafka broker
-    source_endpoint_entity = ngsi.retrieveEntityById(
-        source_prom.hasEndpoint.object)
-    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        source_prom)
+
+    # Task Output
     # Get sink Kafka topic
-    sink_topic_entity = ngsi.retrieveEntityById(task.hasOutput.object)
-    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasOutput.object
+    )
     # Get sink Kafka broker
-    sink_broker_entity = ngsi.retrieveEntityById(
-        sink_topic.hasKafkaBroker.object)
-    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
+    sink_broker = ngsi_ld.get_kafka_broker_from_topic(
+        sink_topic
+    )
     # Get Endpoint for sink Kafka broker
-    sink_endpoint_entity = ngsi.retrieveEntityById(
-        sink_broker.hasEndpoint.object)
-    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        sink_broker
+    )
 
     # Build URL based on optional expression
     prometheus_request = ""
@@ -130,18 +134,19 @@ def configMetricSource(task: Task, ngsi: NGSILDClient) -> dict:
     return arguments
 
 
-def configMetricTarget(task: Task, ngsi: NGSILDClient) -> dict:
+def config_metric_target(task: Task, ngsi_ld: NGSILDClient) -> dict:
+    # Collect lineage information
+
+    # Task Input
     # Get source Kafka topic
-    source_topic_entity = ngsi.retrieveEntityById(task.hasInput.object)
-    source_topic = KafkaTopic.parse_obj(source_topic_entity)
+    source_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
     # Get source Kafka broker
-    source_broker_entity = ngsi.retrieveEntityById(
-        source_topic.hasKafkaBroker.object)
-    source_broker = KafkaBroker.parse_obj(source_broker_entity)
+    source_broker = ngsi_ld.get_kafka_broker_from_topic(
+        source_topic)
     # Get Endpoint for source Kafka broker
-    source_endpoint_entity = ngsi.retrieveEntityById(
-        source_broker.hasEndpoint.object)
-    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
+    source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        source_broker)
 
     # Collect variables for EVESource
     source_broker_url = source_endpoint.uri.value
@@ -162,33 +167,36 @@ def configMetricTarget(task: Task, ngsi: NGSILDClient) -> dict:
     return arguments
 
 
-def configTelemetrySource(task: Task, ngsi: NGSILDClient) -> dict:
+def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
     Deploys a TelemetrySource NiFi template
     from a passed TelemetrySource NGSI-LD entity.
     """
     # Get YANG Module as source
-    module_entity = ngsi.retrieveEntityById(task.hasInput.object)
-    module = Module.parse_obj(module_entity)
-    # Get gNMI server address from hasEndpoint relationship
-    device_entity = ngsi.retrieveEntityById(module.hasDevice.object)
-    device = Device.parse_obj(device_entity)
-    # Get Endpoint for device
-    source_endpoint_entity = ngsi.retrieveEntityById(device.hasEndpoint.object)
-    source_endpoint = Endpoint.parse_obj(source_endpoint_entity)
-    # Get sink Kafka topic
-    sink_topic_entity = ngsi.retrieveEntityById(task.hasOutput.object)
-    sink_topic = KafkaTopic.parse_obj(sink_topic_entity)
-    gnmic_topic = "gnmic-" + sink_topic.name.id
-    # Get sink Kafka broker
-    sink_broker_entity = ngsi.retrieveEntityById(
-        sink_topic.hasKafkaBroker.object)
-    sink_broker = KafkaBroker.parse_obj(sink_broker_entity)
-    # Get Endpoint for sink Kafka broker
-    sink_endpoint_entity = ngsi.retrieveEntityById(
-        sink_broker.hasEndpoint.object)
-    sink_endpoint = Endpoint.parse_obj(sink_endpoint_entity)
+    module = ngsi_ld.get_yang_module(
+        task.hasInput.object
+    )
+    # Get source Device
+    source_device = ngsi_ld.get_device_from_module(
+        module
+    )
+    # Get Endpoint for source device
+    source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        source_device)
 
+    # Task Output
+    # Get sink Kafka topic
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
+    # Get sink Kafka broker
+    sink_broker = ngsi_ld.get_kafka_broker_from_topic(
+        sink_topic)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        sink_broker)
+
+    # Build arguments
+    gnmic_topic = "gnmic-" + sink_topic.name.id
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
     filename = '/gnmic-cfgs/cfg-subscriptions.json'
@@ -239,8 +247,8 @@ def configTelemetrySource(task: Task, ngsi: NGSILDClient) -> dict:
 
 
 application_configs = {
-    "EVESource": configEVESource,
-    "MetricSource": configMetricSource,
-    "MetricTarget": configMetricTarget,
-    "TelemetrySource": configTelemetrySource
+    "EVESource": config_eve_source,
+    "MetricSource": config_metric_source,
+    "MetricTarget": config_metric_target,
+    "TelemetrySource": config_telemetry_source
 }

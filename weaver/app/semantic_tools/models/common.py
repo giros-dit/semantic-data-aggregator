@@ -51,3 +51,9 @@ class Endpoint(StatefulAsset):
     # use cases such as Kafka broker address
     # uri: URI
     uri: Property
+
+
+# Inspiration from the Infrastructure type proposed by Apache Atlas
+class Infrastructure(Asset):
+    type: Literal["Infrastructure"] = "Infrastructure"
+    hasEndpoint: Relationship

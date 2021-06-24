@@ -1,20 +1,23 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.staticfiles import StaticFiles
-from semantic_tools.clients.flink_api_rest import FlinkClient
-from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.flink.client import FlinkClient
+from semantic_tools.nifi.client import NiFiClient
+from semantic_tools.ngsi_ld.client import NGSILDClient
 from typing import Literal, Optional
 
 import app_manager
 import logging
-import nipyapi
 import shutil
 import os
 
 logger = logging.getLogger(__name__)
 
 
-# Init NGSI-LD API Client
-ngsi = NGSILDClient(
+# Application Manager URL (Should be provided by external agent in the future)
+APP_MANAGER_URL = "http://app-manager:8080"
+
+# Init NGSI-LD Client
+ngsi_ld = NGSILDClient(
             url="http://scorpio:9090",
             headers={"Accept": "application/json"},
             context="http://context-catalog:8080/context.jsonld")
@@ -27,10 +30,8 @@ flink = FlinkClient(
                 "Content-Type": "application/json"})
 
 # Init NiFi REST API Client
-nipyapi.config.nifi_config.host = "http://nifi:8080/nifi-api"
+nifi = NiFiClient("http://nifi:8080/nifi-api")
 
-# Set app manager
-app_manager_url = "http://app-manager:8080"
 
 # Init FastAPI server
 app = FastAPI(
@@ -43,15 +44,15 @@ app.mount("/catalog", StaticFiles(directory="/catalog"), name="catalog")
 
 @app.on_event("startup")
 async def startup_event():
-    # Check Orion-LD API is up
-    app_manager.check_scorpio_status(ngsi)
+    # Check Scorpio API is up
+    ngsi_ld.check_scorpio_status
     # Check NiFi REST API is up
-    app_manager.check_nifi_status()
+    nifi.check_nifi_status()
     # Upload NiFi admin templates
     app_manager.upload_local_nifi_templates(
-        ngsi, app_manager_url)
+        nifi, ngsi_ld, APP_MANAGER_URL)
     # Check Flink REST API is up
-    app_manager.check_flink_status(flink)
+    flink.check_flink_status()
 
 
 @app.post("/applications/")
@@ -75,8 +76,8 @@ async def onboard_application(application_type: Literal["FLINK", "NIFI"],
             # Moreover, the only way to find out the identifier
             # of the template, i.e. name, is by uploading it
             application = app_manager.upload_nifi_template(
-                ngsi, name, temp_path,
-                app_manager_url, description)
+                nifi, ngsi_ld, name, temp_path,
+                APP_MANAGER_URL, description)
         except TypeError as e:
             logger.error(str(e))
             os.remove(temp_path)
@@ -106,8 +107,8 @@ async def onboard_application(application_type: Literal["FLINK", "NIFI"],
         try:
             # Upload application to Flink
             application = app_manager.upload_flink_jar(
-                ngsi, flink, name, temp_path,
-                app_manager_url, description)
+                ngsi_ld, flink, name, temp_path,
+                APP_MANAGER_URL, description)
         except Exception as e:
             logger.error(str(e))
             os.remove(temp_path)

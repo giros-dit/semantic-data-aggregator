@@ -1,16 +1,17 @@
-from .ngsi_ld.entity import Property, Relationship
-from .common import Asset, StatefulAsset
+from semantic_tools.models.common import Asset, Infrastructure
+from semantic_tools.models.ngsi_ld.entity import Property, Relationship
 from typing import Literal, Optional
 
 
-class Device(StatefulAsset):
+class Device(Infrastructure):
     type: Literal["Device"] = "Device"
-    hasEndpoint: Relationship
+    hasModule: Relationship
     protocol: Property
     version: Optional[Property]
 
 
-class Module(Asset):
-    type: Literal["Module"] = "Module"
+class YANGModule(Asset):
+    type: Literal["YANGModule"] = "YANGModule"
+    hasDevice: Relationship
     org: Property
     version: Property

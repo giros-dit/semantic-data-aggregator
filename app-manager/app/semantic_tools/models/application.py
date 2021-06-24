@@ -17,7 +17,7 @@ class Application(Asset):
 class Task(StatefulAsset):
     type: Literal["Task"] = "Task"
     arguments: Optional[Property]
+    internalId: Optional[Property]
     hasApplication: Relationship
     hasInput: Relationship
     hasOutput: Relationship
-    taskId: Property

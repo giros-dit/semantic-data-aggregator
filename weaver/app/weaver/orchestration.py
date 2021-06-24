@@ -1,9 +1,7 @@
 from semantic_tools.flink.client import FlinkClient
-from semantic_tools.flink import utils as flink_ops
-from semantic_tools.models.application import Application, Task
-from semantic_tools.nifi import utils as nifi_ops
+from semantic_tools.models.application import Task
+from semantic_tools.nifi.client import NiFiClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
-from semantic_tools.ngsi_ld import utils as ngsi_ld_ops
 from weaver.applications import application_configs
 
 import logging
@@ -11,15 +9,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
+def process_task(task: Task, flink: FlinkClient,
+                 nifi: NiFiClient, ngsi_ld: NGSILDClient):
     """
     Process Task entity
     """
-    application_entity = ngsi.retrieveEntityById(task.hasApplication.object)
-    application = Application.parse_obj(application_entity)
+    application = ngsi_ld.get_application_from_task(task)
     logger.info("Processing task %s with application %s" % (
         task.id, application.name.value))
-    ngsi_ld_ops.appendState(ngsi, task.id, "Configuring task...")
+    ngsi_ld.append_state(task, "Configuring task...")
     if task.action.value == "START":
         logger.info(
             "Instantiating new '{0}'...".format(task.id))
@@ -28,37 +26,34 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
         # Weaver should only receive the final list of arguments
         # and configure the task with them
         arguments = application_configs[
-            application.name.value](task, ngsi)
+            application.name.value](task, ngsi_ld)
         if application.applicationType.value == "NIFI":
-            task_pg = nifi_ops.instantiateTask(
+            task_pg = nifi.instantiate_flow_from_task(
                 task, application.internalId.value,
                 arguments)
-            ngsi_ld_ops.appendInternalId(ngsi, task.id, task_pg.id)
+            ngsi_ld.append_internal_id(task, task_pg.id)
         elif application.applicationType.value == "FLINK":
-            job = flink_ops.submitStreamJob(
-                task, flink,
-                application.internalId.value,
+            job = flink.instantiate_job_from_task(
+                task, application.internalId.value,
                 arguments)
-            ngsi_ld_ops.appendInternalId(ngsi, task.id, job["jobid"])
-        ngsi_ld_ops.stateToRunning(
-            ngsi, task.id,
-            {"value": "SUCCESS! Task started successfully."})
+            ngsi_ld.append_internal_id(task, job["jobid"])
+        ngsi_ld.state_to_running(
+                task,
+                {"value": "SUCCESS! Task started successfully."})
     elif task.action.value == "END":
         logger.info(
             "Deleting '{0}'...".format(task.id))
         if application.applicationType.value == "NIFI":
-            nifi_ops.deleteTask(task)
+            nifi.delete_flow_from_task(task)
         elif application.applicationType.value == "FLINK":
-            flink_ops.deleteTask(task, flink)
-        ngsi_ld_ops.stateToCleaned(
-            ngsi, task.id,
+            flink.delete_job_from_task(task)
+        ngsi_ld.state_to_cleaned(
+            task,
             {"value": "SUCCESS! Task deleted successfully."})
         logger.info(
             "Deleting the '{0}' entity...".format(task.id))
-        ngsi.deleteEntity(task.id)
+        ngsi_ld.delete_entity(task)
     else:
         error_msg = "Unknown %s action" % task.action.value
         logger.error(error_msg)
-        ngsi_ld_ops.stateToFailed(
-            ngsi, task.id,
-            {"value": error_msg})
+        ngsi_ld.state_to_failed(task, {"value": error_msg})

@@ -1,33 +1,20 @@
 from fastapi import FastAPI, status, Request
 from semantic_tools.flink.client import FlinkClient
-from semantic_tools.flink.utils import check_flink_status
 from semantic_tools.models.application import Task
-from semantic_tools.models.common import Endpoint
-from semantic_tools.models.metric import Prometheus
-from semantic_tools.models.telemetry import Device
-from semantic_tools.nifi.utils import check_nifi_status
+from semantic_tools.nifi.client import NiFiClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
-from weaver.health import (
-    processDeviceState,
-    processEndpointState,
-    processPrometheusState
-)
-from semantic_tools.ngsi_ld.utils import (
-    check_scorpio_status,
-    subscribeTask,
-    subscribeDevice,
-    subscribeEndpoint,
-    subscribePrometheus
-)
+
 from weaver.orchestration import process_task
 
 import logging
-import nipyapi
 
 logger = logging.getLogger(__name__)
 
-# Init NGSI-LD API Client
-ngsi = NGSILDClient(
+# Weaver URL (Should be provided by external agent in the future)
+WEAVER_URL = "http://weaver:8080/notify"
+
+# Init NGSI-LD Client
+ngsi_ld = NGSILDClient(
             url="http://scorpio:9090",
             headers={"Accept": "application/json"},
             context="http://context-catalog:8080/context.jsonld")
@@ -40,10 +27,7 @@ flink = FlinkClient(
                 "Content-Type": "application/json"})
 
 # Init NiFi REST API Client
-nipyapi.config.nifi_config.host = "http://nifi:8080/nifi-api"
-
-# Weaver URI (Should be provided by external agent in the future)
-weaver_uri = "http://weaver:8080/notify"
+nifi = NiFiClient("http://nifi:8080/nifi-api")
 
 # Init FastAPI server
 app = FastAPI(
@@ -54,18 +38,18 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event():
     # Check Scorpio API is up
-    check_scorpio_status(ngsi)
+    ngsi_ld.check_scorpio_status
     # Subscribe to data pipeline agent entities
-    subscribeTask(ngsi, weaver_uri)
+    ngsi_ld.subscribe_weaver_to_task(WEAVER_URL)
     # Subscribe to data source entities
     # subscribePrometheus(ngsi, weaver_uri)
     # subscribeDevice(ngsi, weaver_uri)
     # Subscribe to Endpoint entities
     # subscribeEndpoint(ngsi, weaver_uri)
     # Check NiFi REST API is up
-    check_nifi_status()
+    nifi.check_nifi_status()
     # Check Flink REST API is up
-    check_flink_status(flink)
+    flink.check_flink_status()
 
 
 @app.post("/notify",
@@ -74,9 +58,8 @@ async def receiveNotification(request: Request):
     notifications = await request.json()
     for notification in notifications["data"]:
         if notification["type"] == "Task":
-            logger.info("task received")
             task = Task.parse_obj(notification)
-            process_task(task, ngsi, flink)
+            process_task(task, flink, nifi, ngsi_ld)
         # elif notification["type"] == "Device":
         #     device = Device.parse_obj(notification)
         #     processDeviceState(device, ngsi)
@@ -90,4 +73,3 @@ async def receiveNotification(request: Request):
             logger.error(
                 "Weaver does not support %s entity type."
                 % notification["type"])
-

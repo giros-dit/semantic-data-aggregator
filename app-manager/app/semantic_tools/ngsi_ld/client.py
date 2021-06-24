@@ -7,7 +7,6 @@ from semantic_tools.models.telemetry import Device, YANGModule
 from semantic_tools.models.ngsi_ld.entity import Entity, Property
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 from semantic_tools.ngsi_ld.api import NGSILDAPI
-from typing import Optional
 
 import logging
 import time
@@ -66,31 +65,6 @@ class NGSILDClient(object):
                                "Retrying in 30 seconds ...")
                 time.sleep(30)
                 continue
-
-    def create_application(
-                self,
-                application_id: str,
-                internal_id: str,
-                application_type: str,
-                name: str,
-                uri: str,
-                description: Optional[str] = None) -> Application:
-        """
-        Create Application entity based on the provided configuration.
-        """
-        logger.debug("Creating Application entity id '%s'" % id)
-        application = Application(
-                id=application_id,
-                name={"value": name},
-                internalId={"value": internal_id},
-                applicationType={"value": application_type},
-                uri={"value": uri}
-            )
-        if description:
-            application.description = {"value": description}
-
-        self.api.createEntity(application.dict(exclude_none=True))
-        return application
 
     def delete_entity(self, entity: Entity):
         """
