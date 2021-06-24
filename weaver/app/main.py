@@ -58,14 +58,14 @@ async def startup_event():
     # Subscribe to data pipeline agent entities
     subscribeTask(ngsi, weaver_uri)
     # Subscribe to data source entities
-    subscribePrometheus(ngsi, weaver_uri)
-    subscribeDevice(ngsi, weaver_uri)
+    # subscribePrometheus(ngsi, weaver_uri)
+    # subscribeDevice(ngsi, weaver_uri)
     # Subscribe to Endpoint entities
-    subscribeEndpoint(ngsi, weaver_uri)
+    # subscribeEndpoint(ngsi, weaver_uri)
     # Check NiFi REST API is up
     check_nifi_status()
     # Check Flink REST API is up
-    #check_flink_status(flink)
+    check_flink_status(flink)
 
 
 @app.post("/notify",

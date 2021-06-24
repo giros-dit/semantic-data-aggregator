@@ -58,7 +58,7 @@ def deleteTask(task: Task):
     logger.info("'{0}' flow deleted in NiFi.".format(task.id))
 
 
-def deployTask(task: Task, templateName: str,
+def deployTask(task: Task, applicationId: str,
                args: dict) -> ProcessGroupEntity:
     """
     Deploys a NiFi template
@@ -80,7 +80,7 @@ def deployTask(task: Task, templateName: str,
         nipyapi.canvas.update_variable_registry(task_pg, [(argument, value)])
 
     # Deploy Task template
-    task_template = nipyapi.templates.get_template(templateName)
+    task_template = nipyapi.templates.get_template(applicationId, "id")
     task_pg_flow = nipyapi.templates.deploy_template(
                                         task_pg.id,
                                         task_template.id,
@@ -110,13 +110,13 @@ def deployTask(task: Task, templateName: str,
     return task_pg
 
 
-def instantiateTask(task: Task, templateName: str,
+def instantiateTask(task: Task, applicationId: str,
                     args: dict) -> ProcessGroupEntity:
     """
     Deploys and starts NiFi template given
     a Task entity.
     """
-    task_pg = deployTask(task, templateName, args)
+    task_pg = deployTask(task, applicationId, args)
     # Schedule PG
     nipyapi.canvas.schedule_process_group(task_pg.id, True)
     logger.info(

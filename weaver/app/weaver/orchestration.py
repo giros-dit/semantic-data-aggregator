@@ -23,8 +23,7 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
     if task.action.value == "START":
         logger.info(
             "Instantiating new '{0}'...".format(task.id))
-        # Config task by combining user and context arguments
-        # The generation of arguments should be performed
+        # TODO: The generation of arguments should be performed
         # by an intermidiate microservice
         # Weaver should only receive the final list of arguments
         # and configure the task with them
@@ -32,10 +31,15 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
             application.name.value](task, ngsi)
         if application.applicationType.value == "NIFI":
             task_pg = nifi_ops.instantiateTask(
-                task, application.name.value, arguments)
+                task, application.internalId.value,
+                arguments)
             ngsi_ld_ops.appendInternalId(ngsi, task.id, task_pg.id)
         elif application.applicationType.value == "FLINK":
-            flink_ops.submitStreamJob(task, ngsi, flink)
+            job = flink_ops.submitStreamJob(
+                task, flink,
+                application.internalId.value,
+                arguments)
+            ngsi_ld_ops.appendInternalId(ngsi, task.id, job["jobid"])
         ngsi_ld_ops.stateToRunning(
             ngsi, task.id,
             {"value": "SUCCESS! Task started successfully."})
@@ -45,10 +49,16 @@ def process_task(task: Task, ngsi: NGSILDClient, flink: FlinkClient):
         if application.applicationType.value == "NIFI":
             nifi_ops.deleteTask(task)
         elif application.applicationType.value == "FLINK":
-            pass
+            flink_ops.deleteTask(task, flink)
         ngsi_ld_ops.stateToCleaned(
             ngsi, task.id,
             {"value": "SUCCESS! Task deleted successfully."})
         logger.info(
             "Deleting the '{0}' entity...".format(task.id))
         ngsi.deleteEntity(task.id)
+    else:
+        error_msg = "Unknown %s action" % task.action.value
+        logger.error(error_msg)
+        ngsi_ld_ops.stateToFailed(
+            ngsi, task.id,
+            {"value": error_msg})

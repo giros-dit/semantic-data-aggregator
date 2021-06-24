@@ -1,6 +1,5 @@
 from semantic_tools.flink.client import FlinkClient
 from semantic_tools.models.application import Application, Task
-from semantic_tools.ngsi_ld.client import NGSILDClient
 
 import logging
 import time
@@ -26,68 +25,32 @@ def check_flink_status(flink: FlinkClient):
             continue
 
 
-def submitStreamJob(task: Task,
-                    ngsi: NGSILDClient,
-                    flink: FlinkClient) -> str:
+def deleteTask(task: Task,
+               flink: FlinkClient) -> dict:
     """
     Submits a stream processing Job instance to the
     stream processing engine (i.e., the Flink engine).
     """
-    application_entity = ngsi.retrieveEntityById(
-                                task.hasApplication.object)
-    application = Application.parse_obj(application_entity)
-    # Retrieve application Entity JAR id
-    jarfile_id = application.fileId.value
-    # Infer input_topic argument from hasInput relationship
-    input_topic = task.hasInput.object.strip(
-        "urn:ngsi-ld:").replace(":", "-").lower()
-    # Infer output_topic argument from id property
-    output_topic = task.id.strip(
-        "urn:ngsi-ld:").replace(":", "-").lower()
-    # Get a list of arguments separated by commas (e.g. arg1, arg2, ...)
-    # to run the Flink Job
-    arguments = getStreamAppArguments(task,
-                                      input_topic,
-                                      output_topic)
-    # Get a entry class of the Stream Aplication
-    entryClass = application.entryClass.value
     # Run job for JAR id
-    job_submitted = flink.submitJob(jarfile_id, entryClass, arguments)
-    # Update task Entity with Job id
-    job_id = job_submitted['jobid']
-    jobId_dict = {
-        "jobId": {
-                "type": "Property",
-                "value": job_id
-        }
-    }
-    ngsi.appendEntityAttrs(task.id, jobId_dict)
-    logger.info("'{0}' with '{1}' Job submitted in Flink engine.".format(
-        task.id, task.name.value))
-
-    return job_id
+    job = flink.deleteJob(task.internalId.value)
+    logger.info("Job '{0}' deleted in Flink engine.".format(
+        task.internalId.value))
+    return job
 
 
-def getStreamAppArguments(task: Task,
-                          input_topic: str,
-                          output_topic: str) -> str:
+def instantiateTask(task: Task,
+                    flink: FlinkClient,
+                    applicationId: str,
+                    args: dict) -> dict:
     """
-    Gets all the attributes of the 'arguments'
-    property from a specific task entity.
+    Submits a stream processing Job instance to the
+    stream processing engine (i.e., the Flink engine).
     """
-    arguments_list = []
-    arguments_list.append(input_topic)
-    arguments_list.append(output_topic)
-    if(task.arguments):
-        arguments_property = task.arguments.value
-        for key, value in arguments_property.items():
-            arguments_list.append(value)
-
-    arguments = ""
-    for i in range(0, len(arguments_list)):
-        if(i < (len(arguments_list)-1)):
-            arguments += arguments_list[i]+","
-        else:
-            arguments += arguments_list[i]
-
-    return arguments
+    # Get a entry class of the Stream Aplication
+    entryClass = args.value["entryClass"]
+    # Run job for JAR id
+    job = flink.submitJob(applicationId, entryClass, args)
+    logger.info(
+        "Job '{0}' with '{1}' JAR instantiated in Flink engine.".format(
+            task.internalId.value, applicationId))
+    return job
