@@ -1,9 +1,5 @@
 aiofiles
 fastapi
-nipyapi
-pydantic
 python-multipart
-pyyaml
-requests
+semantic-tools
 uvicorn
-xml

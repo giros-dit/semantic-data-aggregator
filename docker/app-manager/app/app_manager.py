@@ -65,7 +65,7 @@ def upload_local_nifi_templates(
         application_id = "urn:ngsi-ld:Application:{0}".format(
             internal_id
         )
-        ngsi_ld.create_application_context(
+        ngsi_ld.create_application(
             application_id, internal_id, "NIFI",
             application_name, application_uri, "Uploaded by admin")
 

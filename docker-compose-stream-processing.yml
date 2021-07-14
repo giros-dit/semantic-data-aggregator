@@ -11,16 +11,16 @@ services:
     volumes:
       - ./app-manager/app:/app
       - ./app-manager/catalog:/catalog
-  consumer:
-    build:
-      context: ./consumer
-      dockerfile: Dockerfile
-    hostname: consumer
-    container_name: consumer
-    ports:
-      - "8080"
-    volumes:
-      - ./consumer/app:/app
+  # consumer:
+  #   build:
+  #     context: ./consumer
+  #     dockerfile: Dockerfile
+  #   hostname: consumer
+  #   container_name: consumer
+  #   ports:
+  #     - "8080"
+  #   volumes:
+  #     - ./consumer/app:/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -29,16 +29,16 @@ services:
       - "8080"
     volumes:
       - ./context-catalog:/web
-  experimenter:
-    build:
-      context: ./experimenter
-      dockerfile: Dockerfile
-    hostname: experimenter
-    container_name: experimenter
-    ports:
-      - "8085:8080"
-    volumes:
-      - ./experimenter/app:/app
+  # experimenter:
+  #   build:
+  #     context: ./experimenter
+  #     dockerfile: Dockerfile
+  #   hostname: experimenter
+  #   container_name: experimenter
+  #   ports:
+  #     - "8085:8080"
+  #   volumes:
+  #     - ./experimenter/app:/app
   flink-jobmanager:
     image: flink:latest
     hostname: flink-jobmanager
@@ -59,7 +59,6 @@ services:
     depends_on:
       - flink-jobmanager
     command: taskmanager
-    scale: 1
     environment:
       - |
         FLINK_PROPERTIES=
