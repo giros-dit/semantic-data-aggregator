@@ -24,7 +24,7 @@ def upload_flink_jar(ngsi_ld: NGSILDClient,
     """
     # Upload JAR file
     # Rename file as Flink sets the JAR name from the file name
-    upload_response = flink.uploadJar(file_path)
+    upload_response = flink.upload_jar(file_path)
     file_id = upload_response["filename"].split("/")[-1]
     jar_id = file_id.replace(" ", "_")
     logger.info(

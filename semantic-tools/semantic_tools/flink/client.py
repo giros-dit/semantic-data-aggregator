@@ -60,3 +60,9 @@ class FlinkClient(object):
             "Job '{0}' with '{1}' JAR instantiated in Flink engine.".format(
                 task.internalId.value, applicationId))
         return job
+
+    def upload_jar(self, file_path: str) -> dict:
+        """
+        Upload JAR file to Flink from a given path.
+        """
+        return self.api.uploadJar(file_path)
