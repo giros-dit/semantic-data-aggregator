@@ -1,4 +1,4 @@
-from .ngsi_ld.entity import Entity, Property, Relationship
+from semantic_tools.models.ngsi_ld.entity import Entity, Property, Relationship
 from pydantic import AnyUrl
 from typing import Literal, Optional
 

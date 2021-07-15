@@ -1,5 +1,5 @@
-from .common import Asset, StatefulAsset, URI
-from .ngsi_ld.entity import Property, Relationship
+from semantic_tools.models.common import Asset, StatefulAsset, URI
+from semantic_tools.models.ngsi_ld.entity import Property, Relationship
 from typing import Literal, Optional
 
 
