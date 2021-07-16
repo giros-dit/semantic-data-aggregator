@@ -1,0 +1,748 @@
+{
+	"info": {
+		"_postman_id": "03761ec4-2698-42fa-a027-fbf3916a9846",
+		"name": "MetricSource_Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Setup",
+			"item": [
+				{
+					"name": "Prometheus",
+					"item": [
+						{
+							"name": "Create prom Endpoint",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Prometheus",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricFamily http_requests",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"gauge\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Metric http_requests",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"labels\": {\n        \"type\": \"Property\",\n        \"value\": [\n            {\n                \"name\": \"cpu\"\n            },\n            {\n                \"name\": \"mode\"\n            }\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "SDA",
+					"item": [
+						{
+							"name": "Create SDA Endpoint",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{ouput_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-SDA\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create KafkaBroker",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{output_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.8.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{ouput_endpoint}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create KafkaTopic",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"evesource-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "MetricSource",
+					"item": [
+						{
+							"name": "Get MetricSource AppId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.collectionVariables.set(\"metric_source_app_id\", jsonData[0].id);",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Task&q=name==\"MetricSource\"",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "Task"
+										},
+										{
+											"key": "q",
+											"value": "name==\"MetricSource\""
+										}
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Create MetricSource Task",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.request.body.toJSON();",
+											"pm.collectionVariables.set(\"metric_source_task_id\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Task:{{$randomUUID}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"10000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": {{metric_source_app_id}}\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Teardown",
+			"item": [
+				{
+					"name": "MetricSource",
+					"item": [
+						{
+							"name": "End MetricSource Task",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_task_id}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{metric_source_task_id}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Prometheus",
+					"item": [
+						{
+							"name": "Delete Metric",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{input_metric_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MetricFamily",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_familiy_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{input_metric_familiy_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Prometheus",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{input_prometheus_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Endpoint",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_endpoint}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{input_endpoint}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "SDA",
+					"item": [
+						{
+							"name": "Delete KafkaTopic",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_kafka_topic_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{output_kafka_topic_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete KafkaBroker",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_kafka_broker_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{output_kafka_broker_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete kafka Endpoint",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{ouput_endpoint}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{ouput_endpoint}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "output_kafka_topic_id",
+			"value": "urn:ngsi-ld:KafkaTopic:2"
+		},
+		{
+			"key": "output_kafka_broker_id",
+			"value": "urn:ngsi-ld:KafkaBroker:2"
+		},
+		{
+			"key": "ouput_endpoint",
+			"value": "urn:ngsi-ld:Endpoint:4"
+		},
+		{
+			"key": "metric_source_task_id",
+			"value": "urn:ngsi-ld:Task:1"
+		},
+		{
+			"key": "input_endpoint",
+			"value": "urn:ngsi-ld:Endpoint:1"
+		},
+		{
+			"key": "input_prometheus_id",
+			"value": "urn:ngsi-ld:Prometheus:1"
+		},
+		{
+			"key": "input_metric_familiy_id",
+			"value": "urn:ngsi-ld:MetricFamily:1"
+		},
+		{
+			"key": "input_metric_id",
+			"value": "urn:ngsi-ld:Metric:1"
+		}
+	]
+}
