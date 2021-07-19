@@ -1,5 +1,6 @@
 from semantic_tools.models.application import Task
 from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.ngsi_ld.units import UnitCode
 
 import json
 import logging
@@ -172,6 +173,8 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     Deploys a TelemetrySource NiFi template
     from a passed TelemetrySource NGSI-LD entity.
     """
+
+    # Task Input
     # Get YANG Module as source
     module = ngsi_ld.get_yang_module(
         task.hasInput.object
@@ -187,7 +190,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     # Task Output
     # Get sink Kafka topic
     sink_topic = ngsi_ld.get_kafka_topic(
-        task.hasInput.object)
+        task.hasOutput.object)
     # Get sink Kafka broker
     sink_broker = ngsi_ld.get_kafka_broker_from_topic(
         sink_topic)
@@ -195,40 +198,67 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
         sink_broker)
 
+    XPath = task.arguments.value['XPath']
+    subscription_mode = task.arguments.value['subscriptionMode']
+
     # Build arguments
-    gnmic_topic = "gnmic-" + sink_topic.name.id
+    gnmic_topic = "gnmic-" + sink_topic.name.value
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
-    filename = '/gnmic-cfgs/cfg-subscriptions.json'
-    subscription_name = ""
-    with open(filename, 'r') as file:
-        data = json.load(file)
-        data['address'] = source_endpoint.uri.value.split("://")[1]
-        data['outputs']['output']['topic'] = gnmic_topic
-        data['outputs']['output']['format'] = "event"
-        xPath = task.arguments.value["xPath"]
-        telemetry_data = []
-        if type(xPath) is str:
-            telemetry_data.append(xPath)
-        elif type(xPath) is list:
-            telemetry_data = xPath
-        if subscription_mode == "on-change":
-            data['subscriptions']['on-change']['paths'] = telemetry_data
-        elif subscription_mode == "sample":
-            data['subscriptions']['sample']['paths'] = telemetry_data
-            # Get interval value
-            interval = task.arguments.value["interval"]
-            # Enforce miliseconds for interval
-            data[
-                'subscriptions']['sample']['sample-interval'] = interval + "ms"
+    filename = '/gnmic-cfgs/subscription' + '-' +  sink_topic.name.value + '.json'
+    subscription_name = "subscription"
 
-    os.remove(filename)
+    subscription_data = {}
+    subscription_data['address'] = source_endpoint.uri.value.split("://")[1]
+    subscription_data['username'] = 'admin'
+    subscription_data['password'] = 'xxxx'
+    subscription_data['insecure'] = 'true'
+    logfile = '/tmp/gnmic' + '-' + sink_topic.name.value + '.log'
+    subscription_data['log-file'] = logfile
+    subscriptions = {}
+    if subscription_mode == "on-change":
+        subscription = {}
+        paths = []
+        if type(XPath) is str:
+            paths.append(XPath)
+        elif type(XPath) is list:
+            paths = XPath
+        subscription['paths'] = paths
+        subscription['stream-mode'] = 'on-change'
+    elif subscription_mode == "sample":
+        subscription = {}
+        paths = []
+        if type(XPath) is str:
+            paths.append(XPath)
+        elif type(XPath) is list:
+            paths = XPath
+        subscription['paths'] = paths
+        subscription['stream-mode'] = 'sample'
+        interval = task.arguments.value['interval']
+        interval_unit = UnitCode[task.arguments.unitCode].value
+        subscription['sample-interval'] = interval+interval_unit
+        subscription['qos'] = 0   
+    subscriptions['subscription'] = subscription
+    subscription_data['subscriptions'] = subscriptions
+    outputs = {}
+    output = {}
+    output['type'] = 'kafka'
+    output['address'] = 'kafka:9092'
+    output['topic'] = gnmic_topic
+    output['max-retry'] = 2
+    output['timeout'] = '5s'
+    output['recovery-wait-time'] = '10s'
+    output['format'] = 'event'
+    output['num-workers'] = 1
+    debug = False
+    output['debug'] = debug
+    outputs['output'] = output
+    subscription_data['outputs'] = outputs
+
     with open(filename, 'w') as file:
-        json.dump(data, file, indent=4)
+        json.dump(subscription_data, file, indent=4)
 
     # Collect variables for TelemetrySource
-    # arguments = telemetrySource.arguments.value+" --name {0}".format(
-    # subscription_mode)
     command_arguments = "--config {0} subscribe --name {1}".format(
         filename, subscription_name)
     sink_broker_url = sink_endpoint.uri.value
@@ -250,5 +280,6 @@ application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
     "MetricTarget": config_metric_target,
-    "TelemetrySource": config_telemetry_source
+    "TelemetrySource": config_telemetry_source,
+    "gNMIcSource": config_telemetry_source
 }

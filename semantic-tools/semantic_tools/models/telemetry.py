@@ -5,13 +5,13 @@ from typing import Literal, Optional
 
 class Device(Infrastructure):
     type: Literal["Device"] = "Device"
-    hasModule: Relationship
     protocol: Property
     version: Optional[Property]
+    encodings: Optional[Property]
 
 
 class YANGModule(Asset):
     type: Literal["YANGModule"] = "YANGModule"
     hasDevice: Relationship
     org: Property
-    version: Property
+    revision: Property
