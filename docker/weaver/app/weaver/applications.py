@@ -198,7 +198,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
         sink_broker)
 
-    XPath = task.arguments.value['XPath']
+    xpath = task.arguments.value['XPath']
     subscription_mode = task.arguments.value['subscriptionMode']
 
     # Build arguments
@@ -206,7 +206,6 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
     filename = '/gnmic-cfgs/subscription' + '-' +  sink_topic.name.value + '.json'
-    subscription_name = "subscription"
 
     subscription_data = {}
     subscription_data['address'] = source_endpoint.uri.value.split("://")[1]
@@ -219,19 +218,19 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     if subscription_mode == "on-change":
         subscription = {}
         paths = []
-        if type(XPath) is str:
-            paths.append(XPath)
-        elif type(XPath) is list:
-            paths = XPath
+        if type(xpath) is str:
+            paths.append(xpath)
+        elif type(xpath) is list:
+            paths = xpath
         subscription['paths'] = paths
         subscription['stream-mode'] = 'on-change'
     elif subscription_mode == "sample":
         subscription = {}
         paths = []
-        if type(XPath) is str:
-            paths.append(XPath)
-        elif type(XPath) is list:
-            paths = XPath
+        if type(xpath) is str:
+            paths.append(xpath)
+        elif type(xpath) is list:
+            paths = xpath
         subscription['paths'] = paths
         subscription['stream-mode'] = 'sample'
         interval = task.arguments.value['interval']
@@ -259,8 +258,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         json.dump(subscription_data, file, indent=4)
 
     # Collect variables for TelemetrySource
-    command_arguments = "--config {0} subscribe --name {1}".format(
-        filename, subscription_name)
+    command_arguments = "--config {0} subscribe".format(filename)
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
     arguments = {
