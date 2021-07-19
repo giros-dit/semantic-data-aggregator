@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "dbb2d1de-f80a-4be1-93fd-4596f60bd7e2",
-		"name": "MetricSource_Demo",
+		"_postman_id": "814eb772-f80d-432e-b834-abd66d9b0c76",
+		"name": "TelemetrySource_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,10 +9,10 @@
 			"name": "Setup",
 			"item": [
 				{
-					"name": "Prometheus",
+					"name": "gNMI Device",
 					"item": [
 						{
-							"name": "Create prom Endpoint",
+							"name": "Create gNMI Endpoint",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -39,7 +39,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"gnmi-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"https://ceos1:6030\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -59,7 +59,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Prometheus",
+							"name": "Create gNMI Device",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -86,7 +86,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_device_id}}\",\n    \"type\": \"Device\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"router-ceos1\"\n    },\n    \"protocol\": {\n        \"type\": \"Property\",\n        \"value\": \"gNMI\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"0.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -106,7 +106,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricFamily http_requests",
+							"name": "Create YANGModule openconfig-interfaces",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -133,54 +133,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"gauge\"\n    }\n}"
-								},
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										""
-									]
-								},
-								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-							},
-							"response": []
-						},
-						{
-							"name": "Create Metric http_requests",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Link",
-										"type": "text",
-										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"labels\": {\n        \"type\": \"Property\",\n        \"value\": [\n            {\n                \"name\": \"cpu\"\n            },\n            {\n                \"name\": \"mode\"\n            }\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_yang_module_id}}\",\n    \"type\": \"YANGModule\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"openconfig-interfaces\"\n    },\n    \"org\": {\n        \"type\": \"Property\",\n        \"value\": \"openconfig\"\n    },\n    \"revision\": {\n        \"type\": \"Property\",\n        \"value\": \"2019-11-19\"\n    },\n    \"hasDevice\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_device_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -335,7 +288,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"telemetrysource-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -357,17 +310,17 @@
 					]
 				},
 				{
-					"name": "MetricSource",
+					"name": "TelemetrySource",
 					"item": [
 						{
-							"name": "Get MetricSource AppId",
+							"name": "Get TelemetrySource AppId",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"metric_source_app_id\", jsonData[0].id);",
+											"pm.collectionVariables.set(\"telemetry_source_app_id\", jsonData[0].id);",
 											"",
 											""
 										],
@@ -390,7 +343,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricSource\"",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"gNMIcSource\"",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -408,7 +361,7 @@
 										},
 										{
 											"key": "q",
-											"value": "name==\"MetricSource\""
+											"value": "name==\"gNMIcSource\""
 										}
 									]
 								},
@@ -417,7 +370,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricSource Task",
+							"name": "Create TelemetrySource Task",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -453,7 +406,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"5000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{telemetry_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"telemetrysource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"XPath\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\",\n            \"subscriptionMode\": \"sample\",\n            \"interval\": \"5\"\n        },\n        \"unitCode\": \"SEC\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{telemetry_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_yang_module_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -473,7 +426,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricSource Task with random UUID",
+							"name": "Create TelemetrySource Task with random UUID",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -489,7 +442,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.request.body.toJSON();",
-											"pm.collectionVariables.set(\"metric_source_task_id\", jsonData.id);"
+											"pm.collectionVariables.set(\"telemetry_source_task_id\", jsonData.id);"
 										],
 										"type": "text/javascript"
 									}
@@ -510,7 +463,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Task:{{$randomUUID}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"10000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:Task:{{$randomUUID}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"telemetrysource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"XPath\": \"/interfaces/interface[name=Ethernet1]/state/counters/in-octets\",\n            \"subscriptionMode\": \"sample\",\n            \"interval\": \"5\"\n        },\n        \"unitCode\": \"SEC\"\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": {{telemetry_source_app_id}}\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_yang_module_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -537,10 +490,10 @@
 			"name": "Teardown",
 			"item": [
 				{
-					"name": "MetricSource",
+					"name": "TelemetrySource",
 					"item": [
 						{
-							"name": "End MetricSource Task",
+							"name": "End TelemetrySource Task",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -561,7 +514,7 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_task_id}}/attrs",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{telemetry_source_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -570,7 +523,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{metric_source_task_id}}",
+										"{{telemetry_source_task_id}}",
 										"attrs"
 									]
 								},
@@ -581,15 +534,15 @@
 					]
 				},
 				{
-					"name": "Prometheus",
+					"name": "gNMI Device",
 					"item": [
 						{
-							"name": "Delete Metric",
+							"name": "Delete YANGModule",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_yang_module_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -598,7 +551,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_metric_id}}"
+										"{{input_yang_module_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -606,12 +559,12 @@
 							"response": []
 						},
 						{
-							"name": "Delete MetricFamily",
+							"name": "Delete Device",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_familiy_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_device_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -620,29 +573,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_metric_familiy_id}}"
-									]
-								},
-								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Prometheus",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_id}}",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										"{{input_prometheus_id}}"
+										"{{input_device_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -778,7 +709,7 @@
 		},
 		{
 			"key": "output_kafka_topic_id",
-			"value": "urn:ngsi-ld:KafkaTopic:1"
+			"value": "urn:ngsi-ld:KafkaTopic:2"
 		},
 		{
 			"key": "output_kafka_broker_id",
@@ -790,27 +721,23 @@
 		},
 		{
 			"key": "input_endpoint",
-			"value": "urn:ngsi-ld:Endpoint:1"
+			"value": "urn:ngsi-ld:Endpoint:2"
 		},
 		{
-			"key": "input_prometheus_id",
-			"value": "urn:ngsi-ld:Prometheus:1"
+			"key": "input_device_id",
+			"value": "urn:ngsi-ld:Device:1"
 		},
 		{
-			"key": "input_metric_familiy_id",
-			"value": "urn:ngsi-ld:MetricFamily:1"
+			"key": "input_yang_module_id",
+			"value": "urn:ngsi-ld:YANGModule:1"
 		},
 		{
-			"key": "input_metric_id",
-			"value": "urn:ngsi-ld:Metric:1"
+			"key": "telemetry_source_task_id",
+			"value": "urn:ngsi-ld:Task:2"
 		},
 		{
-			"key": "metric_source_app_id",
+			"key": "telemetry_source_app_id",
 			"value": ""
-		},
-		{
-			"key": "metric_source_task_id",
-			"value": "urn:ngsi-ld:Task:1"
 		}
 	]
 }
