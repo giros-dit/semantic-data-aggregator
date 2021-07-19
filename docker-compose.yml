@@ -12,7 +12,7 @@ services:
       - ./docker/app-manager/app:/opt/app-manager/app
       - ./docker/app-manager/catalog:/catalog
   ceos1:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos1
     container_name: ceos1
     ports:
@@ -31,7 +31,7 @@ services:
       net1:
       net2:
   ceos2:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos2
     container_name: ceos2
     ports:
