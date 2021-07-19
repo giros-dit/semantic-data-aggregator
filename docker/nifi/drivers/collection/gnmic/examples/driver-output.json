@@ -1,0 +1,28 @@
+{
+    "name": "default-1624205356", 
+    "timestamp": "1624205300446746902.000", 
+    "values": {
+        "value": [
+            {
+                "name": "/interfaces/interface/state/counters/in-octets", 
+                "value": "3104"
+            }
+        ]
+    }, 
+    "tags": {
+        "tag": [
+            {
+                "name": "interface_name", 
+                "value": "Ethernet1"
+            }, 
+            {
+                "name": "source", 
+                "value": "localhost:6030"
+            }, 
+            {
+                "name": "subscription-name", 
+                "value": "default-1624205356"
+            }
+        ]
+    }
+}
