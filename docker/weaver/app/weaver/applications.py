@@ -58,7 +58,7 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
 
-    context_arguments = {
+    arguments = {
         # Avro schema hardcoded
         # although should be discovered
         # by asking registry with context information
@@ -68,10 +68,6 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         "sink_broker_url": sink_broker_url,
         "sink_topic": sink_topic_name
     }
-    # Combine context arguments with user arguments
-    user_arguments = task.arguments.value
-    arguments = {**context_arguments, **user_arguments}
-
     return arguments
 
 

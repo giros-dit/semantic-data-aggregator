@@ -6,6 +6,7 @@ from nipyapi.nifi.models.process_group_flow_entity import (
     ProcessGroupFlowEntity
 )
 from nipyapi.nifi.models.template_entity import TemplateEntity
+from random import randrange
 from semantic_tools.models.application import Task
 from urllib3.exceptions import MaxRetryError
 
@@ -78,15 +79,14 @@ class NiFiClient(object):
         Deploys a NiFi template
         from a passed Task NGSI-LD entity.
         """
-        # We assume last string is an integer value
-        source_id_number = int(task.id.split(":")[-1])
         # Get root PG
         root_pg = nipyapi.canvas.get_process_group("root")
-        # Y multiply ID last integer by 200, X fixed to -250 for MS PGs
+        # Place the PG in a random location in canvas
+        location_x = randrange(0,4000)
+        location_y = randrange(0,4000)
+        location = (location_x, location_y)
         task_pg = nipyapi.canvas.create_process_group(
-                        root_pg,
-                        task.id,
-                        (-250, 200*source_id_number)
+                        root_pg, task.id, location
         )
         logger.debug("Deploy with arguments %s" % args)
         # Set variables for Task PG
