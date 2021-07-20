@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dbb2d1de-f80a-4be1-93fd-4596f60bd7e2",
+		"_postman_id": "8c9f23b8-9225-439a-8965-26f4bc746bd0",
 		"name": "MetricSource_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -18,6 +18,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"input_endpoint\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -65,6 +68,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"input_prometheus_id\", \"urn:ngsi-ld:Prometheus:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -112,6 +118,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"input_metric_familiy_id\", \"urn:ngsi-ld:MetricFamily:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -159,6 +168,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"input_metric_id\", \"urn:ngsi-ld:Metric:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -211,6 +223,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"ouput_endpoint\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -258,6 +273,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"output_kafka_broker_id\", \"urn:ngsi-ld:KafkaBroker:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -305,6 +323,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -335,7 +356,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -423,6 +444,9 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.environment.set(\"metric_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -454,63 +478,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"5000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
-								},
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										""
-									]
-								},
-								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-							},
-							"response": []
-						},
-						{
-							"name": "Create MetricSource Task with random UUID",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = pm.request.body.toJSON();",
-											"pm.collectionVariables.set(\"metric_source_task_id\", jsonData.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Link",
-										"type": "text",
-										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:Task:{{$randomUUID}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-1\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"10000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
