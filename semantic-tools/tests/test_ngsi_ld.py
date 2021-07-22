@@ -1,7 +1,7 @@
 import unittest
 
-from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.metric import MetricSource, Endpoint
+from semantic_tools.models.common import Endpoint
+from semantic_tools.ngsi_ld.client import NGSILDClient
 
 
 class TestScorpio(unittest.TestCase):
