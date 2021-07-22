@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "c9a39939-c1f4-478a-98db-4678abdeaaa0",
-		"name": "MetricSource_Demo",
+		"_postman_id": "9cd1ba62-c55b-4fe4-949b-ab18e438ecad",
+		"name": "LogParserSource_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,10 +9,10 @@
 			"name": "Setup",
 			"item": [
 				{
-					"name": "Prometheus",
+					"name": "LogParser",
 					"item": [
 						{
-							"name": "Create prom Endpoint",
+							"name": "Create Kafka LogParser Endpoint",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -42,7 +42,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://prometheus:9090/api/v1/query\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-LogParser\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"pc105.maas:9092,pc109.maas:9092\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -62,7 +62,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Prometheus",
+							"name": "Create KafkaBroker",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -70,7 +70,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_prometheus_id\", \"urn:ngsi-ld:Prometheus:\" + myUUID);",
+											"pm.collectionVariables.set(\"input_kafka_broker_id\", \"urn:ngsi-ld:KafkaBroker:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -92,7 +92,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.28.1\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"LogParser-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -112,7 +112,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricFamily http_requests",
+							"name": "Create KafkaTopic",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -120,7 +120,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_metric_familiy_id\", \"urn:ngsi-ld:MetricFamily:\" + myUUID);",
+											"pm.collectionVariables.set(\"input_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -142,57 +142,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"gauge\"\n    }\n}"
-								},
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										""
-									]
-								},
-								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
-							},
-							"response": []
-						},
-						{
-							"name": "Create Metric http_requests",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"var uuid = require('uuid')",
-											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_metric_id\", \"urn:ngsi-ld:Metric:\" + myUUID);",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Link",
-										"type": "text",
-										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus_http_requests_total\"\n    },\n    \"labels\": {\n        \"type\": \"Property\",\n        \"value\": [\n            {\n                \"name\": \"cpu\"\n            },\n            {\n                \"name\": \"mode\"\n            }\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"log-parser-kafka-real-time\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -297,7 +247,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{ouput_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_endpoint}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -326,7 +276,7 @@
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
 											"pm.collectionVariables.set(\"output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
-											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"metric-source-\" + myUUID)"
+											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"logparser-source-\" + myUUID)"
 										],
 										"type": "text/javascript"
 									}
@@ -378,18 +328,27 @@
 					]
 				},
 				{
-					"name": "MetricSource",
+					"name": "LogParserSource",
 					"item": [
 						{
-							"name": "Get MetricSource AppId",
+							"name": "Get LogParserSource AppId",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"metric_source_app_id\", jsonData[0].id);",
+											"pm.collectionVariables.set(\"logparser_source_app_id\", jsonData[0].id);",
 											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
 											""
 										],
 										"type": "text/javascript"
@@ -411,7 +370,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricSource\"",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"LogParserSource\"",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -429,7 +388,7 @@
 										},
 										{
 											"key": "q",
-											"value": "name==\"MetricSource\""
+											"value": "name==\"LogParserSource\""
 										}
 									]
 								},
@@ -438,7 +397,7 @@
 							"response": []
 						},
 						{
-							"name": "Create MetricSource Task",
+							"name": "Create LogParserSource Task",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -446,8 +405,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"metric_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
-											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"metric-source-\" + myUUID)"
+											"pm.collectionVariables.set(\"logparser_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -477,7 +436,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"expression\": {\n                \"job\": \"prometheus\",\n                \"code\": \"200\"\n            },\n            \"interval\": \"5000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{logparser_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"logparsersource\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"logparser-source\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{logparser_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -504,10 +463,10 @@
 			"name": "Teardown",
 			"item": [
 				{
-					"name": "MetricSource",
+					"name": "LogParserSource",
 					"item": [
 						{
-							"name": "End MetricSource Task",
+							"name": "End SOLogSource Task",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -528,7 +487,7 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_task_id}}/attrs",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -537,7 +496,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{metric_source_task_id}}",
+										"{{logparser_source_task_id}}",
 										"attrs"
 									]
 								},
@@ -548,15 +507,15 @@
 					]
 				},
 				{
-					"name": "Prometheus",
+					"name": "LogParser",
 					"item": [
 						{
-							"name": "Delete Metric",
+							"name": "Delete Input KafkaTopic",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -565,7 +524,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_metric_id}}"
+										"{{input_kafka_topic_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -573,12 +532,12 @@
 							"response": []
 						},
 						{
-							"name": "Delete MetricFamily",
+							"name": "Delete KafkaBroker",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_familiy_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_kafka_broker_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -587,29 +546,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_metric_familiy_id}}"
-									]
-								},
-								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Prometheus",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_id}}",
-									"protocol": "http",
-									"host": [
-										"{{broker}}"
-									],
-									"path": [
-										"ngsi-ld",
-										"v1",
-										"entities",
-										"{{input_prometheus_id}}"
+										"{{input_kafka_broker_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -644,7 +581,7 @@
 					"name": "SDA",
 					"item": [
 						{
-							"name": "Delete KafkaTopic",
+							"name": "Delete Output KafkaTopic",
 							"request": {
 								"method": "DELETE",
 								"header": [],
@@ -693,7 +630,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{ouput_endpoint}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_endpoint}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -702,7 +639,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{ouput_endpoint}}"
+										"{{output_endpoint}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -733,7 +670,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_app_id}}",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_app_id}}",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -742,7 +679,7 @@
 								"ngsi-ld",
 								"v1",
 								"entities",
-								"{{metric_source_app_id}}"
+								"{{logparser_source_app_id}}"
 							]
 						},
 						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -841,23 +778,19 @@
 			"value": ""
 		},
 		{
-			"key": "input_prometheus_id",
+			"key": "input_kafka_broker_id",
 			"value": ""
 		},
 		{
-			"key": "input_metric_familiy_id",
+			"key": "input_kafka_topic_id",
 			"value": ""
 		},
 		{
-			"key": "input_metric_id",
+			"key": "logparser_source_app_id",
 			"value": ""
 		},
 		{
-			"key": "metric_source_app_id",
-			"value": ""
-		},
-		{
-			"key": "metric_source_task_id",
+			"key": "logparser_source_task_id",
 			"value": ""
 		}
 	]

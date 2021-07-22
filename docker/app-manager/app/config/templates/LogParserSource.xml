@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template encoding-version="1.3">
     <description></description>
-    <groupId>a4671784-017a-1000-eaf2-bcd5970a6d86</groupId>
-    <name>SOLogSource</name>
+    <groupId>cd1a32c8-017a-1000-91f6-9ee8fce1f220</groupId>
+    <name>LogParserSource</name>
     <snippet>
         <connections>
-            <id>4b24084f-f25a-3d2a-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>183d4be1-07a3-3b01-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>6130b67f-cb69-3b49-0000-000000000000</groupId>
-                <id>23d10caa-3f45-3f77-0000-000000000000</id>
+                <groupId>115c8f6d-73f4-3288-0000-000000000000</groupId>
+                <id>1cf8984a-1469-345e-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -23,20 +23,20 @@
             <name></name>
             <selectedRelationships>output stream</selectedRelationships>
             <source>
-                <groupId>6130b67f-cb69-3b49-0000-000000000000</groupId>
-                <id>e046c236-ba21-32d8-0000-000000000000</id>
+                <groupId>115c8f6d-73f4-3288-0000-000000000000</groupId>
+                <id>4dcf2410-65f1-375a-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <connections>
-            <id>c81a8fe4-3037-3f93-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>efe50ca5-12f5-3e3c-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>6130b67f-cb69-3b49-0000-000000000000</groupId>
-                <id>e046c236-ba21-32d8-0000-000000000000</id>
+                <groupId>115c8f6d-73f4-3288-0000-000000000000</groupId>
+                <id>4dcf2410-65f1-375a-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -48,119 +48,15 @@
             <name></name>
             <selectedRelationships>success</selectedRelationships>
             <source>
-                <groupId>6130b67f-cb69-3b49-0000-000000000000</groupId>
-                <id>c79fa95d-b2c2-381b-0000-000000000000</id>
+                <groupId>115c8f6d-73f4-3288-0000-000000000000</groupId>
+                <id>928f31ca-7727-3446-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <controllerServices>
-            <id>32d99851-f5da-380f-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
-            <bundle>
-                <artifact>nifi-confluent-platform-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.13.2</version>
-            </bundle>
-            <comments></comments>
-            <descriptors>
-                <entry>
-                    <key>url</key>
-                    <value>
-                        <name>url</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>ssl-context</key>
-                    <value>
-                        <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
-                        <name>ssl-context</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>timeout</key>
-                    <value>
-                        <name>timeout</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>cache-size</key>
-                    <value>
-                        <name>cache-size</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>cache-expiration</key>
-                    <value>
-                        <name>cache-expiration</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>authentication-type</key>
-                    <value>
-                        <name>authentication-type</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>username</key>
-                    <value>
-                        <dependencies>
-                            <dependentValues>BASIC</dependentValues>
-                            <propertyName>authentication-type</propertyName>
-                        </dependencies>
-                        <name>username</name>
-                    </value>
-                </entry>
-                <entry>
-                    <key>password</key>
-                    <value>
-                        <dependencies>
-                            <dependentValues>BASIC</dependentValues>
-                            <propertyName>authentication-type</propertyName>
-                        </dependencies>
-                        <name>password</name>
-                    </value>
-                </entry>
-            </descriptors>
-            <name>ConfluentSchemaRegistry</name>
-            <persistsState>false</persistsState>
-            <properties>
-                <entry>
-                    <key>url</key>
-                    <value>http://schema-registry-confluent:8081</value>
-                </entry>
-                <entry>
-                    <key>ssl-context</key>
-                </entry>
-                <entry>
-                    <key>timeout</key>
-                    <value>30 secs</value>
-                </entry>
-                <entry>
-                    <key>cache-size</key>
-                    <value>1000</value>
-                </entry>
-                <entry>
-                    <key>cache-expiration</key>
-                    <value>1 hour</value>
-                </entry>
-                <entry>
-                    <key>authentication-type</key>
-                    <value>NONE</value>
-                </entry>
-                <entry>
-                    <key>username</key>
-                </entry>
-                <entry>
-                    <key>password</key>
-                </entry>
-            </properties>
-            <state>DISABLED</state>
-            <type>org.apache.nifi.confluent.schemaregistry.ConfluentSchemaRegistry</type>
-        </controllerServices>
-        <controllerServices>
-            <id>3d8aa467-adca-32dd-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>321629fc-6376-3b8d-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <bundle>
                 <artifact>nifi-record-serialization-services-nar</artifact>
                 <group>org.apache.nifi</group>
@@ -291,7 +187,7 @@
                 </entry>
                 <entry>
                     <key>schema-registry</key>
-                    <value>32d99851-f5da-380f-0000-000000000000</value>
+                    <value>f9ec822a-e676-3489-0000-000000000000</value>
                 </entry>
                 <entry>
                     <key>schema-name</key>
@@ -324,8 +220,8 @@
             <type>org.apache.nifi.avro.AvroRecordSetWriter</type>
         </controllerServices>
         <controllerServices>
-            <id>a76dc54b-1df3-3103-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>aff16b39-0c57-3589-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <bundle>
                 <artifact>nifi-record-serialization-services-nar</artifact>
                 <group>org.apache.nifi</group>
@@ -462,11 +358,115 @@
             <state>DISABLED</state>
             <type>org.apache.nifi.json.JsonTreeReader</type>
         </controllerServices>
+        <controllerServices>
+            <id>f9ec822a-e676-3489-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
+            <bundle>
+                <artifact>nifi-confluent-platform-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.13.2</version>
+            </bundle>
+            <comments></comments>
+            <descriptors>
+                <entry>
+                    <key>url</key>
+                    <value>
+                        <name>url</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>ssl-context</key>
+                    <value>
+                        <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
+                        <name>ssl-context</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>timeout</key>
+                    <value>
+                        <name>timeout</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>cache-size</key>
+                    <value>
+                        <name>cache-size</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>cache-expiration</key>
+                    <value>
+                        <name>cache-expiration</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>authentication-type</key>
+                    <value>
+                        <name>authentication-type</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>username</key>
+                    <value>
+                        <dependencies>
+                            <dependentValues>BASIC</dependentValues>
+                            <propertyName>authentication-type</propertyName>
+                        </dependencies>
+                        <name>username</name>
+                    </value>
+                </entry>
+                <entry>
+                    <key>password</key>
+                    <value>
+                        <dependencies>
+                            <dependentValues>BASIC</dependentValues>
+                            <propertyName>authentication-type</propertyName>
+                        </dependencies>
+                        <name>password</name>
+                    </value>
+                </entry>
+            </descriptors>
+            <name>ConfluentSchemaRegistry</name>
+            <persistsState>false</persistsState>
+            <properties>
+                <entry>
+                    <key>url</key>
+                    <value>http://schema-registry-confluent:8081</value>
+                </entry>
+                <entry>
+                    <key>ssl-context</key>
+                </entry>
+                <entry>
+                    <key>timeout</key>
+                    <value>30 secs</value>
+                </entry>
+                <entry>
+                    <key>cache-size</key>
+                    <value>1000</value>
+                </entry>
+                <entry>
+                    <key>cache-expiration</key>
+                    <value>1 hour</value>
+                </entry>
+                <entry>
+                    <key>authentication-type</key>
+                    <value>NONE</value>
+                </entry>
+                <entry>
+                    <key>username</key>
+                </entry>
+                <entry>
+                    <key>password</key>
+                </entry>
+            </properties>
+            <state>DISABLED</state>
+            <type>org.apache.nifi.confluent.schemaregistry.ConfluentSchemaRegistry</type>
+        </controllerServices>
         <processors>
-            <id>23d10caa-3f45-3f77-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>1cf8984a-1469-345e-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <position>
-                <x>770.9999999999999</x>
+                <x>771.0</x>
                 <y>338.0</y>
             </position>
             <bundle>
@@ -654,11 +654,11 @@
                     </entry>
                     <entry>
                         <key>record-reader</key>
-                        <value>a76dc54b-1df3-3103-0000-000000000000</value>
+                        <value>aff16b39-0c57-3589-0000-000000000000</value>
                     </entry>
                     <entry>
                         <key>record-writer</key>
-                        <value>3d8aa467-adca-32dd-0000-000000000000</value>
+                        <value>321629fc-6376-3b8d-0000-000000000000</value>
                     </entry>
                     <entry>
                         <key>use-transactions</key>
@@ -758,8 +758,132 @@
             <type>org.apache.nifi.processors.kafka.pubsub.PublishKafkaRecord_2_6</type>
         </processors>
         <processors>
-            <id>c79fa95d-b2c2-381b-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
+            <id>4dcf2410-65f1-375a-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
+            <position>
+                <x>768.0</x>
+                <y>0.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.13.2</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>argumentsStrategy</key>
+                        <value>
+                            <name>argumentsStrategy</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Command Arguments</key>
+                        <value>
+                            <name>Command Arguments</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Command Path</key>
+                        <value>
+                            <name>Command Path</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Ignore STDIN</key>
+                        <value>
+                            <name>Ignore STDIN</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Working Directory</key>
+                        <value>
+                            <name>Working Directory</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Argument Delimiter</key>
+                        <value>
+                            <name>Argument Delimiter</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Output Destination Attribute</key>
+                        <value>
+                            <name>Output Destination Attribute</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Max Attribute Length</key>
+                        <value>
+                            <name>Max Attribute Length</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>argumentsStrategy</key>
+                        <value>Command Arguments Property</value>
+                    </entry>
+                    <entry>
+                        <key>Command Arguments</key>
+                    </entry>
+                    <entry>
+                        <key>Command Path</key>
+                        <value>./generate-logparser.py</value>
+                    </entry>
+                    <entry>
+                        <key>Ignore STDIN</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>Working Directory</key>
+                        <value>/opt/aggregator/drivers/collection/logparser</value>
+                    </entry>
+                    <entry>
+                        <key>Argument Delimiter</key>
+                        <value>;</value>
+                    </entry>
+                    <entry>
+                        <key>Output Destination Attribute</key>
+                    </entry>
+                    <entry>
+                        <key>Max Attribute Length</key>
+                        <value>256</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>LogParserDriver</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>nonzero status</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>original</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>output stream</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.ExecuteStreamCommand</type>
+        </processors>
+        <processors>
+            <id>928f31ca-7727-3446-0000-000000000000</id>
+            <parentGroupId>115c8f6d-73f4-3288-0000-000000000000</parentGroupId>
             <position>
                 <x>0.0</x>
                 <y>0.0</y>
@@ -1019,7 +1143,7 @@
                 <yieldDuration>1 sec</yieldDuration>
             </config>
             <executionNodeRestricted>false</executionNodeRestricted>
-            <name>ConsumeSOLogParserKafka</name>
+            <name>ConsumeLogParserKafka</name>
             <relationships>
                 <autoTerminate>false</autoTerminate>
                 <name>success</name>
@@ -1028,130 +1152,6 @@
             <style/>
             <type>org.apache.nifi.processors.kafka.pubsub.ConsumeKafka_2_6</type>
         </processors>
-        <processors>
-            <id>e046c236-ba21-32d8-0000-000000000000</id>
-            <parentGroupId>6130b67f-cb69-3b49-0000-000000000000</parentGroupId>
-            <position>
-                <x>767.9999999999999</x>
-                <y>0.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.13.2</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>argumentsStrategy</key>
-                        <value>
-                            <name>argumentsStrategy</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Command Arguments</key>
-                        <value>
-                            <name>Command Arguments</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Command Path</key>
-                        <value>
-                            <name>Command Path</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Ignore STDIN</key>
-                        <value>
-                            <name>Ignore STDIN</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Working Directory</key>
-                        <value>
-                            <name>Working Directory</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Argument Delimiter</key>
-                        <value>
-                            <name>Argument Delimiter</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Output Destination Attribute</key>
-                        <value>
-                            <name>Output Destination Attribute</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Max Attribute Length</key>
-                        <value>
-                            <name>Max Attribute Length</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>argumentsStrategy</key>
-                        <value>Command Arguments Property</value>
-                    </entry>
-                    <entry>
-                        <key>Command Arguments</key>
-                    </entry>
-                    <entry>
-                        <key>Command Path</key>
-                        <value>./generate-logparser.py</value>
-                    </entry>
-                    <entry>
-                        <key>Ignore STDIN</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>Working Directory</key>
-                        <value>/opt/aggregator/drivers/collection/logparser</value>
-                    </entry>
-                    <entry>
-                        <key>Argument Delimiter</key>
-                        <value>;</value>
-                    </entry>
-                    <entry>
-                        <key>Output Destination Attribute</key>
-                    </entry>
-                    <entry>
-                        <key>Max Attribute Length</key>
-                        <value>256</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>SOLogParserDriver</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>nonzero status</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>original</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>output stream</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.ExecuteStreamCommand</type>
-        </processors>
     </snippet>
-    <timestamp>07/14/2021 10:29:49 UTC</timestamp>
+    <timestamp>07/22/2021 07:31:23 UTC</timestamp>
 </template>

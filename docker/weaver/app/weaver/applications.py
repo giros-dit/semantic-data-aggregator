@@ -41,7 +41,7 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     # Task Output
     # Get sink Kafka topic
     sink_topic = ngsi_ld.get_kafka_topic(
-        task.hasInput.object)
+        task.hasOutput.object)
     # Get sink Kafka broker
     sink_broker = ngsi_ld.get_kafka_broker_from_topic(
         sink_topic)
@@ -57,12 +57,14 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     source_topic_name = source_topic.name.value
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
+    group_id = task.arguments.value["groupId"]
 
     arguments = {
         # Avro schema hardcoded
         # although should be discovered
         # by asking registry with context information
         "avro_schema": "eve",
+        "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
         "sink_broker_url": sink_broker_url,
@@ -270,10 +272,63 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     return arguments
 
 
+def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
+    """
+    Builds configuration arguments for LogParserSource application (NiFi)
+    """
+    # Collect lineage information
+
+    # Task Input
+    # Get source Kafka topic
+    source_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
+    # Get source Kafka broker
+    source_broker = ngsi_ld.get_kafka_broker_from_topic(
+        source_topic)
+    # Get Endpoint for source Kafka broker
+    source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        source_broker)
+
+    # Task Output
+    # Get sink Kafka topic
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasOutput.object)
+    # Get sink Kafka broker
+    sink_broker = ngsi_ld.get_kafka_broker_from_topic(
+        sink_topic)
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        sink_broker)
+
+    # Prepare variables from context arguments
+    # Only supports one input Kafka topic
+    # although NiFi allows passing multiple
+    # broker urls and multiple topic names
+    source_broker_url = source_endpoint.uri.value
+    source_topic_name = source_topic.name.value
+    sink_broker_url = sink_endpoint.uri.value
+    sink_topic_name = sink_topic.name.value
+    group_id = task.arguments.value["groupId"]
+
+    arguments = {
+        # Avro schema hardcoded
+        # although should be discovered
+        # by asking registry with context information
+        "avro_schema": "logparser",
+        "group_id": group_id,
+        "source_broker_url": source_broker_url,
+        "source_topics": source_topic_name,
+        "sink_broker_url": sink_broker_url,
+        "sink_topic": sink_topic_name
+    }
+    return arguments
+
+
 application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
     "MetricTarget": config_metric_target,
     "TelemetrySource": config_telemetry_source,
-    "gNMIcSource": config_telemetry_source
+    "gNMIcSource": config_telemetry_source,
+    "LogParserSource": config_logparser_source
 }

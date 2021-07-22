@@ -8,10 +8,11 @@ class Device(Infrastructure):
     protocol: Property
     version: Optional[Property]
     encodings: Optional[Property]
+    hasModule: Optional[Relationship]
 
 
 class YANGModule(Asset):
     type: Literal["YANGModule"] = "YANGModule"
-    hasDevice: Relationship
     org: Property
     revision: Property
+    hasDevice: Relationship
