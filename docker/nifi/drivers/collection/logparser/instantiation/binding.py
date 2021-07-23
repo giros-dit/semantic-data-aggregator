@@ -30,7 +30,7 @@ class yc_so_instantiation_metrics_logparser_instantiation_operation__so_instanti
 
   YANG Description: Enclosing container for the time-related metrics provided by the 5Growth Service Orchestrator related logs during the network service instantiation operation.
   """
-  __slots__ = ('_path_helper', '_extmethods', '__current_time','__operation','__nsID','__nsdID','__total_instantiation_time','__SOE_time','__ROE_time','__operation_ID_for_instantiation_op_datetime_difference','__hierarchical_SOE_dispatching_datetime_difference','__ROE_created_VLs_start_datetime_difference','__ROE_retrieve_RL_resources_start_datetime_difference','__ROE_parsing_NSDs_start_datetime_difference','__ROE_updating_DBs_start_datetime_difference','__ROE_extract_VLs_start_datetime_difference','__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference','__PA_calculation_start_datetime_difference','__create_threshold_based_alerts_start_datetime_difference','__create_monitoring_jobs_start_datetime_difference','__create_AIML_alerts_start_datetime_difference','__CoreMANO_wrapper_time',)
+  __slots__ = ('_path_helper', '_extmethods', '__Current_time','__Operation','__NS_ID','__NSD_ID','__Total_instantiation_time','__SOE_time','__ROE_time','__Operation_ID_for_instantiation_op','__Hierarchical_SOE_dispatching_SOEpSOEc','__ROE_created_VLs','__ROE_retrieve_RL_resources','__ROE_parsing_NSDs','__ROE_updating_DBs','__ROE_extract_VLs','__Retrieving_descriptor_from_catalogue_DBs','__PA_calculation','__Create_threshold_based_alerts','__Create_monitoring_jobs','__Create_AIML_alerts','__CoreMANO_Wrapper_time',)
 
   _yang_name = 'so-instantiation-metrics'
   _yang_namespace = 'http://data-aggregator.com/ns/so-log-parser/instantiation-op'
@@ -51,26 +51,26 @@ class yc_so_instantiation_metrics_logparser_instantiation_operation__so_instanti
       self._path_helper = False
 
     self._extmethods = False
-    self.__current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
-    self.__operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
-    self.__nsID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
-    self.__nsdID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
-    self.__total_instantiation_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
+    self.__Operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+    self.__NS_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+    self.__NSD_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+    self.__Total_instantiation_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     self.__SOE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     self.__ROE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__operation_ID_for_instantiation_op_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_instantiation_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__hierarchical_SOE_dispatching_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__ROE_created_VLs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__ROE_retrieve_RL_resources_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__ROE_parsing_NSDs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__ROE_updating_DBs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__ROE_extract_VLs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="retrieving_descriptor_from_catalogue_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__PA_calculation_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__create_threshold_based_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_threshold_based_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__create_monitoring_jobs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_monitoring_jobs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__create_AIML_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_AIML_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
-    self.__CoreMANO_wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Operation_ID_for_instantiation_op = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_instantiation_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__ROE_created_VLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__ROE_retrieve_RL_resources = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__ROE_parsing_NSDs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__ROE_updating_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__ROE_extract_VLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Retrieving_descriptor_from_catalogue_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Retrieving_descriptor_from_catalogue_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__PA_calculation = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Create_threshold_based_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Create_monitoring_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__Create_AIML_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_AIML_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+    self.__CoreMANO_Wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
     load = kwargs.pop("load", None)
     if args:
@@ -99,189 +99,189 @@ class yc_so_instantiation_metrics_logparser_instantiation_operation__so_instanti
     else:
       return ['so-instantiation-metrics']
 
-  def _get_current_time(self):
+  def _get_Current_time(self):
     """
-    Getter method for current_time, mapped from YANG variable /so_instantiation_metrics/current_time (ietf-types:date-and-time)
+    Getter method for Current_time, mapped from YANG variable /so_instantiation_metrics/Current_time (ietf-types:date-and-time)
 
     YANG Description: Date and time in which the time-related metric values have been sent to Kafka (following the ISO 8601 format).
     """
-    return self.__current_time
+    return self.__Current_time
       
-  def _set_current_time(self, v, load=False):
+  def _set_Current_time(self, v, load=False):
     """
-    Setter method for current_time, mapped from YANG variable /so_instantiation_metrics/current_time (ietf-types:date-and-time)
+    Setter method for Current_time, mapped from YANG variable /so_instantiation_metrics/Current_time (ietf-types:date-and-time)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_current_time is considered as a private
+    source YANG file, then _set_Current_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_current_time() directly.
+    do so via calling thisObj._set_Current_time() directly.
 
     YANG Description: Date and time in which the time-related metric values have been sent to Kafka (following the ISO 8601 format).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """current_time must be of a type compatible with ietf-types:date-and-time""",
+          'error-string': """Current_time must be of a type compatible with ietf-types:date-and-time""",
           'defined-type': "ietf-types:date-and-time",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)""",
         })
 
-    self.__current_time = t
+    self.__Current_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_current_time(self):
-    self.__current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
+  def _unset_Current_time(self):
+    self.__Current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='ietf-types:date-and-time', is_config=False)
 
 
-  def _get_operation(self):
+  def _get_Operation(self):
     """
-    Getter method for operation, mapped from YANG variable /so_instantiation_metrics/operation (string)
+    Getter method for Operation, mapped from YANG variable /so_instantiation_metrics/Operation (string)
 
-    YANG Description: Identifier of the type of operation (i.e., instantiation).
+    YANG Description: Identifier of the type of operation (i.e., Instantiation).
     """
-    return self.__operation
+    return self.__Operation
       
-  def _set_operation(self, v, load=False):
+  def _set_Operation(self, v, load=False):
     """
-    Setter method for operation, mapped from YANG variable /so_instantiation_metrics/operation (string)
+    Setter method for Operation, mapped from YANG variable /so_instantiation_metrics/Operation (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_operation is considered as a private
+    source YANG file, then _set_Operation is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_operation() directly.
+    do so via calling thisObj._set_Operation() directly.
 
-    YANG Description: Identifier of the type of operation (i.e., instantiation).
+    YANG Description: Identifier of the type of operation (i.e., Instantiation).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """operation must be of a type compatible with string""",
+          'error-string': """Operation must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__operation = t
+    self.__Operation = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_operation(self):
-    self.__operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+  def _unset_Operation(self):
+    self.__Operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
 
 
-  def _get_nsID(self):
+  def _get_NS_ID(self):
     """
-    Getter method for nsID, mapped from YANG variable /so_instantiation_metrics/nsID (string)
+    Getter method for NS_ID, mapped from YANG variable /so_instantiation_metrics/NS_ID (string)
 
     YANG Description: Network Service Identifier.
     """
-    return self.__nsID
+    return self.__NS_ID
       
-  def _set_nsID(self, v, load=False):
+  def _set_NS_ID(self, v, load=False):
     """
-    Setter method for nsID, mapped from YANG variable /so_instantiation_metrics/nsID (string)
+    Setter method for NS_ID, mapped from YANG variable /so_instantiation_metrics/NS_ID (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_nsID is considered as a private
+    source YANG file, then _set_NS_ID is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_nsID() directly.
+    do so via calling thisObj._set_NS_ID() directly.
 
     YANG Description: Network Service Identifier.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """nsID must be of a type compatible with string""",
+          'error-string': """NS_ID must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__nsID = t
+    self.__NS_ID = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_nsID(self):
-    self.__nsID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+  def _unset_NS_ID(self):
+    self.__NS_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
 
 
-  def _get_nsdID(self):
+  def _get_NSD_ID(self):
     """
-    Getter method for nsdID, mapped from YANG variable /so_instantiation_metrics/nsdID (string)
+    Getter method for NSD_ID, mapped from YANG variable /so_instantiation_metrics/NSD_ID (string)
 
     YANG Description: Network Service Descriptor Identifier.
     """
-    return self.__nsdID
+    return self.__NSD_ID
       
-  def _set_nsdID(self, v, load=False):
+  def _set_NSD_ID(self, v, load=False):
     """
-    Setter method for nsdID, mapped from YANG variable /so_instantiation_metrics/nsdID (string)
+    Setter method for NSD_ID, mapped from YANG variable /so_instantiation_metrics/NSD_ID (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_nsdID is considered as a private
+    source YANG file, then _set_NSD_ID is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_nsdID() directly.
+    do so via calling thisObj._set_NSD_ID() directly.
 
     YANG Description: Network Service Descriptor Identifier.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """nsdID must be of a type compatible with string""",
+          'error-string': """NSD_ID must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__nsdID = t
+    self.__NSD_ID = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_nsdID(self):
-    self.__nsdID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
+  def _unset_NSD_ID(self):
+    self.__NSD_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='string', is_config=False)
 
 
-  def _get_total_instantiation_time(self):
+  def _get_Total_instantiation_time(self):
     """
-    Getter method for total_instantiation_time, mapped from YANG variable /so_instantiation_metrics/total_instantiation_time (int64)
+    Getter method for Total_instantiation_time, mapped from YANG variable /so_instantiation_metrics/Total_instantiation_time (int64)
 
     YANG Description: Network service total instantiation time. The time it takes since the 5Gr-SO created the service identifier for a network service until it has been totally instantiated.
     """
-    return self.__total_instantiation_time
+    return self.__Total_instantiation_time
       
-  def _set_total_instantiation_time(self, v, load=False):
+  def _set_Total_instantiation_time(self, v, load=False):
     """
-    Setter method for total_instantiation_time, mapped from YANG variable /so_instantiation_metrics/total_instantiation_time (int64)
+    Setter method for Total_instantiation_time, mapped from YANG variable /so_instantiation_metrics/Total_instantiation_time (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_total_instantiation_time is considered as a private
+    source YANG file, then _set_Total_instantiation_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_total_instantiation_time() directly.
+    do so via calling thisObj._set_Total_instantiation_time() directly.
 
     YANG Description: Network service total instantiation time. The time it takes since the 5Gr-SO created the service identifier for a network service until it has been totally instantiated.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """total_instantiation_time must be of a type compatible with int64""",
+          'error-string': """Total_instantiation_time must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__total_instantiation_time = t
+    self.__Total_instantiation_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_total_instantiation_time(self):
-    self.__total_instantiation_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Total_instantiation_time(self):
+    self.__Total_instantiation_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_instantiation_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
   def _get_SOE_time(self):
@@ -358,244 +358,244 @@ class yc_so_instantiation_metrics_logparser_instantiation_operation__so_instanti
     self.__ROE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_operation_ID_for_instantiation_op_datetime_difference(self):
+  def _get_Operation_ID_for_instantiation_op(self):
     """
-    Getter method for operation_ID_for_instantiation_op_datetime_difference, mapped from YANG variable /so_instantiation_metrics/operation_ID_for_instantiation_op_datetime_difference (int64)
+    Getter method for Operation_ID_for_instantiation_op, mapped from YANG variable /so_instantiation_metrics/Operation_ID_for_instantiation_op (int64)
 
     YANG Description: The time it takes the Northbound Interface (NBI) to generate an ID to identify the instantiation operation.
     """
-    return self.__operation_ID_for_instantiation_op_datetime_difference
+    return self.__Operation_ID_for_instantiation_op
       
-  def _set_operation_ID_for_instantiation_op_datetime_difference(self, v, load=False):
+  def _set_Operation_ID_for_instantiation_op(self, v, load=False):
     """
-    Setter method for operation_ID_for_instantiation_op_datetime_difference, mapped from YANG variable /so_instantiation_metrics/operation_ID_for_instantiation_op_datetime_difference (int64)
+    Setter method for Operation_ID_for_instantiation_op, mapped from YANG variable /so_instantiation_metrics/Operation_ID_for_instantiation_op (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_operation_ID_for_instantiation_op_datetime_difference is considered as a private
+    source YANG file, then _set_Operation_ID_for_instantiation_op is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_operation_ID_for_instantiation_op_datetime_difference() directly.
+    do so via calling thisObj._set_Operation_ID_for_instantiation_op() directly.
 
     YANG Description: The time it takes the Northbound Interface (NBI) to generate an ID to identify the instantiation operation.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_instantiation_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_instantiation_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """operation_ID_for_instantiation_op_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Operation_ID_for_instantiation_op must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_instantiation_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_instantiation_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__operation_ID_for_instantiation_op_datetime_difference = t
+    self.__Operation_ID_for_instantiation_op = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_operation_ID_for_instantiation_op_datetime_difference(self):
-    self.__operation_ID_for_instantiation_op_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_instantiation_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Operation_ID_for_instantiation_op(self):
+    self.__Operation_ID_for_instantiation_op = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_instantiation_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_hierarchical_SOE_dispatching_datetime_difference(self):
+  def _get_Hierarchical_SOE_dispatching_SOEpSOEc(self):
     """
-    Getter method for hierarchical_SOE_dispatching_datetime_difference, mapped from YANG variable /so_instantiation_metrics/hierarchical_SOE_dispatching_datetime_difference (int64)
+    Getter method for Hierarchical_SOE_dispatching_SOEpSOEc, mapped from YANG variable /so_instantiation_metrics/Hierarchical_SOE_dispatching_SOEpSOEc (int64)
 
     YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation process based on the nature of the service (single NS, composite NS).
     """
-    return self.__hierarchical_SOE_dispatching_datetime_difference
+    return self.__Hierarchical_SOE_dispatching_SOEpSOEc
       
-  def _set_hierarchical_SOE_dispatching_datetime_difference(self, v, load=False):
+  def _set_Hierarchical_SOE_dispatching_SOEpSOEc(self, v, load=False):
     """
-    Setter method for hierarchical_SOE_dispatching_datetime_difference, mapped from YANG variable /so_instantiation_metrics/hierarchical_SOE_dispatching_datetime_difference (int64)
+    Setter method for Hierarchical_SOE_dispatching_SOEpSOEc, mapped from YANG variable /so_instantiation_metrics/Hierarchical_SOE_dispatching_SOEpSOEc (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_hierarchical_SOE_dispatching_datetime_difference is considered as a private
+    source YANG file, then _set_Hierarchical_SOE_dispatching_SOEpSOEc is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_hierarchical_SOE_dispatching_datetime_difference() directly.
+    do so via calling thisObj._set_Hierarchical_SOE_dispatching_SOEpSOEc() directly.
 
     YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation process based on the nature of the service (single NS, composite NS).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """hierarchical_SOE_dispatching_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Hierarchical_SOE_dispatching_SOEpSOEc must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__hierarchical_SOE_dispatching_datetime_difference = t
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_hierarchical_SOE_dispatching_datetime_difference(self):
-    self.__hierarchical_SOE_dispatching_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Hierarchical_SOE_dispatching_SOEpSOEc(self):
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_created_VLs_start_datetime_difference(self):
+  def _get_ROE_created_VLs(self):
     """
-    Getter method for ROE_created_VLs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_created_VLs_start_datetime_difference (int64)
+    Getter method for ROE_created_VLs, mapped from YANG variable /so_instantiation_metrics/ROE_created_VLs (int64)
 
     YANG Description: Time in the interaction between Resource Orchestration Engine (ROE) and Resource Layer (RL) to allocate resources in the Logical Links (LLs) based on the ROE extract request.
     """
-    return self.__ROE_created_VLs_start_datetime_difference
+    return self.__ROE_created_VLs
       
-  def _set_ROE_created_VLs_start_datetime_difference(self, v, load=False):
+  def _set_ROE_created_VLs(self, v, load=False):
     """
-    Setter method for ROE_created_VLs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_created_VLs_start_datetime_difference (int64)
+    Setter method for ROE_created_VLs, mapped from YANG variable /so_instantiation_metrics/ROE_created_VLs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_created_VLs_start_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_created_VLs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_created_VLs_start_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_created_VLs() directly.
 
     YANG Description: Time in the interaction between Resource Orchestration Engine (ROE) and Resource Layer (RL) to allocate resources in the Logical Links (LLs) based on the ROE extract request.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_created_VLs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_created_VLs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_created_VLs_start_datetime_difference = t
+    self.__ROE_created_VLs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_created_VLs_start_datetime_difference(self):
-    self.__ROE_created_VLs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_created_VLs(self):
+    self.__ROE_created_VLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_created_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_retrieve_RL_resources_start_datetime_difference(self):
+  def _get_ROE_retrieve_RL_resources(self):
     """
-    Getter method for ROE_retrieve_RL_resources_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_retrieve_RL_resources_start_datetime_difference (int64)
+    Getter method for ROE_retrieve_RL_resources, mapped from YANG variable /so_instantiation_metrics/ROE_retrieve_RL_resources (int64)
 
     YANG Description: The time to recollect the information from the Resource Layer (RL).
     """
-    return self.__ROE_retrieve_RL_resources_start_datetime_difference
+    return self.__ROE_retrieve_RL_resources
       
-  def _set_ROE_retrieve_RL_resources_start_datetime_difference(self, v, load=False):
+  def _set_ROE_retrieve_RL_resources(self, v, load=False):
     """
-    Setter method for ROE_retrieve_RL_resources_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_retrieve_RL_resources_start_datetime_difference (int64)
+    Setter method for ROE_retrieve_RL_resources, mapped from YANG variable /so_instantiation_metrics/ROE_retrieve_RL_resources (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_retrieve_RL_resources_start_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_retrieve_RL_resources is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_retrieve_RL_resources_start_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_retrieve_RL_resources() directly.
 
     YANG Description: The time to recollect the information from the Resource Layer (RL).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_retrieve_RL_resources_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_retrieve_RL_resources must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_retrieve_RL_resources_start_datetime_difference = t
+    self.__ROE_retrieve_RL_resources = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_retrieve_RL_resources_start_datetime_difference(self):
-    self.__ROE_retrieve_RL_resources_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_retrieve_RL_resources(self):
+    self.__ROE_retrieve_RL_resources = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_retrieve_RL_resources", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_parsing_NSDs_start_datetime_difference(self):
+  def _get_ROE_parsing_NSDs(self):
     """
-    Getter method for ROE_parsing_NSDs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_parsing_NSDs_start_datetime_difference (int64)
+    Getter method for ROE_parsing_NSDs, mapped from YANG variable /so_instantiation_metrics/ROE_parsing_NSDs (int64)
 
     YANG Description: The time at Resource Orchestration Engine (ROE) submodule to parse NSD and VNFDs of an network service to get the required information for Placement Algorithm (PA).
     """
-    return self.__ROE_parsing_NSDs_start_datetime_difference
+    return self.__ROE_parsing_NSDs
       
-  def _set_ROE_parsing_NSDs_start_datetime_difference(self, v, load=False):
+  def _set_ROE_parsing_NSDs(self, v, load=False):
     """
-    Setter method for ROE_parsing_NSDs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_parsing_NSDs_start_datetime_difference (int64)
+    Setter method for ROE_parsing_NSDs, mapped from YANG variable /so_instantiation_metrics/ROE_parsing_NSDs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_parsing_NSDs_start_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_parsing_NSDs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_parsing_NSDs_start_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_parsing_NSDs() directly.
 
     YANG Description: The time at Resource Orchestration Engine (ROE) submodule to parse NSD and VNFDs of an network service to get the required information for Placement Algorithm (PA).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_parsing_NSDs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_parsing_NSDs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_parsing_NSDs_start_datetime_difference = t
+    self.__ROE_parsing_NSDs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_parsing_NSDs_start_datetime_difference(self):
-    self.__ROE_parsing_NSDs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_parsing_NSDs(self):
+    self.__ROE_parsing_NSDs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_parsing_NSDs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_updating_DBs_start_datetime_difference(self):
+  def _get_ROE_updating_DBs(self):
     """
-    Getter method for ROE_updating_DBs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_updating_DBs_start_datetime_difference (int64)
+    Getter method for ROE_updating_DBs, mapped from YANG variable /so_instantiation_metrics/ROE_updating_DBs (int64)
 
     YANG Description: Time to update databases (DBs) to declare the network service as operative and the instantiation operation as successful.
     """
-    return self.__ROE_updating_DBs_start_datetime_difference
+    return self.__ROE_updating_DBs
       
-  def _set_ROE_updating_DBs_start_datetime_difference(self, v, load=False):
+  def _set_ROE_updating_DBs(self, v, load=False):
     """
-    Setter method for ROE_updating_DBs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_updating_DBs_start_datetime_difference (int64)
+    Setter method for ROE_updating_DBs, mapped from YANG variable /so_instantiation_metrics/ROE_updating_DBs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_updating_DBs_start_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_updating_DBs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_updating_DBs_start_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_updating_DBs() directly.
 
     YANG Description: Time to update databases (DBs) to declare the network service as operative and the instantiation operation as successful.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_updating_DBs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_updating_DBs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_updating_DBs_start_datetime_difference = t
+    self.__ROE_updating_DBs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_updating_DBs_start_datetime_difference(self):
-    self.__ROE_updating_DBs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_updating_DBs(self):
+    self.__ROE_updating_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_extract_VLs_start_datetime_difference(self):
+  def _get_ROE_extract_VLs(self):
     """
-    Getter method for ROE_extract_VLs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_extract_VLs_start_datetime_difference (int64)
+    Getter method for ROE_extract_VLs, mapped from YANG variable /so_instantiation_metrics/ROE_extract_VLs (int64)
 
     YANG Description: The time it takes the Resource Orchestration Engine (ROE) to determine the request of the different Virtual Links (VLs) needing resources in the Logical Links (LLs) because
 connected VNFs have been deployed in multiple Virtualized Infrastructure Managers (VIMs).
     """
-    return self.__ROE_extract_VLs_start_datetime_difference
+    return self.__ROE_extract_VLs
       
-  def _set_ROE_extract_VLs_start_datetime_difference(self, v, load=False):
+  def _set_ROE_extract_VLs(self, v, load=False):
     """
-    Setter method for ROE_extract_VLs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/ROE_extract_VLs_start_datetime_difference (int64)
+    Setter method for ROE_extract_VLs, mapped from YANG variable /so_instantiation_metrics/ROE_extract_VLs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_extract_VLs_start_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_extract_VLs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_extract_VLs_start_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_extract_VLs() directly.
 
     YANG Description: The time it takes the Resource Orchestration Engine (ROE) to determine the request of the different Virtual Links (VLs) needing resources in the Logical Links (LLs) because
 connected VNFs have been deployed in multiple Virtualized Infrastructure Managers (VIMs).
@@ -603,113 +603,113 @@ connected VNFs have been deployed in multiple Virtualized Infrastructure Manager
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_extract_VLs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_extract_VLs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_extract_VLs_start_datetime_difference = t
+    self.__ROE_extract_VLs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_extract_VLs_start_datetime_difference(self):
-    self.__ROE_extract_VLs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_extract_VLs(self):
+    self.__ROE_extract_VLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_extract_VLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference(self):
+  def _get_Retrieving_descriptor_from_catalogue_DBs(self):
     """
-    Getter method for retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference (int64)
+    Getter method for Retrieving_descriptor_from_catalogue_DBs, mapped from YANG variable /so_instantiation_metrics/Retrieving_descriptor_from_catalogue_DBs (int64)
 
     YANG Description: The time to collect the descriptor from the network service descriptor (NSD) catalogue.
     """
-    return self.__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference
+    return self.__Retrieving_descriptor_from_catalogue_DBs
       
-  def _set_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference(self, v, load=False):
+  def _set_Retrieving_descriptor_from_catalogue_DBs(self, v, load=False):
     """
-    Setter method for retrieving_descriptor_from_catalogue_DBs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/retrieving_descriptor_from_catalogue_DBs_start_datetime_difference (int64)
+    Setter method for Retrieving_descriptor_from_catalogue_DBs, mapped from YANG variable /so_instantiation_metrics/Retrieving_descriptor_from_catalogue_DBs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference is considered as a private
+    source YANG file, then _set_Retrieving_descriptor_from_catalogue_DBs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference() directly.
+    do so via calling thisObj._set_Retrieving_descriptor_from_catalogue_DBs() directly.
 
     YANG Description: The time to collect the descriptor from the network service descriptor (NSD) catalogue.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="retrieving_descriptor_from_catalogue_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Retrieving_descriptor_from_catalogue_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """retrieving_descriptor_from_catalogue_DBs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Retrieving_descriptor_from_catalogue_DBs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="retrieving_descriptor_from_catalogue_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Retrieving_descriptor_from_catalogue_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = t
+    self.__Retrieving_descriptor_from_catalogue_DBs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference(self):
-    self.__retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="retrieving_descriptor_from_catalogue_DBs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Retrieving_descriptor_from_catalogue_DBs(self):
+    self.__Retrieving_descriptor_from_catalogue_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Retrieving_descriptor_from_catalogue_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_PA_calculation_start_datetime_difference(self):
+  def _get_PA_calculation(self):
     """
-    Getter method for PA_calculation_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/PA_calculation_start_datetime_difference (int64)
+    Getter method for PA_calculation, mapped from YANG variable /so_instantiation_metrics/PA_calculation (int64)
 
     YANG Description: The time to build the request to the Placement Algorithm (PA), send it to the external PA service and receive its answers.
     """
-    return self.__PA_calculation_start_datetime_difference
+    return self.__PA_calculation
       
-  def _set_PA_calculation_start_datetime_difference(self, v, load=False):
+  def _set_PA_calculation(self, v, load=False):
     """
-    Setter method for PA_calculation_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/PA_calculation_start_datetime_difference (int64)
+    Setter method for PA_calculation, mapped from YANG variable /so_instantiation_metrics/PA_calculation (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_PA_calculation_start_datetime_difference is considered as a private
+    source YANG file, then _set_PA_calculation is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_PA_calculation_start_datetime_difference() directly.
+    do so via calling thisObj._set_PA_calculation() directly.
 
     YANG Description: The time to build the request to the Placement Algorithm (PA), send it to the external PA service and receive its answers.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """PA_calculation_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """PA_calculation must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__PA_calculation_start_datetime_difference = t
+    self.__PA_calculation = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_PA_calculation_start_datetime_difference(self):
-    self.__PA_calculation_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_PA_calculation(self):
+    self.__PA_calculation = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="PA_calculation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_create_threshold_based_alerts_start_datetime_difference(self):
+  def _get_Create_threshold_based_alerts(self):
     """
-    Getter method for create_threshold_based_alerts_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_threshold_based_alerts_start_datetime_difference (int64)
+    Getter method for Create_threshold_based_alerts, mapped from YANG variable /so_instantiation_metrics/Create_threshold_based_alerts (int64)
 
     YANG Description: Time interaction between SOE-SLA Manager modules of the 5Gr-SO to determine the threshold-alerts objects (if there is not AI/ML treatment) to be configured at the 5Gr-VoMS
 plus the interaction to configure them at the 5GR-VoMs and receive the associated object identifiers and update the information in Network Service Instantiation Resource
 (NSIR) database.
     """
-    return self.__create_threshold_based_alerts_start_datetime_difference
+    return self.__Create_threshold_based_alerts
       
-  def _set_create_threshold_based_alerts_start_datetime_difference(self, v, load=False):
+  def _set_Create_threshold_based_alerts(self, v, load=False):
     """
-    Setter method for create_threshold_based_alerts_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_threshold_based_alerts_start_datetime_difference (int64)
+    Setter method for Create_threshold_based_alerts, mapped from YANG variable /so_instantiation_metrics/Create_threshold_based_alerts (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_create_threshold_based_alerts_start_datetime_difference is considered as a private
+    source YANG file, then _set_Create_threshold_based_alerts is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_create_threshold_based_alerts_start_datetime_difference() directly.
+    do so via calling thisObj._set_Create_threshold_based_alerts() directly.
 
     YANG Description: Time interaction between SOE-SLA Manager modules of the 5Gr-SO to determine the threshold-alerts objects (if there is not AI/ML treatment) to be configured at the 5Gr-VoMS
 plus the interaction to configure them at the 5GR-VoMs and receive the associated object identifiers and update the information in Network Service Instantiation Resource
@@ -718,38 +718,38 @@ plus the interaction to configure them at the 5GR-VoMs and receive the associate
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_threshold_based_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """create_threshold_based_alerts_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Create_threshold_based_alerts must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_threshold_based_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__create_threshold_based_alerts_start_datetime_difference = t
+    self.__Create_threshold_based_alerts = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_create_threshold_based_alerts_start_datetime_difference(self):
-    self.__create_threshold_based_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_threshold_based_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Create_threshold_based_alerts(self):
+    self.__Create_threshold_based_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_create_monitoring_jobs_start_datetime_difference(self):
+  def _get_Create_monitoring_jobs(self):
     """
-    Getter method for create_monitoring_jobs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_monitoring_jobs_start_datetime_difference (int64)
+    Getter method for Create_monitoring_jobs, mapped from YANG variable /so_instantiation_metrics/Create_monitoring_jobs (int64)
 
     YANG Description: Time interaction between SOE-Monitoring Manager modules of 5Gr-SO to determine the monitoring jobs (exporters) and dashboards to be configured at the 5Gr-VoMS plus the interaction
 to configure them and receive the associated object identifiers and update the information in Network Service Instantiation Resource (NSIR) database.
     """
-    return self.__create_monitoring_jobs_start_datetime_difference
+    return self.__Create_monitoring_jobs
       
-  def _set_create_monitoring_jobs_start_datetime_difference(self, v, load=False):
+  def _set_Create_monitoring_jobs(self, v, load=False):
     """
-    Setter method for create_monitoring_jobs_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_monitoring_jobs_start_datetime_difference (int64)
+    Setter method for Create_monitoring_jobs, mapped from YANG variable /so_instantiation_metrics/Create_monitoring_jobs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_create_monitoring_jobs_start_datetime_difference is considered as a private
+    source YANG file, then _set_Create_monitoring_jobs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_create_monitoring_jobs_start_datetime_difference() directly.
+    do so via calling thisObj._set_Create_monitoring_jobs() directly.
 
     YANG Description: Time interaction between SOE-Monitoring Manager modules of 5Gr-SO to determine the monitoring jobs (exporters) and dashboards to be configured at the 5Gr-VoMS plus the interaction
 to configure them and receive the associated object identifiers and update the information in Network Service Instantiation Resource (NSIR) database.
@@ -757,39 +757,39 @@ to configure them and receive the associated object identifiers and update the i
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_monitoring_jobs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """create_monitoring_jobs_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Create_monitoring_jobs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_monitoring_jobs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__create_monitoring_jobs_start_datetime_difference = t
+    self.__Create_monitoring_jobs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_create_monitoring_jobs_start_datetime_difference(self):
-    self.__create_monitoring_jobs_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_monitoring_jobs_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Create_monitoring_jobs(self):
+    self.__Create_monitoring_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_create_AIML_alerts_start_datetime_difference(self):
+  def _get_Create_AIML_alerts(self):
     """
-    Getter method for create_AIML_alerts_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_AIML_alerts_start_datetime_difference (int64)
+    Getter method for Create_AIML_alerts, mapped from YANG variable /so_instantiation_metrics/Create_AIML_alerts (int64)
 
     YANG Description: Time interaction between SOE-SLA Manager to configure the AI/ML workflow to drive scaling operations. The creation and configuration of the data engineering pipeline consist of:
 i) interaction with 5Gr-VoMs to create a Kafka Topic, ii) interaction with the 5Gr-AIML platform to download the required model, iii) creation of inference job at Apache Spark,
 iv) update of Network Service Instantiation Resource (NSIR) database.
     """
-    return self.__create_AIML_alerts_start_datetime_difference
+    return self.__Create_AIML_alerts
       
-  def _set_create_AIML_alerts_start_datetime_difference(self, v, load=False):
+  def _set_Create_AIML_alerts(self, v, load=False):
     """
-    Setter method for create_AIML_alerts_start_datetime_difference, mapped from YANG variable /so_instantiation_metrics/create_AIML_alerts_start_datetime_difference (int64)
+    Setter method for Create_AIML_alerts, mapped from YANG variable /so_instantiation_metrics/Create_AIML_alerts (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_create_AIML_alerts_start_datetime_difference is considered as a private
+    source YANG file, then _set_Create_AIML_alerts is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_create_AIML_alerts_start_datetime_difference() directly.
+    do so via calling thisObj._set_Create_AIML_alerts() directly.
 
     YANG Description: Time interaction between SOE-SLA Manager to configure the AI/ML workflow to drive scaling operations. The creation and configuration of the data engineering pipeline consist of:
 i) interaction with 5Gr-VoMs to create a Kafka Topic, ii) interaction with the 5Gr-AIML platform to download the required model, iii) creation of inference job at Apache Spark,
@@ -798,38 +798,38 @@ iv) update of Network Service Instantiation Resource (NSIR) database.
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_AIML_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_AIML_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """create_AIML_alerts_start_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Create_AIML_alerts must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_AIML_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_AIML_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__create_AIML_alerts_start_datetime_difference = t
+    self.__Create_AIML_alerts = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_create_AIML_alerts_start_datetime_difference(self):
-    self.__create_AIML_alerts_start_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="create_AIML_alerts_start_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_Create_AIML_alerts(self):
+    self.__Create_AIML_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Create_AIML_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
 
-  def _get_CoreMANO_wrapper_time(self):
+  def _get_CoreMANO_Wrapper_time(self):
     """
-    Getter method for CoreMANO_wrapper_time, mapped from YANG variable /so_instantiation_metrics/CoreMANO_wrapper_time (int64)
+    Getter method for CoreMANO_Wrapper_time, mapped from YANG variable /so_instantiation_metrics/CoreMANO_Wrapper_time (int64)
 
     YANG Description: Time spent in the Core MANO Wrapper module during the instantiation process to create virtual network supporting the Virtual Links (VLs), the VMs supporting the VNFs, and
 update the Network Service Instantiation Resource (NSIR) database.
     """
-    return self.__CoreMANO_wrapper_time
+    return self.__CoreMANO_Wrapper_time
       
-  def _set_CoreMANO_wrapper_time(self, v, load=False):
+  def _set_CoreMANO_Wrapper_time(self, v, load=False):
     """
-    Setter method for CoreMANO_wrapper_time, mapped from YANG variable /so_instantiation_metrics/CoreMANO_wrapper_time (int64)
+    Setter method for CoreMANO_Wrapper_time, mapped from YANG variable /so_instantiation_metrics/CoreMANO_Wrapper_time (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_CoreMANO_wrapper_time is considered as a private
+    source YANG file, then _set_CoreMANO_Wrapper_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_CoreMANO_wrapper_time() directly.
+    do so via calling thisObj._set_CoreMANO_Wrapper_time() directly.
 
     YANG Description: Time spent in the Core MANO Wrapper module during the instantiation process to create virtual network supporting the Virtual Links (VLs), the VMs supporting the VNFs, and
 update the Network Service Instantiation Resource (NSIR) database.
@@ -837,44 +837,44 @@ update the Network Service Instantiation Resource (NSIR) database.
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """CoreMANO_wrapper_time must be of a type compatible with int64""",
+          'error-string': """CoreMANO_Wrapper_time must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__CoreMANO_wrapper_time = t
+    self.__CoreMANO_Wrapper_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_CoreMANO_wrapper_time(self):
-    self.__CoreMANO_wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
+  def _unset_CoreMANO_Wrapper_time(self):
+    self.__CoreMANO_Wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/instantiation-op', defining_module='logparser-instantiation-operation', yang_type='int64', is_config=False)
 
-  current_time = __builtin__.property(_get_current_time)
-  operation = __builtin__.property(_get_operation)
-  nsID = __builtin__.property(_get_nsID)
-  nsdID = __builtin__.property(_get_nsdID)
-  total_instantiation_time = __builtin__.property(_get_total_instantiation_time)
+  Current_time = __builtin__.property(_get_Current_time)
+  Operation = __builtin__.property(_get_Operation)
+  NS_ID = __builtin__.property(_get_NS_ID)
+  NSD_ID = __builtin__.property(_get_NSD_ID)
+  Total_instantiation_time = __builtin__.property(_get_Total_instantiation_time)
   SOE_time = __builtin__.property(_get_SOE_time)
   ROE_time = __builtin__.property(_get_ROE_time)
-  operation_ID_for_instantiation_op_datetime_difference = __builtin__.property(_get_operation_ID_for_instantiation_op_datetime_difference)
-  hierarchical_SOE_dispatching_datetime_difference = __builtin__.property(_get_hierarchical_SOE_dispatching_datetime_difference)
-  ROE_created_VLs_start_datetime_difference = __builtin__.property(_get_ROE_created_VLs_start_datetime_difference)
-  ROE_retrieve_RL_resources_start_datetime_difference = __builtin__.property(_get_ROE_retrieve_RL_resources_start_datetime_difference)
-  ROE_parsing_NSDs_start_datetime_difference = __builtin__.property(_get_ROE_parsing_NSDs_start_datetime_difference)
-  ROE_updating_DBs_start_datetime_difference = __builtin__.property(_get_ROE_updating_DBs_start_datetime_difference)
-  ROE_extract_VLs_start_datetime_difference = __builtin__.property(_get_ROE_extract_VLs_start_datetime_difference)
-  retrieving_descriptor_from_catalogue_DBs_start_datetime_difference = __builtin__.property(_get_retrieving_descriptor_from_catalogue_DBs_start_datetime_difference)
-  PA_calculation_start_datetime_difference = __builtin__.property(_get_PA_calculation_start_datetime_difference)
-  create_threshold_based_alerts_start_datetime_difference = __builtin__.property(_get_create_threshold_based_alerts_start_datetime_difference)
-  create_monitoring_jobs_start_datetime_difference = __builtin__.property(_get_create_monitoring_jobs_start_datetime_difference)
-  create_AIML_alerts_start_datetime_difference = __builtin__.property(_get_create_AIML_alerts_start_datetime_difference)
-  CoreMANO_wrapper_time = __builtin__.property(_get_CoreMANO_wrapper_time)
+  Operation_ID_for_instantiation_op = __builtin__.property(_get_Operation_ID_for_instantiation_op)
+  Hierarchical_SOE_dispatching_SOEpSOEc = __builtin__.property(_get_Hierarchical_SOE_dispatching_SOEpSOEc)
+  ROE_created_VLs = __builtin__.property(_get_ROE_created_VLs)
+  ROE_retrieve_RL_resources = __builtin__.property(_get_ROE_retrieve_RL_resources)
+  ROE_parsing_NSDs = __builtin__.property(_get_ROE_parsing_NSDs)
+  ROE_updating_DBs = __builtin__.property(_get_ROE_updating_DBs)
+  ROE_extract_VLs = __builtin__.property(_get_ROE_extract_VLs)
+  Retrieving_descriptor_from_catalogue_DBs = __builtin__.property(_get_Retrieving_descriptor_from_catalogue_DBs)
+  PA_calculation = __builtin__.property(_get_PA_calculation)
+  Create_threshold_based_alerts = __builtin__.property(_get_Create_threshold_based_alerts)
+  Create_monitoring_jobs = __builtin__.property(_get_Create_monitoring_jobs)
+  Create_AIML_alerts = __builtin__.property(_get_Create_AIML_alerts)
+  CoreMANO_Wrapper_time = __builtin__.property(_get_CoreMANO_Wrapper_time)
 
 
-  _pyangbind_elements = OrderedDict([('current_time', current_time), ('operation', operation), ('nsID', nsID), ('nsdID', nsdID), ('total_instantiation_time', total_instantiation_time), ('SOE_time', SOE_time), ('ROE_time', ROE_time), ('operation_ID_for_instantiation_op_datetime_difference', operation_ID_for_instantiation_op_datetime_difference), ('hierarchical_SOE_dispatching_datetime_difference', hierarchical_SOE_dispatching_datetime_difference), ('ROE_created_VLs_start_datetime_difference', ROE_created_VLs_start_datetime_difference), ('ROE_retrieve_RL_resources_start_datetime_difference', ROE_retrieve_RL_resources_start_datetime_difference), ('ROE_parsing_NSDs_start_datetime_difference', ROE_parsing_NSDs_start_datetime_difference), ('ROE_updating_DBs_start_datetime_difference', ROE_updating_DBs_start_datetime_difference), ('ROE_extract_VLs_start_datetime_difference', ROE_extract_VLs_start_datetime_difference), ('retrieving_descriptor_from_catalogue_DBs_start_datetime_difference', retrieving_descriptor_from_catalogue_DBs_start_datetime_difference), ('PA_calculation_start_datetime_difference', PA_calculation_start_datetime_difference), ('create_threshold_based_alerts_start_datetime_difference', create_threshold_based_alerts_start_datetime_difference), ('create_monitoring_jobs_start_datetime_difference', create_monitoring_jobs_start_datetime_difference), ('create_AIML_alerts_start_datetime_difference', create_AIML_alerts_start_datetime_difference), ('CoreMANO_wrapper_time', CoreMANO_wrapper_time), ])
+  _pyangbind_elements = OrderedDict([('Current_time', Current_time), ('Operation', Operation), ('NS_ID', NS_ID), ('NSD_ID', NSD_ID), ('Total_instantiation_time', Total_instantiation_time), ('SOE_time', SOE_time), ('ROE_time', ROE_time), ('Operation_ID_for_instantiation_op', Operation_ID_for_instantiation_op), ('Hierarchical_SOE_dispatching_SOEpSOEc', Hierarchical_SOE_dispatching_SOEpSOEc), ('ROE_created_VLs', ROE_created_VLs), ('ROE_retrieve_RL_resources', ROE_retrieve_RL_resources), ('ROE_parsing_NSDs', ROE_parsing_NSDs), ('ROE_updating_DBs', ROE_updating_DBs), ('ROE_extract_VLs', ROE_extract_VLs), ('Retrieving_descriptor_from_catalogue_DBs', Retrieving_descriptor_from_catalogue_DBs), ('PA_calculation', PA_calculation), ('Create_threshold_based_alerts', Create_threshold_based_alerts), ('Create_monitoring_jobs', Create_monitoring_jobs), ('Create_AIML_alerts', Create_AIML_alerts), ('CoreMANO_Wrapper_time', CoreMANO_Wrapper_time), ])
 
 
 class logparser_instantiation_operation(PybindBase):

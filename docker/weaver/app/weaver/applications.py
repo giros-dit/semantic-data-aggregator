@@ -314,7 +314,8 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         # Avro schema hardcoded
         # although should be discovered
         # by asking registry with context information
-        "avro_schema": "logparser",
+        "avro_schema_instantiation": "logparser-instantiation",
+        "avro_schema_termination": "logparser-termination",
         "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,

@@ -9,11 +9,11 @@ import pyangbind.lib.pybindJSON as pybindJSON
 import sys
 
 data = json.load(sys.stdin.buffer)
-if data['operation'] == "instantiation":
+if data['Operation'] == "Instantiation":
     yang_obj = parse_instantiation_event(data)
-elif data['operation'] == "scaling":
+elif data['Operation'] == "scaling":
     yang_obj = parse_scaling_event(data)
-elif data['operation'] == "termination":
+elif data['Operation'] == "termination":
     yang_obj = parse_termination_event(data) 
 ietf_json = pybindJSON.dumps(yang_obj, mode="ietf")
 # Remove root container

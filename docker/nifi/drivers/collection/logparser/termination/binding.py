@@ -30,7 +30,7 @@ class yc_so_termination_metrics_logparser_termination_operation__so_termination_
 
   YANG Description: Enclosing container for the time-related metrics provided by the 5Growth Service Orchestrator related logs during the network service termination operation.
   """
-  __slots__ = ('_path_helper', '_extmethods', '__current_time','__operation','__nsID','__nsdID','__total_termination_time','__SOE_time','__ROE_time','__operation_ID_for_termination_op_datetime_difference','__hierarchical_SOE_dispatching_datetime_difference','__ROE_deleting_LLs_stop_datetime_difference','__ROE_updating_DBs_stop_datetime_difference','__terminating_threshold_based_alerts_stop_datetime_difference','__terminating_monitoring_jobs_stop_datetime_difference','__terminating_AIML_jobs_stop_datetime_difference','__CoreMANO_wrapper_time',)
+  __slots__ = ('_path_helper', '_extmethods', '__Current_time','__Operation','__NS_ID','__NSD_ID','__Total_termination_time','__SOE_time','__ROE_time','__Operation_ID_for_Termination_op','__Hierarchical_SOE_dispatching_SOEpSOEc','__ROE_deleting_LLs','__ROE_updating_DBs','__Terminating_Threshold_based_alerts','__Terminating_Monitoring_jobs','__Terminating_AIML_alert_jobs','__CoreMANO_Wrapper_time',)
 
   _yang_name = 'so-termination-metrics'
   _yang_namespace = 'http://data-aggregator.com/ns/so-log-parser/termination-op'
@@ -51,21 +51,21 @@ class yc_so_termination_metrics_logparser_termination_operation__so_termination_
       self._path_helper = False
 
     self._extmethods = False
-    self.__current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
-    self.__operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
-    self.__nsID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
-    self.__nsdID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
-    self.__total_termination_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
+    self.__Operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+    self.__NS_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+    self.__NSD_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+    self.__Total_termination_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     self.__SOE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="SOE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     self.__ROE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__operation_ID_for_termination_op_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_termination_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__hierarchical_SOE_dispatching_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__ROE_deleting_LLs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__ROE_updating_DBs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__terminating_threshold_based_alerts_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_threshold_based_alerts_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__terminating_monitoring_jobs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_monitoring_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__terminating_AIML_jobs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_AIML_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
-    self.__CoreMANO_wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Operation_ID_for_Termination_op = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_Termination_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__ROE_deleting_LLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__ROE_updating_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Terminating_Threshold_based_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Terminating_Monitoring_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__Terminating_AIML_alert_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_AIML_alert_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+    self.__CoreMANO_Wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
     load = kwargs.pop("load", None)
     if args:
@@ -94,189 +94,189 @@ class yc_so_termination_metrics_logparser_termination_operation__so_termination_
     else:
       return ['so-termination-metrics']
 
-  def _get_current_time(self):
+  def _get_Current_time(self):
     """
-    Getter method for current_time, mapped from YANG variable /so_termination_metrics/current_time (ietf-types:date-and-time)
+    Getter method for Current_time, mapped from YANG variable /so_termination_metrics/Current_time (ietf-types:date-and-time)
 
     YANG Description: Date and time in which the time-related metric values have been sent to Kafka (following the ISO 8601 format).
     """
-    return self.__current_time
+    return self.__Current_time
       
-  def _set_current_time(self, v, load=False):
+  def _set_Current_time(self, v, load=False):
     """
-    Setter method for current_time, mapped from YANG variable /so_termination_metrics/current_time (ietf-types:date-and-time)
+    Setter method for Current_time, mapped from YANG variable /so_termination_metrics/Current_time (ietf-types:date-and-time)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_current_time is considered as a private
+    source YANG file, then _set_Current_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_current_time() directly.
+    do so via calling thisObj._set_Current_time() directly.
 
     YANG Description: Date and time in which the time-related metric values have been sent to Kafka (following the ISO 8601 format).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """current_time must be of a type compatible with ietf-types:date-and-time""",
+          'error-string': """Current_time must be of a type compatible with ietf-types:date-and-time""",
           'defined-type': "ietf-types:date-and-time",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)""",
         })
 
-    self.__current_time = t
+    self.__Current_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_current_time(self):
-    self.__current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
+  def _unset_Current_time(self):
+    self.__Current_time = YANGDynClass(base=RestrictedClassType(base_type=six.text_type, restriction_dict={'pattern': '\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[\\+\\-]\\d{2}:\\d{2})'}), is_leaf=True, yang_name="Current_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='ietf-types:date-and-time', is_config=False)
 
 
-  def _get_operation(self):
+  def _get_Operation(self):
     """
-    Getter method for operation, mapped from YANG variable /so_termination_metrics/operation (string)
+    Getter method for Operation, mapped from YANG variable /so_termination_metrics/Operation (string)
 
     YANG Description: Identifier of the type of operation (i.e., termination).
     """
-    return self.__operation
+    return self.__Operation
       
-  def _set_operation(self, v, load=False):
+  def _set_Operation(self, v, load=False):
     """
-    Setter method for operation, mapped from YANG variable /so_termination_metrics/operation (string)
+    Setter method for Operation, mapped from YANG variable /so_termination_metrics/Operation (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_operation is considered as a private
+    source YANG file, then _set_Operation is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_operation() directly.
+    do so via calling thisObj._set_Operation() directly.
 
     YANG Description: Identifier of the type of operation (i.e., termination).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """operation must be of a type compatible with string""",
+          'error-string': """Operation must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__operation = t
+    self.__Operation = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_operation(self):
-    self.__operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+  def _unset_Operation(self):
+    self.__Operation = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="Operation", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
 
 
-  def _get_nsID(self):
+  def _get_NS_ID(self):
     """
-    Getter method for nsID, mapped from YANG variable /so_termination_metrics/nsID (string)
+    Getter method for NS_ID, mapped from YANG variable /so_termination_metrics/NS_ID (string)
 
     YANG Description: Network Service Identifier.
     """
-    return self.__nsID
+    return self.__NS_ID
       
-  def _set_nsID(self, v, load=False):
+  def _set_NS_ID(self, v, load=False):
     """
-    Setter method for nsID, mapped from YANG variable /so_termination_metrics/nsID (string)
+    Setter method for NS_ID, mapped from YANG variable /so_termination_metrics/NS_ID (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_nsID is considered as a private
+    source YANG file, then _set_NS_ID is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_nsID() directly.
+    do so via calling thisObj._set_NS_ID() directly.
 
     YANG Description: Network Service Identifier.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """nsID must be of a type compatible with string""",
+          'error-string': """NS_ID must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__nsID = t
+    self.__NS_ID = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_nsID(self):
-    self.__nsID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+  def _unset_NS_ID(self):
+    self.__NS_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NS_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
 
 
-  def _get_nsdID(self):
+  def _get_NSD_ID(self):
     """
-    Getter method for nsdID, mapped from YANG variable /so_termination_metrics/nsdID (string)
+    Getter method for NSD_ID, mapped from YANG variable /so_termination_metrics/NSD_ID (string)
 
     YANG Description: Network Service Descriptor Identifier.
     """
-    return self.__nsdID
+    return self.__NSD_ID
       
-  def _set_nsdID(self, v, load=False):
+  def _set_NSD_ID(self, v, load=False):
     """
-    Setter method for nsdID, mapped from YANG variable /so_termination_metrics/nsdID (string)
+    Setter method for NSD_ID, mapped from YANG variable /so_termination_metrics/NSD_ID (string)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_nsdID is considered as a private
+    source YANG file, then _set_NSD_ID is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_nsdID() directly.
+    do so via calling thisObj._set_NSD_ID() directly.
 
     YANG Description: Network Service Descriptor Identifier.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+      t = YANGDynClass(v,base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """nsdID must be of a type compatible with string""",
+          'error-string': """NSD_ID must be of a type compatible with string""",
           'defined-type': "string",
-          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
+          'generated-type': """YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)""",
         })
 
-    self.__nsdID = t
+    self.__NSD_ID = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_nsdID(self):
-    self.__nsdID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="nsdID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
+  def _unset_NSD_ID(self):
+    self.__NSD_ID = YANGDynClass(base=six.text_type, is_leaf=True, yang_name="NSD_ID", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='string', is_config=False)
 
 
-  def _get_total_termination_time(self):
+  def _get_Total_termination_time(self):
     """
-    Getter method for total_termination_time, mapped from YANG variable /so_termination_metrics/total_termination_time (int64)
+    Getter method for Total_termination_time, mapped from YANG variable /so_termination_metrics/Total_termination_time (int64)
 
     YANG Description: Network service total termination time. The time it takes to the 5Gr-SO to perform the termination operation since the request arrives to the Northbound Interface (NBI).
     """
-    return self.__total_termination_time
+    return self.__Total_termination_time
       
-  def _set_total_termination_time(self, v, load=False):
+  def _set_Total_termination_time(self, v, load=False):
     """
-    Setter method for total_termination_time, mapped from YANG variable /so_termination_metrics/total_termination_time (int64)
+    Setter method for Total_termination_time, mapped from YANG variable /so_termination_metrics/Total_termination_time (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_total_termination_time is considered as a private
+    source YANG file, then _set_Total_termination_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_total_termination_time() directly.
+    do so via calling thisObj._set_Total_termination_time() directly.
 
     YANG Description: Network service total termination time. The time it takes to the 5Gr-SO to perform the termination operation since the request arrives to the Northbound Interface (NBI).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """total_termination_time must be of a type compatible with int64""",
+          'error-string': """Total_termination_time must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__total_termination_time = t
+    self.__Total_termination_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_total_termination_time(self):
-    self.__total_termination_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Total_termination_time(self):
+    self.__Total_termination_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Total_termination_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
   def _get_SOE_time(self):
@@ -353,207 +353,207 @@ class yc_so_termination_metrics_logparser_termination_operation__so_termination_
     self.__ROE_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_operation_ID_for_termination_op_datetime_difference(self):
+  def _get_Operation_ID_for_Termination_op(self):
     """
-    Getter method for operation_ID_for_termination_op_datetime_difference, mapped from YANG variable /so_termination_metrics/operation_ID_for_termination_op_datetime_difference (int64)
+    Getter method for Operation_ID_for_Termination_op, mapped from YANG variable /so_termination_metrics/Operation_ID_for_Termination_op (int64)
 
     YANG Description: The time it takes the Northbound Interface (NBI) to generate an ID to identify the termination operation.
     """
-    return self.__operation_ID_for_termination_op_datetime_difference
+    return self.__Operation_ID_for_Termination_op
       
-  def _set_operation_ID_for_termination_op_datetime_difference(self, v, load=False):
+  def _set_Operation_ID_for_Termination_op(self, v, load=False):
     """
-    Setter method for operation_ID_for_termination_op_datetime_difference, mapped from YANG variable /so_termination_metrics/operation_ID_for_termination_op_datetime_difference (int64)
+    Setter method for Operation_ID_for_Termination_op, mapped from YANG variable /so_termination_metrics/Operation_ID_for_Termination_op (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_operation_ID_for_termination_op_datetime_difference is considered as a private
+    source YANG file, then _set_Operation_ID_for_Termination_op is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_operation_ID_for_termination_op_datetime_difference() directly.
+    do so via calling thisObj._set_Operation_ID_for_Termination_op() directly.
 
     YANG Description: The time it takes the Northbound Interface (NBI) to generate an ID to identify the termination operation.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_termination_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_Termination_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """operation_ID_for_termination_op_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Operation_ID_for_Termination_op must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_termination_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_Termination_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__operation_ID_for_termination_op_datetime_difference = t
+    self.__Operation_ID_for_Termination_op = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_operation_ID_for_termination_op_datetime_difference(self):
-    self.__operation_ID_for_termination_op_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="operation_ID_for_termination_op_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Operation_ID_for_Termination_op(self):
+    self.__Operation_ID_for_Termination_op = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Operation_ID_for_Termination_op", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_hierarchical_SOE_dispatching_datetime_difference(self):
+  def _get_Hierarchical_SOE_dispatching_SOEpSOEc(self):
     """
-    Getter method for hierarchical_SOE_dispatching_datetime_difference, mapped from YANG variable /so_termination_metrics/hierarchical_SOE_dispatching_datetime_difference (int64)
+    Getter method for Hierarchical_SOE_dispatching_SOEpSOEc, mapped from YANG variable /so_termination_metrics/Hierarchical_SOE_dispatching_SOEpSOEc (int64)
 
     YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate termination process based on the nature of the service (single NS, composite NS).
     """
-    return self.__hierarchical_SOE_dispatching_datetime_difference
+    return self.__Hierarchical_SOE_dispatching_SOEpSOEc
       
-  def _set_hierarchical_SOE_dispatching_datetime_difference(self, v, load=False):
+  def _set_Hierarchical_SOE_dispatching_SOEpSOEc(self, v, load=False):
     """
-    Setter method for hierarchical_SOE_dispatching_datetime_difference, mapped from YANG variable /so_termination_metrics/hierarchical_SOE_dispatching_datetime_difference (int64)
+    Setter method for Hierarchical_SOE_dispatching_SOEpSOEc, mapped from YANG variable /so_termination_metrics/Hierarchical_SOE_dispatching_SOEpSOEc (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_hierarchical_SOE_dispatching_datetime_difference is considered as a private
+    source YANG file, then _set_Hierarchical_SOE_dispatching_SOEpSOEc is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_hierarchical_SOE_dispatching_datetime_difference() directly.
+    do so via calling thisObj._set_Hierarchical_SOE_dispatching_SOEpSOEc() directly.
 
     YANG Description: The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate termination process based on the nature of the service (single NS, composite NS).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """hierarchical_SOE_dispatching_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Hierarchical_SOE_dispatching_SOEpSOEc must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__hierarchical_SOE_dispatching_datetime_difference = t
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_hierarchical_SOE_dispatching_datetime_difference(self):
-    self.__hierarchical_SOE_dispatching_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="hierarchical_SOE_dispatching_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Hierarchical_SOE_dispatching_SOEpSOEc(self):
+    self.__Hierarchical_SOE_dispatching_SOEpSOEc = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Hierarchical_SOE_dispatching_SOEpSOEc", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_deleting_LLs_stop_datetime_difference(self):
+  def _get_ROE_deleting_LLs(self):
     """
-    Getter method for ROE_deleting_LLs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/ROE_deleting_LLs_stop_datetime_difference (int64)
+    Getter method for ROE_deleting_LLs, mapped from YANG variable /so_termination_metrics/ROE_deleting_LLs (int64)
 
     YANG Description: Time in the Resource Orchestration Engine (ROE) to interact with the Resource Layer (RL) to deallocate resources in the logical links (LLs) serving the virtual link (VL) connections between VNFs deployed in multiple Virtualized Infrastructure Managers (VIMs).
     """
-    return self.__ROE_deleting_LLs_stop_datetime_difference
+    return self.__ROE_deleting_LLs
       
-  def _set_ROE_deleting_LLs_stop_datetime_difference(self, v, load=False):
+  def _set_ROE_deleting_LLs(self, v, load=False):
     """
-    Setter method for ROE_deleting_LLs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/ROE_deleting_LLs_stop_datetime_difference (int64)
+    Setter method for ROE_deleting_LLs, mapped from YANG variable /so_termination_metrics/ROE_deleting_LLs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_deleting_LLs_stop_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_deleting_LLs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_deleting_LLs_stop_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_deleting_LLs() directly.
 
     YANG Description: Time in the Resource Orchestration Engine (ROE) to interact with the Resource Layer (RL) to deallocate resources in the logical links (LLs) serving the virtual link (VL) connections between VNFs deployed in multiple Virtualized Infrastructure Managers (VIMs).
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_deleting_LLs_stop_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_deleting_LLs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_deleting_LLs_stop_datetime_difference = t
+    self.__ROE_deleting_LLs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_deleting_LLs_stop_datetime_difference(self):
-    self.__ROE_deleting_LLs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_deleting_LLs(self):
+    self.__ROE_deleting_LLs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_deleting_LLs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_ROE_updating_DBs_stop_datetime_difference(self):
+  def _get_ROE_updating_DBs(self):
     """
-    Getter method for ROE_updating_DBs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/ROE_updating_DBs_stop_datetime_difference (int64)
+    Getter method for ROE_updating_DBs, mapped from YANG variable /so_termination_metrics/ROE_updating_DBs (int64)
 
     YANG Description: Time to update databases (DBs) to declare the network service as operative and the termination operation as successful.
     """
-    return self.__ROE_updating_DBs_stop_datetime_difference
+    return self.__ROE_updating_DBs
       
-  def _set_ROE_updating_DBs_stop_datetime_difference(self, v, load=False):
+  def _set_ROE_updating_DBs(self, v, load=False):
     """
-    Setter method for ROE_updating_DBs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/ROE_updating_DBs_stop_datetime_difference (int64)
+    Setter method for ROE_updating_DBs, mapped from YANG variable /so_termination_metrics/ROE_updating_DBs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_ROE_updating_DBs_stop_datetime_difference is considered as a private
+    source YANG file, then _set_ROE_updating_DBs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_ROE_updating_DBs_stop_datetime_difference() directly.
+    do so via calling thisObj._set_ROE_updating_DBs() directly.
 
     YANG Description: Time to update databases (DBs) to declare the network service as operative and the termination operation as successful.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """ROE_updating_DBs_stop_datetime_difference must be of a type compatible with int64""",
+          'error-string': """ROE_updating_DBs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__ROE_updating_DBs_stop_datetime_difference = t
+    self.__ROE_updating_DBs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_ROE_updating_DBs_stop_datetime_difference(self):
-    self.__ROE_updating_DBs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_ROE_updating_DBs(self):
+    self.__ROE_updating_DBs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="ROE_updating_DBs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_terminating_threshold_based_alerts_stop_datetime_difference(self):
+  def _get_Terminating_Threshold_based_alerts(self):
     """
-    Getter method for terminating_threshold_based_alerts_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_threshold_based_alerts_stop_datetime_difference (int64)
+    Getter method for Terminating_Threshold_based_alerts, mapped from YANG variable /so_termination_metrics/Terminating_Threshold_based_alerts (int64)
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove alert-based objects in case they have been configured in the 5Gr-VoMS.
     """
-    return self.__terminating_threshold_based_alerts_stop_datetime_difference
+    return self.__Terminating_Threshold_based_alerts
       
-  def _set_terminating_threshold_based_alerts_stop_datetime_difference(self, v, load=False):
+  def _set_Terminating_Threshold_based_alerts(self, v, load=False):
     """
-    Setter method for terminating_threshold_based_alerts_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_threshold_based_alerts_stop_datetime_difference (int64)
+    Setter method for Terminating_Threshold_based_alerts, mapped from YANG variable /so_termination_metrics/Terminating_Threshold_based_alerts (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_terminating_threshold_based_alerts_stop_datetime_difference is considered as a private
+    source YANG file, then _set_Terminating_Threshold_based_alerts is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_terminating_threshold_based_alerts_stop_datetime_difference() directly.
+    do so via calling thisObj._set_Terminating_Threshold_based_alerts() directly.
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove alert-based objects in case they have been configured in the 5Gr-VoMS.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_threshold_based_alerts_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """terminating_threshold_based_alerts_stop_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Terminating_Threshold_based_alerts must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_threshold_based_alerts_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__terminating_threshold_based_alerts_stop_datetime_difference = t
+    self.__Terminating_Threshold_based_alerts = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_terminating_threshold_based_alerts_stop_datetime_difference(self):
-    self.__terminating_threshold_based_alerts_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_threshold_based_alerts_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Terminating_Threshold_based_alerts(self):
+    self.__Terminating_Threshold_based_alerts = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Threshold_based_alerts", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_terminating_monitoring_jobs_stop_datetime_difference(self):
+  def _get_Terminating_Monitoring_jobs(self):
     """
-    Getter method for terminating_monitoring_jobs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_monitoring_jobs_stop_datetime_difference (int64)
+    Getter method for Terminating_Monitoring_jobs, mapped from YANG variable /so_termination_metrics/Terminating_Monitoring_jobs (int64)
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and Monitoring Manager to remove alert-based objects in case they have been configured in the
 5Gr-VoMS.
     """
-    return self.__terminating_monitoring_jobs_stop_datetime_difference
+    return self.__Terminating_Monitoring_jobs
       
-  def _set_terminating_monitoring_jobs_stop_datetime_difference(self, v, load=False):
+  def _set_Terminating_Monitoring_jobs(self, v, load=False):
     """
-    Setter method for terminating_monitoring_jobs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_monitoring_jobs_stop_datetime_difference (int64)
+    Setter method for Terminating_Monitoring_jobs, mapped from YANG variable /so_termination_metrics/Terminating_Monitoring_jobs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_terminating_monitoring_jobs_stop_datetime_difference is considered as a private
+    source YANG file, then _set_Terminating_Monitoring_jobs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_terminating_monitoring_jobs_stop_datetime_difference() directly.
+    do so via calling thisObj._set_Terminating_Monitoring_jobs() directly.
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and Monitoring Manager to remove alert-based objects in case they have been configured in the
 5Gr-VoMS.
@@ -561,38 +561,38 @@ class yc_so_termination_metrics_logparser_termination_operation__so_termination_
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_monitoring_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """terminating_monitoring_jobs_stop_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Terminating_Monitoring_jobs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_monitoring_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__terminating_monitoring_jobs_stop_datetime_difference = t
+    self.__Terminating_Monitoring_jobs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_terminating_monitoring_jobs_stop_datetime_difference(self):
-    self.__terminating_monitoring_jobs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_monitoring_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Terminating_Monitoring_jobs(self):
+    self.__Terminating_Monitoring_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_Monitoring_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_terminating_AIML_jobs_stop_datetime_difference(self):
+  def _get_Terminating_AIML_alert_jobs(self):
     """
-    Getter method for terminating_AIML_jobs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_AIML_jobs_stop_datetime_difference (int64)
+    Getter method for Terminating_AIML_alert_jobs, mapped from YANG variable /so_termination_metrics/Terminating_AIML_alert_jobs (int64)
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove data engineering pipeline elements (Kafka topic, Spark job) in case
 they have been configured in the 5Gr-VoMs and the Inference Platform (Apache Spark).
     """
-    return self.__terminating_AIML_jobs_stop_datetime_difference
+    return self.__Terminating_AIML_alert_jobs
       
-  def _set_terminating_AIML_jobs_stop_datetime_difference(self, v, load=False):
+  def _set_Terminating_AIML_alert_jobs(self, v, load=False):
     """
-    Setter method for terminating_AIML_jobs_stop_datetime_difference, mapped from YANG variable /so_termination_metrics/terminating_AIML_jobs_stop_datetime_difference (int64)
+    Setter method for Terminating_AIML_alert_jobs, mapped from YANG variable /so_termination_metrics/Terminating_AIML_alert_jobs (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_terminating_AIML_jobs_stop_datetime_difference is considered as a private
+    source YANG file, then _set_Terminating_AIML_alert_jobs is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_terminating_AIML_jobs_stop_datetime_difference() directly.
+    do so via calling thisObj._set_Terminating_AIML_alert_jobs() directly.
 
     YANG Description: The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove data engineering pipeline elements (Kafka topic, Spark job) in case
 they have been configured in the 5Gr-VoMs and the Inference Platform (Apache Spark).
@@ -600,76 +600,76 @@ they have been configured in the 5Gr-VoMs and the Inference Platform (Apache Spa
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_AIML_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_AIML_alert_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """terminating_AIML_jobs_stop_datetime_difference must be of a type compatible with int64""",
+          'error-string': """Terminating_AIML_alert_jobs must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_AIML_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_AIML_alert_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__terminating_AIML_jobs_stop_datetime_difference = t
+    self.__Terminating_AIML_alert_jobs = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_terminating_AIML_jobs_stop_datetime_difference(self):
-    self.__terminating_AIML_jobs_stop_datetime_difference = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="terminating_AIML_jobs_stop_datetime_difference", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_Terminating_AIML_alert_jobs(self):
+    self.__Terminating_AIML_alert_jobs = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="Terminating_AIML_alert_jobs", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
 
-  def _get_CoreMANO_wrapper_time(self):
+  def _get_CoreMANO_Wrapper_time(self):
     """
-    Getter method for CoreMANO_wrapper_time, mapped from YANG variable /so_termination_metrics/CoreMANO_wrapper_time (int64)
+    Getter method for CoreMANO_Wrapper_time, mapped from YANG variable /so_termination_metrics/CoreMANO_Wrapper_time (int64)
 
     YANG Description: Time spent in the Core MANO Wrapper module during the termination process to delete virtual network supporting the vitual links (VLs) and the VMs supporting the VNFs.
     """
-    return self.__CoreMANO_wrapper_time
+    return self.__CoreMANO_Wrapper_time
       
-  def _set_CoreMANO_wrapper_time(self, v, load=False):
+  def _set_CoreMANO_Wrapper_time(self, v, load=False):
     """
-    Setter method for CoreMANO_wrapper_time, mapped from YANG variable /so_termination_metrics/CoreMANO_wrapper_time (int64)
+    Setter method for CoreMANO_Wrapper_time, mapped from YANG variable /so_termination_metrics/CoreMANO_Wrapper_time (int64)
     If this variable is read-only (config: false) in the
-    source YANG file, then _set_CoreMANO_wrapper_time is considered as a private
+    source YANG file, then _set_CoreMANO_Wrapper_time is considered as a private
     method. Backends looking to populate this variable should
-    do so via calling thisObj._set_CoreMANO_wrapper_time() directly.
+    do so via calling thisObj._set_CoreMANO_Wrapper_time() directly.
 
     YANG Description: Time spent in the Core MANO Wrapper module during the termination process to delete virtual network supporting the vitual links (VLs) and the VMs supporting the VNFs.
     """
     if hasattr(v, "_utype"):
       v = v._utype(v)
     try:
-      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+      t = YANGDynClass(v,base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
     except (TypeError, ValueError):
       raise ValueError({
-          'error-string': """CoreMANO_wrapper_time must be of a type compatible with int64""",
+          'error-string': """CoreMANO_Wrapper_time must be of a type compatible with int64""",
           'defined-type': "int64",
-          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
+          'generated-type': """YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)""",
         })
 
-    self.__CoreMANO_wrapper_time = t
+    self.__CoreMANO_Wrapper_time = t
     if hasattr(self, '_set'):
       self._set()
 
-  def _unset_CoreMANO_wrapper_time(self):
-    self.__CoreMANO_wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
+  def _unset_CoreMANO_Wrapper_time(self):
+    self.__CoreMANO_Wrapper_time = YANGDynClass(base=RestrictedClassType(base_type=long, restriction_dict={'range': ['-9223372036854775808..9223372036854775807']}, int_size=64), is_leaf=True, yang_name="CoreMANO_Wrapper_time", parent=self, path_helper=self._path_helper, extmethods=self._extmethods, register_paths=True, namespace='http://data-aggregator.com/ns/so-log-parser/termination-op', defining_module='logparser-termination-operation', yang_type='int64', is_config=False)
 
-  current_time = __builtin__.property(_get_current_time)
-  operation = __builtin__.property(_get_operation)
-  nsID = __builtin__.property(_get_nsID)
-  nsdID = __builtin__.property(_get_nsdID)
-  total_termination_time = __builtin__.property(_get_total_termination_time)
+  Current_time = __builtin__.property(_get_Current_time)
+  Operation = __builtin__.property(_get_Operation)
+  NS_ID = __builtin__.property(_get_NS_ID)
+  NSD_ID = __builtin__.property(_get_NSD_ID)
+  Total_termination_time = __builtin__.property(_get_Total_termination_time)
   SOE_time = __builtin__.property(_get_SOE_time)
   ROE_time = __builtin__.property(_get_ROE_time)
-  operation_ID_for_termination_op_datetime_difference = __builtin__.property(_get_operation_ID_for_termination_op_datetime_difference)
-  hierarchical_SOE_dispatching_datetime_difference = __builtin__.property(_get_hierarchical_SOE_dispatching_datetime_difference)
-  ROE_deleting_LLs_stop_datetime_difference = __builtin__.property(_get_ROE_deleting_LLs_stop_datetime_difference)
-  ROE_updating_DBs_stop_datetime_difference = __builtin__.property(_get_ROE_updating_DBs_stop_datetime_difference)
-  terminating_threshold_based_alerts_stop_datetime_difference = __builtin__.property(_get_terminating_threshold_based_alerts_stop_datetime_difference)
-  terminating_monitoring_jobs_stop_datetime_difference = __builtin__.property(_get_terminating_monitoring_jobs_stop_datetime_difference)
-  terminating_AIML_jobs_stop_datetime_difference = __builtin__.property(_get_terminating_AIML_jobs_stop_datetime_difference)
-  CoreMANO_wrapper_time = __builtin__.property(_get_CoreMANO_wrapper_time)
+  Operation_ID_for_Termination_op = __builtin__.property(_get_Operation_ID_for_Termination_op)
+  Hierarchical_SOE_dispatching_SOEpSOEc = __builtin__.property(_get_Hierarchical_SOE_dispatching_SOEpSOEc)
+  ROE_deleting_LLs = __builtin__.property(_get_ROE_deleting_LLs)
+  ROE_updating_DBs = __builtin__.property(_get_ROE_updating_DBs)
+  Terminating_Threshold_based_alerts = __builtin__.property(_get_Terminating_Threshold_based_alerts)
+  Terminating_Monitoring_jobs = __builtin__.property(_get_Terminating_Monitoring_jobs)
+  Terminating_AIML_alert_jobs = __builtin__.property(_get_Terminating_AIML_alert_jobs)
+  CoreMANO_Wrapper_time = __builtin__.property(_get_CoreMANO_Wrapper_time)
 
 
-  _pyangbind_elements = OrderedDict([('current_time', current_time), ('operation', operation), ('nsID', nsID), ('nsdID', nsdID), ('total_termination_time', total_termination_time), ('SOE_time', SOE_time), ('ROE_time', ROE_time), ('operation_ID_for_termination_op_datetime_difference', operation_ID_for_termination_op_datetime_difference), ('hierarchical_SOE_dispatching_datetime_difference', hierarchical_SOE_dispatching_datetime_difference), ('ROE_deleting_LLs_stop_datetime_difference', ROE_deleting_LLs_stop_datetime_difference), ('ROE_updating_DBs_stop_datetime_difference', ROE_updating_DBs_stop_datetime_difference), ('terminating_threshold_based_alerts_stop_datetime_difference', terminating_threshold_based_alerts_stop_datetime_difference), ('terminating_monitoring_jobs_stop_datetime_difference', terminating_monitoring_jobs_stop_datetime_difference), ('terminating_AIML_jobs_stop_datetime_difference', terminating_AIML_jobs_stop_datetime_difference), ('CoreMANO_wrapper_time', CoreMANO_wrapper_time), ])
+  _pyangbind_elements = OrderedDict([('Current_time', Current_time), ('Operation', Operation), ('NS_ID', NS_ID), ('NSD_ID', NSD_ID), ('Total_termination_time', Total_termination_time), ('SOE_time', SOE_time), ('ROE_time', ROE_time), ('Operation_ID_for_Termination_op', Operation_ID_for_Termination_op), ('Hierarchical_SOE_dispatching_SOEpSOEc', Hierarchical_SOE_dispatching_SOEpSOEc), ('ROE_deleting_LLs', ROE_deleting_LLs), ('ROE_updating_DBs', ROE_updating_DBs), ('Terminating_Threshold_based_alerts', Terminating_Threshold_based_alerts), ('Terminating_Monitoring_jobs', Terminating_Monitoring_jobs), ('Terminating_AIML_alert_jobs', Terminating_AIML_alert_jobs), ('CoreMANO_Wrapper_time', CoreMANO_Wrapper_time), ])
 
 
 class logparser_termination_operation(PybindBase):

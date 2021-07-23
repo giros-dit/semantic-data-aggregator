@@ -8,18 +8,18 @@ import json
 import pyangbind.lib.pybindJSON as pybindJSON
 import sys
 
-with open('driver-sample-input.json') as json_file:
+with open('instantiation-metrics-sample-input.json') as json_file:
     data = json.load(json_file)
-    if data['operation'] == "instantiation":
+    if data['Operation'] == "Instantiation":
         yang_obj = parse_instantiation_event(data)
-    elif data['operation'] == "scaling":
+    elif data['Operation'] == "scaling":
         yang_obj = parse_scaling_event(data)
-    elif data['operation'] == "termination":
+    elif data['Operation'] == "termination":
         yang_obj = parse_termination_event(data) 
     ietf_json = pybindJSON.dumps(yang_obj, mode="ietf")
     # Remove root container
     # Represented by top Avro record
-    # (same as Protobuf ang gNMI)
+    # (same as Protobuf and gNMI)
     ietf_json_dict = json.loads(ietf_json)
     root_container = list(ietf_json_dict)[0]
     ietf_json_dict = ietf_json_dict[root_container]
