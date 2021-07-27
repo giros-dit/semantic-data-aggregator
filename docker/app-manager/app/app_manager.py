@@ -12,21 +12,49 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def upload_flink_jar(ngsi_ld: NGSILDClient,
-                     flink: FlinkClient,
+def upload_local_flink_jars(flink: FlinkClient,
+                     ngsi_ld: NGSILDClient,
+                     app_manager_url: str):
+    """
+    Uploads the stream processing application JARs stored locally in the service
+    to the stream processing engine (i.e., the Flink engine).
+    """
+    # Upload templates
+    jars_path = "/catalog/flink/jars"
+    for file in os.listdir(jars_path):
+        logger.info("Uploading '%s' admin stream processing application JAR to Flink..." % file)
+        try:
+            jar = flink.upload_jar(
+                        jars_path + "/" + file)
+        except Exception as e:
+            logger.info(str(e))
+            continue
+        jar_id = jar["filename"].split("/")[-1]
+        application_name = jar_id.split("_")[-1].replace(".jar","")
+        # Register Application context
+        application_uri = app_manager_url + jars_path + "/" + file
+        application_id = "urn:ngsi-ld:Application:{0}".format(
+            jar_id.split("_")[0]
+        )
+        ngsi_ld.create_application(
+            application_id, jar_id, "FLINK",
+            application_name, application_uri, "Uploaded by admin")
+
+
+def upload_flink_jar(flink: FlinkClient,
+                     ngsi_ld: NGSILDClient,
                      name: str,
                      file_path: str,
                      app_manager_url: str,
                      description: Optional[str] = None) -> Application:
     """
-    Uploads a stream processing application JAR
+    Uploads a stream processing application JAR provided by user
     to the stream processing engine (i.e., the Flink engine).
     """
     # Upload JAR file
     # Rename file as Flink sets the JAR name from the file name
     upload_response = flink.upload_jar(file_path)
-    file_id = upload_response["filename"].split("/")[-1]
-    jar_id = file_id.replace(" ", "_")
+    jar_id = upload_response["filename"].split("/")[-1]
     logger.info(
         "Application '{0}' with name '{1}' uploaded in Flink.".format(
             jar_id, name))

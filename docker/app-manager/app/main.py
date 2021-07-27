@@ -53,7 +53,9 @@ async def startup_event():
         nifi, ngsi_ld, APP_MANAGER_URL)
     # Check Flink REST API is up
     flink.check_flink_status()
-
+    # Upload Flink admin JARs
+    app_manager.upload_local_flink_jars(
+        flink, ngsi_ld, APP_MANAGER_URL)
 
 @app.post("/applications/")
 async def onboard_application(application_type: Literal["FLINK", "NIFI"],
@@ -107,7 +109,7 @@ async def onboard_application(application_type: Literal["FLINK", "NIFI"],
         try:
             # Upload application to Flink
             application = app_manager.upload_flink_jar(
-                ngsi_ld, flink, name, temp_path,
+                flink, ngsi_ld, name, temp_path,
                 APP_MANAGER_URL, description)
         except Exception as e:
             logger.error(str(e))
