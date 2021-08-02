@@ -91,7 +91,7 @@ public class TrafficRate {
 		    public String reduce(String value1, String value2)
 		    throws Exception {
 		    	System.out.println(value2 + "-" + value1);
-		    	String traffic_rate = "reduce-" + Integer.toString(Integer.parseInt(value2) -  Integer.parseInt(value1));
+		    	String traffic_rate = "reduce-" + value1 + "-" + value2; //Float.toString(Float.parseFloat(value2) -  Float.parseFloat(value1));
 		    	System.out.println(traffic_rate);
 		        return traffic_rate;
 		    }

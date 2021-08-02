@@ -2,7 +2,7 @@ from semantic_tools.flink.client import FlinkClient
 from semantic_tools.models.application import Task
 from semantic_tools.nifi.client import NiFiClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
-from weaver.applications import application_configs
+from weaver.applications import nifi_application_configs, config_flink_jobs
 
 import logging
 
@@ -25,14 +25,16 @@ def process_task(task: Task, flink: FlinkClient,
         # by an intermidiate microservice
         # Weaver should only receive the final list of arguments
         # and configure the task with them
-        arguments = application_configs[
-            application.name.value](task, ngsi_ld)
+        #arguments = application_configs[
+            #application.name.value](task, ngsi_ld)
         if application.applicationType.value == "NIFI":
+            arguments = nifi_application_configs[application.name.value](task, ngsi_ld)
             task_pg = nifi.instantiate_flow_from_task(
                 task, application.internalId.value,
                 arguments)
             ngsi_ld.append_internal_id(task, task_pg.id)
         elif application.applicationType.value == "FLINK":
+            arguments = config_flink_jobs(task, ngsi_ld)
             job = flink.instantiate_job_from_task(
                 task, application.internalId.value,
                 arguments)

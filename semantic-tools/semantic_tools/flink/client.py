@@ -52,14 +52,41 @@ class FlinkClient(object):
         Insantiates a Flink job from a given Task entity
         and its associated Application, i.e., JAR.
         """
-        # Get a entry class of the Stream Aplication
-        entryClass = args.value["entryClass"]
-        # Run job for JAR id
-        job = self.api.submitJob(applicationId, entryClass, args)
+        # Get a entry class of the Stream Aplication (if it exists)
+        if args["entryClass"]:
+            entryClass = args["entryClass"]
+            # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
+            arguments = self.get_job_arguments_list(args)
+            # Run job for JAR id
+            job = self.api.submitJob(applicationId, entryClass, arguments)
+        else:
+            # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
+            arguments = self.get_job_arguments_list(args)
+            # Run job for JAR id
+            job = self.api.submitJob(applicationId, None, arguments)
+
         logger.info(
             "Job '{0}' with '{1}' JAR instantiated in Flink engine.".format(
-                task.internalId.value, applicationId))
+                task.id, applicationId))
         return job
+
+    def get_job_arguments_list(self, args: dict) -> str:
+        """
+        Get all the arguments for a specific Flink job Task entity as a list separated by commas.
+        """
+        arguments=""
+        arguments_list = []
+        for key, value in args.items():
+            if key != "entryClass":
+                arguments_list.append(value)
+
+        for i in range(0, len(arguments_list)):
+            if(i < (len(arguments_list)-1)):
+                arguments += arguments_list[i]+","
+            else:
+                arguments += arguments_list[i]
+
+        return arguments
 
     def upload_jar(self, file_path: str) -> dict:
         """

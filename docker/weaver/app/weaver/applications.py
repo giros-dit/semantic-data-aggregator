@@ -324,8 +324,34 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
+def config_flink_jobs (task: Task, ngsi_ld: NGSILDClient) -> dict:
+    """
+    Builds configuration arguments for stream processing applications (Flink)
+    """
+    # Collect lineage information
 
-application_configs = {
+    # Task Input
+    # Get source Kafka topic
+    source_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
+
+    # Task Output
+    # Get sink Kafka topic
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasOutput.object)
+
+    # Prepare variables from context arguments
+    source_topic_name = source_topic.name.value
+    sink_topic_name = sink_topic.name.value
+
+    arguments = {
+        "source_topics": source_topic_name,
+        "sink_topic": sink_topic_name
+    }
+    arguments.update(task.arguments.value)
+    return arguments
+
+nifi_application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
     "MetricTarget": config_metric_target,
