@@ -242,6 +242,16 @@ services:
     depends_on:
       - kafka
       - postgres
+  source-manager:
+    build:
+        context: .
+        dockerfile: ./docker/source-manager/Dockerfile
+    hostname: source-manager
+    container_name: source-manager
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./docker/source-manager/app:/opt/source-manager/app
   weaver:
     build:
       context: .
