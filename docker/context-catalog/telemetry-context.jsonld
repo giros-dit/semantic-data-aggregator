@@ -1,0 +1,10 @@
+{
+    "@context": {
+        "Device": "http://example.org/Device",
+        "hasEndpoint": "http://example.org/hasEndpoint",
+        "protocol": "http://example.org/protocol",
+        "version": "http://example.org/version",
+        "Module": "http://example.org/Module",
+        "org": "http://example.org/org"
+    }
+}

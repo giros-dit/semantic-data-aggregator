@@ -1,5 +1,16 @@
 version: '3'
 services:
+  app-manager:
+    build:
+        context: .
+        dockerfile: ./docker/app-manager/Dockerfile
+    hostname: app-manager
+    container_name: app-manager
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./docker/app-manager/app:/opt/app-manager/app
+      - ./docker/app-manager/catalog:/catalog
   ceos1:
     image: "ceos-image:4.24.5M"
     hostname: ceos1
@@ -40,32 +51,32 @@ services:
       net2:
   consumer:
     build:
-      context: ./consumer
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/consumer/Dockerfile
     hostname: consumer
     container_name: consumer
     ports:
-      - "8081:8080"
+      - "8080"
     volumes:
-      - ./consumer/app:/app
+      - ./docker/consumer/app:/opt/consumer/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
     container_name: context-catalog
     ports:
-      - "8082:8080"
+      - "8080"
     volumes:
-      - ./context-catalog:/web
+      - ./docker/context-catalog:/web
   experimenter:
     build:
-      context: ./experimenter
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/experimenter/Dockerfile
     hostname: experimenter
     container_name: experimenter
     ports:
-      - "8085:8080"
+      - "8080"
     volumes:
-      - ./experimenter/app:/app
+      - ./docker/experimenter/app:/opt/experimenter/app
   kafka:
     image: wurstmeister/kafka:latest
     hostname: kafka
@@ -83,8 +94,8 @@ services:
       - zookeeper
   nifi:
     build:
-      context: ./nifi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
@@ -92,7 +103,7 @@ services:
       - "8080:8080"
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./nifi:/opt/aggregator
+      - ./docker/nifi:/opt/aggregator
   postgres:
     image: mdillon/postgis
     hostname: postgres
@@ -146,12 +157,13 @@ services:
       - postgres
   weaver:
     build:
-      context: ./weaver
+      context: .
+      dockerfile: ./docker/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
     user: root
     volumes:
-      - ./weaver/app:/app
+      - ./docker/weaver/app:/opt/weaver/app
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi

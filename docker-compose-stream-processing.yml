@@ -1,33 +1,44 @@
 version: '3'
 services:
-  consumer:
+  app-manager:
     build:
-      context: ./consumer
-      dockerfile: Dockerfile
-    hostname: consumer
-    container_name: consumer
+        context: ./app-manager
+        dockerfile: Dockerfile
+    hostname: app-manager
+    container_name: app-manager
     ports:
-      - "8081:8080"
+      - "8082:8080"
     volumes:
-      - ./consumer/app:/app
+      - ./app-manager/app:/app
+      - ./app-manager/catalog:/catalog
+  # consumer:
+  #   build:
+  #     context: ./consumer
+  #     dockerfile: Dockerfile
+  #   hostname: consumer
+  #   container_name: consumer
+  #   ports:
+  #     - "8080"
+  #   volumes:
+  #     - ./consumer/app:/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
     container_name: context-catalog
     ports:
-      - "8082:8080"
+      - "8080"
     volumes:
       - ./context-catalog:/web
-  experimenter:
-    build:
-      context: ./experimenter
-      dockerfile: Dockerfile
-    hostname: experimenter
-    container_name: experimenter
-    ports:
-      - "8085:8080"
-    volumes:
-      - ./experimenter/app:/app
+  # experimenter:
+  #   build:
+  #     context: ./experimenter
+  #     dockerfile: Dockerfile
+  #   hostname: experimenter
+  #   container_name: experimenter
+  #   ports:
+  #     - "8085:8080"
+  #   volumes:
+  #     - ./experimenter/app:/app
   flink-jobmanager:
     image: flink:latest
     hostname: flink-jobmanager
@@ -48,7 +59,6 @@ services:
     depends_on:
       - flink-jobmanager
     command: taskmanager
-    scale: 1
     environment:
       - |
         FLINK_PROPERTIES=
@@ -156,14 +166,6 @@ services:
     depends_on:
       - kafka
       - postgres
-  stream-catalog:
-    image: halverneus/static-file-server
-    hostname: stream-catalog
-    container_name: stream-catalog
-    ports:
-      - "8083:8080"
-    volumes:
-      - ./stream-catalog:/web
   weaver:
     build:
       context: ./weaver

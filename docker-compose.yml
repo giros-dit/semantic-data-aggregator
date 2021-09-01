@@ -1,7 +1,18 @@
 version: '3'
 services:
+  app-manager:
+    build:
+        context: .
+        dockerfile: ./docker/app-manager/Dockerfile
+    hostname: app-manager
+    container_name: app-manager
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./docker/app-manager/app:/opt/app-manager/app
+      - ./docker/app-manager/catalog:/catalog
   ceos1:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos1
     container_name: ceos1
     ports:
@@ -20,7 +31,7 @@ services:
       net1:
       net2:
   ceos2:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos2
     container_name: ceos2
     ports:
@@ -40,36 +51,38 @@ services:
       net2:
   consumer:
     build:
-      context: ./consumer
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/consumer/Dockerfile
     hostname: consumer
     container_name: consumer
     ports:
-      - "8081:8080"
+      - "8080"
     volumes:
-      - ./consumer/app:/app
+      - ./docker/consumer/app:/opt/consumer/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
     container_name: context-catalog
     ports:
-      - "8082:8080"
+      - "8080"
     volumes:
-      - ./context-catalog:/web
+      - ./docker/context-catalog:/web
   complex-publisher:
-    image: complex_publisher
+    build:
+      context: .
+      dockerfile: ./docker/complex-publishers/Dockerfile
     hostname: complex-publisher
     container_name: complex-publisher
   experimenter:
     build:
-      context: ./experimenter
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/experimenter/Dockerfile
     hostname: experimenter
     container_name: experimenter
     ports:
-      - "8085:8080"
+      - "8080"
     volumes:
-      - ./experimenter/app:/app
+      - ./docker/experimenter/app:/opt/experimenter/app
   flink-jobmanager:
     image: flink:latest
     hostname: flink-jobmanager
@@ -90,7 +103,6 @@ services:
     depends_on:
       - flink-jobmanager
     command: taskmanager
-    scale: 1
     environment:
       - |
         FLINK_PROPERTIES=
@@ -145,8 +157,8 @@ services:
       - zookeeper
   nifi:
     build:
-      context: ./nifi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
@@ -154,7 +166,7 @@ services:
       - "8080:8080"
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./nifi:/opt/aggregator
+      - ./docker/nifi:/opt/aggregator
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
@@ -190,7 +202,7 @@ services:
     ports:
       - "9099:9090"
     volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   schema-registry-confluent:
     image: confluentinc/cp-schema-registry:6.1.1
     hostname: schema-registry-confluent
@@ -230,22 +242,25 @@ services:
     depends_on:
       - kafka
       - postgres
-  stream-catalog:
-    image: halverneus/static-file-server
-    hostname: stream-catalog
-    container_name: stream-catalog
+  source-manager:
+    build:
+        context: .
+        dockerfile: ./docker/source-manager/Dockerfile
+    hostname: source-manager
+    container_name: source-manager
     ports:
       - "8083:8080"
     volumes:
-      - ./stream-catalog:/web
+      - ./docker/source-manager/app:/opt/source-manager/app
   weaver:
     build:
-      context: ./weaver
+      context: .
+      dockerfile: ./docker/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
     user: root
     volumes:
-      - ./weaver/app:/app
+      - ./docker/weaver/app:/opt/weaver/app
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi

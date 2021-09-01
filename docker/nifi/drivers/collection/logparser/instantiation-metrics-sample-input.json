@@ -1,0 +1,22 @@
+{
+     "Current_time":"2021-05-17T07:53:13Z",
+     "Operation":"Instantiation",
+     "NS_ID":"fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413",
+     "NSD_ID":"vCDN_aiml",
+     "Total_instantiation_time":42631,     
+     "SOE_time":1637,
+     "ROE_time":2331,
+     "Operation_ID_for_instantiation_op":4,
+     "Hierarchical_SOE_dispatching_SOEpSOEc":6,
+     "ROE_created_VLs":3,
+     "ROE_retrieve_RL_resources":2310,
+     "ROE_parsing_NSDs":0,
+     "ROE_updating_DBs":12,
+     "ROE_extract_VLs":5,
+     "Retrieving_descriptor_from_catalogue_DBs":4,
+     "PA_calculation":1,
+     "Create_threshold_based_alerts":9,
+     "Create_monitoring_jobs":144,
+     "Create_AIML_alerts":1474,
+     "CoreMANO_Wrapper_time":38661
+}

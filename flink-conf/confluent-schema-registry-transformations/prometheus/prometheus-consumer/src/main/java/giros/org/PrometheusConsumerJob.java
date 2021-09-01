@@ -29,7 +29,7 @@ public class PrometheusConsumerJob {
 
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-		DataStreamSource<Metric> input = env.addSource(new FlinkKafkaConsumer<>("metricsource-2",
+		DataStreamSource<Metric> input = env.addSource(new FlinkKafkaConsumer<>(args[0],
 				ConfluentRegistryAvroDeserializationSchema.forSpecific(Metric.class, schemaRegistryUrl), props));
 
 		SingleOutputStreamOperator<String> mapToString = input.name("Kafka Source").uid("Kafka Source")
@@ -38,7 +38,7 @@ public class PrometheusConsumerJob {
                                 .map((MapFunction<Metric, String>) SpecificRecordBase::toString);
 
 		FlinkKafkaProducer<String> stringFlinkKafkaProducer = new FlinkKafkaProducer<>(
-				"raw-metricsource-2", new SimpleStringSchema(), props);
+				args[1], new SimpleStringSchema(), props);
 
 		mapToString.addSink(stringFlinkKafkaProducer).name("Kafka Sink").uid("Kafka Sink");
 

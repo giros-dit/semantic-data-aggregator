@@ -1,0 +1,15 @@
+{
+    "@context": {
+        "Metric": "http://example.org/Metric",
+        "labels": "http://example.org/labels",
+        "hasMetricFamily": "http://example.org/hasMetricFamily",
+        "hasPrometheus": "http://example.org/hasPrometheus",
+        "MetricFamily": "http://example.org/MetricFamily",
+        "familyType": "http://example.org/familyType",
+        "help": "http://example.org/help",
+        "unit": "http://example.org/unit",
+        "Prometheus": "http://example.org/Prometheus",
+        "hasEndpoint": "http://example.org/hasEndpoint",
+        "version": "http://example.org/version"
+    }
+}

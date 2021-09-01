@@ -1,0 +1,10 @@
+{
+    "@context": {
+        "KafkaBroker": "http://example.org/KafkaBroker",
+        "hasEndpoint": "http://example.org/hasEndpoint",
+        "version": "http://example.org/version",
+        "KafkaTopic": "http://example.org/KafkaTopic",
+        "hasKafkaBroker": "http://example.org/hasKafkaBroker",
+        "schemaURL": "http://example.org/schemaURL"
+    }
+}
