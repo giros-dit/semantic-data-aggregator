@@ -104,8 +104,8 @@ class NGSILDAPI():
             response.raise_for_status()
 
     # NGSI-LD Query Entity -> /entities
-    def queryEntities(self, entityId: str = None, attrs: str = None,
-                      type: str = None, q: str = None,
+    def queryEntities(self, type: str, attrs: str = None,
+                      q: str = None,
                       options: Options = None) -> dict:
         """
         Retrieve a set of entities which matches
@@ -114,11 +114,11 @@ class NGSILDAPI():
         params = {}
         if attrs:
             params['attrs'] = attrs
-        elif type:
+        if type:
             params['type'] = type
-        elif q:
+        if q:
             params['q'] = q
-        elif options:
+        if options:
             params['options'] = options
         response = self._session.get(
             "{0}/ngsi-ld/v1/entities".format(self.url),
@@ -142,9 +142,9 @@ class NGSILDAPI():
         params = {}
         if attrs:
             params['attrs'] = attrs
-        elif type:
+        if type:
             params['type'] = type
-        elif options:
+        if options:
             params['options'] = options
         response = self._session.get(
             "{0}/ngsi-ld/v1/entities/{1}".format(self.url, entityId),

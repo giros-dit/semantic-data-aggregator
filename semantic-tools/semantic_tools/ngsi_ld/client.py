@@ -1,4 +1,5 @@
 from enum import Enum
+from pydantic import parse_obj_as
 from semantic_tools.models.common import Endpoint, Infrastructure, State
 from semantic_tools.models.application import Application, Task
 from semantic_tools.models.metric import Metric, Prometheus
@@ -7,7 +8,7 @@ from semantic_tools.models.telemetry import Device, YANGModule
 from semantic_tools.models.ngsi_ld.entity import Entity, Property
 from semantic_tools.models.ngsi_ld.subscription import Subscription
 from semantic_tools.ngsi_ld.api import NGSILDAPI
-from typing import Optional
+from typing import List, Optional
 
 import logging
 import time
@@ -29,9 +30,11 @@ class NGSILDClient(object):
 
     def __init__(self, url: str = "http://scorpio:9090",
                  headers: dict = {"Accept": "application/json"},
-                 context: str = "http://context-catalog:8080/context.jsonld"):
+                 context: str = "http://context-catalog:8080/context.jsonld",
+                 debug: bool = False):
         # Init NGSI-LD REST API Client
-        self.api = NGSILDAPI(url, headers=headers, context=context)
+        self.api = NGSILDAPI(url, headers=headers,
+                             context=context, debug=debug)
 
     def check_orion_status(self):
         """
@@ -57,7 +60,7 @@ class NGSILDClient(object):
         """
         logger.info("Checking Scorpio REST API status ...")
         while True:
-            if self.checkScorpioHealth():
+            if self.api.checkScorpioHealth():
                 logger.info(
                     "Successfully connected to Scorpio REST API!")
                 break
@@ -169,6 +172,29 @@ class NGSILDClient(object):
             topic.hasKafkaBroker.object)
         return KafkaBroker.parse_obj(kafka_broker_entity)
 
+    def create_kafka_topic(
+                self,
+                broker: KafkaBroker,
+                id: str,
+                name: str,
+                description: Optional[str] = None) -> KafkaTopic:
+        """
+        Create KafkaTopic entity for a given KafkaBroker
+        """
+        logger.debug(
+            "Creating KafkaTopic entity with id '%s' for KafkaBroker ''%s." % (
+                id, broker.id))
+        kafka_topic = KafkaTopic(
+            id=id,
+            name={"value": name},
+            hasKafkaBroker={"object": broker.id}
+        )
+        if description:
+            kafka_topic.description = {"value": description}
+
+        self.api.createEntity(kafka_topic.dict(exclude_none=True))
+        return kafka_topic
+
     def get_kafka_topic(self, id: str) -> KafkaTopic:
         """
         Get KafkaTopic entity
@@ -177,6 +203,17 @@ class NGSILDClient(object):
             "Retrieving KafkaTopic entity with id '%s'." % id)
         kafka_topic_entity = self.api.retrieveEntityById(id)
         return KafkaTopic.parse_obj(kafka_topic_entity)
+
+    def get_kafka_topics_by_name(self, name: str) -> List[KafkaTopic]:
+        """
+        Get KafkaTopic entities from a given name
+        """
+        logger.debug(
+            "Retrieving KafkaTopic entities with name '%s'." % name)
+        kafka_topic_entities = self.api.queryEntities(
+            type="KafkaTopic",
+            q='name=="{0}"'.format(name))
+        return parse_obj_as(List[KafkaTopic], kafka_topic_entities)
 
     def get_metric(self, id: str) -> Metric:
         """
