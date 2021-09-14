@@ -22,26 +22,38 @@ class NiFiClient(object):
     Class encapsulating the main operations with Apache NiFi.
     """
 
-    def __init__(self, url: str = "http://nifi:8080/nifi-api"):
+    def __init__(self,
+                 username: str,
+                 password: str,
+                 url: str = "https://nifi:8443/nifi-api",):
+
+        self.username = username
+        self.password = password
+        self.url = url
+
         # Init NiFi REST API Client
         nipyapi.config.nifi_config.host = url
+        # Disable SSL verification
+        nipyapi.config.nifi_config.verify_ssl = False
 
-    def check_nifi_status(self):
+    def login(self):
         """
-        Infinite loop that checks every 30 seconds
-        until NiFi REST API becomes available.
+        Log into NiFi to generate temporary token
         """
-        logger.info("Checking NiFi REST API status ...")
-        while True:
-            try:
-                nipyapi.system.get_nifi_version_info()
-            except MaxRetryError:
-                logger.warning("Could not connect to NiFi REST API. "
-                               "Retrying in 30 seconds ...")
-                time.sleep(30)
-                continue
-            logger.info("Successfully connected to NiFi REST API!")
-            break
+        logger.info("Waiting for NiFi to be ready for login")
+        nipyapi.utils.wait_to_complete(
+            test_function=nipyapi.security.service_login,
+            service='nifi',
+            username=self.username,
+            password=self.password,
+            bool_response=True,
+            nipyapi_delay=nipyapi.config.long_retry_delay, # Default 5 sec
+            nipyapi_max_wait=nipyapi.config.long_max_wait # Default 120 sec
+        )
+        nifi_user = nipyapi.security.get_service_access_status(service='nifi')
+        logger.info(
+            'nipyapi_secured_nifi CurrentUser: ' + nifi_user.access_status.identity
+        )
 
     def delete_flow_from_task(self, task: Task):
         """

@@ -162,8 +162,12 @@ services:
     hostname: nifi
     container_name: nifi
     user: root
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      # Must be of 12 characters min
+      SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
     ports:
-      - "8080:8080"
+      - "8443:8443"
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./docker/nifi:/opt/aggregator

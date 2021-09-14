@@ -27,7 +27,9 @@ flink = FlinkClient(
                 "Content-Type": "application/json"})
 
 # Init NiFi REST API Client
-nifi = NiFiClient("http://nifi:8080/nifi-api")
+nifi = NiFiClient(username="admin",
+                  password="ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB",
+                  url="https://nifi:8443/nifi-api")
 
 # Init FastAPI server
 app = FastAPI(
@@ -47,7 +49,7 @@ async def startup_event():
     # Subscribe to Endpoint entities
     # subscribeEndpoint(ngsi, weaver_uri)
     # Check NiFi REST API is up
-    nifi.check_nifi_status()
+    nifi.login()
     # Check Flink REST API is up
     flink.check_flink_status()
 
