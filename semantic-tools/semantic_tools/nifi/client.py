@@ -1,6 +1,9 @@
 from nipyapi.nifi.models.controller_service_entity import (
     ControllerServiceEntity
 )
+from nipyapi.nifi.models.documented_type_dto import (
+    DocumentedTypeDTO
+)
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from nipyapi.nifi.models.process_group_flow_entity import (
     ProcessGroupFlowEntity
@@ -8,11 +11,9 @@ from nipyapi.nifi.models.process_group_flow_entity import (
 from nipyapi.nifi.models.template_entity import TemplateEntity
 from random import randrange
 from semantic_tools.models.application import Task
-from urllib3.exceptions import MaxRetryError
 
 import logging
 import nipyapi
-import time
 
 logger = logging.getLogger(__name__)
 
@@ -47,13 +48,26 @@ class NiFiClient(object):
             username=self.username,
             password=self.password,
             bool_response=True,
-            nipyapi_delay=nipyapi.config.long_retry_delay, # Default 5 sec
-            nipyapi_max_wait=nipyapi.config.long_max_wait # Default 120 sec
+            nipyapi_delay=nipyapi.config.long_retry_delay,  # Default 5 sec
+            nipyapi_max_wait=nipyapi.config.long_max_wait  # Default 120 sec
         )
         nifi_user = nipyapi.security.get_service_access_status(service='nifi')
         logger.info(
-            'nipyapi_secured_nifi CurrentUser: ' + nifi_user.access_status.identity
+            'nipyapi_secured_nifi CurrentUser: '
+            + nifi_user.access_status.identity
         )
+
+    def create_controller_service(
+                self, pg: ProcessGroupEntity,
+                dto: DocumentedTypeDTO,
+                name: str = None) -> ControllerServiceEntity:
+        """
+        Creates Controller Service from a given DocumentedTypeDTO.
+        Optionally, the controller service can be created under a
+        specified a name.
+        """
+        return nipyapi.canvas.nipyapi.canvas.create_controller(
+            pg, dto, name)
 
     def delete_flow_from_task(self, task: Task):
         """
@@ -94,8 +108,8 @@ class NiFiClient(object):
         # Get root PG
         root_pg = nipyapi.canvas.get_process_group("root")
         # Place the PG in a random location in canvas
-        location_x = randrange(0,4000)
-        location_y = randrange(0,4000)
+        location_x = randrange(0, 4000)
+        location_y = randrange(0, 4000)
         location = (location_x, location_y)
         task_pg = nipyapi.canvas.create_process_group(
                         root_pg, task.id, location
@@ -159,11 +173,28 @@ class NiFiClient(object):
             if controller.component.name == name:
                 return controller
 
+    def get_controller_service_type(
+            self, expression: str) -> DocumentedTypeDTO:
+        """
+        Get Controller Service type information by type expression.
+        Returns the first found controller service type.
+        """
+        cs_types = nipyapi.canvas.list_all_controller_types()
+        for cs in cs_types:
+            if expression in cs.type:
+                return cs
+
     def get_pg_from_task(self, task: Task) -> ProcessGroupEntity:
         """
         Get NiFi flow (Process Group) from Task.
         """
         return nipyapi.canvas.get_process_group(task.id)
+
+    def get_root_pg(self) -> ProcessGroupEntity:
+        """
+        Get the root Process Group"
+        """
+        return nipyapi.canvas.get_process_group("root")
 
     def set_polling_interval(self, pg_flow: ProcessGroupFlowEntity,
                              interval: str):
@@ -183,6 +214,22 @@ class NiFiClient(object):
             nipyapi.nifi.ProcessorConfigDTO(
                 scheduling_period='{0}{1}'.format(interval,
                                                   interval_unit)))
+
+    def start_controller_service(
+            self,
+            controller: ControllerServiceEntity) -> ControllerServiceEntity:
+        """
+        Starts controller service.
+        """
+        return nipyapi.canvas.schedule_controller(controller, True)
+
+    def stop_controller_service(
+            self,
+            controller: ControllerServiceEntity) -> ControllerServiceEntity:
+        """
+        Starts controller service.
+        """
+        return nipyapi.canvas.schedule_controller(controller, False)
 
     def stop_flow_from_task(self, task: Task) -> ProcessGroupEntity:
         """
