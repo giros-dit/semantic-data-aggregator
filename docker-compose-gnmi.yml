@@ -108,6 +108,7 @@ services:
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./docker/nifi:/opt/aggregator
+      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   postgres:
     image: mdillon/postgis
     hostname: postgres

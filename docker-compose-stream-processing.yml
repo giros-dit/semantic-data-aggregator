@@ -94,7 +94,8 @@ services:
       - "8443:8443"
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./nifi:/opt/aggregator
+      - ./docker/nifi:/opt/aggregator
+      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1

@@ -171,6 +171,7 @@ services:
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./docker/nifi:/opt/aggregator
+      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
