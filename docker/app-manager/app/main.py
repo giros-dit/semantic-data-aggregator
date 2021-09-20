@@ -46,7 +46,7 @@ app.mount("/catalog", StaticFiles(directory="/catalog"), name="catalog")
 @app.on_event("startup")
 async def startup_event():
     # Check Scorpio API is up
-    ngsi_ld.check_scorpio_status
+    ngsi_ld.check_scorpio_status()
     # Check NiFi REST API is up
     nifi.login()
     # Upload NiFi admin templates
