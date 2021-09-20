@@ -136,9 +136,11 @@ services:
       SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
     ports:
       - "8443:8443"
+      # Used by Prometheus exporter
+      - "8444:8444"
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./docker/nifi:/opt/aggregator
+      - ./docker/nifi/drivers/jinja-templates:/jinja-templates
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   node-exporter-1:
     image: prom/node-exporter
