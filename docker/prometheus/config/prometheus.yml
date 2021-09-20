@@ -39,6 +39,14 @@ scrape_configs:
 
     static_configs:
       - targets: ['node-exporter-2:9100']
+
+  - job_name: 'nifi'
+
+    scrape_interval: 5s
+    metrics_path: '/my-metric'
+
+    static_configs:
+      - targets: ['nifi:8444']
  
   # REQUIRES configuring docker daemon.json
   # - job_name: 'docker'
