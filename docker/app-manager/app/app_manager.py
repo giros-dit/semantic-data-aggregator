@@ -1,20 +1,19 @@
-from semantic_tools.flink.client import FlinkClient
-from semantic_tools.models.application import Application
-from semantic_tools.nifi.client import NiFiClient
-from semantic_tools.ngsi_ld.client import NGSILDClient
+import logging
+import os
 from typing import Optional
 from xml.etree import ElementTree as et
 
-import logging
-import os
-
+from semantic_tools.flink.client import FlinkClient
+from semantic_tools.models.application import Application
+from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.nifi.client import NiFiClient
 
 logger = logging.getLogger(__name__)
 
 
 def upload_local_flink_jars(flink: FlinkClient,
-                     ngsi_ld: NGSILDClient,
-                     app_manager_url: str):
+                            ngsi_ld: NGSILDClient,
+                            app_manager_url: str):
     """
     Uploads the stream processing application JARs stored locally in the service
     to the stream processing engine (i.e., the Flink engine).

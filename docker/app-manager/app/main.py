@@ -1,14 +1,15 @@
-from fastapi import FastAPI, HTTPException, File, UploadFile
-from fastapi.staticfiles import StaticFiles
-from semantic_tools.flink.client import FlinkClient
-from semantic_tools.nifi.client import NiFiClient
-from semantic_tools.ngsi_ld.client import NGSILDClient
+import logging
+import os
+import shutil
 from typing import Literal, Optional
 
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.staticfiles import StaticFiles
+from semantic_tools.flink.client import FlinkClient
+from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.nifi.client import NiFiClient
+
 import app_manager
-import logging
-import shutil
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ app.mount("/catalog", StaticFiles(directory="/catalog"), name="catalog")
 @app.on_event("startup")
 async def startup_event():
     # Check Scorpio API is up
-    ngsi_ld.check_scorpio_status
+    ngsi_ld.check_scorpio_status()
     # Check NiFi REST API is up
     nifi.login()
     # Upload NiFi admin templates

@@ -1,12 +1,12 @@
-from fastapi import FastAPI, status, Request
+import logging
+
+from fastapi import FastAPI, Request, status
 from semantic_tools.flink.client import FlinkClient
 from semantic_tools.models.application import Task
-from semantic_tools.nifi.client import NiFiClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.nifi.client import NiFiClient
 
 from weaver.orchestration import process_task
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event():
     # Check Scorpio API is up
-    ngsi_ld.check_scorpio_status
+    ngsi_ld.check_scorpio_status()
     # Subscribe to data pipeline agent entities
     ngsi_ld.subscribe_weaver_to_task(WEAVER_URL)
     # Subscribe to data source entities

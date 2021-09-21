@@ -1,10 +1,9 @@
+import json
+import logging
+
 from semantic_tools.models.application import Task
 from semantic_tools.ngsi_ld.client import NGSILDClient
 from semantic_tools.ngsi_ld.units import UnitCode
-
-import json
-import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -60,10 +59,6 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     group_id = task.arguments.value["groupId"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema": "eve",
         "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
@@ -324,7 +319,8 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
-def config_flink_jobs (task: Task, ngsi_ld: NGSILDClient) -> dict:
+
+def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
     Builds configuration arguments for stream processing applications (Flink)
     """
@@ -350,6 +346,7 @@ def config_flink_jobs (task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     arguments.update(task.arguments.value)
     return arguments
+
 
 nifi_application_configs = {
     "EVESource": config_eve_source,
