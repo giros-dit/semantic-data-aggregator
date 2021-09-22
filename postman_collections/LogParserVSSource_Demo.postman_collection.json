@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "9cd1ba62-c55b-4fe4-949b-ab18e438ecad",
-		"name": "LogParserSource_Demo",
+		"_postman_id": "d0f70a65-1cdf-43d1-935a-b0a0cdb7f6b1",
+		"name": "LogParserVSSource_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -142,7 +142,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"log-parser-kafka-real-time\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"log-parser-vs-kafka-real-time\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -328,10 +328,10 @@
 					]
 				},
 				{
-					"name": "LogParserSource",
+					"name": "LogParserVSSource",
 					"item": [
 						{
-							"name": "Get LogParserSource AppId",
+							"name": "Get LogParserVSSource AppId",
 							"event": [
 								{
 									"listen": "test",
@@ -370,7 +370,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"LogParserSource\"",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"LogParserVSSource\"",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -388,7 +388,7 @@
 										},
 										{
 											"key": "q",
-											"value": "name==\"LogParserSource\""
+											"value": "name==\"LogParserVSSource\""
 										}
 									]
 								},
@@ -397,7 +397,7 @@
 							"response": []
 						},
 						{
-							"name": "Create LogParserSource Task",
+							"name": "Create LogParserVSSource Task",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -463,10 +463,10 @@
 			"name": "Teardown",
 			"item": [
 				{
-					"name": "LogParserSource",
+					"name": "LogParserVSSource",
 					"item": [
 						{
-							"name": "End SOLogSource Task",
+							"name": "End LogParserVSSource Task",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -751,7 +751,7 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "localhost:9090"
+			"value": "138.4.7.159:9090"
 		},
 		{
 			"key": "context.jsonld",
