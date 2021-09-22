@@ -8,9 +8,7 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 `Kafka` plays the role of the data substrate in the `SDA`, hence `NiFi` relies on `Kafka` as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures `NiFi` processors to connect to the same Kafka instance that `Scorpio` runs for its internal communication bus.
 
-Additionally, a dummy context consumer is deployed based on a simple docker image that runs a [FastAPI](https://fastapi.tiangolo.com/) webserver. Basically, the webserver includes an additional REST endpoint that the context consumer can leverage to receive notifications from HTTP subscriptions.
-
-![Docker Prototype](docs/data-aggregator-prototype.png)
+![Docker Prototype](docs/data-aggregator-data-fabric-generic.png)
 
 # Requirements
 
@@ -19,17 +17,9 @@ Additionally, a dummy context consumer is deployed based on a simple docker imag
 
 # Quick Start
 
-## Build Docker images
+## All-in-one Scenario
 
-The prototype is composed by some containers which require building their Docker images. Utility script `build-docker.sh` eases the process of building such images. So far, it only supports building the `schema-registry:0.9.0` image. To do so, run the following command:
-```bash
-./build-docker.sh build-registry
-```
-It is expected for future works to support more building procedures for images such as `weaver`.
-
-## Run the prototype
-
-Start the prototype by running docker-compose:
+To deploy a scenario that comprises the SDA along with all the supported data sources, execute the following command:
 ```bash
 docker-compose up
 ```
@@ -39,7 +29,38 @@ In case you are interested in running the prototype in background (`kafka` or `s
 docker-compose up -d
 ```
 
-If you are interested to run the gNMI-based data collection prototype, follow the next steps:
+Tear the scenario down as follows:
+```bash
+docker-compose down
+```
+
+## Data Source Specific Scenarios
+
+In addition to the all-in-one setup, this repository includes different docker-compose files that deploy scenarios in which the SDA is integrated with a specific data source. These scenarios come handy for debugging purposes and showcasing demos.
+
+### Prometheus-based Data Sources
+
+This scenario deploys a Prometheus instance that is integrated as a data source for the SDA. Additionally, two node-exporter microservices are deployed to emulate two separate machines that send metrics to Prometheus - although both node exporters collect data from the same machine (host machine).
+
+1) Deploy the scenario with the following command:
+```bash
+docker-compose up  -f docker-compose-prometheus.yml -d
+```
+
+2) The [`MetricSource_Demo`](postman_collections/MetricSource_Demo.postman_collection.json) Postman collection provides a demo pipeline that periodically fetches a metric from Prometheus.
+
+3) Lastly, tear the scenario down with:
+```bash
+docker-compose -f docker-compose-prometheus.yml down
+```
+
+### gNMI-based Data Sources (Arista cEOS)
+
+If you are interested in running the gNMI-based data collection prototype, follow the next steps:
+
+The purpose of this prototype is collect data of [`gNMI`](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) telemetry-based sources from the `Semantic Data Aggregator`. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of `Arista cEOS` routers as network devices and YANG-based data sources that support the `gNMI` management protocol and a CLI client that provides a full support of `gNMI` RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+
+To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-telemetry-recipe/README.md).
 
 1) Before starting docker-compose it is necessary to import the [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.24.5M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
 
@@ -53,9 +74,34 @@ docker import cEOS-lab-4.24.5M.tar ceos-image:4.24.5M
 docker-compose -f docker-compose-arista.yml up
 ```
 
-The purpose of this prototype is collect data of [`gNMI`](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) telemetry-based sources from the `Semantic Data Aggregator`. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of `Arista cEOS` routers as network devices and YANG-based data sources that support the `gNMI` management protocol and a CLI client that provides a full support of `gNMI` RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
+4) The [`TelemetrySource_Demo`](postman_collections/TelemetrySource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a YANG XPath of a network device through the gNMI protocol.
 
-To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-telemetry-recipe/README.md).
+5) Tear the scenario down with:
+```bash
+docker-compose -f docker-compose-arista.yml down
+```
+
+### Kafka-based Data Sources
+
+Kafka is another type of data source supported by the SDA. More precisely, the ICT-17 5G-EVE project represents a use case that provides monitoring data through Kafka. In this use case, the SDA enables interoperability by integrating a data source from an ICT-17 environment, and then aggregating and delivering the data to other domains such as 5Growth.
+
+1) For the 5G-EVE use case, we simply re-use the same Kafka instance to work as both the data source and the SDA's data substrate. Let's deploy the all-in-one scenario:
+```bash
+docker-compose up  -d
+```
+
+2) The [`EVESource_Demo`](postman_collections/EVESource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a Kafka topic.
+
+3) To generate synthetic data compliant with 5G-EVE data model, the [complex-publisher](docker/complex-publishers) microservice offers a utility that generates random data into a Kafka topic. For instance, execute the following command to generate 10 new metrics:
+```bash
+docker exec -it complex-publisher python3 /5GEVE-publisher/publisher.py kafka:9092 spain-5tonic.topic-1 10
+```
+
+4) Once you are done, tear the scenario down with:
+```bash
+docker-compose down
+```
+
 
 # SDA Orchestration
 
