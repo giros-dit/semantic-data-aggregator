@@ -198,7 +198,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     gnmic_topic = "gnmic-" + sink_topic.name.value
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
-    filename = '/gnmic-cfgs/subscription' + '-' +  sink_topic.name.value + '.json'
+    filename = '/gnmic-cfgs/subscription' + '-' + sink_topic.name.value + '.json'
 
     subscription_data = {}
     subscription_data['address'] = source_endpoint.uri.value.split("://")[1]
@@ -229,7 +229,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         interval = task.arguments.value['interval']
         interval_unit = UnitCode[task.arguments.unitCode].value
         subscription['sample-interval'] = interval+interval_unit
-        subscription['qos'] = 0   
+        subscription['qos'] = 0
     subscriptions['subscription'] = subscription
     subscription_data['subscriptions'] = subscriptions
     outputs = {}
@@ -258,7 +258,6 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         # Avro schema hardcoded
         # although should be discovered
         # by asking registry with context information
-        "avro_schema": "gnmic-event",
         "command": "gnmic",
         "command_arguments": command_arguments,
         "sink_broker_url": sink_broker_url,

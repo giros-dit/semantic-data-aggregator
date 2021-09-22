@@ -19,16 +19,16 @@ APP_MANAGER_URL = "http://app-manager:8080"
 
 # Init NGSI-LD Client
 ngsi_ld = NGSILDClient(
-            url="http://scorpio:9090",
-            headers={"Accept": "application/json"},
-            context="http://context-catalog:8080/context.jsonld")
+    url="http://scorpio:9090",
+    headers={"Accept": "application/json"},
+    context="http://context-catalog:8080/context.jsonld")
 
 # Init Flink REST API Client
 flink = FlinkClient(
-            url="http://flink-jobmanager:8081",
-            headers={
-                "Accept": "application/json",
-                "Content-Type": "application/json"})
+    url="http://flink-jobmanager:8081",
+    headers={
+        "Accept": "application/json",
+        "Content-Type": "application/json"})
 
 # Init NiFi REST API Client
 nifi = NiFiClient(username="admin",
@@ -58,6 +58,7 @@ async def startup_event():
     # Upload Flink admin JARs
     app_manager.upload_local_flink_jars(
         flink, ngsi_ld, APP_MANAGER_URL)
+
 
 @app.post("/applications/")
 async def onboard_application(application_type: Literal["FLINK", "NIFI"],
