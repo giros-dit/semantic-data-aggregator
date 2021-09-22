@@ -116,10 +116,6 @@ def config_metric_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_topic_name = sink_topic.name.value
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema": "prometheus",
         "interval": task.arguments.value["interval"],
         "prometheus_request": prometheus_request,
         "sink_broker_url": sink_broker_url,
@@ -151,9 +147,6 @@ def config_metric_target(task: Task, ngsi_ld: NGSILDClient) -> dict:
     consumer_url = task.expression.value["consumer_url"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
         "consumer_url": consumer_url
@@ -255,9 +248,6 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
         "command": "gnmic",
         "command_arguments": command_arguments,
         "sink_broker_url": sink_broker_url,
@@ -268,7 +258,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
 
 def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for LogParserSource application (NiFi)
+    Builds configuration arguments for LogParserSOSource application (NiFi)
     """
     # Collect lineage information
 
@@ -305,11 +295,6 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     group_id = task.arguments.value["groupId"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema_instantiation": "logparser-instantiation",
-        "avro_schema_termination": "logparser-termination",
         "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
@@ -351,7 +336,7 @@ nifi_application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
     "MetricTarget": config_metric_target,
-    "TelemetrySource": config_telemetry_source,
     "gNMIcSource": config_telemetry_source,
-    "LogParserSource": config_logparser_source
+    "LogParserSOSource": config_logparser_source,
+    "LogParserVSSource": config_logparser_source
 }
