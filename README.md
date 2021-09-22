@@ -57,20 +57,6 @@ The purpose of this prototype is collect data of [`gNMI`](https://github.com/ope
 
 To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-telemetry-recipe/README.md).
 
-## Upload Avro schemas
-
-Every data source supported by the `SDA` has one or more [`Avro schemas`](https://avro.apache.org/) associated. The collection agent of the `SDA` implements drivers responsible for transforming the collected raw data into a pre-defined `Avro` schema. Before interacting with the `SDA`, make sure that these `Avro` schemas are uploaded in the schema registry. The `SDA` prototype currently leverages [`HWX Schema Registry`](https://github.com/hortonworks/registry) to store Avro schemas. More details on how to upload schemas can be found [here](https://github.com/giros-dit/semantic-data-aggregator/blob/develop/docs/nifi-schemas/nifi-schema-registry.md#uploading-schemas-to-the-registry).
-
-For now, the data sources supported by the `SDA` are `Prometheus` and gNMI-based devices. The respective `Avro` schemas can be fetched from the following links:
-
-> __IMPORTANT__: Notice the name specified when uploading the schemas to the registry
->
-
-1. [Prometeus schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/prometheus/avro/prometheus.avsc): Store schema with `prometheus` name
-2. [gNMI - Openconfig-interfaces schema](https://github.com/giros-dit/semantic-metrics-datamodels/blob/main/models/openconfig/avro/openconfig-interfaces.avsc): Store schema with `openconfig-interfaces` name
-
-Note that the `SDA` only supports the `openconfig-interfaces` YANG model for gNMI-based data sources. Once we add support for the rest of YANG models, new `Avro` schemas will be defined for this data source.
-
 # SDA Orchestration
 
 In order to orchestrate the life cycle management of the `Semantic Data Aggregator` by an external application or system, the prototype uses he `NGSI-LD` API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the `NGSI-LD` data model for that. This is an approach to orchestrate the state of those `NGSI-LD` entities that represent the different stages in the data pipelines and model the activity of the Data Aggregator agents.
