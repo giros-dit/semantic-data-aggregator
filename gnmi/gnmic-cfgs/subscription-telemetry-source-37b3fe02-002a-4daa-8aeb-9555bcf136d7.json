@@ -1,0 +1,30 @@
+{
+    "address": "ceos1:6030",
+    "username": "admin",
+    "password": "xxxx",
+    "insecure": "true",
+    "log-file": "/tmp/gnmic-telemetry-source-37b3fe02-002a-4daa-8aeb-9555bcf136d7.log",
+    "subscriptions": {
+        "subscription": {
+            "paths": [
+                "/interfaces/interface[name=Ethernet1]/state/counters/in-octets"
+            ],
+            "stream-mode": "sample",
+            "sample-interval": "5s",
+            "qos": 0
+        }
+    },
+    "outputs": {
+        "output": {
+            "type": "kafka",
+            "address": "kafka:9092",
+            "topic": "gnmic-telemetry-source-37b3fe02-002a-4daa-8aeb-9555bcf136d7",
+            "max-retry": 2,
+            "timeout": "5s",
+            "recovery-wait-time": "10s",
+            "format": "event",
+            "num-workers": 1,
+            "debug": false
+        }
+    }
+}
