@@ -10,12 +10,24 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 ![Docker Prototype](docs/data-aggregator-SDA.png)
 
-# Requirements
+# Table of Contents
+
+1. [Prototype](#prototype)
+    1. [All-in-one scenario](#all-in-one-scenario)
+    2. [Data Source specific scenarios](#data-source-specific-scenarios)
+        1. [Prometheus](#prometheus-based-data-sources)
+        2. [gNMI](#gNMI-based-data-sources-(Arista-cEOS))
+        3. [Kafka](#kafka-based-data-sources)
+2. [SDA Orchestration](#sda-orchestration)
+3. [Stream processing aplications management](#stream-processing-aplications-management)
+4. [Postman collections](#postman-collections)
+
+# Prototype
+
+## Requirements
 
 - Docker (_Tested with version 19.03.13_)
 - Docker-compose (_Tested with version 1.27.4_)
-
-# Quick Start
 
 ## All-in-one Scenario
 
