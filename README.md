@@ -8,7 +8,7 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 `Kafka` plays the role of the data substrate in the `SDA`, hence `NiFi` relies on `Kafka` as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures `NiFi` processors to connect to the same Kafka instance that `Scorpio` runs for its internal communication bus.
 
-![Docker Prototype](docs/data-aggregator-data-fabric-generic.png)
+![Docker Prototype](docs/data-aggregator-SDA.png)
 
 # Requirements
 
