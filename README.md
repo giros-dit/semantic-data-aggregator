@@ -74,9 +74,17 @@ docker import cEOS64-lab-4.25.4M.tar.xz ceos-image:4.25.4M
 docker-compose -f docker-compose-arista.yml up
 ```
 
-4) The [`TelemetrySource_Demo`](postman_collections/TelemetrySource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a YANG XPath of a network device through the gNMI protocol.
+4) Run the utility script [ceos-startup.sh](docker/ceos-arista/ceos-startup.sh) to configure a simple network topology with two Arista cEOS devices interconnected through a single link::
+```bash
+cd docker/ceos-arista
+./ceos-startup.sh
+```
 
-5) Tear the scenario down with:
+**TODO: Add diagram of network topology**
+
+5) The [`TelemetrySource_Demo`](postman_collections/TelemetrySource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a YANG XPath of a network device through the gNMI protocol.
+
+6) Tear the scenario down with:
 ```bash
 docker-compose -f docker-compose-arista.yml down
 ```
