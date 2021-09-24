@@ -91,8 +91,8 @@ docker-compose -f docker-compose-arista.yml up
 cd docker/ceos-arista
 ./ceos-startup.sh
 ```
-
-**TODO: Add diagram of network topology**
+Following picture depicts the network topology and addressing:
+![single-link-topology](docs/gnmi-telemetry-recipe/single-link-topology.png)
 
 5) The [`TelemetrySource_Demo`](postman_collections/TelemetrySource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a YANG XPath of a network device through the gNMI protocol.
 
