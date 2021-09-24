@@ -10,6 +10,7 @@ RUN pip3 install kafka-python
 # Copy files
 COPY docker/complex-publishers/files/5GEVE-publisher /5GEVE-publisher
 COPY docker/complex-publishers/files/SOLogParser-publisher /SOLogParser-publisher
+COPY docker/complex-publishers/files/VSLogParser-publisher /VSLogParser-publisher
 
 # Entrypoint script
 COPY docker/complex-publishers/files/entrypoint.sh /

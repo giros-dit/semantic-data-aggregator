@@ -4,11 +4,11 @@ The purpose of this prototype is collect data of [`gNMI`](https://github.com/ope
 
 Here are the most important steps to be able to run the gNMI-based data collection prototype and extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from the `SDA`:
 
-1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available `Arista cEOS` versions `cEOS-lab-4.24.5M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the non-64-bit version).
+1) Before starting docker-compose it is necessary to import the `Arista cEOS` router docker image. Specifically, the scenario uses one of the latest available `Arista cEOS` versions `cEOS-lab-4.25.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the 64-bit version).
 
 2) The command to import the image is:
 ```bash
-docker import cEOS-lab-4.24.5M.tar ceos-image:4.24.5M
+docker import cEOS64-lab-4.25.4M.tar.xz ceos-image:4.25.4M
 ```
 
 3) Then you can start the docker-compose, which raises two instances of `Arista cEOS` routers (`ceos1` and `ceos2` docker services). These docker services are responsible for configuring environment variables, configuring TCP access ports for `gNMI`, and creating two P2P networks between both routers. The command to start the docker-compose is:

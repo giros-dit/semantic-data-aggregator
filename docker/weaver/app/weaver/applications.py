@@ -1,10 +1,9 @@
+import json
+import logging
+
 from semantic_tools.models.application import Task
 from semantic_tools.ngsi_ld.client import NGSILDClient
 from semantic_tools.ngsi_ld.units import UnitCode
-
-import json
-import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -60,10 +59,6 @@ def config_eve_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     group_id = task.arguments.value["groupId"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema": "eve",
         "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
@@ -121,10 +116,6 @@ def config_metric_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_topic_name = sink_topic.name.value
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema": "prometheus",
         "interval": task.arguments.value["interval"],
         "prometheus_request": prometheus_request,
         "sink_broker_url": sink_broker_url,
@@ -156,9 +147,6 @@ def config_metric_target(task: Task, ngsi_ld: NGSILDClient) -> dict:
     consumer_url = task.expression.value["consumer_url"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
         "consumer_url": consumer_url
@@ -203,7 +191,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     gnmic_topic = "gnmic-" + sink_topic.name.value
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
-    filename = '/gnmic-cfgs/subscription' + '-' +  sink_topic.name.value + '.json'
+    filename = '/gnmic-cfgs/subscription' + '-' + sink_topic.name.value + '.json'
 
     subscription_data = {}
     subscription_data['address'] = source_endpoint.uri.value.split("://")[1]
@@ -234,7 +222,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
         interval = task.arguments.value['interval']
         interval_unit = UnitCode[task.arguments.unitCode].value
         subscription['sample-interval'] = interval+interval_unit
-        subscription['qos'] = 0   
+        subscription['qos'] = 0
     subscriptions['subscription'] = subscription
     subscription_data['subscriptions'] = subscriptions
     outputs = {}
@@ -260,10 +248,6 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     sink_broker_url = sink_endpoint.uri.value
     sink_topic_name = sink_topic.name.value
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema": "gnmic-event",
         "command": "gnmic",
         "command_arguments": command_arguments,
         "sink_broker_url": sink_broker_url,
@@ -274,7 +258,7 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
 
 def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for LogParserSource application (NiFi)
+    Builds configuration arguments for LogParserSOSource application (NiFi)
     """
     # Collect lineage information
 
@@ -311,11 +295,6 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     group_id = task.arguments.value["groupId"]
 
     arguments = {
-        # Avro schema hardcoded
-        # although should be discovered
-        # by asking registry with context information
-        "avro_schema_instantiation": "logparser-instantiation",
-        "avro_schema_termination": "logparser-termination",
         "group_id": group_id,
         "source_broker_url": source_broker_url,
         "source_topics": source_topic_name,
@@ -324,7 +303,8 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
-def config_flink_jobs (task: Task, ngsi_ld: NGSILDClient) -> dict:
+
+def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
     Builds configuration arguments for stream processing applications (Flink)
     """
@@ -351,11 +331,12 @@ def config_flink_jobs (task: Task, ngsi_ld: NGSILDClient) -> dict:
     arguments.update(task.arguments.value)
     return arguments
 
+
 nifi_application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
     "MetricTarget": config_metric_target,
-    "TelemetrySource": config_telemetry_source,
     "gNMIcSource": config_telemetry_source,
-    "LogParserSource": config_logparser_source
+    "LogParserSOSource": config_logparser_source,
+    "LogParserVSSource": config_logparser_source
 }

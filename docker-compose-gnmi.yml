@@ -12,7 +12,7 @@ services:
       - ./docker/app-manager/app:/opt/app-manager/app
       - ./docker/app-manager/catalog:/catalog
   ceos1:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos1
     container_name: ceos1
     ports:
@@ -31,7 +31,7 @@ services:
       net1:
       net2:
   ceos2:
-    image: "ceos-image:4.24.5M"
+    image: "ceos-image:4.25.4M"
     hostname: ceos2
     container_name: ceos2
     ports:
@@ -108,6 +108,7 @@ services:
     volumes:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./docker/nifi:/opt/aggregator
+      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   postgres:
     image: mdillon/postgis
     hostname: postgres
@@ -120,36 +121,6 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
-  schema-registry-confluent:
-    image: confluentinc/cp-schema-registry:6.1.1
-    hostname: schema-registry-confluent
-    container_name: schema-registry-confluent
-    restart: always
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry-confluent
-      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
-      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
-      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
-    ports:
-      - 8086:8081
-    depends_on:
-      - zookeeper
-  schema-registry-confluent-ui:
-    image: landoop/schema-registry-ui:latest
-    hostname: schema-registry-confluent-ui
-    container_name: schema-registry-confluent-ui
-    environment:
-      SCHEMAREGISTRY_URL: http://schema-registry-confluent:8081
-      ALLOW_GLOBAL: "true"
-      ALLOW_TRANSITIVE: "true"
-      ALLOW_DELETION: "true"
-      READONLY_MODE: "true"
-      PROXY: "true"
-    ports:
-      - "8000:8000"
-    depends_on:
-      - schema-registry-confluent
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
     hostname: scorpio
