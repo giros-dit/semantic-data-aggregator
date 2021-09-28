@@ -276,7 +276,7 @@
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
 											"pm.collectionVariables.set(\"output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
-											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"eve-source-\" + myUUID)"
+											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"eve-source-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -405,7 +405,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"eve_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);"
+											"pm.collectionVariables.set(\"eve_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.collectionVariables.set(\"eve_source_groupId\", \"eve-source-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -435,7 +436,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{eve_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"evesource\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"eve-source\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{eve_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{eve_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"evesource\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{eve_source_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{eve_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -750,7 +751,7 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "localhost:9090"
+			"value": "138.4.7.159:9090"
 		},
 		{
 			"key": "context.jsonld",
@@ -790,6 +791,10 @@
 		},
 		{
 			"key": "eve_source_task_id",
+			"value": ""
+		},
+		{
+			"key": "eve_source_groupId",
 			"value": ""
 		}
 	]

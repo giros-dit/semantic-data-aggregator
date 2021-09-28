@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "d0f70a65-1cdf-43d1-935a-b0a0cdb7f6b1",
-		"name": "LogParserVSSource_Demo",
+		"_postman_id": "bb8ec774-76dc-4c82-a1c4-e550fad3955f",
+		"name": "LogParserSource_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -112,7 +112,7 @@
 							"response": []
 						},
 						{
-							"name": "Create KafkaTopic",
+							"name": "Create KafkaTopic SO metrics",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -120,7 +120,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											"pm.collectionVariables.set(\"input_logparser_so_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -142,7 +142,57 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"log-parser-vs-kafka-real-time\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_logparser_so_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"so-metrics\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create KafkaTopic VS metrics",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.collectionVariables.set(\"input_logparser_vs_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{input_logparser_vs_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"vs-metrics\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -267,7 +317,7 @@
 							"response": []
 						},
 						{
-							"name": "Create KafkaTopic",
+							"name": "Create KafkaTopic SO metrics",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -275,8 +325,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
-											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"logparser-source-\" + myUUID)"
+											"pm.collectionVariables.set(\"output_logparser_so_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											"pm.collectionVariables.set(\"output_logparser_so_kafka_topic_name\", \"logparser-so-source-\" + myUUID)"
 										],
 										"type": "text/javascript"
 									}
@@ -306,7 +356,196 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_logparser_so_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{output_logparser_so_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						},
+						{
+							"name": "Create KafkaTopic VS metrics",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.collectionVariables.set(\"output_logparser_vs_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											"pm.collectionVariables.set(\"output_logparser_vs_kafka_topic_name\", \"logparser-vs-source-\" + myUUID)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{output_logparser_vs_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{output_logparser_vs_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									]
+								},
+								"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LogParserSOSource",
+					"item": [
+						{
+							"name": "Get LogParserSOSource AppId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.collectionVariables.set(\"logparser_source_so_app_id\", jsonData[0].id);",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"LogParserSOSource\"",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										""
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "Application"
+										},
+										{
+											"key": "q",
+											"value": "name==\"LogParserSOSource\""
+										}
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Create LogParserSOSource Task",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var uuid = require('uuid')",
+											"var myUUID = uuid.v4()",
+											"pm.collectionVariables.set(\"logparser_source_so_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.collectionVariables.set(\"logparser_source_so_groupId\", \"logparser-source-so-metrics-\" + myUUID);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"{{logparser_source_so_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"logparser-source-so-metrics\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{logparser_source_so_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{logparser_source_so_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_logparser_so_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_logparser_so_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -338,7 +577,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"logparser_source_app_id\", jsonData[0].id);",
+											"pm.collectionVariables.set(\"logparser_source_vs_app_id\", jsonData[0].id);",
 											"",
 											""
 										],
@@ -405,7 +644,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"logparser_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.collectionVariables.set(\"logparser_source_vs_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.collectionVariables.set(\"logparser_source_vs_groupId\", \"logparser-source-vs-metrics-\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -436,7 +676,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{logparser_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"logparsersource\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"logparser-source\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{logparser_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{logparser_source_vs_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"logparsersource-vs-metrics\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{logparser_source_vs_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{logparser_source_vs_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_logparser_vs_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_logparser_vs_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -463,6 +703,50 @@
 			"name": "Teardown",
 			"item": [
 				{
+					"name": "LogParserSOSource",
+					"item": [
+						{
+							"name": "End LogParserSOSource Task",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Link",
+										"type": "text",
+										"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_so_task_id}}/attrs",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{logparser_source_so_task_id}}",
+										"attrs"
+									]
+								},
+								"description": "update the attribute of entity"
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "LogParserVSSource",
 					"item": [
 						{
@@ -487,7 +771,7 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_task_id}}/attrs",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_vs_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -496,7 +780,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{logparser_source_task_id}}",
+										"{{logparser_source_vs_task_id}}",
 										"attrs"
 									]
 								},
@@ -510,12 +794,12 @@
 					"name": "LogParser",
 					"item": [
 						{
-							"name": "Delete Input KafkaTopic",
+							"name": "Delete Input KafkaTopic for SO metrics",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_kafka_topic_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_logparser_so_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -524,7 +808,29 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_kafka_topic_id}}"
+										"{{input_logparser_so_kafka_topic_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Input KafkaTopic for VS metrics",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_logparser_vs_kafka_topic_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{input_logparser_vs_kafka_topic_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -581,12 +887,12 @@
 					"name": "SDA",
 					"item": [
 						{
-							"name": "Delete Output KafkaTopic",
+							"name": "Delete Output KafkaTopic for SO metrics",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_kafka_topic_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_logparser_so_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -595,7 +901,29 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{output_kafka_topic_id}}"
+										"{{output_logparser_so_kafka_topic_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Output KafkaTopic for VS metrics",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_logparser_vs_kafka_topic_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{output_logparser_vs_kafka_topic_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -670,7 +998,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_app_id}}",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{logparser_source_so_app_id}}",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -679,7 +1007,7 @@
 								"ngsi-ld",
 								"v1",
 								"entities",
-								"{{logparser_source_app_id}}"
+								"{{logparser_source_so_app_id}}"
 							]
 						},
 						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -758,7 +1086,7 @@
 			"value": "http://context-catalog:8080/context.jsonld"
 		},
 		{
-			"key": "output_kafka_topic_id",
+			"key": "output_endpoint",
 			"value": ""
 		},
 		{
@@ -766,11 +1094,19 @@
 			"value": ""
 		},
 		{
-			"key": "output_kafka_topic_name",
+			"key": "output_logparser_so_kafka_topic_id",
 			"value": ""
 		},
 		{
-			"key": "output_endpoint",
+			"key": "output_logparser_so_kafka_topic_name",
+			"value": ""
+		},
+		{
+			"key": "output_logparser_vs_kafka_topic_id",
+			"value": ""
+		},
+		{
+			"key": "output_logparser_vs_kafka_topic_name",
 			"value": ""
 		},
 		{
@@ -782,15 +1118,35 @@
 			"value": ""
 		},
 		{
-			"key": "input_kafka_topic_id",
+			"key": "input_logparser_so_kafka_topic_id",
 			"value": ""
 		},
 		{
-			"key": "logparser_source_app_id",
+			"key": "input_logparser_vs_kafka_topic_id",
 			"value": ""
 		},
 		{
-			"key": "logparser_source_task_id",
+			"key": "logparser_source_so_app_id",
+			"value": ""
+		},
+		{
+			"key": "logparser_source_so_task_id",
+			"value": ""
+		},
+		{
+			"key": "logparser_source_vs_app_id",
+			"value": ""
+		},
+		{
+			"key": "logparser_source_vs_task_id",
+			"value": ""
+		},
+		{
+			"key": "logparser_source_so_groupId",
+			"value": ""
+		},
+		{
+			"key": "logparser_source_vs_groupId",
 			"value": ""
 		}
 	]
