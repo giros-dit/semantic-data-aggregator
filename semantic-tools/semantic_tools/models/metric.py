@@ -5,9 +5,10 @@ from typing import Literal, Optional
 
 class Metric(Asset):
     type: Literal["Metric"] = "Metric"
-    labels: Property
+    hasLabels: Relationship
     hasMetricFamily: Relationship
     hasPrometheus: Relationship
+    hasPrometheusExporter: Relationship
 
 
 class MetricFamily(Asset):
@@ -20,3 +21,7 @@ class MetricFamily(Asset):
 class Prometheus(Infrastructure):
     type: Literal["Prometheus"] = "Prometheus"
     version: Optional[Property]
+
+
+class PrometheusExporter(Infrastructure):
+    type: Literal["PrometheusExporter"] = "PrometheusExporter"
