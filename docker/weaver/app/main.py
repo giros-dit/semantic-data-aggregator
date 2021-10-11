@@ -15,16 +15,16 @@ WEAVER_URL = "http://weaver:8080/notify"
 
 # Init NGSI-LD Client
 ngsi_ld = NGSILDClient(
-            url="http://scorpio:9090",
-            headers={"Accept": "application/json"},
-            context="http://context-catalog:8080/context.jsonld")
+    url="http://scorpio:9090",
+    headers={"Accept": "application/json"},
+    context="http://context-catalog:8080/context.jsonld")
 
 # Init Flink REST API Client
 flink = FlinkClient(
-            url="http://flink-jobmanager:8081",
-            headers={
-                "Accept": "application/json",
-                "Content-Type": "application/json"})
+    url="http://flink-jobmanager:8081",
+    headers={
+        "Accept": "application/json",
+        "Content-Type": "application/json"})
 
 # Init NiFi REST API Client
 nifi = NiFiClient(username="admin",
@@ -50,6 +50,8 @@ async def startup_event():
     # subscribeEndpoint(ngsi, weaver_uri)
     # Check NiFi REST API is up
     nifi.login()
+    # Deploy DistributedMapCacheServer in root PG
+    nifi.deploy_distributed_map_cache_server()
     # Check Flink REST API is up
     flink.check_flink_status()
 
