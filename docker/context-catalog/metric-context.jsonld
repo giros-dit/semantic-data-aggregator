@@ -13,6 +13,7 @@
         "Prometheus": "http://example.org/Prometheus",
         "hasEndpoint": "http://example.org/hasEndpoint",
         "version": "http://example.org/version",
-        "PrometheusExporter": "http://example.org/PrometheusExporter"
+        "PrometheusExporter": "http://example.org/PrometheusExporter",
+        "hasPrometheusExporter": "http://example.org/hasPrometheusExporter"
     }
 }
