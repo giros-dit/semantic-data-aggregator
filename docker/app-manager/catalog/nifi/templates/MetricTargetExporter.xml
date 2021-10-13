@@ -776,22 +776,22 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>log-level</key>
-<value>
-    <name>log-level</name>
-</value>
+                                <key>log-level</key>
+                                <value>
+                                    <name>log-level</name>
+                                </value>
                             </entry>
                             <entry>
-<key>log-prefix</key>
-<value>
-    <name>log-prefix</name>
-</value>
+                                <key>log-prefix</key>
+                                <value>
+                                    <name>log-prefix</name>
+                                </value>
                             </entry>
                             <entry>
-<key>log-message</key>
-<value>
-    <name>log-message</name>
-</value>
+                                <key>log-message</key>
+                                <value>
+                                    <name>log-message</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -799,14 +799,14 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>log-level</key>
-<value>info</value>
+                                <key>log-level</key>
+                                <value>info</value>
                             </entry>
                             <entry>
-<key>log-prefix</key>
+                                <key>log-prefix</key>
                             </entry>
                             <entry>
-<key>log-message</key>
+                                <key>log-message</key>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -821,7 +821,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.LogMessage</type>
                 </processors>
                 <processors>
@@ -842,34 +842,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Destination</key>
-<value>
-    <name>Destination</name>
-</value>
+                                <key>Destination</key>
+                                <value>
+                                    <name>Destination</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>
-    <name>Return Type</name>
-</value>
+                                <key>Return Type</key>
+                                <value>
+                                    <name>Return Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>
-    <name>Path Not Found Behavior</name>
-</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>
+                                    <name>Path Not Found Behavior</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                             <entry>
-<key>metric-name</key>
-<value>
-    <name>metric-name</name>
-</value>
+                                <key>metric-name</key>
+                                <value>
+                                    <name>metric-name</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -877,24 +877,24 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Destination</key>
-<value>flowfile-attribute</value>
+                                <key>Destination</key>
+                                <value>flowfile-attribute</value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>auto-detect</value>
+                                <key>Return Type</key>
+                                <value>auto-detect</value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>ignore</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>ignore</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                             <entry>
-<key>metric-name</key>
-<value>name</value>
+                                <key>metric-name</key>
+                                <value>name</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -917,7 +917,7 @@
                         <name>unmatched</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.EvaluateJsonPath</type>
                 </processors>
                 <processors>
@@ -938,40 +938,40 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>jolt-transform</key>
-<value>
-    <name>jolt-transform</name>
-</value>
+                                <key>jolt-transform</key>
+                                <value>
+                                    <name>jolt-transform</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
-<value>
-    <name>jolt-custom-class</name>
-</value>
+                                <key>jolt-custom-class</key>
+                                <value>
+                                    <name>jolt-custom-class</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
-<value>
-    <name>jolt-custom-modules</name>
-</value>
+                                <key>jolt-custom-modules</key>
+                                <value>
+                                    <name>jolt-custom-modules</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>
-    <name>jolt-spec</name>
-</value>
+                                <key>jolt-spec</key>
+                                <value>
+                                    <name>jolt-spec</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>
-    <name>Transform Cache Size</name>
-</value>
+                                <key>Transform Cache Size</key>
+                                <value>
+                                    <name>Transform Cache Size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>
-    <name>pretty_print</name>
-</value>
+                                <key>pretty_print</key>
+                                <value>
+                                    <name>pretty_print</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -979,18 +979,18 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>jolt-transform</key>
-<value>jolt-transform-chain</value>
+                                <key>jolt-transform</key>
+                                <value>jolt-transform-chain</value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
+                                <key>jolt-custom-class</key>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
+                                <key>jolt-custom-modules</key>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>[
+                                <key>jolt-spec</key>
+                                <value>[
   {
     "operation": "shift",
     "spec": {
@@ -1026,12 +1026,12 @@
 </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>1</value>
+                                <key>Transform Cache Size</key>
+                                <value>1</value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>false</value>
+                                <key>pretty_print</key>
+                                <value>false</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1050,7 +1050,7 @@
                         <name>success</name>
                     </relationships>
                     <state>DISABLED</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.JoltTransformJSON</type>
                 </processors>
                 <processors>
@@ -1071,34 +1071,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Delete Attributes Expression</key>
-<value>
-    <name>Delete Attributes Expression</name>
-</value>
+                                <key>Delete Attributes Expression</key>
+                                <value>
+                                    <name>Delete Attributes Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>
-    <name>Store State</name>
-</value>
+                                <key>Store State</key>
+                                <value>
+                                    <name>Store State</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
-<value>
-    <name>Stateful Variables Initial Value</name>
-</value>
+                                <key>Stateful Variables Initial Value</key>
+                                <value>
+                                    <name>Stateful Variables Initial Value</name>
+                                </value>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>
-    <name>canonical-value-lookup-cache-size</name>
-</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>
+                                    <name>canonical-value-lookup-cache-size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>metric-family-id</key>
-<value>
-    <name>metric-family-id</name>
-</value>
+                                <key>metric-family-id</key>
+                                <value>
+                                    <name>metric-family-id</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1106,22 +1106,22 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Delete Attributes Expression</key>
+                                <key>Delete Attributes Expression</key>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>Do not store state</value>
+                                <key>Store State</key>
+                                <value>Do not store state</value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
+                                <key>Stateful Variables Initial Value</key>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>100</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>100</value>
                             </entry>
                             <entry>
-<key>metric-family-id</key>
-<value>urn:ngsi-ld:MetricFamily:SDA:${metric-family-name}</value>
+                                <key>metric-family-id</key>
+                                <value>urn:ngsi-ld:MetricFamily:SDA:${metric-family-name}</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1136,7 +1136,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
                 </processors>
                 <processors>
@@ -1157,16 +1157,16 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>JsonPath Expression</key>
-<value>
-    <name>JsonPath Expression</name>
-</value>
+                                <key>JsonPath Expression</key>
+                                <value>
+                                    <name>JsonPath Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1174,12 +1174,12 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>JsonPath Expression</key>
-<value>openmetrics:metric-families.metric-family</value>
+                                <key>JsonPath Expression</key>
+                                <value>openmetrics:metric-families.metric-family</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1202,7 +1202,7 @@
                         <name>split</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.SplitJson</type>
                 </processors>
                 <processors>
@@ -1223,40 +1223,40 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>jolt-transform</key>
-<value>
-    <name>jolt-transform</name>
-</value>
+                                <key>jolt-transform</key>
+                                <value>
+                                    <name>jolt-transform</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
-<value>
-    <name>jolt-custom-class</name>
-</value>
+                                <key>jolt-custom-class</key>
+                                <value>
+                                    <name>jolt-custom-class</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
-<value>
-    <name>jolt-custom-modules</name>
-</value>
+                                <key>jolt-custom-modules</key>
+                                <value>
+                                    <name>jolt-custom-modules</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>
-    <name>jolt-spec</name>
-</value>
+                                <key>jolt-spec</key>
+                                <value>
+                                    <name>jolt-spec</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>
-    <name>Transform Cache Size</name>
-</value>
+                                <key>Transform Cache Size</key>
+                                <value>
+                                    <name>Transform Cache Size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>
-    <name>pretty_print</name>
-</value>
+                                <key>pretty_print</key>
+                                <value>
+                                    <name>pretty_print</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1264,18 +1264,18 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>jolt-transform</key>
-<value>jolt-transform-chain</value>
+                                <key>jolt-transform</key>
+                                <value>jolt-transform-chain</value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
+                                <key>jolt-custom-class</key>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
+                                <key>jolt-custom-modules</key>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>[
+                                <key>jolt-spec</key>
+                                <value>[
   {
     "operation": "shift",
     "spec": {
@@ -1300,12 +1300,12 @@
 </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>1</value>
+                                <key>Transform Cache Size</key>
+                                <value>1</value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>false</value>
+                                <key>pretty_print</key>
+                                <value>false</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1324,7 +1324,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.JoltTransformJSON</type>
                 </processors>
                 <processors>
@@ -1345,34 +1345,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Delete Attributes Expression</key>
-<value>
-    <name>Delete Attributes Expression</name>
-</value>
+                                <key>Delete Attributes Expression</key>
+                                <value>
+                                    <name>Delete Attributes Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>
-    <name>Store State</name>
-</value>
+                                <key>Store State</key>
+                                <value>
+                                    <name>Store State</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
-<value>
-    <name>Stateful Variables Initial Value</name>
-</value>
+                                <key>Stateful Variables Initial Value</key>
+                                <value>
+                                    <name>Stateful Variables Initial Value</name>
+                                </value>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>
-    <name>canonical-value-lookup-cache-size</name>
-</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>
+                                    <name>canonical-value-lookup-cache-size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>metric-id</key>
-<value>
-    <name>metric-id</name>
-</value>
+                                <key>metric-id</key>
+                                <value>
+                                    <name>metric-id</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1380,22 +1380,22 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Delete Attributes Expression</key>
+                                <key>Delete Attributes Expression</key>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>Do not store state</value>
+                                <key>Store State</key>
+                                <value>Do not store state</value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
+                                <key>Stateful Variables Initial Value</key>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>100</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>100</value>
                             </entry>
                             <entry>
-<key>metric-id</key>
-<value>urn:ngsi-ld:Metric:SDA:${metric-name}</value>
+                                <key>metric-id</key>
+                                <value>urn:ngsi-ld:Metric:SDA:${metric-name}</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1410,7 +1410,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
                 </processors>
                 <processors>
@@ -1431,34 +1431,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Destination</key>
-<value>
-    <name>Destination</name>
-</value>
+                                <key>Destination</key>
+                                <value>
+                                    <name>Destination</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>
-    <name>Return Type</name>
-</value>
+                                <key>Return Type</key>
+                                <value>
+                                    <name>Return Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>
-    <name>Path Not Found Behavior</name>
-</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>
+                                    <name>Path Not Found Behavior</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                             <entry>
-<key>entity-id</key>
-<value>
-    <name>entity-id</name>
-</value>
+                                <key>entity-id</key>
+                                <value>
+                                    <name>entity-id</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1466,24 +1466,24 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Destination</key>
-<value>flowfile-attribute</value>
+                                <key>Destination</key>
+                                <value>flowfile-attribute</value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>auto-detect</value>
+                                <key>Return Type</key>
+                                <value>auto-detect</value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>ignore</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>ignore</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                             <entry>
-<key>entity-id</key>
-<value>id</value>
+                                <key>entity-id</key>
+                                <value>id</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1506,7 +1506,7 @@
                         <name>unmatched</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.EvaluateJsonPath</type>
                 </processors>
                 <processors>
@@ -1527,34 +1527,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Delete Attributes Expression</key>
-<value>
-    <name>Delete Attributes Expression</name>
-</value>
+                                <key>Delete Attributes Expression</key>
+                                <value>
+                                    <name>Delete Attributes Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>
-    <name>Store State</name>
-</value>
+                                <key>Store State</key>
+                                <value>
+                                    <name>Store State</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
-<value>
-    <name>Stateful Variables Initial Value</name>
-</value>
+                                <key>Stateful Variables Initial Value</key>
+                                <value>
+                                    <name>Stateful Variables Initial Value</name>
+                                </value>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>
-    <name>canonical-value-lookup-cache-size</name>
-</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>
+                                    <name>canonical-value-lookup-cache-size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>label-id</key>
-<value>
-    <name>label-id</name>
-</value>
+                                <key>label-id</key>
+                                <value>
+                                    <name>label-id</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1562,22 +1562,22 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Delete Attributes Expression</key>
+                                <key>Delete Attributes Expression</key>
                             </entry>
                             <entry>
-<key>Store State</key>
-<value>Do not store state</value>
+                                <key>Store State</key>
+                                <value>Do not store state</value>
                             </entry>
                             <entry>
-<key>Stateful Variables Initial Value</key>
+                                <key>Stateful Variables Initial Value</key>
                             </entry>
                             <entry>
-<key>canonical-value-lookup-cache-size</key>
-<value>100</value>
+                                <key>canonical-value-lookup-cache-size</key>
+                                <value>100</value>
                             </entry>
                             <entry>
-<key>label-id</key>
-<value>urn:ngsi-ld:Label:SDA:${label-name}</value>
+                                <key>label-id</key>
+                                <value>urn:ngsi-ld:Label:SDA:${label-name}</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1592,7 +1592,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
                 </processors>
                 <processors>
@@ -1613,35 +1613,35 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>
-    <name>Cache Entry Identifier</name>
-</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>
+                                    <name>Cache Entry Identifier</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
-    <name>Distributed Cache Service</name>
-</value>
+                                <key>Distributed Cache Service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
+                                    <name>Distributed Cache Service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
-<value>
-    <name>Put Cache Value In Attribute</name>
-</value>
+                                <key>Put Cache Value In Attribute</key>
+                                <value>
+                                    <name>Put Cache Value In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>
-    <name>Max Length To Put In Attribute</name>
-</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>
+                                    <name>Max Length To Put In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>
-    <name>Character Set</name>
-</value>
+                                <key>Character Set</key>
+                                <value>
+                                    <name>Character Set</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1649,23 +1649,23 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>${metric-id}</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>${metric-id}</value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>1437a80e-9e8d-3629-0000-000000000000</value>
+                                <key>Distributed Cache Service</key>
+                                <value>1437a80e-9e8d-3629-0000-000000000000</value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
+                                <key>Put Cache Value In Attribute</key>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>256</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>256</value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>UTF-8</value>
+                                <key>Character Set</key>
+                                <value>UTF-8</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -1688,7 +1688,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.FetchDistributedMapCache</type>
                 </processors>
                 <processors>
@@ -1709,216 +1709,216 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>HTTP Method</key>
-<value>
-    <name>HTTP Method</name>
-</value>
+                                <key>HTTP Method</key>
+                                <value>
+                                    <name>HTTP Method</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Remote URL</key>
-<value>
-    <name>Remote URL</name>
-</value>
+                                <key>Remote URL</key>
+                                <value>
+                                    <name>Remote URL</name>
+                                </value>
                             </entry>
                             <entry>
-<key>SSL Context Service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
-    <name>SSL Context Service</name>
-</value>
+                                <key>SSL Context Service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
+                                    <name>SSL Context Service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Connection Timeout</key>
-<value>
-    <name>Connection Timeout</name>
-</value>
+                                <key>Connection Timeout</key>
+                                <value>
+                                    <name>Connection Timeout</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Read Timeout</key>
-<value>
-    <name>Read Timeout</name>
-</value>
+                                <key>Read Timeout</key>
+                                <value>
+                                    <name>Read Timeout</name>
+                                </value>
                             </entry>
                             <entry>
-<key>idle-timeout</key>
-<value>
-    <name>idle-timeout</name>
-</value>
+                                <key>idle-timeout</key>
+                                <value>
+                                    <name>idle-timeout</name>
+                                </value>
                             </entry>
                             <entry>
-<key>max-idle-connections</key>
-<value>
-    <name>max-idle-connections</name>
-</value>
+                                <key>max-idle-connections</key>
+                                <value>
+                                    <name>max-idle-connections</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Include Date Header</key>
-<value>
-    <name>Include Date Header</name>
-</value>
+                                <key>Include Date Header</key>
+                                <value>
+                                    <name>Include Date Header</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Follow Redirects</key>
-<value>
-    <name>Follow Redirects</name>
-</value>
+                                <key>Follow Redirects</key>
+                                <value>
+                                    <name>Follow Redirects</name>
+                                </value>
                             </entry>
                             <entry>
-<key>disable-http2</key>
-<value>
-    <name>disable-http2</name>
-</value>
+                                <key>disable-http2</key>
+                                <value>
+                                    <name>disable-http2</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Attributes to Send</key>
-<value>
-    <name>Attributes to Send</name>
-</value>
+                                <key>Attributes to Send</key>
+                                <value>
+                                    <name>Attributes to Send</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Useragent</key>
-<value>
-    <name>Useragent</name>
-</value>
+                                <key>Useragent</key>
+                                <value>
+                                    <name>Useragent</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Basic Authentication Username</key>
-<value>
-    <name>Basic Authentication Username</name>
-</value>
+                                <key>Basic Authentication Username</key>
+                                <value>
+                                    <name>Basic Authentication Username</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Basic Authentication Password</key>
-<value>
-    <name>Basic Authentication Password</name>
-</value>
+                                <key>Basic Authentication Password</key>
+                                <value>
+                                    <name>Basic Authentication Password</name>
+                                </value>
                             </entry>
                             <entry>
-<key>proxy-configuration-service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.proxy.ProxyConfigurationService</identifiesControllerService>
-    <name>proxy-configuration-service</name>
-</value>
+                                <key>proxy-configuration-service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.proxy.ProxyConfigurationService</identifiesControllerService>
+                                    <name>proxy-configuration-service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Proxy Host</key>
-<value>
-    <name>Proxy Host</name>
-</value>
+                                <key>Proxy Host</key>
+                                <value>
+                                    <name>Proxy Host</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Proxy Port</key>
-<value>
-    <name>Proxy Port</name>
-</value>
+                                <key>Proxy Port</key>
+                                <value>
+                                    <name>Proxy Port</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Proxy Type</key>
-<value>
-    <name>Proxy Type</name>
-</value>
+                                <key>Proxy Type</key>
+                                <value>
+                                    <name>Proxy Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>invokehttp-proxy-user</key>
-<value>
-    <name>invokehttp-proxy-user</name>
-</value>
+                                <key>invokehttp-proxy-user</key>
+                                <value>
+                                    <name>invokehttp-proxy-user</name>
+                                </value>
                             </entry>
                             <entry>
-<key>invokehttp-proxy-password</key>
-<value>
-    <name>invokehttp-proxy-password</name>
-</value>
+                                <key>invokehttp-proxy-password</key>
+                                <value>
+                                    <name>invokehttp-proxy-password</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Put Response Body In Attribute</key>
-<value>
-    <name>Put Response Body In Attribute</name>
-</value>
+                                <key>Put Response Body In Attribute</key>
+                                <value>
+                                    <name>Put Response Body In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>
-    <name>Max Length To Put In Attribute</name>
-</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>
+                                    <name>Max Length To Put In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Digest Authentication</key>
-<value>
-    <name>Digest Authentication</name>
-</value>
+                                <key>Digest Authentication</key>
+                                <value>
+                                    <name>Digest Authentication</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Always Output Response</key>
-<value>
-    <name>Always Output Response</name>
-</value>
+                                <key>Always Output Response</key>
+                                <value>
+                                    <name>Always Output Response</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Add Response Headers to Request</key>
-<value>
-    <name>Add Response Headers to Request</name>
-</value>
+                                <key>Add Response Headers to Request</key>
+                                <value>
+                                    <name>Add Response Headers to Request</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Content-Type</key>
-<value>
-    <name>Content-Type</name>
-</value>
+                                <key>Content-Type</key>
+                                <value>
+                                    <name>Content-Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>send-message-body</key>
-<value>
-    <name>send-message-body</name>
-</value>
+                                <key>send-message-body</key>
+                                <value>
+                                    <name>send-message-body</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Use Chunked Encoding</key>
-<value>
-    <name>Use Chunked Encoding</name>
-</value>
+                                <key>Use Chunked Encoding</key>
+                                <value>
+                                    <name>Use Chunked Encoding</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Penalize on "No Retry"</key>
-<value>
-    <name>Penalize on "No Retry"</name>
-</value>
+                                <key>Penalize on "No Retry"</key>
+                                <value>
+                                    <name>Penalize on "No Retry"</name>
+                                </value>
                             </entry>
                             <entry>
-<key>use-etag</key>
-<value>
-    <name>use-etag</name>
-</value>
+                                <key>use-etag</key>
+                                <value>
+                                    <name>use-etag</name>
+                                </value>
                             </entry>
                             <entry>
-<key>etag-max-cache-size</key>
-<value>
-    <name>etag-max-cache-size</name>
-</value>
+                                <key>etag-max-cache-size</key>
+                                <value>
+                                    <name>etag-max-cache-size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>ignore-response-content</key>
-<value>
-    <name>ignore-response-content</name>
-</value>
+                                <key>ignore-response-content</key>
+                                <value>
+                                    <name>ignore-response-content</name>
+                                </value>
                             </entry>
                             <entry>
-<key>form-body-form-name</key>
-<value>
-    <name>form-body-form-name</name>
-</value>
+                                <key>form-body-form-name</key>
+                                <value>
+                                    <name>form-body-form-name</name>
+                                </value>
                             </entry>
                             <entry>
-<key>set-form-filename</key>
-<value>
-    <name>set-form-filename</name>
-</value>
+                                <key>set-form-filename</key>
+                                <value>
+                                    <name>set-form-filename</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Link</key>
-<value>
-    <name>Link</name>
-</value>
+                                <key>Link</key>
+                                <value>
+                                    <name>Link</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -1926,132 +1926,132 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>HTTP Method</key>
-<value>POST</value>
+                                <key>HTTP Method</key>
+                                <value>POST</value>
                             </entry>
                             <entry>
-<key>Remote URL</key>
-<value>http://${broker_name}:${broker_port}/ngsi-ld/v1/entities</value>
+                                <key>Remote URL</key>
+                                <value>http://${broker_name}:${broker_port}/ngsi-ld/v1/entities</value>
                             </entry>
                             <entry>
-<key>SSL Context Service</key>
+                                <key>SSL Context Service</key>
                             </entry>
                             <entry>
-<key>Connection Timeout</key>
-<value>5 secs</value>
+                                <key>Connection Timeout</key>
+                                <value>5 secs</value>
                             </entry>
                             <entry>
-<key>Read Timeout</key>
-<value>15 secs</value>
+                                <key>Read Timeout</key>
+                                <value>15 secs</value>
                             </entry>
                             <entry>
-<key>idle-timeout</key>
-<value>5 mins</value>
+                                <key>idle-timeout</key>
+                                <value>5 mins</value>
                             </entry>
                             <entry>
-<key>max-idle-connections</key>
-<value>5</value>
+                                <key>max-idle-connections</key>
+                                <value>5</value>
                             </entry>
                             <entry>
-<key>Include Date Header</key>
-<value>True</value>
+                                <key>Include Date Header</key>
+                                <value>True</value>
                             </entry>
                             <entry>
-<key>Follow Redirects</key>
-<value>True</value>
+                                <key>Follow Redirects</key>
+                                <value>True</value>
                             </entry>
                             <entry>
-<key>disable-http2</key>
-<value>False</value>
+                                <key>disable-http2</key>
+                                <value>False</value>
                             </entry>
                             <entry>
-<key>Attributes to Send</key>
+                                <key>Attributes to Send</key>
                             </entry>
                             <entry>
-<key>Useragent</key>
+                                <key>Useragent</key>
                             </entry>
                             <entry>
-<key>Basic Authentication Username</key>
+                                <key>Basic Authentication Username</key>
                             </entry>
                             <entry>
-<key>Basic Authentication Password</key>
+                                <key>Basic Authentication Password</key>
                             </entry>
                             <entry>
-<key>proxy-configuration-service</key>
+                                <key>proxy-configuration-service</key>
                             </entry>
                             <entry>
-<key>Proxy Host</key>
+                                <key>Proxy Host</key>
                             </entry>
                             <entry>
-<key>Proxy Port</key>
+                                <key>Proxy Port</key>
                             </entry>
                             <entry>
-<key>Proxy Type</key>
-<value>http</value>
+                                <key>Proxy Type</key>
+                                <value>http</value>
                             </entry>
                             <entry>
-<key>invokehttp-proxy-user</key>
+                                <key>invokehttp-proxy-user</key>
                             </entry>
                             <entry>
-<key>invokehttp-proxy-password</key>
+                                <key>invokehttp-proxy-password</key>
                             </entry>
                             <entry>
-<key>Put Response Body In Attribute</key>
+                                <key>Put Response Body In Attribute</key>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>256</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>256</value>
                             </entry>
                             <entry>
-<key>Digest Authentication</key>
-<value>false</value>
+                                <key>Digest Authentication</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>Always Output Response</key>
-<value>false</value>
+                                <key>Always Output Response</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>Add Response Headers to Request</key>
-<value>false</value>
+                                <key>Add Response Headers to Request</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>Content-Type</key>
-<value>application/json</value>
+                                <key>Content-Type</key>
+                                <value>application/json</value>
                             </entry>
                             <entry>
-<key>send-message-body</key>
-<value>true</value>
+                                <key>send-message-body</key>
+                                <value>true</value>
                             </entry>
                             <entry>
-<key>Use Chunked Encoding</key>
-<value>false</value>
+                                <key>Use Chunked Encoding</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>Penalize on "No Retry"</key>
-<value>false</value>
+                                <key>Penalize on "No Retry"</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>use-etag</key>
-<value>false</value>
+                                <key>use-etag</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>etag-max-cache-size</key>
-<value>10MB</value>
+                                <key>etag-max-cache-size</key>
+                                <value>10MB</value>
                             </entry>
                             <entry>
-<key>ignore-response-content</key>
-<value>false</value>
+                                <key>ignore-response-content</key>
+                                <value>false</value>
                             </entry>
                             <entry>
-<key>form-body-form-name</key>
+                                <key>form-body-form-name</key>
                             </entry>
                             <entry>
-<key>set-form-filename</key>
-<value>true</value>
+                                <key>set-form-filename</key>
+                                <value>true</value>
                             </entry>
                             <entry>
-<key>Link</key>
-<value>&lt;http://context-catalog:8080/context.jsonld&gt;; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"</value>
+                                <key>Link</key>
+                                <value>&lt;http://context-catalog:8080/context.jsonld&gt;; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2082,7 +2082,7 @@
                         <name>Retry</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.InvokeHTTP</type>
                 </processors>
                 <processors>
@@ -2103,16 +2103,16 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>JsonPath Expression</key>
-<value>
-    <name>JsonPath Expression</name>
-</value>
+                                <key>JsonPath Expression</key>
+                                <value>
+                                    <name>JsonPath Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2120,12 +2120,12 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>JsonPath Expression</key>
-<value>metrics.metric</value>
+                                <key>JsonPath Expression</key>
+                                <value>metrics.metric</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2148,7 +2148,7 @@
                         <name>split</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.SplitJson</type>
                 </processors>
                 <processors>
@@ -2169,35 +2169,35 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>
-    <name>Cache Entry Identifier</name>
-</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>
+                                    <name>Cache Entry Identifier</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
-    <name>Distributed Cache Service</name>
-</value>
+                                <key>Distributed Cache Service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
+                                    <name>Distributed Cache Service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
-<value>
-    <name>Put Cache Value In Attribute</name>
-</value>
+                                <key>Put Cache Value In Attribute</key>
+                                <value>
+                                    <name>Put Cache Value In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>
-    <name>Max Length To Put In Attribute</name>
-</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>
+                                    <name>Max Length To Put In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>
-    <name>Character Set</name>
-</value>
+                                <key>Character Set</key>
+                                <value>
+                                    <name>Character Set</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2205,23 +2205,23 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>${metric-family-id}</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>${metric-family-id}</value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>1437a80e-9e8d-3629-0000-000000000000</value>
+                                <key>Distributed Cache Service</key>
+                                <value>1437a80e-9e8d-3629-0000-000000000000</value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
+                                <key>Put Cache Value In Attribute</key>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>256</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>256</value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>UTF-8</value>
+                                <key>Character Set</key>
+                                <value>UTF-8</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2244,7 +2244,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.FetchDistributedMapCache</type>
                 </processors>
                 <processors>
@@ -2265,29 +2265,29 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>
-    <name>Cache Entry Identifier</name>
-</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>
+                                    <name>Cache Entry Identifier</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
-    <name>Distributed Cache Service</name>
-</value>
+                                <key>Distributed Cache Service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
+                                    <name>Distributed Cache Service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Cache update strategy</key>
-<value>
-    <name>Cache update strategy</name>
-</value>
+                                <key>Cache update strategy</key>
+                                <value>
+                                    <name>Cache update strategy</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Max cache entry size</key>
-<value>
-    <name>Max cache entry size</name>
-</value>
+                                <key>Max cache entry size</key>
+                                <value>
+                                    <name>Max cache entry size</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2295,20 +2295,20 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>${entity-id}</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>${entity-id}</value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>1437a80e-9e8d-3629-0000-000000000000</value>
+                                <key>Distributed Cache Service</key>
+                                <value>1437a80e-9e8d-3629-0000-000000000000</value>
                             </entry>
                             <entry>
-<key>Cache update strategy</key>
-<value>replace</value>
+                                <key>Cache update strategy</key>
+                                <value>replace</value>
                             </entry>
                             <entry>
-<key>Max cache entry size</key>
-<value>1 MB</value>
+                                <key>Max cache entry size</key>
+                                <value>1 MB</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2327,7 +2327,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.PutDistributedMapCache</type>
                 </processors>
                 <processors>
@@ -2348,35 +2348,35 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>
-    <name>Cache Entry Identifier</name>
-</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>
+                                    <name>Cache Entry Identifier</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>
-    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
-    <name>Distributed Cache Service</name>
-</value>
+                                <key>Distributed Cache Service</key>
+                                <value>
+                                    <identifiesControllerService>org.apache.nifi.distributed.cache.client.DistributedMapCacheClient</identifiesControllerService>
+                                    <name>Distributed Cache Service</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
-<value>
-    <name>Put Cache Value In Attribute</name>
-</value>
+                                <key>Put Cache Value In Attribute</key>
+                                <value>
+                                    <name>Put Cache Value In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>
-    <name>Max Length To Put In Attribute</name>
-</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>
+                                    <name>Max Length To Put In Attribute</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>
-    <name>Character Set</name>
-</value>
+                                <key>Character Set</key>
+                                <value>
+                                    <name>Character Set</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2384,23 +2384,23 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Cache Entry Identifier</key>
-<value>${label-id}</value>
+                                <key>Cache Entry Identifier</key>
+                                <value>${label-id}</value>
                             </entry>
                             <entry>
-<key>Distributed Cache Service</key>
-<value>1437a80e-9e8d-3629-0000-000000000000</value>
+                                <key>Distributed Cache Service</key>
+                                <value>1437a80e-9e8d-3629-0000-000000000000</value>
                             </entry>
                             <entry>
-<key>Put Cache Value In Attribute</key>
+                                <key>Put Cache Value In Attribute</key>
                             </entry>
                             <entry>
-<key>Max Length To Put In Attribute</key>
-<value>256</value>
+                                <key>Max Length To Put In Attribute</key>
+                                <value>256</value>
                             </entry>
                             <entry>
-<key>Character Set</key>
-<value>UTF-8</value>
+                                <key>Character Set</key>
+                                <value>UTF-8</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2423,7 +2423,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.FetchDistributedMapCache</type>
                 </processors>
                 <processors>
@@ -2444,40 +2444,40 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>jolt-transform</key>
-<value>
-    <name>jolt-transform</name>
-</value>
+                                <key>jolt-transform</key>
+                                <value>
+                                    <name>jolt-transform</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
-<value>
-    <name>jolt-custom-class</name>
-</value>
+                                <key>jolt-custom-class</key>
+                                <value>
+                                    <name>jolt-custom-class</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
-<value>
-    <name>jolt-custom-modules</name>
-</value>
+                                <key>jolt-custom-modules</key>
+                                <value>
+                                    <name>jolt-custom-modules</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>
-    <name>jolt-spec</name>
-</value>
+                                <key>jolt-spec</key>
+                                <value>
+                                    <name>jolt-spec</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>
-    <name>Transform Cache Size</name>
-</value>
+                                <key>Transform Cache Size</key>
+                                <value>
+                                    <name>Transform Cache Size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>
-    <name>pretty_print</name>
-</value>
+                                <key>pretty_print</key>
+                                <value>
+                                    <name>pretty_print</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2485,18 +2485,18 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>jolt-transform</key>
-<value>jolt-transform-chain</value>
+                                <key>jolt-transform</key>
+                                <value>jolt-transform-chain</value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
+                                <key>jolt-custom-class</key>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
+                                <key>jolt-custom-modules</key>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>[
+                                <key>jolt-spec</key>
+                                <value>[
   {
     "operation": "modify-overwrite-beta",
     "spec": {
@@ -2536,6 +2536,10 @@
         "type": "Relationship",
         "object": "${metric-family-id}"
       },
+      "hasPrometheusExporter": {
+        "type": "Relationship",
+        "object": "${exporter_entity_id}"
+      },
       "hasLabels": {
         "type": "Relationship"
       }
@@ -2545,12 +2549,12 @@
 </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>1</value>
+                                <key>Transform Cache Size</key>
+                                <value>1</value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>false</value>
+                                <key>pretty_print</key>
+                                <value>false</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2569,7 +2573,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.JoltTransformJSON</type>
                 </processors>
                 <processors>
@@ -2590,16 +2594,16 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>JsonPath Expression</key>
-<value>
-    <name>JsonPath Expression</name>
-</value>
+                                <key>JsonPath Expression</key>
+                                <value>
+                                    <name>JsonPath Expression</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2607,12 +2611,12 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>JsonPath Expression</key>
-<value>labels.label</value>
+                                <key>JsonPath Expression</key>
+                                <value>labels.label</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2635,7 +2639,7 @@
                         <name>split</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.SplitJson</type>
                 </processors>
                 <processors>
@@ -2656,40 +2660,40 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>jolt-transform</key>
-<value>
-    <name>jolt-transform</name>
-</value>
+                                <key>jolt-transform</key>
+                                <value>
+                                    <name>jolt-transform</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
-<value>
-    <name>jolt-custom-class</name>
-</value>
+                                <key>jolt-custom-class</key>
+                                <value>
+                                    <name>jolt-custom-class</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
-<value>
-    <name>jolt-custom-modules</name>
-</value>
+                                <key>jolt-custom-modules</key>
+                                <value>
+                                    <name>jolt-custom-modules</name>
+                                </value>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>
-    <name>jolt-spec</name>
-</value>
+                                <key>jolt-spec</key>
+                                <value>
+                                    <name>jolt-spec</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>
-    <name>Transform Cache Size</name>
-</value>
+                                <key>Transform Cache Size</key>
+                                <value>
+                                    <name>Transform Cache Size</name>
+                                </value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>
-    <name>pretty_print</name>
-</value>
+                                <key>pretty_print</key>
+                                <value>
+                                    <name>pretty_print</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2697,18 +2701,18 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>jolt-transform</key>
-<value>jolt-transform-chain</value>
+                                <key>jolt-transform</key>
+                                <value>jolt-transform-chain</value>
                             </entry>
                             <entry>
-<key>jolt-custom-class</key>
+                                <key>jolt-custom-class</key>
                             </entry>
                             <entry>
-<key>jolt-custom-modules</key>
+                                <key>jolt-custom-modules</key>
                             </entry>
                             <entry>
-<key>jolt-spec</key>
-<value>[
+                                <key>jolt-spec</key>
+                                <value>[
   {
     "operation": "shift",
     "spec": {
@@ -2735,12 +2739,12 @@
 </value>
                             </entry>
                             <entry>
-<key>Transform Cache Size</key>
-<value>1</value>
+                                <key>Transform Cache Size</key>
+                                <value>1</value>
                             </entry>
                             <entry>
-<key>pretty_print</key>
-<value>false</value>
+                                <key>pretty_print</key>
+                                <value>false</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2759,7 +2763,7 @@
                         <name>success</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.JoltTransformJSON</type>
                 </processors>
                 <processors>
@@ -2780,34 +2784,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Destination</key>
-<value>
-    <name>Destination</name>
-</value>
+                                <key>Destination</key>
+                                <value>
+                                    <name>Destination</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>
-    <name>Return Type</name>
-</value>
+                                <key>Return Type</key>
+                                <value>
+                                    <name>Return Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>
-    <name>Path Not Found Behavior</name>
-</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>
+                                    <name>Path Not Found Behavior</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                             <entry>
-<key>metric-family-name</key>
-<value>
-    <name>metric-family-name</name>
-</value>
+                                <key>metric-family-name</key>
+                                <value>
+                                    <name>metric-family-name</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2815,24 +2819,24 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Destination</key>
-<value>flowfile-attribute</value>
+                                <key>Destination</key>
+                                <value>flowfile-attribute</value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>auto-detect</value>
+                                <key>Return Type</key>
+                                <value>auto-detect</value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>ignore</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>ignore</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                             <entry>
-<key>metric-family-name</key>
-<value>name</value>
+                                <key>metric-family-name</key>
+                                <value>name</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2855,7 +2859,7 @@
                         <name>unmatched</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.EvaluateJsonPath</type>
                 </processors>
                 <processors>
@@ -2876,34 +2880,34 @@
                         <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                         <descriptors>
                             <entry>
-<key>Destination</key>
-<value>
-    <name>Destination</name>
-</value>
+                                <key>Destination</key>
+                                <value>
+                                    <name>Destination</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>
-    <name>Return Type</name>
-</value>
+                                <key>Return Type</key>
+                                <value>
+                                    <name>Return Type</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>
-    <name>Path Not Found Behavior</name>
-</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>
+                                    <name>Path Not Found Behavior</name>
+                                </value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>
-    <name>Null Value Representation</name>
-</value>
+                                <key>Null Value Representation</key>
+                                <value>
+                                    <name>Null Value Representation</name>
+                                </value>
                             </entry>
                             <entry>
-<key>label-name</key>
-<value>
-    <name>label-name</name>
-</value>
+                                <key>label-name</key>
+                                <value>
+                                    <name>label-name</name>
+                                </value>
                             </entry>
                         </descriptors>
                         <executionNode>ALL</executionNode>
@@ -2911,24 +2915,24 @@
                         <penaltyDuration>30 sec</penaltyDuration>
                         <properties>
                             <entry>
-<key>Destination</key>
-<value>flowfile-attribute</value>
+                                <key>Destination</key>
+                                <value>flowfile-attribute</value>
                             </entry>
                             <entry>
-<key>Return Type</key>
-<value>auto-detect</value>
+                                <key>Return Type</key>
+                                <value>auto-detect</value>
                             </entry>
                             <entry>
-<key>Path Not Found Behavior</key>
-<value>ignore</value>
+                                <key>Path Not Found Behavior</key>
+                                <value>ignore</value>
                             </entry>
                             <entry>
-<key>Null Value Representation</key>
-<value>empty string</value>
+                                <key>Null Value Representation</key>
+                                <value>empty string</value>
                             </entry>
                             <entry>
-<key>label-name</key>
-<value>name</value>
+                                <key>label-name</key>
+                                <value>name</value>
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
@@ -2951,7 +2955,7 @@
                         <name>unmatched</name>
                     </relationships>
                     <state>RUNNING</state>
-                    <style/>
+                    <style />
                     <type>org.apache.nifi.processors.standard.EvaluateJsonPath</type>
                 </processors>
             </contents>
@@ -2961,7 +2965,7 @@
             <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
             <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
             <name>Produce Context from Metrics</name>
-            <variables/>
+            <variables />
         </processGroups>
         <processors>
             <id>00bc2d6e-0eba-35ce-0000-000000000000</id>
@@ -3026,7 +3030,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>org.apache.nifi.processors.standard.LogMessage</type>
         </processors>
         <processors>
@@ -3109,7 +3113,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>org.apache.nifi.processors.standard.PutDistributedMapCache</type>
         </processors>
         <processors>
@@ -3380,7 +3384,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>org.apache.nifi.processors.kafka.pubsub.ConsumeKafka_2_6</type>
         </processors>
         <processors>
@@ -3445,7 +3449,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>upm.dit.giros.processors.jsontojinja.JsonToJinja</type>
         </processors>
         <processors>
@@ -3747,7 +3751,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>org.apache.nifi.processors.kafka.pubsub.PublishKafka_2_6</type>
         </processors>
         <processors>
@@ -3934,7 +3938,7 @@
                 <name>success</name>
             </relationships>
             <state>RUNNING</state>
-            <style/>
+            <style />
             <type>org.apache.nifi.processors.standard.GenerateFlowFile</type>
         </processors>
     </snippet>
