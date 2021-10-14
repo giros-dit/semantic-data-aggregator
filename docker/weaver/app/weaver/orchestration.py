@@ -33,7 +33,6 @@ def process_task(task: Task, flink: FlinkClient,
             # using NiFi parameter context. Migrate in the future.
             #
             if application.name.value == "MetricTargetExporter":
-                nifi.deploy_exporter_service()
                 task_pg = nifi.deploy_flow_from_task(
                     task, application.internalId.value,
                     arguments)

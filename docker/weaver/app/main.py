@@ -52,6 +52,8 @@ async def startup_event():
     nifi.login()
     # Deploy DistributedMapCacheServer in root PG
     nifi.deploy_distributed_map_cache_server()
+    # Deploy exporter-service PG in root PG
+    nifi.deploy_exporter_service()
     # Check Flink REST API is up
     flink.check_flink_status()
 

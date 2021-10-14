@@ -119,6 +119,16 @@ class NGSILDClient(object):
         application = Application.parse_obj(application_entity)
         return application
 
+    def get_applications_by_name(self, name: str) -> List[Application]:
+        """
+        Finds Applications based on the provided name
+        """
+        logger.debug("Retrieving Application entity by name '%s'" % name)
+        application_entities = self.api.queryEntities(
+            type="Application",
+            q='name=="{0}"'.format(name))
+        return parse_obj_as(List[Application], application_entities)
+
     def get_application_from_task(self, task: Task) -> Application:
         """
         Get Application entity from a given Task
@@ -260,6 +270,23 @@ class NGSILDClient(object):
         exporter_entity = self.api.retrieveEntityById(id)
         exporter = PrometheusExporter.parse_obj(exporter_entity)
         return exporter
+
+    def get_tasks_by_application_name(self, name: str) -> List[Task]:
+        """
+        Get a list of Task entities that run an Application
+        that have the specified name.
+
+        Method assumes that Applications entities have unique names.
+        """
+        logger.debug(
+            "Retrieving Task entities with Application name '%s'" % name)
+        applications = self.get_applications_by_name(name)
+        if applications:
+            application = applications[0]  # Unique name assumption
+            task_entities = self.api.queryEntities(
+                type="Task",
+                q='hasApplication=="{0}"'.format(application.id))
+            return parse_obj_as(List[Task], task_entities)
 
     def get_yang_module(self, id: str) -> YANGModule:
         """
