@@ -1,5 +1,6 @@
-import nipyapi
 import logging
+import nipyapi
+import time
 
 from nipyapi.nifi import ParameterContextEntity, ParameterEntity
 from nipyapi.nifi.models.controller_service_entity import (
@@ -19,6 +20,8 @@ from semantic_tools.models.application import Task
 from typing import List
 
 logger = logging.getLogger(__name__)
+
+EXPORTER_SERVICE_PG_NAME = "exporter-service"
 
 
 class NiFiClient(object):
@@ -143,22 +146,28 @@ class NiFiClient(object):
         """
         Deploys export-service NiFi template
         """
-        exporter_service_name = "exporter-service"
         # Get root PG
         root_pg = nipyapi.canvas.get_process_group("root")
         # Check if already deployed, return if found
         exporter_service_pg = nipyapi.canvas.get_process_group(
-            exporter_service_name)
+            EXPORTER_SERVICE_PG_NAME)
         if exporter_service_pg:
             return exporter_service_pg
         # Deploy template
-        template = nipyapi.templates.get_template(exporter_service_name)
+        # Avoid race conditions due to app-manager microservice
+        template = None
+        while(not template):
+            logger.info(
+                "Waiting for exporter-service template to become available")
+            template = nipyapi.templates.get_template(EXPORTER_SERVICE_PG_NAME)
+            time.sleep(10)
+
         _ = nipyapi.templates.deploy_template(
             root_pg.id,
             template.id,
             -250, 200)
         exporter_service_pg = nipyapi.canvas.get_process_group(
-            exporter_service_name)
+            EXPORTER_SERVICE_PG_NAME)
         # Enable controller services (if any)
         controllers = nipyapi.canvas.list_all_controllers(
             exporter_service_pg.id, False)
@@ -173,7 +182,31 @@ class NiFiClient(object):
                     nipyapi.canvas.schedule_controller(controller, True)
         # Schedule PG
         nipyapi.canvas.schedule_process_group(exporter_service_pg.id, True)
+        logger.info(
+            "exporter-service PG with ID '{0}' deployed in NiFi.".format(
+                exporter_service_pg.id))
         return exporter_service_pg
+
+    def delete_exporter_service(self):
+        """
+        Delete special exporter-service process group
+        """
+        # Stop process group
+        exporter_pg = nipyapi.canvas.get_process_group(
+            EXPORTER_SERVICE_PG_NAME)
+        # Disable controller services (if any)
+        controllers = nipyapi.canvas.list_all_controllers(
+            exporter_pg.id, False)
+        if controllers:
+            for controller in controllers:
+                if controller.status.run_status == 'ENABLED':
+                    logger.debug("Disabling controller %s ..."
+                                 % controller.component.name)
+                    nipyapi.canvas.schedule_controller(
+                        controller, False, True)
+        # Delete Task PG
+        nipyapi.canvas.delete_process_group(exporter_pg, True)
+        logger.info("'{0}' flow deleted in NiFi.".format(exporter_pg.id))
 
     def deploy_flow_from_task(self, task: Task, application_id: str,
                               args: dict) -> ProcessGroupEntity:
@@ -223,8 +256,7 @@ class NiFiClient(object):
     def instantiate_flow_from_task(self, task: Task, application_id: str,
                                    args: dict) -> ProcessGroupEntity:
         """
-        Deploys and starts NiFi template given
-        a Task entity.
+        Deploys and starts NiFi template given a Task entity.
         """
         task_pg = self.deploy_flow_from_task(task, application_id, args)
         # Schedule PG
