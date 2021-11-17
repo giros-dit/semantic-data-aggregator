@@ -327,6 +327,34 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
+def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient) -> dict:
+    """
+    Builds configuration arguments for PrometheusToOpenmetricsTransformer application (NiFi)
+    """
+    # Collect lineage information
+
+    # Task Input
+    # Get source Kafka topic
+    source_topic = ngsi_ld.get_kafka_topic(
+        task.hasInput.object)
+
+    # Task Output
+    # Get sink Kafka topic
+    sink_topic = ngsi_ld.get_kafka_topic(
+        task.hasOutput.object)
+
+    # Prepare variables from context arguments
+    source_topic_name = source_topic.name.value
+    sink_topic_name = sink_topic.name.value
+    group_id = task.arguments.value["groupId"]
+
+    arguments = {
+        "group_id": group_id,
+        "source_topic": source_topic_name,
+        "sink_topic": sink_topic_name
+    }
+    arguments.update(task.arguments.value)
+    return arguments
 
 def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
@@ -362,5 +390,6 @@ nifi_application_configs = {
     "MetricTargetExporter": config_metric_target_exporter,
     "gNMIcSource": config_telemetry_source,
     "LogParserSOSource": config_logparser_source,
-    "LogParserVSSource": config_logparser_source
+    "LogParserVSSource": config_logparser_source,
+    "PrometheusToOpenmetricsTransformer": config_prometheus2openmetrics_transformer
 }
