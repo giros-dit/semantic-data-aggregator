@@ -305,7 +305,7 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
 
 def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for PrometheusToOpenmetricsTranformer application (NiFi)
+    Builds configuration arguments for PrometheusToOpenmetricsTransformer application (NiFi)
     """
     # Collect lineage information
 
