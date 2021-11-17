@@ -2,8 +2,8 @@ version: '3'
 services:
   app-manager:
     build:
-        context: .
-        dockerfile: ./docker/app-manager/Dockerfile
+      context: .
+      dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     ports:
@@ -39,6 +39,31 @@ services:
       - "8080"
     volumes:
       - ./docker/experimenter/app:/opt/experimenter/app
+  flink-jobmanager:
+    image: flink:latest
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - "8084:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+    volumes:
+      - ./flink-conf:/flink-conf
+  flink-taskmanager:
+    image: flink:latest
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 2
   kafka:
     image: wurstmeister/kafka
     hostname: kafka

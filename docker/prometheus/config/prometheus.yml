@@ -42,7 +42,7 @@ scrape_configs:
 
   - job_name: 'nifi'
 
-    scrape_interval: 5s
+    scrape_interval: 30s
     metrics_path: '/metrics/demo-endpoint'
 
     static_configs:
