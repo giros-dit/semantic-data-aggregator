@@ -13,14 +13,23 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 # Table of Contents
 
 1. [Prototype](#prototype)
+    1. [Microservices](#microservices)
+        1. [Weaver](#weaver)
+        2. [Application Manager](#application-manager)
+        3. [Context Catalog](#context-catalog)
+        4. [Source Manager](#source-manager)
+        5. [Complex Publisher](#complex-publisher)
+        6. [Experimenter](#experimenter)
+
+2. [Scenarios](#scenarios)
     1. [All-in-one scenario](#all-in-one-scenario)
     2. [Data Source specific scenarios](#data-source-specific-scenarios)
         1. [Prometheus](#prometheus-based-data-sources)
         2. [gNMI](#gNMI-based-data-sources-(Arista-cEOS))
         3. [Kafka](#kafka-based-data-sources)
-2. [SDA Orchestration](#sda-orchestration)
-3. [Stream processing aplications management](#stream-processing-aplications-management)
-4. [Postman collections](#postman-collections)
+3. [SDA Orchestration](#sda-orchestration)
+4. [Stream processing aplications management](#stream-processing-aplications-management)
+5. [Postman collections](#postman-collections)
 
 # Prototype
 
@@ -28,6 +37,40 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 - Docker (_Tested with version 19.03.13_)
 - Docker-compose (_Tested with version 1.27.4_)
+
+## Microservices
+
+The SDA is composed of several microservices that are deployed as Docker containers. These microservices are briefly introduced in this section.
+
+### Weaver
+
+The [weaver](docker/weaver) container implements the orchestration of Apache NiFi flows and Apache Flink jobs by consuming context information defined in the Context Broker.
+
+### Application-Manager
+
+The [app-manager](docker/app-manager) container offers a catalog of applications that can be used in the SDA. Within the scope of the SDA, these applications are NiFi templates and Flink applications, i.e., JARs. The app-manager implements a REST API that facilitates the on-boarding of applications in the SDA. This REST API takes as input the type of application, a name, a description, and the file of the application. The app-manager gathers all this information and makes sure that the application is properly uploaded in the target runner - NiFi or Flink - and that the context associated to the application is created in the Context Broker.
+
+The full OpenAPI specification is available [here](docs/architecture/microservices/app-manager/openapi.json).
+
+### Context-Catalog
+
+The [context-catalog](docker/context-catalog) container provides a static web server where JSON-LD vocabularies can be uploaded. Interactions with the NGSI-LD API can link to this webserver rather than appending the JSON-LD vocabulary in the request's body.
+
+### Source-Manager
+
+The [source-manager](docker/source-manager) utility automates the discovery of Kafka topics available in a 5G-EVE monitoring platform. The source-manager provides a REST API through which users can specify the address of 5G-EVE's Kafka Broker and a string filter - usecase - to discover Kafka topics with maching names. Using this information the source-manager sends a request to the DCM service in 5G-EVE. Lastly, those discovered topics are created as new context information within the Context Broker.
+
+The full OpenAPI specification is available [here](docs/architecture/microservices/source-manager/openapi.json).
+
+### Complex-Publisher
+
+The [complex-publishers](docker/complex-publishers) utility allows for generating synthetic metrics compliant with 5G-EVE's data model or 5Gr-LogParser's data model.
+
+### Experimenter
+
+The [experimenter](docker/experimenter) container emulates an application that receives updates from Tasks running in the SDA. This container subscribes to the Context Broker in order to receive NGSI-LD notifications related with the Tasks. These notifications are sent to stdout. The experimenter container serves as a first step towards a GUI to visualize the status of Tasks running in the SDA.
+
+# Scenarios
 
 ## All-in-one Scenario
 
