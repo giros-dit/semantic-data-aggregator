@@ -1,18 +1,19 @@
-from enum import Enum
-from pydantic import parse_obj_as
-from semantic_tools.models.common import Endpoint, Infrastructure, State
-from semantic_tools.models.application import Application, Task
-from semantic_tools.models.metric import Metric, Prometheus, PrometheusExporter
-from semantic_tools.models.stream import KafkaBroker, KafkaTopic
-from semantic_tools.models.telemetry import Device, YANGModule
-from semantic_tools.models.ngsi_ld.entity import Entity, Property
-from semantic_tools.models.ngsi_ld.subscription import Subscription
-from semantic_tools.ngsi_ld.api import NGSILDAPI
-from typing import List, Optional
-
 import logging
 import time
 import uuid
+from enum import Enum
+from typing import List, Optional
+
+from pydantic import parse_obj_as
+from semantic_tools.models.application import Application, Task
+from semantic_tools.models.common import Endpoint, Infrastructure, State
+from semantic_tools.models.metric import (Metric, MetricFamily, Prometheus,
+                                          PrometheusExporter)
+from semantic_tools.models.ngsi_ld.entity import Entity, Property
+from semantic_tools.models.ngsi_ld.subscription import Subscription
+from semantic_tools.models.stream import KafkaBroker, KafkaTopic
+from semantic_tools.models.telemetry import Device, YANGModule
+from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 logger = logging.getLogger(__name__)
 
@@ -242,6 +243,16 @@ class NGSILDClient(object):
         metric = Metric.parse_obj(metric_entity)
         return metric
 
+    def get_metric_family(self, id: str) -> MetricFamily:
+        """
+        Get MetricFamily entity for a given ID
+        """
+        logger.debug(
+            "Retrieving MetricFamily entity with id '%s'."
+            % id)
+        mf_entity = self.api.retrieveEntityById(id)
+        return MetricFamily.parse_obj(mf_entity)
+
     def get_prometheus(self, id: str) -> Prometheus:
         """
         Get Prometheus entity for a given ID
@@ -287,6 +298,28 @@ class NGSILDClient(object):
                 type="Task",
                 q='hasApplication=="{0}"'.format(application.id))
             return parse_obj_as(List[Task], task_entities)
+
+    def get_tasks_by_input_kafka_topic(self, topic: KafkaTopic) -> Task:
+        """
+        Get a list of Task entities with a given KafkaTopic as input
+        """
+        logger.debug(
+            "Retrieving Task entities with input KafkaTopic '%s'" % topic.id)
+        task_entities = self.api.queryEntities(
+            type="Task",
+            q='hasInput=="{0}"'.format(topic.id))
+        return parse_obj_as(List[Task], task_entities)
+
+    def get_tasks_by_output_kafka_topic(self, topic: KafkaTopic) -> Task:
+        """
+        Get a list of Task entities with a given KafkaTopic as output
+        """
+        logger.debug(
+            "Retrieving Task entities with output KafkaTopic '%s'" % topic.id)
+        task_entities = self.api.queryEntities(
+            type="Task",
+            q='hasOutput=="{0}"'.format(topic.id))
+        return parse_obj_as(List[Task], task_entities)
 
     def get_yang_module(self, id: str) -> YANGModule:
         """

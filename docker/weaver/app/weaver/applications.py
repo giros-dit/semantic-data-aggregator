@@ -1,10 +1,10 @@
 import json
 import logging
+from urllib.parse import urlparse
 
 from semantic_tools.models.application import Task
 from semantic_tools.ngsi_ld.client import NGSILDClient
 from semantic_tools.ngsi_ld.units import UnitCode
-from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -327,9 +327,12 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
-def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient) -> dict:
+
+def config_prometheus2openmetrics_transformer(
+        task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for PrometheusToOpenmetricsTransformer application (NiFi)
+    Builds configuration arguments for 
+    PrometheusToOpenmetricsTransformer application (NiFi)
     """
     # Collect lineage information
 
@@ -343,18 +346,40 @@ def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient)
     sink_topic = ngsi_ld.get_kafka_topic(
         task.hasOutput.object)
 
+    # Collect MetricFamily data of source Metric
+    # We assume there is just one MetricSource for this topic
+    metric_source_task = ngsi_ld.get_tasks_by_output_kafka_topic(
+        source_topic)[0]
+    source_metric = ngsi_ld.get_metric(metric_source_task.hasInput.object)
+    source_mf = ngsi_ld.get_metric_family(source_metric.hasMetricFamily.object)
+
     # Prepare variables from context arguments
     source_topic_name = source_topic.name.value
     sink_topic_name = sink_topic.name.value
     group_id = task.arguments.value["groupId"]
+    mf_name = source_mf.name.value
+    mf_type = source_mf.familyType.value
+    if source_mf.help:
+        mf_help = source_mf.help.value
+    else:
+        mf_help = ""
+    if source_mf.unit:
+        mf_unit = source_mf.unit.value
+    else:
+        mf_unit = ""
 
     arguments = {
         "group_id": group_id,
         "source_topic": source_topic_name,
-        "sink_topic": sink_topic_name
+        "sink_topic": sink_topic_name,
+        "mf_name": mf_name,
+        "mf_type": mf_type,
+        "mf_help": mf_help,
+        "mf_unit": mf_unit
     }
     arguments.update(task.arguments.value)
     return arguments
+
 
 def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
