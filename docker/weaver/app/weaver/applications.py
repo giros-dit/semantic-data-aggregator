@@ -359,14 +359,15 @@ def config_prometheus2openmetrics_transformer(
     group_id = task.arguments.value["groupId"]
     mf_name = source_mf.name.value
     mf_type = source_mf.familyType.value
+    
     if source_mf.help:
         mf_help = source_mf.help.value
     else:
-        mf_help = ""
+        mf_help = None
     if source_mf.unit:
         mf_unit = source_mf.unit.value
     else:
-        mf_unit = ""
+        mf_unit = None
 
     arguments = {
         "group_id": group_id,
