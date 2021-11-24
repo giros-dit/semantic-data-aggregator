@@ -1,17 +1,19 @@
-from enum import Enum
-from pydantic import parse_obj_as
-from semantic_tools.models.common import Endpoint, Infrastructure, State
-from semantic_tools.models.application import Application, Task
-from semantic_tools.models.metric import Metric, Prometheus
-from semantic_tools.models.stream import KafkaBroker, KafkaTopic
-from semantic_tools.models.telemetry import Device, YANGModule
-from semantic_tools.models.ngsi_ld.entity import Entity, Property
-from semantic_tools.models.ngsi_ld.subscription import Subscription
-from semantic_tools.ngsi_ld.api import NGSILDAPI
-from typing import List, Optional
-
 import logging
 import time
+import uuid
+from enum import Enum
+from typing import List, Optional
+
+from pydantic import parse_obj_as
+from semantic_tools.models.application import Application, Task
+from semantic_tools.models.common import Endpoint, Infrastructure, State
+from semantic_tools.models.metric import (Metric, MetricFamily, Prometheus,
+                                          PrometheusExporter)
+from semantic_tools.models.ngsi_ld.entity import Entity, Property
+from semantic_tools.models.ngsi_ld.subscription import Subscription
+from semantic_tools.models.stream import KafkaBroker, KafkaTopic
+from semantic_tools.models.telemetry import Device, YANGModule
+from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 logger = logging.getLogger(__name__)
 
@@ -71,24 +73,24 @@ class NGSILDClient(object):
                 continue
 
     def create_application(
-                self,
-                application_id: str,
-                internal_id: str,
-                application_type: str,
-                name: str,
-                uri: str,
-                description: Optional[str] = None) -> Application:
+            self,
+            application_id: str,
+            internal_id: str,
+            application_type: str,
+            name: str,
+            uri: str,
+            description: Optional[str] = None) -> Application:
         """
         Create Application entity based on the provided configuration.
         """
         logger.debug("Creating Application entity id '%s'" % id)
         application = Application(
-                id=application_id,
-                name={"value": name},
-                internalId={"value": internal_id},
-                applicationType={"value": application_type},
-                uri={"value": uri}
-            )
+            id=application_id,
+            name={"value": name},
+            internalId={"value": internal_id},
+            applicationType={"value": application_type},
+            uri={"value": uri}
+        )
         if description:
             application.description = {"value": description}
 
@@ -102,6 +104,13 @@ class NGSILDClient(object):
         logger.debug("Deleting entity with id '%s'." % entity.id)
         self.api.deleteEntity(entity.id)
 
+    def delete_entity_by_id(self, id: str):
+        """
+        Delete Entity by id wrapper
+        """
+        logger.debug("Deleting entity with id '%s'." % id)
+        self.api.deleteEntity(id)
+
     def get_application(self, id: str) -> Application:
         """
         Get Application entity for a given ID
@@ -110,6 +119,16 @@ class NGSILDClient(object):
         application_entity = self.api.retrieveEntityById(id)
         application = Application.parse_obj(application_entity)
         return application
+
+    def get_applications_by_name(self, name: str) -> List[Application]:
+        """
+        Finds Applications based on the provided name
+        """
+        logger.debug("Retrieving Application entity by name '%s'" % name)
+        application_entities = self.api.queryEntities(
+            type="Application",
+            q='name=="{0}"'.format(name))
+        return parse_obj_as(List[Application], application_entities)
 
     def get_application_from_task(self, task: Task) -> Application:
         """
@@ -173,11 +192,11 @@ class NGSILDClient(object):
         return KafkaBroker.parse_obj(kafka_broker_entity)
 
     def create_kafka_topic(
-                self,
-                broker: KafkaBroker,
-                id: str,
-                name: str,
-                description: Optional[str] = None) -> KafkaTopic:
+            self,
+            broker: KafkaBroker,
+            id: str,
+            name: str,
+            description: Optional[str] = None) -> KafkaTopic:
         """
         Create KafkaTopic entity for a given KafkaBroker
         """
@@ -224,6 +243,16 @@ class NGSILDClient(object):
         metric = Metric.parse_obj(metric_entity)
         return metric
 
+    def get_metric_family(self, id: str) -> MetricFamily:
+        """
+        Get MetricFamily entity for a given ID
+        """
+        logger.debug(
+            "Retrieving MetricFamily entity with id '%s'."
+            % id)
+        mf_entity = self.api.retrieveEntityById(id)
+        return MetricFamily.parse_obj(mf_entity)
+
     def get_prometheus(self, id: str) -> Prometheus:
         """
         Get Prometheus entity for a given ID
@@ -244,6 +273,54 @@ class NGSILDClient(object):
             metric.hasPrometheus.object)
         return Prometheus.parse_obj(prometheus_entity)
 
+    def get_prometheus_exporter(self, id: str) -> PrometheusExporter:
+        """
+        Get PrometheusExporter entity for a given ID
+        """
+        logger.debug("Retrieving PrometheusExporter entity by id '%s'" % id)
+        exporter_entity = self.api.retrieveEntityById(id)
+        exporter = PrometheusExporter.parse_obj(exporter_entity)
+        return exporter
+
+    def get_tasks_by_application_name(self, name: str) -> List[Task]:
+        """
+        Get a list of Task entities that run an Application
+        that have the specified name.
+
+        Method assumes that Applications entities have unique names.
+        """
+        logger.debug(
+            "Retrieving Task entities with Application name '%s'" % name)
+        applications = self.get_applications_by_name(name)
+        if applications:
+            application = applications[0]  # Unique name assumption
+            task_entities = self.api.queryEntities(
+                type="Task",
+                q='hasApplication=="{0}"'.format(application.id))
+            return parse_obj_as(List[Task], task_entities)
+
+    def get_tasks_by_input_kafka_topic(self, topic: KafkaTopic) -> Task:
+        """
+        Get a list of Task entities with a given KafkaTopic as input
+        """
+        logger.debug(
+            "Retrieving Task entities with input KafkaTopic '%s'" % topic.id)
+        task_entities = self.api.queryEntities(
+            type="Task",
+            q='hasInput=="{0}"'.format(topic.id))
+        return parse_obj_as(List[Task], task_entities)
+
+    def get_tasks_by_output_kafka_topic(self, topic: KafkaTopic) -> Task:
+        """
+        Get a list of Task entities with a given KafkaTopic as output
+        """
+        logger.debug(
+            "Retrieving Task entities with output KafkaTopic '%s'" % topic.id)
+        task_entities = self.api.queryEntities(
+            type="Task",
+            q='hasOutput=="{0}"'.format(topic.id))
+        return parse_obj_as(List[Task], task_entities)
+
     def get_yang_module(self, id: str) -> YANGModule:
         """
         Get YANGModule entity for a given ID
@@ -261,7 +338,7 @@ class NGSILDClient(object):
         Base method to create subscription for the specified entity
         """
         logger.debug("Subscribing to '%s' entity type ..."
-                    % entity_type)
+                     % entity_type)
         if subscription_id:
             try:
                 self.api.retrieveSubscription(
@@ -291,19 +368,19 @@ class NGSILDClient(object):
                 )
         else:
             subscription = Subscription(
-                    entities=[
-                        {
-                            "type": entity_type
-                        }
-                    ],
-                    notification={
-                        "endpoint": {
-                            "uri": endpoint
-                        }
+                entities=[
+                    {
+                        "type": entity_type
                     }
-                )
+                ],
+                notification={
+                    "endpoint": {
+                        "uri": endpoint
+                    }
+                }
+            )
             self.api.createSubscription(
-                    (subscription.dict(exclude_none=True)))
+                (subscription.dict(exclude_none=True)))
 
     def append_internal_id(self, entity: Entity,
                            internal_id: str):

@@ -1,13 +1,15 @@
+from typing import Literal, Optional
+
 from semantic_tools.models.common import Asset, Infrastructure
 from semantic_tools.models.ngsi_ld.entity import Property, Relationship
-from typing import Literal, Optional
 
 
 class Metric(Asset):
     type: Literal["Metric"] = "Metric"
-    labels: Property
+    hasLabels: Relationship
     hasMetricFamily: Relationship
-    hasPrometheus: Relationship
+    hasPrometheus: Optional[Relationship]
+    hasPrometheusExporter: Optional[Relationship]
 
 
 class MetricFamily(Asset):
@@ -20,3 +22,7 @@ class MetricFamily(Asset):
 class Prometheus(Infrastructure):
     type: Literal["Prometheus"] = "Prometheus"
     version: Optional[Property]
+
+
+class PrometheusExporter(Infrastructure):
+    type: Literal["PrometheusExporter"] = "PrometheusExporter"

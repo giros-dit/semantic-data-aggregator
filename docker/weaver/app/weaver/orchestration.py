@@ -25,13 +25,23 @@ def process_task(task: Task, flink: FlinkClient,
         # by an intermidiate microservice
         # Weaver should only receive the final list of arguments
         # and configure the task with them
-        #arguments = application_configs[
-            #application.name.value](task, ngsi_ld)
         if application.applicationType.value == "NIFI":
-            arguments = nifi_application_configs[application.name.value](task, ngsi_ld)
-            task_pg = nifi.instantiate_flow_from_task(
-                task, application.internalId.value,
-                arguments)
+            arguments = nifi_application_configs[
+                application.name.value](task, ngsi_ld)
+            #
+            # [S-96] Hack to configure MetricTargetExporter
+            # using NiFi parameter context. Migrate in the future.
+            #
+            if application.name.value == "MetricTargetExporter":
+                task_pg = nifi.deploy_flow_from_task(
+                    task, application.internalId.value,
+                    arguments)
+                nifi.set_parameter_context(task_pg, arguments)
+                nifi.start_flow_from_task(task)
+            else:
+                task_pg = nifi.instantiate_flow_from_task(
+                    task, application.internalId.value,
+                    arguments)
             ngsi_ld.append_internal_id(task, task_pg.id)
         elif application.applicationType.value == "FLINK":
             arguments = config_flink_jobs(task, ngsi_ld)
@@ -40,8 +50,8 @@ def process_task(task: Task, flink: FlinkClient,
                 arguments)
             ngsi_ld.append_internal_id(task, job["jobid"])
         ngsi_ld.state_to_running(
-                task,
-                {"value": "SUCCESS! Task started successfully."})
+            task,
+            {"value": "SUCCESS! Task started successfully."})
     elif task.action.value == "END":
         logger.info(
             "Deleting '{0}'...".format(task.id))

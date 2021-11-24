@@ -1,5 +1,6 @@
 import json
 import logging
+from urllib.parse import urlparse
 
 from semantic_tools.models.application import Task
 from semantic_tools.ngsi_ld.client import NGSILDClient
@@ -124,7 +125,7 @@ def config_metric_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     return arguments
 
 
-def config_metric_target(task: Task, ngsi_ld: NGSILDClient) -> dict:
+def config_metric_target_exporter(task: Task, ngsi_ld: NGSILDClient) -> dict:
     # Collect lineage information
 
     # Task Input
@@ -144,12 +145,33 @@ def config_metric_target(task: Task, ngsi_ld: NGSILDClient) -> dict:
     # although NiFi allows passing multiple
     # topic names for consumption
     source_topic_name = source_topic.name.value
-    consumer_url = task.expression.value["consumer_url"]
+    group_id = task.arguments.value["groupId"]
+
+    # Task Output
+    # TODO: PrometheusExporter is NOT a data asset but an infrastructure
+    # Here an infrastructure is the output of the task for simplicity
+    # Get sink Prometheus exporter broker
+    sink_exporter = ngsi_ld.get_prometheus_exporter(
+        task.hasOutput.object
+    )
+    # Get Endpoint for sink Kafka broker
+    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
+        sink_exporter
+    )
+    # Parse exporter's path from the endpoint
+    exporter_path = urlparse(
+        sink_endpoint.uri.value).path.replace("/metrics/", "")
 
     arguments = {
+        # Watch out! Hardcoded to scorpio
+        "broker_name": "scorpio",
+        "broker_port": "9090",
+        "exporter_entity_id": sink_exporter.id,
+        "exporter_path": exporter_path,
+        "group_id": group_id,
         "source_broker_url": source_broker_url,
-        "source_topics": source_topic_name,
-        "consumer_url": consumer_url
+        "source_topics": source_topic_name
+
     }
     return arguments
 
@@ -191,7 +213,9 @@ def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     gnmic_topic = "gnmic-" + sink_topic.name.value
     # Get subscription mode (sample or on-change)
     subscription_mode = task.arguments.value["subscriptionMode"]
-    filename = '/gnmic-cfgs/subscription' + '-' + sink_topic.name.value + '.json'
+    filename = (
+        '/gnmic-cfgs/subscription'
+        + '-' + sink_topic.name.value + '.json')
 
     subscription_data = {}
     subscription_data['address'] = source_endpoint.uri.value.split("://")[1]
@@ -303,9 +327,12 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
     }
     return arguments
 
-def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient) -> dict:
+
+def config_prometheus2openmetrics_transformer(
+        task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for PrometheusToOpenmetricsTransformer application (NiFi)
+    Builds configuration arguments for 
+    PrometheusToOpenmetricsTransformer application (NiFi)
     """
     # Collect lineage information
 
@@ -319,18 +346,41 @@ def config_prometheus2openmetrics_transformer(task: Task, ngsi_ld: NGSILDClient)
     sink_topic = ngsi_ld.get_kafka_topic(
         task.hasOutput.object)
 
+    # Collect MetricFamily data of source Metric
+    # We assume there is just one MetricSource for this topic
+    metric_source_task = ngsi_ld.get_tasks_by_output_kafka_topic(
+        source_topic)[0]
+    source_metric = ngsi_ld.get_metric(metric_source_task.hasInput.object)
+    source_mf = ngsi_ld.get_metric_family(source_metric.hasMetricFamily.object)
+
     # Prepare variables from context arguments
     source_topic_name = source_topic.name.value
     sink_topic_name = sink_topic.name.value
     group_id = task.arguments.value["groupId"]
+    mf_name = source_mf.name.value
+    mf_type = source_mf.familyType.value
+    
+    if source_mf.help:
+        mf_help = source_mf.help.value
+    else:
+        mf_help = None
+    if source_mf.unit:
+        mf_unit = source_mf.unit.value
+    else:
+        mf_unit = None
 
     arguments = {
         "group_id": group_id,
         "source_topic": source_topic_name,
-        "sink_topic": sink_topic_name
+        "sink_topic": sink_topic_name,
+        "mf_name": mf_name,
+        "mf_type": mf_type,
+        "mf_help": mf_help,
+        "mf_unit": mf_unit
     }
     arguments.update(task.arguments.value)
     return arguments
+
 
 def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
@@ -363,7 +413,7 @@ def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
 nifi_application_configs = {
     "EVESource": config_eve_source,
     "MetricSource": config_metric_source,
-    "MetricTarget": config_metric_target,
+    "MetricTargetExporter": config_metric_target_exporter,
     "gNMIcSource": config_telemetry_source,
     "LogParserSOSource": config_logparser_source,
     "LogParserVSSource": config_logparser_source,

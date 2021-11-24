@@ -20,4 +20,4 @@ class Task(StatefulAsset):
     internalId: Optional[Property]
     hasApplication: Relationship
     hasInput: Relationship
-    hasOutput: Relationship
+    hasOutput: Optional[Relationship]
