@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "157c163c-8839-4ce7-8d4a-ee252d27b0cb",
+		"_postman_id": "64f2f206-49a3-4206-bf0f-b61f17fa6c0f",
 		"name": "Prometheus_5GVINNI_Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -20,7 +20,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_endpoint\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
+											"pm.environment.set(\"input_prometheus_endpoint_id\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -42,7 +42,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api-5G-VINNI\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://193.136.92.119:9090/api/v1/query\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_prometheus_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api-5G-VINNI\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_prometheus_endpoint_uri}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -70,7 +70,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_prometheus_id\", \"urn:ngsi-ld:Prometheus:\" + myUUID);",
+											"pm.environment.set(\"input_prometheus_id\", \"urn:ngsi-ld:Prometheus:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -92,7 +92,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server-5G-VINNI\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.28.1\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server-5G-VINNI\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.28.1\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -170,7 +170,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_metric_familiy_id\", \"urn:ngsi-ld:MetricFamily:\" + myUUID);",
+											"pm.environment.set(\"input_metric_familiy_id\", \"urn:ngsi-ld:MetricFamily:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -192,7 +192,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"linklatency\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"gauge\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_familiy_name}}\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_familiy_type}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -242,7 +242,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"linklatency\"\n    },\n    \"hasLabels\": {\n        \"type\": \"Relationship\",\n        \"object\": [\n            \"{{label_1_id}}\"\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_name}}\"\n    },\n    \"hasLabels\": {\n        \"type\": \"Relationship\",\n        \"object\": [\n            \"{{label_1_id}}\"\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -275,7 +275,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"output_endpoint\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
+											"pm.environment.set(\"sda_kafka_endpoint_id\", \"urn:ngsi-ld:Endpoint:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -297,7 +297,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-SDA\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{sda_kafka_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-SDA\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -325,7 +325,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"output_kafka_broker_id\", \"urn:ngsi-ld:KafkaBroker:\" + myUUID);",
+											"pm.environment.set(\"sda_kafka_broker_id\", \"urn:ngsi-ld:KafkaBroker:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -347,7 +347,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{sda_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -375,8 +375,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
-											"pm.collectionVariables.set(\"output_kafka_topic_name\", \"metric-source-\" + myUUID);"
+											"pm.environment.set(\"source_output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											"pm.environment.set(\"source_output_kafka_topic_name\", \"metric-source-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -406,7 +406,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{source_output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{source_output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -434,8 +434,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"transformation_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
-											"pm.collectionVariables.set(\"transformation_kafka_topic_name\", \"metric-source-transformation-\" + myUUID);"
+											"pm.environment.set(\"transformation_output_kafka_topic_id\", \"urn:ngsi-ld:KafkaTopic:\" + myUUID);",
+											"pm.environment.set(\"transformation_output_kafka_topic_name\", \"metric-source-transformation-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -465,7 +465,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{transformation_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{transformation_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_broker_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{transformation_output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{transformation_output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -497,7 +497,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"metric_source_app_id\", jsonData[0].id);",
+											"pm.environment.set(\"metric_source_app_id\", jsonData[0].id);",
 											"",
 											""
 										],
@@ -555,7 +555,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"metric_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);"
+											"pm.environment.set(\"metric_source_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -585,7 +585,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"interval\": \"5000\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"interval\": \"{{sampling_interval}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{source_output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -617,7 +617,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"transformer_app_id\", jsonData[0].id);",
+											"pm.environment.set(\"transformer_app_id\", jsonData[0].id);",
 											"",
 											""
 										],
@@ -675,8 +675,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"transformer_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
-											"pm.collectionVariables.set(\"metric_source_groupId\", \"metric-source-transformation-\" + myUUID);"
+											"pm.environment.set(\"transformer_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.environment.set(\"metric_source_groupId\", \"metric-source-transformation-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -706,7 +706,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{transformer_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"transformer-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{metric_source_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformer_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_kafka_topic_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{transformer_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"transformer-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{metric_source_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformer_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{source_output_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -739,7 +739,18 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"prometheus_exporter_endpoint\", \"urn:ngsi-ld:Endpoint:\" + myUUID);"
+											"pm.environment.set(\"output_prometheus_exporter_endpoint_id\", \"urn:ngsi-ld:Endpoint:\" + myUUID);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"sda_ip_address = pm.environment.get(\"sda_ip_address\");\r",
+											"output_prometheus_exporter_path = pm.environment.get(\"output_prometheus_exporter_path\")\r",
+											"pm.environment.set(\"output_prometheus_exporter_uri\",\"http://\" + sda_ip_address + \":8444/metrics/\" + output_prometheus_exporter_path)"
 										],
 										"type": "text/javascript"
 									}
@@ -760,7 +771,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{prometheus_exporter_endpoint}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-exporter-endpoint\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://{{nifi_ip_address}}:8444/metrics/demo-endpoint\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_prometheus_exporter_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-exporter-endpoint\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://{{sda_ip_address}}:8444/metrics/{{output_prometheus_exporter_path}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -788,7 +799,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"prometheus_exporter_id\", \"urn:ngsi-ld:PrometheusExporter:\" + myUUID);",
+											"pm.environment.set(\"output_prometheus_exporter_id\", \"urn:ngsi-ld:PrometheusExporter:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -810,7 +821,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{prometheus_exporter_id}}\",\n    \"type\": \"PrometheusExporter\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"SDA-prometheus-exporter\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{prometheus_exporter_endpoint}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{output_prometheus_exporter_id}}\",\n    \"type\": \"PrometheusExporter\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"SDA-prometheus-exporter\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_prometheus_exporter_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -837,7 +848,7 @@
 									"script": {
 										"exec": [
 											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"metric_target_exporter_app_id\", jsonData[0].id);",
+											"pm.environment.set(\"metric_target_exporter_app_id\", jsonData[0].id);",
 											"",
 											""
 										],
@@ -895,7 +906,8 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"metric_target_exporter_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);"
+											"pm.environment.set(\"metric_target_exporter_task_id\", \"urn:ngsi-ld:Task:\" + myUUID);",
+											"pm.environment.set(\"metric_target_exporter_groupId\", \"metric-target-exporter-\" + myUUID);"
 										],
 										"type": "text/javascript"
 									}
@@ -925,7 +937,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"{{metric_target_exporter_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metric-exporter-demo\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"my_group_ID\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_target_exporter_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{prometheus_exporter_id}}\"\n    }\n}"
+									"raw": "{\n    \"id\": \"{{metric_target_exporter_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metric-exporter-demo\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{output_prometheus_exporter_id}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_target_exporter_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_output_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_prometheus_exporter_id}}\"\n    }\n}"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -999,7 +1011,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{prometheus_exporter_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_prometheus_exporter_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1008,7 +1020,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{prometheus_exporter_id}}"
+										"{{output_prometheus_exporter_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1021,7 +1033,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{prometheus_exporter_endpoint}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_prometheus_exporter_endpoint_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1030,7 +1042,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{prometheus_exporter_endpoint}}"
+										"{{output_prometheus_exporter_endpoint_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1202,7 +1214,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_endpoint}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_endpoint_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1211,7 +1223,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{input_endpoint}}"
+										"{{input_prometheus_endpoint_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1229,7 +1241,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_kafka_topic_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{source_output_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1238,7 +1250,29 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{output_kafka_topic_id}}"
+										"{{source_output_kafka_topic_id}}"
+									]
+								},
+								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete KafkaTopic Transformer",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{transformation_output_kafka_topic_id}}",
+									"protocol": "http",
+									"host": [
+										"{{broker}}"
+									],
+									"path": [
+										"ngsi-ld",
+										"v1",
+										"entities",
+										"{{transformation_output_kafka_topic_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1251,7 +1285,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_kafka_broker_id}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{sda_kafka_broker_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1260,7 +1294,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{output_kafka_broker_id}}"
+										"{{sda_kafka_broker_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1273,7 +1307,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{ouput_endpoint}}",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{sda_kafka_endpoint_id}}",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -1282,7 +1316,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"{{ouput_endpoint}}"
+										"{{sda_kafka_endpoint_id}}"
 									]
 								},
 								"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
@@ -1401,91 +1435,11 @@
 			"value": "http://context-catalog:8080/context.jsonld"
 		},
 		{
-			"key": "output_kafka_topic_id",
-			"value": ""
-		},
-		{
-			"key": "output_kafka_broker_id",
-			"value": ""
-		},
-		{
-			"key": "output_kafka_topic_name",
-			"value": ""
-		},
-		{
-			"key": "output_endpoint",
-			"value": ""
-		},
-		{
-			"key": "input_endpoint",
-			"value": ""
-		},
-		{
-			"key": "input_prometheus_id",
-			"value": ""
-		},
-		{
-			"key": "input_metric_familiy_id",
-			"value": ""
-		},
-		{
-			"key": "input_metric_id",
-			"value": ""
-		},
-		{
-			"key": "metric_source_app_id",
-			"value": ""
-		},
-		{
-			"key": "metric_source_task_id",
-			"value": ""
-		},
-		{
-			"key": "metric_source_groupId",
-			"value": ""
-		},
-		{
-			"key": "transformer_app_id",
-			"value": ""
-		},
-		{
-			"key": "transformer_task_id",
-			"value": ""
-		},
-		{
-			"key": "transformation_kafka_topic_id",
-			"value": ""
-		},
-		{
-			"key": "transformation_kafka_topic_name",
-			"value": ""
-		},
-		{
 			"key": "label_1_id",
 			"value": ""
 		},
 		{
-			"key": "nifi_ip_address",
-			"value": "nifi"
-		},
-		{
-			"key": "output_prometheus_exporter_id",
-			"value": ""
-		},
-		{
-			"key": "metric_target_exporter_app_id",
-			"value": ""
-		},
-		{
-			"key": "metric_target_exporter_task_id",
-			"value": ""
-		},
-		{
-			"key": "prometheus_exporter_endpoint",
-			"value": ""
-		},
-		{
-			"key": "prometheus_exporter_id",
+			"key": "input_metric_id",
 			"value": ""
 		}
 	]
