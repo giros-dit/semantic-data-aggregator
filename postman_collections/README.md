@@ -21,7 +21,7 @@ npm install -g newman
 
 Config Newman to deploy a pipeline that collects metrics from 5G-VINNI's Prometheus and sends them to a local instance of Prometheus (notice the `Setup` folder is specified):
 ```bash
-newman run Prometheus_5GVINNI_Demo.postman_collection.json -e Input-VINNI-to-5GROWTH.postman_environment.json --export-environment output-env-1.json --bail --folder Setup
+newman run Prometheus_5GVINNI_Demo.postman_collection.json -e input-linklatency.json --export-environment output-env-1.json --bail --folder Setup
 ```
 
 ## Teardown
