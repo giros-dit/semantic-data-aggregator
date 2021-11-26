@@ -813,7 +813,7 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "138.4.7.159:9090"
+			"value": "localhost:9090"
 		},
 		{
 			"key": "context.jsonld",

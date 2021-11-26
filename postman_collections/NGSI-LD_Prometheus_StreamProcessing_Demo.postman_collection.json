@@ -1548,7 +1548,7 @@
 	"variable": [
 		{
 			"key": "broker",
-			"value": "138.4.7.159:9090"
+			"value": "localhost:9090"
 		},
 		{
 			"key": "broker",
@@ -1557,7 +1557,7 @@
 		},
 		{
 			"key": "broker",
-			"value": "138.4.7.159:1026",
+			"value": "localhost:1026",
 			"disabled": true
 		},
 		{
