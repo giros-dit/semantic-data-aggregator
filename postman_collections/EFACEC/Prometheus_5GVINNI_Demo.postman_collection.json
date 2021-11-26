@@ -120,7 +120,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"label_1_id\", \"urn:ngsi-ld:Label:\" + myUUID);",
+											"pm.environment.set(\"label_1_id\", \"urn:ngsi-ld:Label:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -220,7 +220,7 @@
 										"exec": [
 											"var uuid = require('uuid')",
 											"var myUUID = uuid.v4()",
-											"pm.collectionVariables.set(\"input_metric_id\", \"urn:ngsi-ld:Metric:\" + myUUID);",
+											"pm.environment.set(\"input_metric_id\", \"urn:ngsi-ld:Metric:\" + myUUID);",
 											""
 										],
 										"type": "text/javascript"
@@ -1433,14 +1433,6 @@
 		{
 			"key": "context.jsonld",
 			"value": "http://context-catalog:8080/context.jsonld"
-		},
-		{
-			"key": "label_1_id",
-			"value": ""
-		},
-		{
-			"key": "input_metric_id",
-			"value": ""
 		}
 	]
 }
