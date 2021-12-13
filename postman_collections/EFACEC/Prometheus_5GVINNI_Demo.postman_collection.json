@@ -45,10 +45,10 @@
 									"raw": "{\n    \"id\": \"{{input_prometheus_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-api-5G-VINNI\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_prometheus_endpoint_uri}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -95,10 +95,10 @@
 									"raw": "{\n    \"id\": \"{{input_prometheus_id}}\",\n    \"type\": \"Prometheus\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-server-5G-VINNI\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.28.1\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -145,10 +145,10 @@
 									"raw": "{\n    \"id\": \"{{label_1_id}}\",\n    \"type\": \"Label\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"host\"\n    },\n    \"description\": {\n        \"type\": \"Property\",\n        \"value\": \"IP address of target host to which latency is measured\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -195,10 +195,10 @@
 									"raw": "{\n    \"id\": \"{{input_metric_familiy_id}}\",\n    \"type\": \"MetricFamily\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_familiy_name}}\"\n    },\n    \"familyType\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_familiy_type}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -245,10 +245,10 @@
 									"raw": "{\n    \"id\": \"{{input_metric_id}}\",\n    \"type\": \"Metric\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{input_metric_name}}\"\n    },\n    \"hasLabels\": {\n        \"type\": \"Relationship\",\n        \"object\": [\n            \"{{label_1_id}}\"\n        ]\n    },\n    \"hasPrometheus\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_prometheus_id}}\"\n    },\n    \"hasMetricFamily\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_familiy_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -300,10 +300,10 @@
 									"raw": "{\n    \"id\": \"{{sda_kafka_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka-SDA\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"kafka:9092\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -350,10 +350,10 @@
 									"raw": "{\n    \"id\": \"{{sda_kafka_broker_id}}\",\n    \"type\": \"KafkaBroker\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"sda-kafka-broker\"\n    },\n    \"version\": {\n        \"type\": \"Property\",\n        \"value\": \"2.7.0\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -409,10 +409,10 @@
 									"raw": "{\n    \"id\": \"{{source_output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{source_output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -468,10 +468,10 @@
 									"raw": "{\n    \"id\": \"{{transformation_output_kafka_topic_id}}\",\n    \"type\": \"KafkaTopic\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"{{transformation_output_kafka_topic_name}}\"\n    },\n    \"hasKafkaBroker\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{sda_kafka_broker_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -520,10 +520,10 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricSource\"",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricSource\"",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -588,10 +588,10 @@
 									"raw": "{\n    \"id\": \"{{metric_source_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metricsource-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"interval\": \"{{sampling_interval}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_source_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{input_metric_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{source_output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -640,10 +640,10 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"PrometheusToOpenmetricsTransformer\"",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/?type=Application&q=name==\"PrometheusToOpenmetricsTransformer\"",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -709,10 +709,10 @@
 									"raw": "{\n    \"id\": \"{{transformer_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"transformer-5G-VINNI\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{metric_source_groupId}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformer_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{source_output_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_output_kafka_topic_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -774,10 +774,10 @@
 									"raw": "{\n    \"id\": \"{{output_prometheus_exporter_endpoint_id}}\",\n    \"type\": \"Endpoint\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"prometheus-exporter-endpoint\"\n    },\n    \"uri\": {\n        \"type\": \"Property\",\n        \"value\": \"http://{{sda_ip_address}}:8444/metrics/{{output_prometheus_exporter_path}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -824,10 +824,10 @@
 									"raw": "{\n    \"id\": \"{{output_prometheus_exporter_id}}\",\n    \"type\": \"PrometheusExporter\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"SDA-prometheus-exporter\"\n    },\n    \"hasEndpoint\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_prometheus_exporter_endpoint_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -871,10 +871,10 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricTargetExporter\"",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/?type=Application&q=name==\"MetricTargetExporter\"",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -940,10 +940,10 @@
 									"raw": "{\n    \"id\": \"{{metric_target_exporter_task_id}}\",\n    \"type\": \"Task\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"metric-exporter-demo\"\n    },\n    \"arguments\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"groupId\": \"{{output_prometheus_exporter_id}}\"\n        }\n    },\n    \"hasApplication\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{metric_target_exporter_app_id}}\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{transformation_output_kafka_topic_id}}\"\n    },\n    \"hasOutput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"{{output_prometheus_exporter_id}}\"\n    }\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -988,10 +988,10 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_target_exporter_task_id}}/attrs",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{metric_target_exporter_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1011,10 +1011,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_prometheus_exporter_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{output_prometheus_exporter_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1033,10 +1033,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{output_prometheus_exporter_endpoint_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{output_prometheus_exporter_endpoint_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1076,10 +1076,10 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{transformer_task_id}}/attrs",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{transformer_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1120,10 +1120,10 @@
 									"raw": "{\r\n    \"action\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"END\"\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_task_id}}/attrs",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{metric_source_task_id}}/attrs",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1148,10 +1148,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{input_metric_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1170,10 +1170,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_metric_familiy_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{input_metric_familiy_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1192,10 +1192,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{input_prometheus_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1214,10 +1214,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{input_prometheus_endpoint_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{input_prometheus_endpoint_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1241,10 +1241,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{source_output_kafka_topic_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{source_output_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1263,10 +1263,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{transformation_output_kafka_topic_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{transformation_output_kafka_topic_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1285,10 +1285,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{sda_kafka_broker_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{sda_kafka_broker_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1307,10 +1307,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{sda_kafka_endpoint_id}}",
+									"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{sda_kafka_endpoint_id}}",
 									"protocol": "http",
 									"host": [
-										"{{broker}}"
+										"{{sda_ip_address}}:9090"
 									],
 									"path": [
 										"ngsi-ld",
@@ -1347,10 +1347,10 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/{{metric_source_app_id}}",
+							"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/{{metric_source_app_id}}",
 							"protocol": "http",
 							"host": [
-								"{{broker}}"
+								"{{sda_ip_address}}:9090"
 							],
 							"path": [
 								"ngsi-ld",
@@ -1380,10 +1380,10 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Task",
+							"raw": "http://{{sda_ip_address}}:9090/ngsi-ld/v1/entities/?type=Task",
 							"protocol": "http",
 							"host": [
-								"{{broker}}"
+								"{{sda_ip_address}}:9090"
 							],
 							"path": [
 								"ngsi-ld",
