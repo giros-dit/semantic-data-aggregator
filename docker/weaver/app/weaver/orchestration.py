@@ -1,10 +1,11 @@
+import logging
+
 from semantic_tools.flink.client import FlinkClient
 from semantic_tools.models.application import Task
-from semantic_tools.nifi.client import NiFiClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
-from weaver.applications import nifi_application_configs, config_flink_jobs
+from semantic_tools.nifi.client import NiFiClient
 
-import logging
+from weaver.applications import config_flink_jobs, nifi_application_configs
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,8 @@ def process_task(task: Task, flink: FlinkClient,
         # Weaver should only receive the final list of arguments
         # and configure the task with them
         if application.applicationType.value == "NIFI":
+            # Renew access token for NiFi API
+            nifi.login()
             arguments = nifi_application_configs[
                 application.name.value](task, ngsi_ld)
             #
@@ -56,6 +59,8 @@ def process_task(task: Task, flink: FlinkClient,
         logger.info(
             "Deleting '{0}'...".format(task.id))
         if application.applicationType.value == "NIFI":
+            # Renew access token for NiFi API
+            nifi.login()
             nifi.delete_flow_from_task(task)
         elif application.applicationType.value == "FLINK":
             flink.delete_job_from_task(task)
