@@ -260,7 +260,7 @@
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>${source_broker_url}</value>
+                        <value>#{source_broker_url}</value>
                     </entry>
                     <entry>
                         <key>security.protocol</key>
@@ -297,7 +297,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${source_topics}</value>
+                        <value>#{source_topics}</value>
                     </entry>
                     <entry>
                         <key>topic_type</key>
@@ -309,7 +309,7 @@
                     </entry>
                     <entry>
                         <key>group.id</key>
-                        <value>${group_id}</value>
+                        <value>#{group_id}</value>
                     </entry>
                     <entry>
                         <key>auto.offset.reset</key>
@@ -549,7 +549,7 @@
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>${sink_broker_url}</value>
+                        <value>#{sink_broker_url}</value>
                     </entry>
                     <entry>
                         <key>security.protocol</key>
@@ -586,7 +586,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${sink_topic}</value>
+                        <value>#{sink_topic}</value>
                     </entry>
                     <entry>
                         <key>acks</key>

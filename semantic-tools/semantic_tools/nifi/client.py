@@ -1,23 +1,19 @@
 import logging
-import nipyapi
 import time
-
-from nipyapi.nifi import ParameterContextEntity, ParameterEntity
-from nipyapi.nifi.models.controller_service_entity import (
-    ControllerServiceEntity
-)
-from nipyapi.nifi.models.documented_type_dto import (
-    DocumentedTypeDTO
-)
-from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
-from nipyapi.nifi.models.process_group_flow_entity import (
-    ProcessGroupFlowEntity
-)
-from nipyapi.nifi.models.template_entity import TemplateEntity
-from nipyapi import parameters as nifi_params
 from random import randrange
-from semantic_tools.models.application import Task
 from typing import List
+
+import nipyapi
+from nipyapi import parameters as nifi_params
+from nipyapi.nifi import ParameterContextEntity, ParameterEntity
+from nipyapi.nifi.models.controller_service_entity import \
+    ControllerServiceEntity
+from nipyapi.nifi.models.documented_type_dto import DocumentedTypeDTO
+from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
+from nipyapi.nifi.models.process_group_flow_entity import \
+    ProcessGroupFlowEntity
+from nipyapi.nifi.models.template_entity import TemplateEntity
+from semantic_tools.models.application import Task
 
 logger = logging.getLogger(__name__)
 
@@ -224,10 +220,8 @@ class NiFiClient(object):
             root_pg, task.id, location
         )
         logger.debug("Deploy with arguments %s" % args)
-        # Set variables for Task PG
-        for argument, value in args.items():
-            nipyapi.canvas.update_variable_registry(
-                task_pg, [(argument, value)])
+        # Set Parameter Context for Task PG
+        self.set_parameter_context(task_pg, args)
 
         # Deploy Task template
         task_template = nipyapi.templates.get_template(application_id, "id")

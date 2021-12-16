@@ -31,20 +31,9 @@ def process_task(task: Task, flink: FlinkClient,
             nifi.login()
             arguments = nifi_application_configs[
                 application.name.value](task, ngsi_ld)
-            #
-            # [S-96] Hack to configure MetricTargetExporter
-            # using NiFi parameter context. Migrate in the future.
-            #
-            if application.name.value == "MetricTargetExporter":
-                task_pg = nifi.deploy_flow_from_task(
-                    task, application.internalId.value,
-                    arguments)
-                nifi.set_parameter_context(task_pg, arguments)
-                nifi.start_flow_from_task(task)
-            else:
-                task_pg = nifi.instantiate_flow_from_task(
-                    task, application.internalId.value,
-                    arguments)
+            task_pg = nifi.instantiate_flow_from_task(
+                task, application.internalId.value,
+                arguments)
             ngsi_ld.append_internal_id(task, task_pg.id)
         elif application.applicationType.value == "FLINK":
             arguments = config_flink_jobs(task, ngsi_ld)
