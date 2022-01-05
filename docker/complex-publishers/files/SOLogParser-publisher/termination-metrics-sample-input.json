@@ -1,6 +1,6 @@
 {
      "Current_time":"2021-05-17T07:53:13Z",
-     "Operation":"Termination",
+     "Operation":"termination",
      "NS_ID":"fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413",
      "NSD_ID":"vCDN_aiml",
      "Total_termination_time":42631,     
