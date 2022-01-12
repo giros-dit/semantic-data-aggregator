@@ -331,7 +331,7 @@ def config_logparser_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
 def config_prometheus2openmetrics_transformer(
         task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for 
+    Builds configuration arguments for
     PrometheusToOpenmetricsTransformer application (NiFi)
     """
     # Collect lineage information
@@ -359,7 +359,7 @@ def config_prometheus2openmetrics_transformer(
     group_id = task.arguments.value["groupId"]
     mf_name = source_mf.name.value
     mf_type = source_mf.familyType.value
-    
+
     if source_mf.help:
         mf_help = source_mf.help.value
     else:
@@ -384,7 +384,7 @@ def config_prometheus2openmetrics_transformer(
 def config_logparser2openmetrics_transformer(
         task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
-    Builds configuration arguments for 
+    Builds configuration arguments for
     LogParserToOpenmetricsTransformer application (NiFi)
     """
     # Collect lineage information
@@ -413,7 +413,6 @@ def config_logparser2openmetrics_transformer(
         "mf_help": "",
         "mf_unit": None
     }
-    arguments.update(task.arguments.value)
     return arguments
 
 
@@ -441,7 +440,6 @@ def config_flink_jobs(task: Task, ngsi_ld: NGSILDClient) -> dict:
         "source_topics": source_topic_name,
         "sink_topic": sink_topic_name
     }
-    arguments.update(task.arguments.value)
     return arguments
 
 
