@@ -84,7 +84,7 @@ services:
     volumes:
       - ./docker/experimenter/app:/opt/experimenter/app
   flink-jobmanager:
-    image: flink:latest
+    image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
@@ -97,7 +97,7 @@ services:
     volumes:
       - ./flink-conf:/flink-conf
   flink-taskmanager:
-    image: flink:latest
+    image: flink:1.14.0-scala_2.12-java11
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     depends_on:
@@ -134,8 +134,6 @@ services:
       SINGLE_USER_CREDENTIALS_USERNAME: admin
       # Must be of 12 characters min
       SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
-      NIFI_JVM_HEAP_INIT: 4g
-      NIFI_JVM_HEAP_MAX: 6g
     ports:
       - "8443:8443"
       # Used by Prometheus exporter
