@@ -141,7 +141,7 @@ public class NetflowDriver {
         // Consume data stream from the Kafka input topic, then from Goflow2 collector
         FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>(args[0], new SimpleStringSchema(), props);
         // Start reading from the earliest record
-        consumer.setStartFromEarliest();
+        //consumer.setStartFromEarliest();
 
         DataStream<String> stringInputStream = env.addSource(consumer);
 
