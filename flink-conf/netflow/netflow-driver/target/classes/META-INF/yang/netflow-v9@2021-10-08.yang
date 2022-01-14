@@ -1,0 +1,656 @@
+module netflow-v9 {
+
+    yang-version 1.1;
+
+    /*** NAMESPACE / PREFIX DEFINITION ***/
+
+    namespace 'http://data-aggregator.com/ns/netflow';
+
+    prefix "net-v9";
+
+
+    /*** LINKAGE (IMPORTS / INCLUDES) ***/
+    
+    import ietf-inet-types {
+        prefix inet;
+        reference
+            "RFC 6991: Common YANG Data Types";
+    }
+
+    import ietf-yang-types {
+        prefix yang;
+        reference
+            "RFC 6991: Common YANG Data Types";
+    }
+    
+
+    /*** META INFORMATION ***/
+
+    organization "Telefonica I+D";
+
+    contact "cristina.mz.practicas@telefonica.com";
+
+    description
+        "YANG model to represent the information collected in a Netflow version 9 flow";
+
+    reference
+        "RFC 3954: Cisco Systems NetFlow Services Export Version 9";
+
+    revision 2021-10-08 {
+        description
+            "Initial revision.";
+        reference "0.1.0";
+    }
+
+
+    /*** TYPE DEFINITIONS ***/
+
+    typedef name-type {
+        type string {
+            length "1..max";
+            pattern '\S(.*\S)?'; 
+        }
+        description
+            "Type for 'name' leafs, which are used to identify
+            specific instances within lists, etc.
+            Leading and trailing whitespaces are not allowed.";
+        reference
+            "RFC XXXX: YANG Data Models for the IP Flow Information Export
+            (IPFIX) Protocol, Packet Sampling (PSAMP) Protocol,
+            and Bulk Data Export";
+    }
+
+    typedef sys-uptime {
+        type yang:timeticks;
+        units "milliseconds";
+        description
+             "The time (in mseg) since the network device was first booted.";
+        reference
+            "RFC 3954: Cisco Systems NetFlow Services Export Version 9";
+    }
+
+    typedef ipv6-flow-label {
+       type uint32 {
+         range "0..1048575";
+       }
+       description
+        "The ipv6-flow-label type represents the flow identifier or Flow
+         Label in an IPv6 packet header that may be used to
+         discriminate traffic flows.";
+
+       reference
+        "RFC 3595: Textual Conventions for IPv6 Flow Label
+         RFC 2460: Internet Protocol, Version 6 (IPv6) Specification";
+     }
+    
+
+    typedef vlan-id {
+        type uint16 {
+            range 0..4095;
+        }
+        description
+            "Type definition representing VLAN ID field for 802.1q tagged VLANs";
+        
+        reference
+            "NetFlow Configuration Guide, Cisco IOS Release 15M&T. Chapter: NetFlow Layer 2 and Security Monitoring Exports.";
+    }
+
+    typedef prefix-length-ipv4{
+        type uint8 {
+            range 0..32;
+        }
+        description
+            "The length of the subnet prefix in IPv4";
+
+        reference
+            "RFC XXXX: A YANG Data Model for IP Management";
+    }
+
+    typedef prefix-length-ipv6{
+        type uint8 {
+            range 0..128;
+        }
+        description
+            "The length of the subnet prefix in IPv6";
+
+        reference
+            "RFC XXXX: A YANG Data Model for IP Management";
+    }
+
+
+    /*** MODEL DEFINITION ***/
+
+    grouping common-fields {
+        description
+            "Fields of a Netflow flow record version 9. Field's names and semantics correspond to the managed objects in RFC 3954, Section 8."; 
+        
+        reference
+            "RFC 3954.";
+
+
+        leaf bytes-in {
+            type yang:counter64;
+            units "bytes";
+            description
+                "Incoming counter for the number of bytes associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IN_BYTES).";
+
+        }
+
+        leaf bytes-out {
+            type yang:counter64;
+            units "bytes";
+            description
+                "Outgoing counter for the number of bytes associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (OUT_BYTES).";
+
+        }
+
+        leaf bytes-mul {
+            type yang:counter64;
+            units "bytes";
+            description
+                "IP multicast outgoing byte counter associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (MUL_DST_BYTES).";
+
+        }
+
+        leaf pkts-in {
+            type yang:counter64;
+            units "packets";
+            description
+                "Incoming counter for the number of packets associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IN_PKTS).";
+
+        }
+
+        leaf pkts-out {
+            type yang:counter64;
+            units "packets";
+            description
+                "Outgoing counter for the number of packets associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (OUT_PKTS).";
+
+        }
+
+        leaf pkts-mul {
+            type yang:counter64;
+            units "packets";
+            description
+                "IP multicast outgoing packet counter associated with the IP flow.";
+            reference
+                "RFC 3954, Section 8 (MUL_DST_PKTS).";
+
+        }
+
+        leaf first-switched {
+            type sys-uptime;
+            description
+                "sysUpTime in msec at which the first packet in the IP flow was switched.";
+            reference
+                "RFC 3954, Section 8 (FIRST_SWITCHED).";
+
+        }
+
+        leaf last-switched {
+            type sys-uptime;
+            description
+                "sysUpTime in msec at which the last packet in the IP flow was switched.";
+            reference
+                "RFC 3954, Section 8 (LAST_SWITCHED).";
+
+        }
+
+        leaf flows {
+            type yang:counter64;
+            units "flows";
+            description
+                "Number of IP Flows that were aggregated.";
+            reference
+                "RFC 3954, Section 8 (FLOWS).";
+
+        }
+
+        leaf direction {
+            type enumeration {
+                enum ingress {
+                    value "0";
+                    description
+                        "Ingress flow";
+                }
+                enum egress {
+                    value "1";
+                    description
+                        "Egress flow";
+                }
+            }
+            description
+                "Flow direction whose value shall be 0 for ingress flow and 1 for egress flow.";
+            reference
+                "RFC 3954, Section 8 (DIRECTION).";
+
+        }
+
+        leaf ip-version {
+            type enumeration {
+                enum ipv4 {
+                    value "4";
+                    description
+                        "The IPv4 protocol as defined in RFC 791.";
+                }
+                enum ipv6 {
+                    value "6";
+                    description
+                        "The IPv6 protocol as defined in RFC 2460.";
+                }
+            }
+       
+            description
+                "IP Protocol version whose value shall be 4 for IPv4 and 6 for IPv6. If not present, version 4 is assumed.";
+            reference
+                "RFC 3954, Section 8 (IP_PROTOCOL_VERSION).";
+
+        }
+
+        leaf protocol {
+             type enumeration {
+                enum icmp {
+                    value "1";
+                    description
+                        "The protocol used is ICMP.";
+                }
+                enum tcp {
+                    value "6";
+                    description
+                        "The protocol used is TCP.";
+                }
+                enum udp {
+                    value "17";
+                    description
+                        "The protocol used is UDP.";
+                }
+            }
+
+            description
+                "Byte de protocolo IP. Indica el tipo de paquete de transporte incluido en la parte de datos del datagrama IP.";
+            reference
+                "NetFlow Configuration Guide, Cisco IOS Release 15M&T. Chapter: Detecting and Analyzing Network Threats With NetFlow.
+                 RFC 3954, Section 8 (PROTOCOL).";
+
+        }
+
+        leaf src-tos {
+            type uint8;
+            description
+                "Type of service byte when entering incoming interface.";
+            reference
+                "RFC 3954, Section 8 (TOS).";
+
+        }
+
+        leaf dst-tos {
+            type uint8;
+            description
+                "Type of service byte when exiting outgoing interface.";
+            reference
+                "RFC 3954, Section 8 (DST_TOS).";
+
+        }
+
+        leaf tcp-flags {
+            type bits{
+                bit fin {
+                    position 0;
+                    description
+                        "TCP finish flag";
+                }
+                bit syn {
+                    position 1;
+                    description
+                        "TCP synchronize flag";
+                }
+                bit rst {
+                    position 2;
+                    description
+                        "TCP reset flag";
+                }
+                bit psh {
+                    position 3;
+                    description
+                        "TCP push flag";
+                }
+                bit ack {
+                    position 4;
+                    description
+                        "TCP acknowledgement flag";
+                }
+                bit urg {
+                    position 5;
+                    description
+                        "TCP urgent flag";
+                }
+                bit ece {
+                    position 6;
+                    description
+                        "TCP ECN echo flag";
+                }
+                bit cwr {
+                    position 7;
+                    description
+                        "TCP congestion window reduced flag";
+                }
+            }
+            description
+                "Cumulative TCP flags seen in an IP flow.";
+            reference
+                "Flexible NetFlow Command Reference, Cisco IOS XE Release 3SE (Cisco WLC 5700 Series). Chapter: Flexible NetFlow Commands.
+                 RFC 3954, Section 8 (TCP_FLAGS).";
+
+        }
+
+        leaf src-port {
+            type inet:port-number;
+            description
+                "TCP/UDP source port number used in the flow.";
+            reference
+                "RFC 3954, Section 8 (L4_SRC_PORT).";
+
+        }
+
+        leaf dst-port {
+            type inet:port-number;
+            description
+                "TCP/UDP destination port number used in the flow.";
+            reference
+                "RFC 3954, Section 8 (L4_DST_PORT).";
+
+        }
+
+        leaf src-address {
+            type inet:ipv4-address;
+            description
+                "IPv4 source address of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IPV4_SRC_ADDR).";
+
+        }
+
+        leaf dst-address {
+            type inet:ipv4-address;
+            description
+                "IPv4 destination address of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IPV4_DST_ADDR).";
+
+        }
+
+        leaf next-hop {
+            type inet:ipv4-address;
+            description
+                "IPv4 address of the next-hop router ";
+            reference
+                "RFC 3954, Section 8 (IPV4_NEXT_HOP).";
+
+        }
+
+        leaf src-address-ipv6 {
+            type inet:ipv6-address;
+            description
+                "IPv6 source address of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IPV6_SRC_ADDR).";
+
+        }
+
+        leaf dst-address-ipv6 {
+            type inet:ipv6-address;
+            description
+                "IPv6 destination address of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (IPV6_DST_ADDR).";
+
+        }
+
+        leaf next-hop-ipv6 {
+            type inet:ipv6-address;
+            description
+                "IPv6 address of the next-hop router.";
+            reference
+                "RFC 3954, Section 8 (IPV6_NEXT_HOP).";
+
+        }
+
+        
+        leaf src-mask {
+            type prefix-length-ipv4;
+            description
+                "Source subnet mask (in slash notation) of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (SRC_MASK).";
+
+        }
+
+        leaf dst-mask {
+            type prefix-length-ipv4;
+            description
+                 "Destination subnet mask (in slash notation) of the IP flow.";
+            reference
+                "RFC 3954, Section 8 (DST_MASK).";
+
+        }
+
+        leaf src-mask-ipv6 {
+            type prefix-length-ipv6;
+            description
+                "Length of the IPv6 source mask in contiguous bits.";
+            reference
+                "RFC 3954, Section 8 (IPV6_SRC_MASK).";
+
+        }
+
+        leaf dst-mask-ipv6 {
+            type prefix-length-ipv6;
+            description
+                "Length of the IPv6 destination mask in contiguous bits.";
+            reference
+                "RFC 3954, Section 8 (IPV6_DST_MASK).";
+
+        }
+
+        leaf src-mac{
+            type yang:mac-address;
+            description
+                "Source MAC address.";
+            reference
+                "RFC 3954, Section 8 (SRC_MAC).";
+
+        }
+
+        leaf dst-mac {
+            type yang:mac-address;
+            description
+                "Destination MAC address.";
+            reference
+                "RFC 3954, Section 8 (DST_MAC).";
+
+        }
+
+        leaf flow-label-ipv6 {
+            type ipv6-flow-label;
+            description
+                "IPv6 flow label as defined in RFC 2460.";
+            reference
+                "RFC 3954, Section 8 (IPV6_FLOW_LABEL).";
+
+        }
+
+        leaf opt-headers-ipv6 {
+            type uint32;
+            description
+                "Bit-encoded field identifying IPv6 option headers found in the flow.";
+            reference
+                "RFC 3954, Section 8 (IPV6_OPTION_HEADERS).";
+
+        }
+
+        leaf snmp-in {
+            type int32 {
+                range "1..2147483647";
+            }
+            description
+                "Input interface index.";
+            reference
+                "Cisco: Interface Index (ifIndex) Persistence.
+                 Cisco: SNMP Configuration Guide, Cisco IOS XE 17 (Cisco ASR 920 Series).
+                 RFC 2863: The Interfaces Group MIB.
+                 RFC 3954, Section 8 (INPUT_SNMP).";
+
+        }
+
+        leaf snmp-out {
+            type int32 {
+                range "1..2147483647";
+            }
+            description
+                "Output interface index.";
+            reference
+                "Cisco: Interface Index (ifIndex) Persistence.
+                Cisco: SNMP Configuration Guide, Cisco IOS XE 17 (Cisco ASR 920 Series).
+                 RFC 2863: The Interfaces Group MIB.
+                 RFC 3954, Section 8 (OUTPUT_SNMP).";
+
+        }
+
+        leaf src-as {
+            type inet:as-number;
+            description
+                "Source BGP autonomous system number.";
+            reference
+                "RFC 3954, Section 8 (SRC_AS).";
+
+        }
+
+        leaf dst-as {
+            type inet:as-number;
+            description
+                "Destination BGP autonomous system number.";
+            reference
+                "RFC 3954, Section 8 (DST_AS).";
+
+        }
+
+        leaf bgp-next-hop {
+            type inet:ipv4-address;
+            description
+                "Next-hop router's IPv4 address in the BGP domain.";
+            reference
+                "RFC 3954, Section 8 (BGP_IPV4_NEXT_HOP).";
+
+        }
+
+        leaf bgp-next-hop-ipv6 {
+            type inet:ipv6-address;
+            description
+                "Next-hop router's IPv6 address in the BGP domain.";
+            reference
+                "RFC 3954, Section 8 (BGP_IPV6_NEXT_HOP).";
+
+        }
+
+        leaf src-vlan {
+            type vlan-id;
+            description
+                "Virtual LAN identifier associated with ingress interface.";
+            reference
+                "RFC 3954, Section 8 (SRC_VLAN).";
+
+        }
+
+        leaf dst-vlan {
+            type vlan-id;
+            description
+                "Virtual LAN identifier associated with egress interface.";
+            reference
+                "RFC 3954, Section 8 (DST_VLAN).";
+
+        }
+
+        leaf icmp-type {
+            type uint16;
+            description
+                "Internet Control Message Protocol (ICMP) packet type. Reported as ICMP Type * 256 + ICMP code.";
+            reference
+                "RFC 3954, Section 8 (ICMP_TYPE).";
+
+        }
+
+        leaf igmp-type {
+            type uint8;
+            description
+                "Internet Group Management Protocol (IGMP) packet type.";
+            reference
+                "RFC 3954, Section 8 (MUL_IGMP_TYPE).";
+
+        }
+
+        leaf tot-bytes-exp {
+            type yang:counter64;
+            units "bytes";
+            description
+                "Counter for the number of bytes exported by the Observation Domain.";
+            reference
+                "RFC 3954, Section 8 (TOTAL_BYTES_EXP).";
+
+        }
+
+        leaf tot-pkts-exp {
+            type yang:counter64;
+            units "packets";
+            description
+                "Counter for the number of packets exported by the Observation Domain.";
+            reference
+                "RFC 3954, Section 8 (TOTAL_PKTS_EXP).";
+
+        }
+
+        leaf tot-flows-exp {
+            type yang:counter64;
+            units "flows";
+            description
+                "Counter for the number of flows exported by the Observation Domain.";
+            reference
+                "RFC 3954, Section 8 (TOTAL_FLOWS_EXP).";
+
+        }
+        
+    }
+
+
+    container netflow {
+        config false;
+        description
+            "Netflow Exporter or Collector data node.";
+
+        list fields-flow-record {
+            ordered-by "user";
+            key "name";
+
+            description
+                "This list contains fields of a Netflow flow record that is transmitted by the Exporting Process or received by the Collecting Process.";
+
+            leaf name {
+                type string;
+                description
+                    "The name that identifies the fields of a Netflow flow record according to a certain export flow format.";        
+            }
+
+            uses common-fields;
+        }
+    }
+
+}

@@ -1,0 +1,61 @@
+{
+   "netflow-v9:netflow": { 
+      "collecting-process": [
+         {
+            "name": "goflow2-collector",
+            "udp-collector": [
+               {
+                  "name": "goflow2-udp-collector",
+                  "statistic": [
+                     {
+                        "type-version":"NETFLOW_V9",
+                        "time-received":1636370171,
+                        "sequence-num":106218,
+                        "sampling-rate":1,
+                        "sampler-address":"192.168.165.138",
+                        "time-flow-start":1636369754,
+                        "time-flow-end":1636369800,
+                        "bytes-flow":636,
+                        "packets-flow":5,
+                        "source-address":"192.168.123.182",
+                        "destination-address":"192.168.123.102",
+                        "ethernet-type":2048,
+                        "protocol":6,
+                        "source-port":47172,
+                        "destination-port":443,
+                        "input-interface":0,
+                        "output-interface":0,
+                        "source-add-mac":"00:00:00:00:00:00",
+                        "destination-add-mac":"00:00:00:00:00:00",
+                        "source-vlan-id":0,
+                        "destination-vlan-id":0,
+                        "vlan-id":0,
+                        "ingress-vrf-id":0,
+                        "egress-vrf-id":0,
+                        "ip-tos":0,
+                        "forwarding-status":0,
+                        "ip-ttl":0,
+                        "tcp-flags":26,
+                        "icmp-type":0,
+                        "icmp-code":0,
+                        "ipv6-flow-label":0,
+                        "fragment-id":0,
+                        "fragment-offset":0,
+                        "biflow-direction":0,
+                        "source-as":0,
+                        "destination-as":0,
+                        "next-hop":"",
+                        "next-hop-as":0,
+                        "source-net":0,
+                        "destination-net":0,
+                        "ethernet-type-name":"IPv4",
+                        "protocol-name":"TCP",
+                        "icmp-name":""
+                     }
+                  ]
+               }
+            ]
+         }
+      ]   
+   }
+}
