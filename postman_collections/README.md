@@ -69,7 +69,7 @@ curl -X PATCH http://localhost:8084/jobs/dc6dcc99b55184a40e2c0390559a3b84?mode=c
 
 Example:
 ```bash
-curl -X GET http://localhost9:8084/jobs
+curl -X GET http://localhost:8084/jobs
 ```
 
 6. Provides access to aggregated job metrics.

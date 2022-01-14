@@ -27,11 +27,6 @@ Example 1:
 curl -X POST http://localhost:8084/jars/d18cd4e3-09cf-4556-8072-3a6409270b0d_netflow-driver-1.0.jar/run?programArg="netflow-input,netflow-output"
 ```
 
-Example 2:
-```bash
-curl -X POST http://localhost:8084/jars/d18cd4e3-09cf-4556-8072-3a6409270b0d_netflow-driver-1.0.jar/run?programArg="netflow-input,netflow-output"?entry-class=tid.NetflowDriver
-```
-
 4. Cancel/Stop flink job.
 
 Example:
