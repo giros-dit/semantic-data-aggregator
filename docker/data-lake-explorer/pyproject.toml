@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "data-lake-explorer"
+version = "0.1.0"
+description = ""
+authors = ["Ignacio Dominguez Martinez-Casanueva <i.dominguezm@alumnos.upm.es>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+semantic-tools = { path = "../../semantic-tools", develop = true }
+lxml = "^4.7.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = ">=4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
