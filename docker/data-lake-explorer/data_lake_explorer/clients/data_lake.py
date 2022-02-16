@@ -59,25 +59,25 @@ class APIGateway():
         )
         return response
 
-    def list_objects(self, bucket_id: str) -> Response:
+    def list_objects(self, bucket_name: str) -> Response:
         """
         This endpoint serves to get all objects
         pertaining to a bucket in the data lake
         """
         response = self._session.get(
-            "{0}/{1}".format(self.url, bucket_id),
+            "{0}/{1}".format(self.url, bucket_name),
             verify=self.ssl_verification,
             headers=self.headers
         )
         return response
 
-    def get_objects(self, bucket_id: str, object_id: str) -> Response:
+    def get_objects(self, bucket_name: str, object_key: str) -> Response:
         """
-        This endpoint serves to get by ID an object
+        This endpoint serves to get by key an object
         from the data lake
         """
         response = self._session.get(
-            "{0}/{1}/{2}".format(self.url, bucket_id, object_id),
+            "{0}/{1}/{2}".format(self.url, bucket_name, object_key),
             verify=self.ssl_verification,
             headers=self.headers
         )

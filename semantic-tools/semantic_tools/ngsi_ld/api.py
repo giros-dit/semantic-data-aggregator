@@ -1,9 +1,9 @@
+import logging
 from enum import Enum
+
+import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
-import logging
-import requests
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +13,8 @@ CORE_CONTEXT = "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
 class Options(Enum):
     keyValues = "keyValues"
     sysAttrs = "sysAttrs"
+    replace = "replace"
+    update = "update"
 
 # Class built based on reference docs for the
 # Scorpio Broker FIWARE NGSI-LD API Walktrough.
@@ -47,6 +49,7 @@ class NGSILDAPI():
         self.debug = debug
         if self.debug:
             import logging
+
             # These two lines enable debugging at httplib level
             # (requests->urllib3->http.client)
             # You will see the REQUEST, including HEADERS and DATA,
@@ -260,3 +263,19 @@ class NGSILDAPI():
         )
         if response.status_code != 204:
             response.raise_for_status()
+
+    # NGSI-LD Entity Operations. Upsert -> /entityOperations/upsert
+    def batchEntityUpsert(self, entities: list,
+                          options: Options = Options.replace.value):
+        """
+        Batch Entity create or update (upsert) within an NGSI-LD system.
+        """
+        params = {}
+        params['options'] = options
+        response = self._session.post(
+            "{0}/ngsi-ld/v1/entityOperations/upsert".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers,
+            json=entities
+        )
+        return response
