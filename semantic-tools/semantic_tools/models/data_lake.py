@@ -15,6 +15,7 @@ class Bucket(Entity):
 class DataLake(Entity):
     type: Literal["DataLake"] = "DataLake"
     apiKey: Property
+    region: Property
     uri: Property
 
 
@@ -23,7 +24,6 @@ class Object(Entity):
     eTag: Property
     key: Property
     lastModified: Property
-    region: Property
     size: Property
     storageClass: Property
     containedIn: Relationship
@@ -32,6 +32,5 @@ class Object(Entity):
 
 class Owner(Entity):
     type: Literal["Owner"] = "Owner"
-    name: Property
     ownerId: Property
     memberOf: Relationship
