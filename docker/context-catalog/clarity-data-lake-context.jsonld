@@ -1,0 +1,21 @@
+{
+    "@context": {
+        "Bucket": "http://s3.amazonaws.com/doc/2006-03-01/Bucket",
+        "DataLake": "http://s3.amazonaws.com/doc/2006-03-01/DataLake",
+        "Object": "http://s3.amazonaws.com/doc/2006-03-01/Object",
+        "Owner": "http://s3.amazonaws.com/doc/2006-03-01/Owner",
+        "apiKey": "http://s3.amazonaws.com/doc/2006-03-01/apiKey",
+        "belongsTo": "http://s3.amazonaws.com/doc/2006-03-01/belongsTo",
+        "containedIn": "http://s3.amazonaws.com/doc/2006-03-01/containedIn",
+        "creationDate": "http://s3.amazonaws.com/doc/2006-03-01/creationDate",
+        "eTag": "http://s3.amazonaws.com/doc/2006-03-01/eTag",
+        "key": "http://s3.amazonaws.com/doc/2006-03-01/key",
+        "lastModified": "http://s3.amazonaws.com/doc/2006-03-01/lastModified",
+        "memberOf": "http://s3.amazonaws.com/doc/2006-03-01/memberOf",
+        "ownedBy": "http://s3.amazonaws.com/doc/2006-03-01/ownedBy",
+        "ownerId": "http://s3.amazonaws.com/doc/2006-03-01/ownerId",
+        "region": "http://s3.amazonaws.com/doc/2006-03-01/region",
+        "size": "http://s3.amazonaws.com/doc/2006-03-01/size",
+        "storageClass": "http://s3.amazonaws.com/doc/2006-03-01/storageClass"
+    }
+}
