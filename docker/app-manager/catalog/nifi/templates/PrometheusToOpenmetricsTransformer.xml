@@ -304,7 +304,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${sink_topic}</value>
+                        <value>#{sink_topic}</value>
                     </entry>
                     <entry>
                         <key>acks</key>
@@ -654,7 +654,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${source_topic}</value>
+                        <value>#{source_topic}</value>
                     </entry>
                     <entry>
                         <key>topic_type</key>
@@ -666,7 +666,7 @@
                     </entry>
                     <entry>
                         <key>group.id</key>
-                        <value>${group_id}</value>
+                        <value>#{group_id}</value>
                     </entry>
                     <entry>
                         <key>auto.offset.reset</key>
@@ -785,19 +785,19 @@
                     </entry>
                     <entry>
                         <key>Prometheus Metric Family name</key>
-                        <value>${mf_name}</value>
+                        <value>#{mf_name}</value>
                     </entry>
                     <entry>
                         <key>Prometheus Metric Family type</key>
-                        <value>${mf_type}</value>
+                        <value>#{mf_type}</value>
                     </entry>
                     <entry>
                         <key>Prometheus Metric Family unit</key>
-                        <value>${mf_unit}</value>
+                        <value>#{mf_unit}</value>
                     </entry>
                     <entry>
                         <key>Prometheus Metric Family help</key>
-                        <value>${mf_help}</value>
+                        <value>#{mf_help}</value>
                     </entry>
                 </properties>
                 <runDurationMillis>0</runDurationMillis>

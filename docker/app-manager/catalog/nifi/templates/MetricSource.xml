@@ -466,7 +466,7 @@
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>${sink_broker_url}</value>
+                        <value>#{sink_broker_url}</value>
                     </entry>
                     <entry>
                         <key>security.protocol</key>
@@ -503,7 +503,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${sink_topic}</value>
+                        <value>#{sink_topic}</value>
                     </entry>
                     <entry>
                         <key>acks</key>
@@ -902,7 +902,7 @@
                     </entry>
                     <entry>
                         <key>Remote URL</key>
-                        <value>${prometheus_request}</value>
+                        <value>#{prometheus_request}</value>
                     </entry>
                     <entry>
                         <key>SSL Context Service</key>

@@ -319,7 +319,7 @@
                 </entry>
                 <entry>
                     <key>schema-name</key>
-                    <value>${avro_schema}</value>
+                    <value>#{avro_schema}</value>
                 </entry>
                 <entry>
                     <key>schema-version</key>
@@ -864,11 +864,11 @@
                 <properties>
                     <entry>
                         <key>Command</key>
-                        <value>${command}</value>
+                        <value>#{command}</value>
                     </entry>
                     <entry>
                         <key>Command Arguments</key>
-                        <value>${command_arguments}</value>
+                        <value>#{command_arguments}</value>
                     </entry>
                     <entry>
                         <key>Batch Duration</key>
@@ -1208,11 +1208,11 @@
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>${sink_broker_url}</value>
+                        <value>#{sink_broker_url}</value>
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>${sink_topic}</value>
+                        <value>#{sink_topic}</value>
                     </entry>
                     <entry>
                         <key>record-reader</key>
@@ -1585,7 +1585,7 @@
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>${sink_broker_url}</value>
+                        <value>#{sink_broker_url}</value>
                     </entry>
                     <entry>
                         <key>security.protocol</key>
@@ -1622,7 +1622,7 @@
                     </entry>
                     <entry>
                         <key>topic</key>
-                        <value>gnmic-${sink_topic}</value>
+                        <value>gnmic-#{sink_topic}</value>
                     </entry>
                     <entry>
                         <key>topic_type</key>
