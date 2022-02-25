@@ -5,7 +5,8 @@ set -e
 # activate our virtual environment here
 . /venv/bin/activate
 
-# You can put other setup logic here
-
-# Evaluating passed command:
-exec "$@"
+exec python data_lake_explorer/main.py \
+     --broker-uri "${BROKER_URI}" \
+     --data-lake-uri "${DATA_LAKE_URI}" \
+     --data-lake-key "${DATA_LAKE_KEY}" \
+     --data-lake-region "${DATA_LAKE_REGION}"

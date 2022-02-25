@@ -5,17 +5,14 @@ from requests.adapters import HTTPAdapter
 from requests.models import Response
 from urllib3.util.retry import Retry
 
-API_GATEWAY_URI = 'https://2yd7m1wqii.execute-api.eu-west-2.amazonaws.com/v1'
-API_GATEWAY_KEY = 'NnYdCrSuGT8j9MAf9wWRVaFwqVwAzYMc27OUna3r'
-AWS_REGION = 'eu-west-2'
-
 logger = logging.getLogger(__name__)
 
 
 class APIGateway():
     def __init__(
-            self, url: str = API_GATEWAY_URI,
-            api_key: str = API_GATEWAY_KEY,
+            self, url: str,
+            api_key: str,
+            region: str,
             disable_ssl: bool = False,
             debug: bool = False):
 
@@ -24,6 +21,8 @@ class APIGateway():
             "Accept": "application/json"
         }
         self.url = url
+        self.api_key = api_key
+        self.region = region
         self.ssl_verification = not disable_ssl
         # Retry strategy
         retry_strategy = Retry(
