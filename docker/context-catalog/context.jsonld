@@ -1,6 +1,7 @@
 {
     "@context": [
         "http://context-catalog:8080/application-context.jsonld",
+        "http://context-catalog:8080/clarity-data-lake-context.jsonld",
         "http://context-catalog:8080/common-context.jsonld",
         "http://context-catalog:8080/metric-context.jsonld",
         "http://context-catalog:8080/nfv-context.jsonld",
