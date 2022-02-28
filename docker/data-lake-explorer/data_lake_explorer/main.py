@@ -2,7 +2,6 @@ import argparse
 import logging
 import sys
 import xml.etree.ElementTree as ET
-from logging import config
 from typing import List, Tuple
 
 from semantic_tools.models.data_lake import Bucket, DataLake, Object, Owner
@@ -180,7 +179,6 @@ if __name__ == "__main__":
     known_args, _ = parser.parse_known_args(argv)
 
     # Init NGSI-LD REST API Client
-    # Set URL to Stellio API-Gateway
     headers = {"Accept": "application/json"}
     context = "http://context-catalog:8080/context.jsonld"
     debug = False
