@@ -83,10 +83,14 @@ services:
       dockerfile: ./docker/experimenter/Dockerfile
     hostname: experimenter
     container_name: experimenter
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - EXPERIMENTER_URI=${EXPERIMENTER_URI}
     ports:
       - "8080"
     volumes:
-      - ./docker/experimenter/app:/opt/experimenter/app
+      - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
   kafka:
     image: wurstmeister/kafka:latest
     hostname: kafka

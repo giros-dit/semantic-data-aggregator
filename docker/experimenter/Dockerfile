@@ -1,29 +1,41 @@
-FROM python:3.8
+# Based on https://stackoverflow.com/a/57886655
+FROM python:3.9-slim-buster as base
 
-RUN mkdir /opt/experimenter
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
-# Install and config Poetry
-RUN pip install poetry==1.1.7
+# Set hierarchy with folders
+ENV APP_NAME=experimenter
+ENV APP_DIR=/opt/sda/${APP_NAME}
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
 
-RUN poetry config virtualenvs.create false
+FROM base as builder
 
-# Install semantic-tools
-COPY ./semantic-tools /tmp/semantic-tools
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VERSION=1.1.13
 
-WORKDIR /tmp/semantic-tools
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
 
-RUN poetry install
+# Copy semantic-tools dependency
+RUN mkdir -p /opt/semantic-tools
+COPY semantic-tools /opt/semantic-tools
+# Copy app artifacts
+COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
+RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin
 
-# Install dependencies
-COPY ./docker/experimenter/requirements.txt /opt/experimenter/requirements.txt
+COPY docker/${APP_NAME}/ .
+RUN poetry build && /venv/bin/pip install dist/*.whl
 
-RUN pip install -r /opt/experimenter/requirements.txt
+FROM base as final
 
-# Copy application
-COPY ./docker/experimenter/app /opt/experimenter/app
+COPY --from=builder /venv /venv
+COPY --from=builder ${APP_DIR} .
+COPY docker/${APP_NAME}/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
-WORKDIR /opt/experimenter/app
-
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload", "--log-config", "config/log.yaml"]
+CMD ["./docker-entrypoint.sh"]

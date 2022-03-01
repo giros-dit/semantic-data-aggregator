@@ -1,27 +1,31 @@
-from fastapi import FastAPI, status, Request
-from semantic_tools.clients.ngsi_ld import NGSILDClient
-from semantic_tools.models.common import Endpoint
-from semantic_tools.models.metric import (
-    MetricSource, MetricTarget,
-    MetricProcessor, StreamApplication,
-    Prometheus
-)
-from semantic_tools.models.telemetry import TelemetrySource, Device
-from semantic_tools.models.stream import EVESource, SOLogSource
-
 import logging
-import ngsi_ld_ops
+import os
+
+from fastapi import FastAPI, Request, status
+from semantic_tools.models.common import Endpoint
+from semantic_tools.models.metric import (MetricProcessor, MetricSource,
+                                          MetricTarget, Prometheus,
+                                          StreamApplication)
+from semantic_tools.models.stream import EVESource, SOLogSource
+from semantic_tools.models.telemetry import Device, TelemetrySource
+from semantic_tools.ngsi_ld.client import NGSILDClient
+
+from experimenter import ngsi_ld_ops
 
 logger = logging.getLogger(__name__)
 
-# Init NGSI-LD API Client
-ngsi = NGSILDClient(
-            url="http://scorpio:9090",
-            headers={"Accept": "application/json"},
-            context="http://context-catalog:8080/context.jsonld")
+# NGSI-LD Context Broker
+BROKER_URI = os.getenv("BROKER_URI", "http://scorpio:9090")
+# Context Catalog
+CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
+                                "http://context-catalog:8080/context.jsonld")
+# Experimenter
+EXPERIMENTER_URI = os.getenv("EXPERIMENTER_URI",
+                             "http://experimenter:8080/notify")
 
-# Experimenter URI (Should be provided by external agent in the future)
-experimenter_uri = "http://experimenter:8080/notify"
+
+# Init NGSI-LD Client
+ngsi_ld = NGSILDClient(url=BROKER_URI, context=CONTEXT_CATALOG_URI)
 
 # FastAPI specific code
 tags_metadata = [
@@ -36,23 +40,25 @@ app = FastAPI(
     version="1.0.0",
     openapi_tags=tags_metadata)
 
+
 @app.on_event("startup")
 async def startup_event():
     # Check Scorpio API is up
-    ngsi_ld_ops.check_scorpio_status(ngsi)
+    ngsi_ld_ops.check_scorpio_status(ngsi_ld)
     # Subscribe to data pipeline agent entities
-    ngsi_ld_ops.subscribeEVESource(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeMetricSource(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeMetricProcessor(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeStreamApplication(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeMetricTarget(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeTelemetrySource(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeSOLogSource(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeEVESource(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeMetricSource(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeMetricProcessor(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeStreamApplication(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeMetricTarget(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeTelemetrySource(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeSOLogSource(ngsi_ld, EXPERIMENTER_URI)
     # Subscribe to data sources entities
-    ngsi_ld_ops.subscribePrometheus(ngsi, experimenter_uri)
-    ngsi_ld_ops.subscribeDevice(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribePrometheus(ngsi_ld, EXPERIMENTER_URI)
+    ngsi_ld_ops.subscribeDevice(ngsi_ld, EXPERIMENTER_URI)
     # Subscribe to Endpoint entities
-    ngsi_ld_ops.subscribeEndpoint(ngsi, experimenter_uri)
+    ngsi_ld_ops.subscribeEndpoint(ngsi_ld, EXPERIMENTER_URI)
+
 
 # API for experimenter
 @app.post("/notify",
