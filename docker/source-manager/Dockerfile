@@ -1,31 +1,41 @@
-FROM python:3.8
+# Based on https://stackoverflow.com/a/57886655
+FROM python:3.9-slim-buster as base
 
-USER root
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
-RUN mkdir /opt/source-manager
+# Set hierarchy with folders
+ENV APP_NAME=source-manager
+ENV APP_DIR=/opt/sda/${APP_NAME}
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
 
-# Install and config Poetry
-RUN pip install poetry==1.1.7
+FROM base as builder
 
-RUN poetry config virtualenvs.create false
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VERSION=1.1.13
 
-# Install semantic-tools
-COPY ./semantic-tools /tmp/semantic-tools
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
 
-WORKDIR /tmp/semantic-tools
+# Copy semantic-tools dependency
+RUN mkdir -p /opt/semantic-tools
+COPY semantic-tools /opt/semantic-tools
+# Copy app artifacts
+COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
+RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin
 
-RUN poetry install
+COPY docker/${APP_NAME}/ .
+RUN poetry build && /venv/bin/pip install dist/*.whl
 
-# Install dependencies
-COPY ./docker/source-manager/requirements.txt /opt/source-manager/requirements.txt
+FROM base as final
 
-RUN pip install -r /opt/source-manager/requirements.txt
+COPY --from=builder /venv /venv
+COPY --from=builder ${APP_DIR} .
+COPY docker/${APP_NAME}/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
-# Copy application
-COPY ./docker/source-manager/app /opt/source-manager/app
-
-WORKDIR /opt/source-manager/app
-
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload", "--log-config", "config/log.yaml"]
+CMD ["./docker-entrypoint.sh"]

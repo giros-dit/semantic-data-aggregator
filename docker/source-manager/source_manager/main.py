@@ -1,30 +1,28 @@
-from discovery.eve import DCMAPI
+import logging
+import os
+import uuid
+
 from fastapi import FastAPI
 from semantic_tools.ngsi_ld.client import NGSILDClient
 
-import logging
-import uuid
+from source_manager.discovery.eve import DCMAPI
 
 logger = logging.getLogger(__name__)
 
 
+# NGSI-LD Context Broker
+BROKER_URI = os.getenv("BROKER_URI", "http://scorpio:9090")
+# Context Catalog
+CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
+                                "http://context-catalog:8080/context.jsonld")
+
 # Init NGSI-LD Client
-ngsi_ld = NGSILDClient(
-            url="http://scorpio:9090",
-            headers={"Accept": "application/json"},
-            context="http://context-catalog:8080/context.jsonld",
-            debug=False)
+ngsi_ld = NGSILDClient(url=BROKER_URI, context=CONTEXT_CATALOG_URI)
 
 # Init FastAPI server
 app = FastAPI(
     title="Source Manager API",
     version="1.0.0")
-
-
-@app.on_event("startup")
-async def startup_event():
-    # Check Scorpio API is up
-    ngsi_ld.check_scorpio_status()
 
 
 @app.post("/discover-eve/")

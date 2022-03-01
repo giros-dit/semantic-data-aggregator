@@ -208,10 +208,15 @@ services:
         dockerfile: ./docker/source-manager/Dockerfile
     hostname: source-manager
     container_name: source-manager
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
     ports:
       - "8083:8080"
     volumes:
-      - ./docker/source-manager/app:/opt/source-manager/app
+      - ./docker/source-manager/source_manager:/opt/sda/source-manager/source_manager
+    depends_on:
+      - scorpio
   weaver:
     build:
       context: .

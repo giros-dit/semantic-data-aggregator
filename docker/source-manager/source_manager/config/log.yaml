@@ -8,9 +8,6 @@ handlers:
     formatter: simple
     stream: ext://sys.stdout
 loggers:
-  nipyapi:
-    level: WARNING
-    handlers: [console]
   uvicorn.error:
     level: DEBUG
     handlers: [console]
