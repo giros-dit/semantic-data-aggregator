@@ -20,6 +20,7 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
         4. [Source Manager](#source-manager)
         5. [Complex Publisher](#complex-publisher)
         6. [Experimenter](#experimenter)
+    2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
 
 2. [Scenarios](#scenarios)
     1. [All-in-one scenario](#all-in-one-scenario)
