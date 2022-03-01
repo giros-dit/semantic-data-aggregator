@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, Request
+from fastapi import FastAPI, Request, status
 
 # FastAPI specific code
 tags_metadata = [
@@ -12,6 +12,7 @@ app = FastAPI(
     title="Dummy Consumer API",
     version="1.0.0",
     openapi_tags=tags_metadata)
+
 
 # API for consumer
 @app.post("/notify",

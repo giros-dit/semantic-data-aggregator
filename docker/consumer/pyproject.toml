@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "consumer"
+version = "0.1.0"
+description = ""
+authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+fastapi = "^0.74.1"
+uvicorn = "^0.17.5"
+PyYAML = "^6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = ">=4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

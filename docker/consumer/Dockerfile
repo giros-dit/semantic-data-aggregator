@@ -1,17 +1,38 @@
-FROM python:3.8
+# Based on https://stackoverflow.com/a/57886655
+FROM python:3.9-slim-buster as base
 
-RUN mkdir /opt/consumer
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
-# Install dependencies
-COPY ./docker/consumer/requirements.txt /opt/consumer/requirements.txt
+# Set hierarchy with folders
+ENV APP_NAME=consumer
+ENV APP_DIR=/opt/sda/${APP_NAME}
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
 
-RUN pip install -r /opt/consumer/requirements.txt
+FROM base as builder
 
-# Copy application
-COPY ./docker/consumer/app /opt/consumer/app
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VERSION=1.1.13
 
-WORKDIR /opt/consumer/app
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
 
-EXPOSE 8080
+# Copy app artifacts
+COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
+RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+COPY docker/${APP_NAME}/ .
+RUN poetry build && /venv/bin/pip install dist/*.whl
+
+FROM base as final
+
+COPY --from=builder /venv /venv
+COPY --from=builder ${APP_DIR} .
+COPY docker/${APP_NAME}/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
+
+CMD ["./docker-entrypoint.sh"]

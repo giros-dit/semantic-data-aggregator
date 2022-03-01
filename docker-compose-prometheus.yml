@@ -30,7 +30,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/consumer/app:/opt/consumer/app
+      - ./docker/consumer/consumer:/opt/sda/consumer/consumer
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
