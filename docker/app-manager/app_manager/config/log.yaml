@@ -9,7 +9,7 @@ handlers:
     stream: ext://sys.stdout
 loggers:
   nipyapi:
-    level: INFO
+    level: WARNING
     handlers: [console]
   uvicorn.error:
     level: DEBUG

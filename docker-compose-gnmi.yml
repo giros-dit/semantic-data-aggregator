@@ -77,6 +77,12 @@ services:
       - "8080"
     volumes:
       - ./docker/context-catalog:/web
+  eureka:
+    image: scorpiobroker/scorpio:eureka-server_2.1.1
+    hostname: eureka
+    container_name: eureka
+    ports:
+      - "8761"
   experimenter:
     build:
       context: .
@@ -91,21 +97,33 @@ services:
       - "8080"
     volumes:
       - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
+  gateway:
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    hostname: gateway
+    container_name: gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
   kafka:
-    image: wurstmeister/kafka:latest
+    image: bitnami/kafka
     hostname: kafka
     container_name: kafka
     ports:
-      - "9092:9092"
+      - "9092"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_LOG_DIRS: "/tmp/kafka-logs"
+      KAFKA_LOG_RETENTION_MS: 10000
+      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+      ALLOW_PLAINTEXT_LISTENER: "yes"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
+    logging:
+      driver: none
   nifi:
     build:
       context: .
@@ -126,7 +144,7 @@ services:
       - ./docker/nifi:/opt/aggregator
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   postgres:
-    image: mdillon/postgis
+    image: postgis/postgis
     hostname: postgres
     container_name: postgres
     ports:
@@ -138,14 +156,16 @@ services:
     logging:
       driver: none
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_FIWARE_7.9.2
+    image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
     hostname: scorpio
     container_name: scorpio
     ports:
-      - "9090:9090"
+      - "27015"
     depends_on:
-      - kafka
+      - gateway
+      - eureka
       - postgres
+      - kafka
   weaver:
     build:
       context: .
@@ -173,7 +193,6 @@ services:
       - "2181"
     logging:
       driver: none
-    working_dir: /
 networks:
   net1:
   net2:
