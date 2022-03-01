@@ -35,8 +35,12 @@ services:
         dockerfile: ./docker/data-lake-explorer/Dockerfile
     hostname: data-lake-explorer
     container_name: data-lake-explorer
-    env_file:
-      - .env.clarity
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - DATA_LAKE_URI=${DATA_LAKE_URI}
+      - DATA_LAKE_KEY=${DATA_LAKE_KEY}
+      - DATA_LAKE_REGION=${DATA_LAKE_REGION}
   flink-jobmanager:
     image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -148,6 +152,3 @@ services:
     logging:
       driver: none
     working_dir: /
-networks:
-  net1:
-  net2:
