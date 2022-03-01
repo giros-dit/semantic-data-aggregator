@@ -145,9 +145,11 @@ services:
     container_name: nifi
     user: root
     environment:
-      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME}
       # Must be of 12 characters min
-      SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+      SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD}
+      NIFI_JVM_HEAP_INIT: 4g
+      NIFI_JVM_HEAP_MAX: 6g
     ports:
       - "8443:8443"
       # Used by Prometheus exporter
