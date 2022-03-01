@@ -10,28 +10,37 @@ from semantic_tools.nifi.client import NiFiClient
 
 logger = logging.getLogger(__name__)
 
+# Config catalog paths
+script_dir = os.path.dirname(__file__)
+JARS_PATH = os.path.join(script_dir, "catalog", "flink", "jars/")
+TEMPLATES_PATH = os.path.join(script_dir, "catalog", "nifi", "templates/")
+
 
 def upload_local_flink_jars(flink: FlinkClient,
                             ngsi_ld: NGSILDClient,
                             app_manager_url: str):
     """
-    Uploads the stream processing application JARs stored locally in the service
-    to the stream processing engine (i.e., the Flink engine).
+    Uploads the stream processing application JARs
+    stored locally in the service to the stream processing
+    engine (i.e., the Flink engine).
     """
     # Upload templates
-    jars_path = "/catalog/flink/jars"
-    for file in os.listdir(jars_path):
-        logger.info("Uploading '%s' admin stream processing application JAR to Flink..." % file)
+    for file in os.listdir(JARS_PATH):
+        logger.info(
+            "Uploading '%s' admin stream processing "
+            "application JAR to Flink..." % file)
         try:
             jar = flink.upload_jar(
-                        jars_path + "/" + file)
+                        JARS_PATH + file)
         except Exception as e:
             logger.info(str(e))
             continue
         jar_id = jar["filename"].split("/")[-1]
-        application_name = jar_id.split("_")[-1].replace(".jar","")
+        application_name = jar_id.split("_")[-1].replace(
+            ".jar", "")
         # Register Application context
-        application_uri = app_manager_url + jars_path + "/" + file
+        application_uri = app_manager_url + JARS_PATH.replace(
+            script_dir, "") + file
         application_id = "urn:ngsi-ld:Application:{0}".format(
             jar_id.split("_")[0]
         )
@@ -76,19 +85,19 @@ def upload_local_nifi_templates(
     Upload NiFi templates stored locally in the service.
     """
     # Upload templates
-    templates_path = "/catalog/nifi/templates"
-    for file in os.listdir(templates_path):
+    for file in os.listdir(TEMPLATES_PATH):
         logger.info("Uploading '%s' admin template to NiFi..." % file)
         try:
             template = nifi.upload_template(
-                        templates_path + "/" + file)
+                        TEMPLATES_PATH + file)
         except Exception as e:
             logger.info(str(e))
             continue
         internal_id = template.id
         application_name = template.template.name
         # Register Application context
-        application_uri = app_manager_url + templates_path + "/" + file
+        application_uri = app_manager_url + \
+            TEMPLATES_PATH.replace(script_dir, "") + file
         application_id = "urn:ngsi-ld:Application:{0}".format(
             internal_id
         )
@@ -118,7 +127,8 @@ def upload_nifi_template(
     template = nifi.upload_template(file_path)
     # Register Application context
     internal_id = template.id
-    local_path = "/catalog/nifi/templates/%s.xml" % internal_id
+    local_path = TEMPLATES_PATH.replace(script_dir, "") + \
+        "/%s.xml" % internal_id
     application_uri = app_manager_url + local_path
     application_id = "urn:ngsi-ld:Application:{0}".format(
         internal_id

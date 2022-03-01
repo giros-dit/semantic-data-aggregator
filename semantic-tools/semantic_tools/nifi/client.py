@@ -50,8 +50,8 @@ class NiFiClient(object):
             username=self.username,
             password=self.password,
             bool_response=True,
-            nipyapi_delay=nipyapi.config.long_retry_delay,  # Default 5 sec
-            nipyapi_max_wait=nipyapi.config.long_max_wait  # Default 120 sec
+            nipyapi_delay=10,  # 10 sec
+            nipyapi_max_wait=120  # 120 sec
         )
         nifi_user = nipyapi.security.get_service_access_status(service='nifi')
         logger.info(

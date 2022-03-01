@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "semantic_tools"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tools for the semantic data aggregator components"
 authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 pydantic = "^1.8.2"
-nipyapi = "^0.16.2"
+nipyapi = ">=0.18.0"
 PyYAML = "^5.4.1"
 requests = "^2.26.0"
 

@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import time
 from typing import Literal, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -9,31 +10,34 @@ from semantic_tools.flink.client import FlinkClient
 from semantic_tools.ngsi_ld.client import NGSILDClient
 from semantic_tools.nifi.client import NiFiClient
 
-import app_manager
+from app_manager import loader
 
 logger = logging.getLogger(__name__)
 
 
-# Application Manager URL (Should be provided by external agent in the future)
-APP_MANAGER_URL = "http://app-manager:8080"
+# Application Manager
+APP_MANAGER_URI = os.getenv("APP_MANAGER_URI", "http://app-manager:8080")
+# NGSI-LD Context Broker
+BROKER_URI = os.getenv("BROKER_URI", "http://scorpio:9090")
+# Context Catalog
+CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
+                                "http://context-catalog:8080/context.jsonld")
+# Flink
+FLINK_MANAGER_URI = os.getenv("FLINK_MANAGER_URI",
+                              "http://flink-jobmanager:8081")
+# NiFi
+NIFI_URI = os.getenv("NIFI_URI", "https://nifi:8443/nifi-api")
+NIFI_USERNAME = os.getenv("NIFI_USERNAME")
+NIFI_PASSWORD = os.getenv("NIFI_PASSWORD")
 
 # Init NGSI-LD Client
-ngsi_ld = NGSILDClient(
-    url="http://scorpio:9090",
-    headers={"Accept": "application/json"},
-    context="http://context-catalog:8080/context.jsonld")
-
+ngsi_ld = NGSILDClient(url=BROKER_URI, context=CONTEXT_CATALOG_URI)
 # Init Flink REST API Client
-flink = FlinkClient(
-    url="http://flink-jobmanager:8081",
-    headers={
-        "Accept": "application/json",
-        "Content-Type": "application/json"})
-
+flink = FlinkClient(url=FLINK_MANAGER_URI)
 # Init NiFi REST API Client
-nifi = NiFiClient(username="admin",
-                  password="ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB",
-                  url="https://nifi:8443/nifi-api")
+nifi = NiFiClient(username=NIFI_USERNAME,
+                  password=NIFI_PASSWORD,
+                  url=NIFI_URI)
 
 # Init FastAPI server
 app = FastAPI(
@@ -41,23 +45,31 @@ app = FastAPI(
     version="1.0.0")
 
 # Mount static catalog
-app.mount("/catalog", StaticFiles(directory="/catalog"), name="catalog")
+script_dir = os.path.dirname(__file__)
+st_abs_file_path = os.path.join(script_dir, "catalog")
+app.mount("/catalog", StaticFiles(directory=st_abs_file_path), name="catalog")
 
 
 @app.on_event("startup")
 async def startup_event():
-    # Check Scorpio API is up
-    ngsi_ld.check_scorpio_status()
     # Check NiFi REST API is up
-    nifi.login()
+    # Hack for startup
+    while True:
+        try:
+            nifi.login()
+            break
+        except Exception:
+            logger.warning("NiFi REST API not available. "
+                           "Retrying after 10 seconds...")
+            time.sleep(10)
     # Upload NiFi admin templates
-    app_manager.upload_local_nifi_templates(
-        nifi, ngsi_ld, APP_MANAGER_URL)
+    loader.upload_local_nifi_templates(
+        nifi, ngsi_ld, APP_MANAGER_URI)
     # Check Flink REST API is up
     flink.check_flink_status()
     # Upload Flink admin JARs
-    app_manager.upload_local_flink_jars(
-        flink, ngsi_ld, APP_MANAGER_URL)
+    loader.upload_local_flink_jars(
+        flink, ngsi_ld, APP_MANAGER_URI)
 
 
 @app.post("/applications/")
@@ -80,9 +92,9 @@ async def onboard_application(application_type: Literal["FLINK", "NIFI"],
             # Nipyapi runs check of file format for us
             # Moreover, the only way to find out the identifier
             # of the template, i.e. name, is by uploading it
-            application = app_manager.upload_nifi_template(
+            application = loader.upload_nifi_template(
                 nifi, ngsi_ld, name, temp_path,
-                APP_MANAGER_URL, description)
+                APP_MANAGER_URI, description)
         except TypeError as e:
             logger.error(str(e))
             os.remove(temp_path)
@@ -111,9 +123,9 @@ async def onboard_application(application_type: Literal["FLINK", "NIFI"],
         f.close()
         try:
             # Upload application to Flink
-            application = app_manager.upload_flink_jar(
+            application = loader.upload_flink_jar(
                 flink, ngsi_ld, name, temp_path,
-                APP_MANAGER_URL, description)
+                APP_MANAGER_URI, description)
         except Exception as e:
             logger.error(str(e))
             os.remove(temp_path)

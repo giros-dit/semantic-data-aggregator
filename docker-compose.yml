@@ -6,11 +6,21 @@ services:
         dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
+    environment:
+      - APP_MANAGER_URI=${APP_MANAGER_URI}
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
     ports:
       - "8082:8080"
     volumes:
-      - ./docker/app-manager/app:/opt/app-manager/app
-      - ./docker/app-manager/catalog:/catalog
+      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+    depends_on:
+      - nifi
+      - scorpio
   ceos1:
     image: "ceos-image:4.25.4M"
     hostname: ceos1
