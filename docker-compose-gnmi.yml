@@ -148,10 +148,16 @@ services:
       dockerfile: ./docker/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
-    user: root
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
+      - WEAVER_URI=${WEAVER_URI}
     volumes:
-      - ./docker/weaver/app:/opt/weaver/app
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
       - nifi
       - scorpio

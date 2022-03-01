@@ -1,7 +1,7 @@
-from models.application import Application
 from ops import ngsi_ld_ops
-from semantic_tools.clients.ngsi_ld import NGSILDClient
+from semantic_tools.models.application import Application
 from semantic_tools.models.ngsi_ld.entity import Entity
+from semantic_tools.ngsi_ld.client import NGSILDClient
 
 
 def checkApplicationExistence(task: Application, ngsi: NGSILDClient) -> bool:

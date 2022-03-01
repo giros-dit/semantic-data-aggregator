@@ -381,6 +381,7 @@ def config_prometheus2openmetrics_transformer(
     arguments.update(task.arguments.value)
     return arguments
 
+
 def config_logparser2openmetrics_transformer(
         task: Task, ngsi_ld: NGSILDClient) -> dict:
     """
