@@ -1,34 +1,41 @@
-FROM python:3.8
+# Based on https://stackoverflow.com/a/57886655
+FROM python:3.9-slim-buster as base
 
-USER root
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
-RUN mkdir /opt/weaver
+# Set hierarchy with folders
+ENV APP_NAME=weaver
+ENV APP_DIR=/opt/sda/${APP_NAME}
+RUN mkdir -p ${APP_DIR}
+WORKDIR ${APP_DIR}
 
-# Install gNMIc
-RUN bash -c "$(curl -sL https://get-gnmic.kmrd.dev)"
+FROM base as builder
 
-# Install and config Poetry
-RUN pip install poetry==1.1.7
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VERSION=1.1.13
 
-RUN poetry config virtualenvs.create false
+RUN pip install "poetry==$POETRY_VERSION"
+RUN python -m venv /venv
 
-# Install semantic-tools
-COPY ./semantic-tools /tmp/semantic-tools
+# Copy semantic-tools dependency
+RUN mkdir -p /opt/semantic-tools
+COPY semantic-tools /opt/semantic-tools
+# Copy app artifacts
+COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
+RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin
 
-WORKDIR /tmp/semantic-tools
+COPY docker/${APP_NAME}/ .
+RUN poetry build && /venv/bin/pip install dist/*.whl
 
-RUN poetry install
+FROM base as final
 
-# Install dependencies
-COPY ./docker/weaver/requirements.txt /opt/weaver/requirements.txt
+COPY --from=builder /venv /venv
+COPY --from=builder ${APP_DIR} .
+COPY docker/${APP_NAME}/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
-RUN pip install -r /opt/weaver/requirements.txt
-
-# Copy application
-COPY ./docker/weaver/app /opt/weaver/app
-
-WORKDIR /opt/weaver/app
-
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload", "--log-config", "config/log.yaml"]
+CMD ["./docker-entrypoint.sh"]

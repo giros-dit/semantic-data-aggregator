@@ -20,6 +20,7 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
         4. [Source Manager](#source-manager)
         5. [Complex Publisher](#complex-publisher)
         6. [Experimenter](#experimenter)
+    2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
 
 2. [Scenarios](#scenarios)
     1. [All-in-one scenario](#all-in-one-scenario)
@@ -37,6 +38,8 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 - Docker (_Tested with version 19.03.13_)
 - Docker-compose (_Tested with version 1.27.4_)
+- Python 3.9
+- [Poetry](https://python-poetry.org/docs/)
 
 ## Microservices
 
@@ -69,6 +72,26 @@ The [complex-publishers](docker/complex-publishers) utility allows for generatin
 ### Experimenter
 
 The [experimenter](docker/experimenter) container emulates an application that receives updates from Tasks running in the SDA. This container subscribes to the Context Broker in order to receive NGSI-LD notifications related with the Tasks. These notifications are sent to stdout. The experimenter container serves as a first step towards a GUI to visualize the status of Tasks running in the SDA.
+
+## Developing microservices using Poetry
+
+Most of SDA microservices are applications based on Python. To ease management of Python dependencies we rely on poetry tool. Poetry takes care of solving dependency conflicts and also configures virtual environments to develop our Python application.
+
+The following guidelines are proposed to develop Python-based microservices for the SDA:
+
+1. Create folder for your application following a structure similar to [this](docker/app-manager)
+2. Start poetry project with `poetry init`
+3. Init virtual environment  with `poetry env use python3.9`. This should create a folder `.venv`.
+4. Activate virtual environment for development using `poetry shell`. Make sure venv is configured for your shell. In case this command fails, you must activate the environment manually by running `source <path to bin/activate script within venv>
+5. Include dependencies running `poetry add <my-dependency>`
+6. Install dependencies in your virtual environment with `poetry install`
+7. Now you can start developing your application within a fully configured virtual environment
+
+Once you are done with you application, we proposed a structure to containerize the application using a Dockerfile plus a  `docker-entrypoint.sh`.
+
+- The Dockerfile is mostly generic for all microservices execpt for the `APP_NAME`variable. This container will copy poetry files to replicate your virtual environment within the Docker image.
+- The `docker-entrypoint.sh` is the interesting part. This script works as wrapper to call your python application.
+- When developing your containerized application, you can mount the application code's folder as done in the docker-compose files existing in this repository. For example [see](docker-compose.yml)
 
 # Scenarios
 

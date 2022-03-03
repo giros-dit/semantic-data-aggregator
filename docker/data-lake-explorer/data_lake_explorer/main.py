@@ -161,6 +161,12 @@ if __name__ == "__main__":
         required=False,
         help='NGSI-LD Context Broker URI.')
     parser.add_argument(
+        '--context-catalog-uri',
+        dest='context_catalog_uri',
+        default="http://context-catalog:8080/context.jsonld",
+        required=False,
+        help='Context Catalog URI.')
+    parser.add_argument(
         '--data-lake-uri',
         dest='data_lake_uri',
         required=True,
@@ -180,11 +186,10 @@ if __name__ == "__main__":
 
     # Init NGSI-LD REST API Client
     headers = {"Accept": "application/json"}
-    context = "http://context-catalog:8080/context.jsonld"
     debug = False
     ngsi_ld_client = NGSILDAPI(
-                    known_args.broker_uri, headers=headers,
-                    context=context, debug=debug)
+        known_args.broker_uri, headers=headers,
+        context=known_args.context_catalog_uri, debug=debug)
 
     # Init IDCC API Gateway Client
     ag_client = APIGateway(

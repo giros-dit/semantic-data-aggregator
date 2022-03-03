@@ -6,11 +6,21 @@ services:
         dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
+    environment:
+      - APP_MANAGER_URI=${APP_MANAGER_URI}
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
     ports:
       - "8082:8080"
     volumes:
-      - ./docker/app-manager/app:/opt/app-manager/app
-      - ./docker/app-manager/catalog:/catalog
+      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+    depends_on:
+      - nifi
+      - scorpio
   ceos1:
     image: "ceos-image:4.25.4M"
     hostname: ceos1
@@ -58,7 +68,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/consumer/app:/opt/consumer/app
+      - ./docker/consumer/consumer:/opt/sda/consumer/consumer
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -79,10 +89,14 @@ services:
       dockerfile: ./docker/experimenter/Dockerfile
     hostname: experimenter
     container_name: experimenter
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - EXPERIMENTER_URI=${EXPERIMENTER_URI}
     ports:
       - "8080"
     volumes:
-      - ./docker/experimenter/app:/opt/experimenter/app
+      - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
   flink-jobmanager:
     image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -131,9 +145,11 @@ services:
     container_name: nifi
     user: root
     environment:
-      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME}
       # Must be of 12 characters min
-      SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+      SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD}
+      NIFI_JVM_HEAP_INIT: 4g
+      NIFI_JVM_HEAP_MAX: 6g
     ports:
       - "8443:8443"
       # Used by Prometheus exporter
@@ -194,20 +210,31 @@ services:
         dockerfile: ./docker/source-manager/Dockerfile
     hostname: source-manager
     container_name: source-manager
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
     ports:
       - "8083:8080"
     volumes:
-      - ./docker/source-manager/app:/opt/source-manager/app
+      - ./docker/source-manager/source_manager:/opt/sda/source-manager/source_manager
+    depends_on:
+      - scorpio
   weaver:
     build:
       context: .
       dockerfile: ./docker/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
-    user: root
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
+      - WEAVER_URI=${WEAVER_URI}
     volumes:
-      - ./docker/weaver/app:/opt/weaver/app
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
       - nifi
       - scorpio

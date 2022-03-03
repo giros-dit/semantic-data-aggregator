@@ -1,5 +1,0 @@
-aiofiles
-fastapi
-python-multipart
-semantic-tools
-uvicorn

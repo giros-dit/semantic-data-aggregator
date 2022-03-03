@@ -2,15 +2,25 @@ version: '3'
 services:
   app-manager:
     build:
-        context: ./app-manager
-        dockerfile: Dockerfile
+        context: .
+        dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
+    environment:
+      - APP_MANAGER_URI=${APP_MANAGER_URI}
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
     ports:
       - "8082:8080"
     volumes:
-      - ./app-manager/app:/app
-      - ./app-manager/catalog:/catalog
+      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+    depends_on:
+      - nifi
+      - scorpio
   # consumer:
   #   build:
   #     context: ./consumer
@@ -87,9 +97,10 @@ services:
     container_name: nifi
     user: root
     environment:
-      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME}
       # Must be of 12 characters min
-      SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+      SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD}
       NIFI_JVM_HEAP_INIT: 4g
       NIFI_JVM_HEAP_MAX: 6g
     ports:
@@ -147,11 +158,20 @@ services:
       - postgres
   weaver:
     build:
-      context: ./weaver
+      context: .
+      dockerfile: ./docker/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
+      - NIFI_URI=${NIFI_URI}
+      - NIFI_USERNAME=${NIFI_USERNAME}
+      - NIFI_PASSWORD=${NIFI_PASSWORD}
+      - WEAVER_URI=${WEAVER_URI}
     volumes:
-      - ./weaver/app:/app
+      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
       - nifi
       - scorpio

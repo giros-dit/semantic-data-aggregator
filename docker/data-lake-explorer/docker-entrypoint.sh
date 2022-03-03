@@ -7,6 +7,7 @@ set -e
 
 exec python data_lake_explorer/main.py \
      --broker-uri "${BROKER_URI}" \
+     --context-catalog-uri "${CONTEXT_CATALOG_URI}" \
      --data-lake-uri "${DATA_LAKE_URI}" \
      --data-lake-key "${DATA_LAKE_KEY}" \
      --data-lake-region "${DATA_LAKE_REGION}"
