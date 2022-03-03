@@ -82,17 +82,24 @@ class NGSILDClient(object):
         """
         Create Application entity based on the provided configuration.
         """
-        logger.debug("Creating Application entity id '%s'" % id)
-        application = Application(
-            id=application_id,
-            name={"value": name},
-            internalId={"value": internal_id},
-            applicationType={"value": application_type},
-            uri={"value": uri}
-        )
+        logger.debug("Creating Application entity id '%s'" % application_id)
         if description:
-            application.description = {"value": description}
-
+            application = Application(
+                id=application_id,
+                name={"value": name},
+                description={"value": description},
+                internalId={"value": internal_id},
+                applicationType={"value": application_type},
+                uri={"value": uri}
+            )
+        else:
+            application = Application(
+                id=application_id,
+                name={"value": name},
+                internalId={"value": internal_id},
+                applicationType={"value": application_type},
+                uri={"value": uri}
+            )
         self.api.createEntity(application.dict(exclude_none=True))
         return application
 

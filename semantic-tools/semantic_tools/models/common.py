@@ -1,6 +1,7 @@
-from semantic_tools.models.ngsi_ld.entity import Entity, Property, Relationship
-from pydantic import AnyUrl
 from typing import Literal, Optional
+
+from pydantic import AnyHttpUrl
+from semantic_tools.models.ngsi_ld.entity import Entity, Property, Relationship
 
 
 class Action(Property):
@@ -14,7 +15,7 @@ class State(Property):
 
 
 class URI(Property):
-    value: AnyUrl
+    value: AnyHttpUrl
 
 
 # Inspiration from the Asset type proposed by Apache Atlas
