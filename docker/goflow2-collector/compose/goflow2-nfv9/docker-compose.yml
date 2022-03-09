@@ -1,0 +1,18 @@
+version: "3"
+services:
+  goflow:
+    image: prueba:latest
+    ports:
+      - 8080:8080
+      - 6343:6343/udp
+      - 9995:9995/udp
+      #- 9995:9995/udp
+    restart: always
+    volumes:
+      - ./mapping:/mapping
+    command: -format=json -listen="netflow://:9995" -mapping="mapping/mapping.yaml"
+    #- -listen="netflow://:9995"
+    #- -mapping= "mapping.yaml"
+    #- -format=json
+
+  
