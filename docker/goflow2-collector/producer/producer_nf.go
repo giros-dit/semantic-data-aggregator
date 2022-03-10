@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/netflow"
-	flowmessage "github.com/cristinapmz/goflow2-nfv9/pb"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflow"
+	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
 )
 
 type SamplingRateSystem interface {

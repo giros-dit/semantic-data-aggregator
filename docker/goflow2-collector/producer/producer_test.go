@@ -3,8 +3,8 @@ package producer
 import (
 	"testing"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/netflow"
-	"github.com/cristinapmz/goflow2-nfv9/decoders/sflow"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflow"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/sflow"
 	"github.com/stretchr/testify/assert"
 )
 

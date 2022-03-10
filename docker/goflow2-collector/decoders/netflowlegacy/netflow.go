@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/utils"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/utils"
 )
 
 type ErrorVersion struct {

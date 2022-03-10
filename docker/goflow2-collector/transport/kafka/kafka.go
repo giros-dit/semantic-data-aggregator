@@ -12,8 +12,8 @@ import (
 	"time"
 
 	sarama "github.com/Shopify/sarama"
-	"github.com/cristinapmz/goflow2-nfv9/transport"
-	"github.com/cristinapmz/goflow2-nfv9/utils"
+	"semantic-data-aggregator/docker/goflow2-collector/transport"
+	"semantic-data-aggregator/docker/goflow2-collector/utils"
 
 	log "github.com/sirupsen/logrus"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/netflow"
-	flowmessage "github.com/cristinapmz/goflow2-nfv9/pb"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflow"
+	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
 )
 
 func GetBytes(d []byte, offset int, length int) []byte {

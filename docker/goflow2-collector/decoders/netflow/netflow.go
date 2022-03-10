@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/utils"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/utils"
 )
 
 type FlowBaseTemplateSet map[uint16]map[uint32]map[uint16]interface{}

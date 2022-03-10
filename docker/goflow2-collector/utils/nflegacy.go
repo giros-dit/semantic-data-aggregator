@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"time"
 
-	"github.com/cristinapmz/goflow2-nfv9/decoders/netflowlegacy"
-	"github.com/cristinapmz/goflow2-nfv9/format"
-	flowmessage "github.com/cristinapmz/goflow2-nfv9/pb"
-	"github.com/cristinapmz/goflow2-nfv9/producer"
-	"github.com/cristinapmz/goflow2-nfv9/transport"
+	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflowlegacy"
+	"semantic-data-aggregator/docker/goflow2-collector/format"
+	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
+	"semantic-data-aggregator/docker/goflow2-collector/producer"
+	"semantic-data-aggregator/docker/goflow2-collector/transport"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

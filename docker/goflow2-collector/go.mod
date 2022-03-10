@@ -1,4 +1,4 @@
-module github.com/cristinapmz/goflow2-nfv9
+module semantic-data-aggregator/docker/goflow2-collector
 
 go 1.17
 

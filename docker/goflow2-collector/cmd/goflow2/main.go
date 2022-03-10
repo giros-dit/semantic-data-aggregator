@@ -12,17 +12,17 @@ import (
 	"sync"
 
 	// import various formatters
-	"github.com/cristinapmz/goflow2-nfv9/format"
-	_ "github.com/cristinapmz/goflow2-nfv9/format/json"
-	_ "github.com/cristinapmz/goflow2-nfv9/format/protobuf"
-	_ "github.com/cristinapmz/goflow2-nfv9/format/text"
+	"semantic-data-aggregator/docker/goflow2-collector/format"
+	_ "semantic-data-aggregator/docker/goflow2-collector/format/json"
+	_ "semantic-data-aggregator/docker/goflow2-collector/format/protobuf"
+	_ "semantic-data-aggregator/docker/goflow2-collector/format/text"
 
 	// import various transports
-	"github.com/cristinapmz/goflow2-nfv9/transport"
-	_ "github.com/cristinapmz/goflow2-nfv9/transport/file"
-	_ "github.com/cristinapmz/goflow2-nfv9/transport/kafka"
+	"semantic-data-aggregator/docker/goflow2-collector/transport"
+	_ "semantic-data-aggregator/docker/goflow2-collector/transport/file"
+	_ "semantic-data-aggregator/docker/goflow2-collector/transport/kafka"
 
-	"github.com/cristinapmz/goflow2-nfv9/utils"
+	"semantic-data-aggregator/docker/goflow2-collector/utils"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
