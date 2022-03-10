@@ -2,8 +2,8 @@ version: '3'
 services:
   app-manager:
     build:
-        context: .
-        dockerfile: ./docker/app-manager/Dockerfile
+      context: .
+      dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -21,16 +21,6 @@ services:
     depends_on:
       - nifi
       - scorpio
-  # consumer:
-  #   build:
-  #     context: ./consumer
-  #     dockerfile: Dockerfile
-  #   hostname: consumer
-  #   container_name: consumer
-  #   ports:
-  #     - "8080"
-  #   volumes:
-  #     - ./consumer/app:/app
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -38,23 +28,13 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./context-catalog:/web
+      - ./docker/context-catalog:/web
   eureka:
     image: scorpiobroker/scorpio:eureka-server_2.1.1
     hostname: eureka
     container_name: eureka
     ports:
       - "8761"
-  # experimenter:
-  #   build:
-  #     context: ./experimenter
-  #     dockerfile: Dockerfile
-  #   hostname: experimenter
-  #   container_name: experimenter
-  #   ports:
-  #     - "8085:8080"
-  #   volumes:
-  #     - ./experimenter/app:/app
   gateway:
     image: scorpiobroker/scorpio:gateway_aaio_2.1.1
     hostname: gateway
@@ -64,7 +44,7 @@ services:
     depends_on:
       - eureka
   flink-jobmanager:
-    image: flink:latest
+    image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
@@ -77,7 +57,7 @@ services:
     volumes:
       - ./flink-conf:/flink-conf
   flink-taskmanager:
-    image: flink:latest
+    image: flink:1.14.0-scala_2.12-java11
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     depends_on:
@@ -109,13 +89,12 @@ services:
       driver: none
   nifi:
     build:
-      context: ./nifi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
     environment:
-      environment:
       SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME}
       # Must be of 12 characters min
       SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD}
@@ -129,22 +108,7 @@ services:
       - ./gnmi/gnmic-cfgs:/gnmic-cfgs
       - ./docker/nifi/drivers/jinja-templates:/jinja-templates
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
-  node-exporter-1:
-    image: prom/node-exporter
-    hostname: node-exporter-1
-    container_name: node-exporter-1
-    ports:
-      - "9100:9100"
-    depends_on:
-      - prometheus
-  node-exporter-2:
-    image: prom/node-exporter
-    hostname: node-exporter-2
-    container_name: node-exporter-2
-    ports:
-      - "9101:9100"
-    depends_on:
-      - prometheus
+      - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
   postgres:
     image: postgis/postgis
     hostname: postgres
@@ -157,14 +121,6 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
-    ports:
-      - "9099:9090"
-    volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
     hostname: scorpio
@@ -190,6 +146,8 @@ services:
       - NIFI_USERNAME=${NIFI_USERNAME}
       - NIFI_PASSWORD=${NIFI_PASSWORD}
       - WEAVER_URI=${WEAVER_URI}
+    ports:
+      - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
@@ -203,3 +161,21 @@ services:
       - "2181"
     logging:
       driver: none
+  goflow2:
+    build:
+       context: .
+       dockerfile: ./docker/goflow2-collector/Dockerfile
+    hostname: goflow2
+    container_name: goflow2
+    ports:
+      - 9995:9995/udp
+    depends_on:
+      - kafka
+    restart: always
+    command:
+    - -transport=kafka
+    - -transport.kafka.brokers=kafka:9092
+    - -transport.kafka.topic=flows
+    - -format=json
+    - -listen=netflow://:9995
+
