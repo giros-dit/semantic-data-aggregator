@@ -1,12 +1,18 @@
 FROM golang:alpine as builder
 ARG LDFLAGS=""
 
+ENV GO111MODULE=on 
 RUN apk --update --no-cache add git build-base gcc
 
-COPY . /build
+COPY docker/goflow2-collector /build
 WORKDIR /build
 
-RUN go build -ldflags "${LDFLAGS}" -o goflow2 cmd/goflow2/main.go
+COPY docker/goflow2-collector/go.mod ./
+COPY docker/goflow2-collector/go.sum ./
+RUN go mod download
+
+COPY . .
+RUN go build -ldflags "${LDFLAGS}" -o goflow2 docker/goflow2-collector/cmd/goflow2/main.go
 
 FROM alpine:latest
 ARG src_dir
@@ -31,7 +37,7 @@ LABEL org.opencontainers.image.revision="${REV}"
 RUN apk update --no-cache && \
     adduser -S -D -H -h / flow
 USER flow
-COPY --from=builder /build/goflow2 /
-COPY cmd/goflow2/mapping.yaml /
+COPY --from=builder /build /
+COPY docker/goflow2-collector/cmd/goflow2/mapping.yaml /
 
 ENTRYPOINT ["./goflow2"]
