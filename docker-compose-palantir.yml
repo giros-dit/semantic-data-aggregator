@@ -75,7 +75,7 @@ services:
     hostname: goflow2
     container_name: goflow2
     environment:
-      - KAFKA_TOPIC_NAME=${KAFKA_TOPIC_NAME}
+      - KAFKA_OUTPUT_TOPIC_GOFLOW2=${KAFKA_OUTPUT_TOPIC_GOFLOW2}
     ports:
       - 9995:9995/udp
     depends_on:
@@ -84,7 +84,7 @@ services:
     command:
     - -transport=kafka
     - -transport.kafka.brokers=kafka:9092
-    - -transport.kafka.topic=${KAFKA_TOPIC_NAME}
+    - -transport.kafka.topic=${KAFKA_OUTPUT_TOPIC_GOFLOW2}
     - -format=json
     - -listen=netflow://:9995
   kafka:
