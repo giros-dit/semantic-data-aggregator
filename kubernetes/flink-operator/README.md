@@ -1,8 +1,8 @@
 # Running Flink clusters in Application-mode on Kubernetes
 
-Spotify has developed a Kubernetes operator called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Apache Flink applications. The operator introduces the concept of Flink Cluster as CRD (Custom Resource Definition) in Kubernetes. It allows setting up `session-based` and `job-based` Flink clusters in Kubernetes – the second type refers to the [Application-mode] deployment (https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/overview/#application-mode). Basically, this deployment mode allows deploying a dedicated Flink cluster for submitting a particular job. So the Flink cluster only runs this job and then exits. Additionally, this operator allows for submitting Application-mode jobs that may build on JAR files or Python scripts that leverage PyFlink API.
+Spotify has developed a Kubernetes operator called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Apache Flink applications. The operator introduces the concept of Flink Cluster as CRD (Custom Resource Definition) in Kubernetes. It allows setting up `session-based` and `job-based` Flink clusters in Kubernetes – the second type refers to the [Application-mode](https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/overview/#application-mode) deployment. Basically, this deployment mode allows deploying a dedicated Flink cluster for submitting a particular job. So the Flink cluster only runs this job and then exits. Additionally, this operator allows for submitting Application-mode jobs that may build on JAR files or Python scripts that leverage PyFlink API.
 
-In summary, this Kubernetes operator allows orchestrating Flink jobs executed in Application-mode. Below are the basic steps to install the aforementioned operator and an example of deploying Flink clusters in Application-mode running a sample job. Following the official `flink-on-k8s-operator` [user guide](https://github.com/spotify/flink-on-k8s-operator/blob/master/docs/user_guide.md), below are the basic steps to install the afomentioned operator and an example of deploying `job-based` Flink clusters running a sample job.
+In summary, this Kubernetes operator allows orchestrating Flink jobs executed in Application-mode. Following the official [flink-on-k8s-operator user guide](https://github.com/spotify/flink-on-k8s-operator/blob/master/docs/user_guide.md), below are the basic steps to install the afomentioned Flink operator and an example of deploying Flink clusters in Application-mode running a sample job.
 
 
 ## Prerequisites
@@ -78,7 +78,7 @@ kubectl delete -f https://github.com/spotify/flink-on-k8s-operator/releases/down
 ## Deployment and management of Flink clusters in Application-mode
 After deploying the Flink CRDs and the Flink Operator to a Kubernetes cluster, the operator serves as a control plane for Flink applications. In other words, previously the cluster only understands the language of Kubernetes, now it understands the language of Flink. Then, you can create custom resources representing Flink clusters in Application-mode.
 
-Deploy a [sample Flink cluster in Application-mode](./flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) custom resource with:
+Deploy a [sample Flink cluster in Application-mode](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) custom resource with:
 ```bash
 kubectl apply -f flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml
 ```
