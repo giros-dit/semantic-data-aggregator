@@ -35,14 +35,6 @@ services:
     container_name: eureka
     ports:
       - "8761"
-  gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
-    hostname: gateway
-    container_name: gateway
-    ports:
-      - "9090:9090"
-    depends_on:
-      - eureka
   flink-jobmanager:
     image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -68,6 +60,31 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
+  gateway:
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    hostname: gateway
+    container_name: gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
+  goflow2:
+    build:
+       context: .
+       dockerfile: ./docker/goflow2-collector/Dockerfile
+    hostname: goflow2
+    container_name: goflow2
+    ports:
+      - 9995:9995/udp
+    depends_on:
+      - kafka
+    restart: always
+    command:
+    - -transport=kafka
+    - -transport.kafka.brokers=kafka:9092
+    - -transport.kafka.topic=flows
+    - -format=json
+    - -listen=netflow://:9995
   kafka:
     image: bitnami/kafka
     hostname: kafka
@@ -161,21 +178,5 @@ services:
       - "2181"
     logging:
       driver: none
-  goflow2:
-    build:
-       context: .
-       dockerfile: ./docker/goflow2-collector/Dockerfile
-    hostname: goflow2
-    container_name: goflow2
-    ports:
-      - 9995:9995/udp
-    depends_on:
-      - kafka
-    restart: always
-    command:
-    - -transport=kafka
-    - -transport.kafka.brokers=kafka:9092
-    - -transport.kafka.topic=flows
-    - -format=json
-    - -listen=netflow://:9995
+  
 
