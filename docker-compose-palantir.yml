@@ -163,8 +163,8 @@ services:
       driver: none
   goflow2:
     build:
-       context: .
-       dockerfile: ./docker/goflow2-collector/Dockerfile
+       context: ./docker/goflow2-collector
+       dockerfile: Dockerfile
     hostname: goflow2
     container_name: goflow2
     ports:
