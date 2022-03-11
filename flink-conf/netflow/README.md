@@ -22,7 +22,7 @@ curl -X GET http://localhost:8084/jars
 
 - **entry-class** (optional): String value that specifies the fully qualified name of the entry point class. Overrides the class defined in the jar file manifest.
 
-Example 1:
+Example:
 ```bash
 curl -X POST http://localhost:8084/jars/d18cd4e3-09cf-4556-8072-3a6409270b0d_netflow-driver-1.0.jar/run?programArg="netflow-input,netflow-output"
 ```
