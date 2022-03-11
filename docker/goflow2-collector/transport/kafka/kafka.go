@@ -11,9 +11,10 @@ import (
 	"strings"
 	"time"
 
+	"goflow2-collector/transport"
+	"goflow2-collector/utils"
+
 	sarama "github.com/Shopify/sarama"
-	"semantic-data-aggregator/docker/goflow2-collector/transport"
-	"semantic-data-aggregator/docker/goflow2-collector/utils"
 
 	log "github.com/sirupsen/logrus"
 )

@@ -9,10 +9,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	decoder "semantic-data-aggregator/docker/goflow2-collector/decoders"
-	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflow"
-	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
-	"semantic-data-aggregator/docker/goflow2-collector/producer"
+	decoder "goflow2-collector/decoders"
+	"goflow2-collector/decoders/netflow"
+	flowmessage "goflow2-collector/pb"
+	"goflow2-collector/producer"
+
 	reuseport "github.com/libp2p/go-reuseport"
 	"github.com/prometheus/client_golang/prometheus"
 	"gopkg.in/yaml.v2"

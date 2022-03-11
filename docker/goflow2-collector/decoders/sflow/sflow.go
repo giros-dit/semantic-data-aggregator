@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"semantic-data-aggregator/docker/goflow2-collector/decoders/utils"
+	"goflow2-collector/decoders/utils"
 )
 
 const (

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net"
 
-	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflowlegacy"
-	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
+	"goflow2-collector/decoders/netflowlegacy"
+	flowmessage "goflow2-collector/pb"
 )
 
 func ConvertNetFlowLegacyRecord(baseTime uint32, uptime uint32, record netflowlegacy.RecordsNetFlowV5) *flowmessage.FlowMessage {

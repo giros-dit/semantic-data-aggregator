@@ -1,4 +1,4 @@
-module semantic-data-aggregator/docker/goflow2-collector
+module goflow2-collector
 
 go 1.17
 

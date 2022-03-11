@@ -10,7 +10,7 @@ import (
 	"sync"
 	"syscall"
 
-	"semantic-data-aggregator/docker/goflow2-collector/transport"
+	"goflow2-collector/transport"
 )
 
 type FileDriver struct {

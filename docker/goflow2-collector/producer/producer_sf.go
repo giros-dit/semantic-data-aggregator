@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net"
 
-	"semantic-data-aggregator/docker/goflow2-collector/decoders/sflow"
-	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
+	"goflow2-collector/decoders/sflow"
+	flowmessage "goflow2-collector/pb"
 )
 
 func GetSFlowFlowSamples(packet *sflow.Packet) []interface{} {

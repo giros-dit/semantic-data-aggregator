@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"time"
 
-	"semantic-data-aggregator/docker/goflow2-collector/decoders/netflowlegacy"
-	"semantic-data-aggregator/docker/goflow2-collector/format"
-	flowmessage "semantic-data-aggregator/docker/goflow2-collector/pb"
-	"semantic-data-aggregator/docker/goflow2-collector/producer"
-	"semantic-data-aggregator/docker/goflow2-collector/transport"
+	"goflow2-collector/decoders/netflowlegacy"
+	"goflow2-collector/format"
+	flowmessage "goflow2-collector/pb"
+	"goflow2-collector/producer"
+	"goflow2-collector/transport"
+
 	"github.com/prometheus/client_golang/prometheus"
 )
 

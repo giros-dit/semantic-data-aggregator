@@ -12,17 +12,18 @@ import (
 	"sync"
 
 	// import various formatters
-	"semantic-data-aggregator/docker/goflow2-collector/format"
-	_ "semantic-data-aggregator/docker/goflow2-collector/format/json"
-	_ "semantic-data-aggregator/docker/goflow2-collector/format/protobuf"
-	_ "semantic-data-aggregator/docker/goflow2-collector/format/text"
+	"goflow2-collector/format"
+	_ "goflow2-collector/format/json"
+	_ "goflow2-collector/format/protobuf"
+	_ "goflow2-collector/format/text"
 
 	// import various transports
-	"semantic-data-aggregator/docker/goflow2-collector/transport"
-	_ "semantic-data-aggregator/docker/goflow2-collector/transport/file"
-	_ "semantic-data-aggregator/docker/goflow2-collector/transport/kafka"
+	"goflow2-collector/transport"
+	_ "goflow2-collector/transport/file"
+	_ "goflow2-collector/transport/kafka"
 
-	"semantic-data-aggregator/docker/goflow2-collector/utils"
+	"goflow2-collector/utils"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )

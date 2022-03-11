@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"semantic-data-aggregator/docker/goflow2-collector/format"
-	"semantic-data-aggregator/docker/goflow2-collector/format/common"
+	"goflow2-collector/format"
+	"goflow2-collector/format/common"
+
 	"github.com/golang/protobuf/proto"
 )
 

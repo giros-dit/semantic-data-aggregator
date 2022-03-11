@@ -15,19 +15,20 @@ import (
 
 	"github.com/oschwald/geoip2-golang"
 
-	flowmessage "semantic-data-aggregator/docker/goflow2-collector/cmd/enricher/pb"
+	flowmessage "goflow2-collector/cmd/enricher/pb"
+
 	"github.com/golang/protobuf/proto"
 
 	// import various formatters
-	"semantic-data-aggregator/docker/goflow2-collector/format"
-	"semantic-data-aggregator/docker/goflow2-collector/format/common"
-	_ "semantic-data-aggregator/docker/goflow2-collector/format/json"
-	_ "semantic-data-aggregator/docker/goflow2-collector/format/protobuf"
+	"goflow2-collector/format"
+	"goflow2-collector/format/common"
+	_ "goflow2-collector/format/json"
+	_ "goflow2-collector/format/protobuf"
 
 	// import various transports
-	"semantic-data-aggregator/docker/goflow2-collector/transport"
-	_ "semantic-data-aggregator/docker/goflow2-collector/transport/file"
-	_ "semantic-data-aggregator/docker/goflow2-collector/transport/kafka"
+	"goflow2-collector/transport"
+	_ "goflow2-collector/transport/file"
+	_ "goflow2-collector/transport/kafka"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"

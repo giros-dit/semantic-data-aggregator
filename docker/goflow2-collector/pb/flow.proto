@@ -1,6 +1,6 @@
 syntax = "proto3";
 package flowpb;
-option go_package = "semantic-data-aggregator/docker/goflow2-collector/pb;flowpb";
+option go_package = "goflow2-collector/pb;flowpb";
 
 message FlowMessage {
 
