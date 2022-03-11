@@ -74,8 +74,6 @@ services:
        dockerfile: Dockerfile
     hostname: goflow2
     container_name: goflow2
-    environment:
-      - KAFKA_OUTPUT_TOPIC_GOFLOW2=${KAFKA_OUTPUT_TOPIC_GOFLOW2}
     ports:
       - 9995:9995/udp
     depends_on:
