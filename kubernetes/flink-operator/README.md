@@ -5,6 +5,13 @@ Spotify has developed a Kubernetes operator called [flink-on-k8s-operator](https
 In summary, this Kubernetes operator allows orchestrating Flink jobs executed in Application-mode. Following the official [flink-on-k8s-operator user guide](https://github.com/spotify/flink-on-k8s-operator/blob/master/docs/user_guide.md), below are the basic steps to install the afomentioned Flink operator and an example of deploying Flink clusters in Application-mode running a sample job.
 
 
+# Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Installation of the Kubernetes Operator for Apache Flink](#installation-of-the-kubernetes-operator-for-apache-flink)
+3. [Deployment and management of Flink clusters in Application-mode](#deployment-and-management-of-flink-clusters-in-application-mode)
+
+
 ## Prerequisites
 
 - Get a running Kubernetes cluster. You can verify the cluster info with:
@@ -20,7 +27,6 @@ In summary, this Kubernetes operator allows orchestrating Flink jobs executed in
   ```
 
 - Install a private registry for Docker images in Kubernetes cluster.
-
 
 
 ## Installation of the Kubernetes Operator for Apache Flink
@@ -71,6 +77,7 @@ INFO    controller-runtime.controller   Starting workers        {"controller": "
 ```
 
 Undeploy the operator and CRDs from the Kubernetes cluster with:
+
 ```
 kubectl delete -f https://github.com/spotify/flink-on-k8s-operator/releases/download/v0.3.9/flink-operator.yaml
 ```
@@ -79,23 +86,33 @@ kubectl delete -f https://github.com/spotify/flink-on-k8s-operator/releases/down
 After deploying the Flink CRDs and the Flink Operator to a Kubernetes cluster, the operator serves as a control plane for Flink applications. In other words, previously the cluster only understands the language of Kubernetes, now it understands the language of Flink. Then, you can create custom resources representing Flink clusters in Application-mode.
 
 Deploy a [sample Flink cluster in Application-mode](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) custom resource with:
+
 ```bash
 kubectl apply -f flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml
 ```
 
 And verify that the related pods and services are up and running with:
+
 ```
 kubectl get pods,svc -n default | grep "flinkjobcluster"
 ```
+
 By default, Flink cluster's TaskManager will get terminated once  the sample job is completed.
 
+You can check the operator logs at any time with:
+
+```bash
+kubectl logs -n flink-operator-system -l app=flink-operator --all-containers -f --tail=1000
+```
 
 After deploying the Flink cluster with the operator, you can find the cluster custom resources with:
+
 ```bash
 kubectl get flinkclusters
 ```
 
 And check the cluster status with:
+
 ```bash
 kubectl describe flinkclusters <CLUSTER-NAME>
 ```
@@ -108,3 +125,35 @@ You can check the Flink job submission status and logs with:
 kubectl describe jobs <CLUSTER-NAME>-job-submitter
 kubectl logs jobs/<CLUSTER-NAME>-job-submitter -f
 ```
+
+You can also access the Flink web UI, [REST API](https://ci.apache.org/projects/flink/flink-docs-stable/monitoring/rest_api.html) and [CLI](https://ci.apache.org/projects/flink/flink-docs-stable/ops/cli.html) by first creating a port forward from you local machine to the JobManager service UI port (8081 by default).
+
+```bash
+kubectl port-forward svc/[FLINK_CLUSTER_NAME]-jobmanager 8081:8081
+```
+
+then access the web UI with your browser through the following URL:
+
+```bash
+http://localhost:8081
+```
+
+call the Flink REST API, e.g., list jobs:
+
+```bash
+curl http://localhost:8081/jobs
+```
+
+or run the Flink CLI, e.g., list jobs:
+
+```bash
+flink list -m localhost:8081
+```
+
+Finally, you can delete the Flink cluster with the following command regardless of its current status:
+
+```
+kubectl delete flinkclusters <CLUSTER-NAME>
+```
+
+The operator will cancel the current job and then shutdown the Flink cluster.
