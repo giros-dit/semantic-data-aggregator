@@ -10,7 +10,7 @@ In summary, this Kubernetes operator allows orchestrating Flink jobs executed in
 1. [Prerequisites](#prerequisites)
 2. [Installation of the Kubernetes Operator for Apache Flink](#installation-of-the-kubernetes-operator-for-apache-flink)
 3. [Deployment and management of Flink clusters in Application-mode](#deployment-and-management-of-flink-clusters-in-application-mode)
-4. [Use case: deploying a NetFlow driver as a Flink job in Application-mode](#use-case-deploying-a-netflow-driver-as-a-flink-job-in-application-mode)
+4. [Use case: Deploying a NetFlow driver as a Flink job in Application-mode](#use-case-deploying-a-netflow-driver-as-a-flink-job-in-application-mode)
 
 
 ## Prerequisites
@@ -99,7 +99,7 @@ And verify that the related pods and services are up and running with:
 kubectl get pods,svc -n default | grep "flinkjobcluster"
 ```
 
-Before deploying the Flink cluster, within the [flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) template we can configure different interesting properties. With the `replicas` parameter in `taskManager` section, we can select the TaskManager number of the Flink cluster. Also, in the resources option in `jobManager` and `tasManager` sections, we can configure the CPU and memory resources that we want to allocate to the JobManager and TaskManager nodes of the Flink cluster. In addition, in the `job` section we need to specify some properties relative to the Flink application, such as the executable JAR file (i.e., the `jarFile` field), the name of the Java main class (i.e., the `className` field), and the arguments (i.e., the `args` field) required to run the Flink job. Finally, properties related to [job scheduling](https://nightlies.apache.org/flink/flink-docs-master/docs/internals/job_scheduling/) such as number of Task Slots and parallelism can be configured.
+Before deploying the Flink cluster, within the [`flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml`](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) template we can configure different interesting properties. With the `replicas` parameter in `taskManager` section, we can select the number of TaskManager in the Flink cluster. Also, in the resources option in `jobManager` and `tasManager` sections, we can configure the CPU and memory resources that we want to allocate to the JobManager and TaskManager nodes of the Flink cluster. In addition, in the `job` section we need to specify some properties relative to the Flink application, such as the executable JAR file (i.e., the `jarFile` field), the name of the Java main class (i.e., the `className` field), and the arguments (i.e., the `args` field) required to run the Flink job. Finally, properties related to [job scheduling](https://nightlies.apache.org/flink/flink-docs-master/docs/internals/job_scheduling/) such as number of Task Slots and parallelism can be configured.
 
 By default, Flink cluster's TaskManager will get terminated once the sample job is completed.
 
@@ -130,7 +130,7 @@ kubectl describe jobs <CLUSTER-NAME>-job-submitter
 kubectl logs jobs/<CLUSTER-NAME>-job-submitter -f
 ```
 
-You can also access the Flink web UI, [REST API](https://ci.apache.org/projects/flink/flink-docs-stable/monitoring/rest_api.html) and [CLI](https://ci.apache.org/projects/flink/flink-docs-stable/ops/cli.html) by first creating a port forward from you local machine to the JobManager service UI port (8081 by default).
+You can also access the Flink web UI, [REST API](https://ci.apache.org/projects/flink/flink-docs-stable/monitoring/rest_api.html) and [CLI](https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/cli/) by first creating a port forward from you local machine to the JobManager service UI port (8081 by default).
 
 ```bash
 kubectl port-forward svc/[FLINK_CLUSTER_NAME]-jobmanager 8081:8081
@@ -173,7 +173,7 @@ kubectl apply -f flink-cluster-templates/netflow-driver/kafka-service/zookeeper.
 kubectl apply -f flink-cluster-templates/netflow-driver/kafka-service/kafka.yaml
 ```
 
-In order to deploy a Flink cluster in Application-mode with the NetFlow driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [flink-cluster-templates/netflow-driver/Dockerfile](../flink-operator/flink-cluster-templates/netflow-driver/Dockerfile) file is a simple Dockerfile example to include the NetFlow driver application related JAR in the Flink Docker image. Build the related Docker image with:
+In order to deploy a Flink cluster in Application-mode with the NetFlow driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [`flink-cluster-templates/netflow-driver/Dockerfile`](../flink-operator/flink-cluster-templates/netflow-driver/Dockerfile) file is a simple Dockerfile example to include the NetFlow driver application related JAR in the Flink Docker image. Build the related Docker image with:
 
 ```bash
 docker build -t netflow-driver flink-cluster-templates/netflow-driver/Dockerfile
@@ -238,7 +238,7 @@ kubectl apply -f flink-cluster-templates/netflow-driver/flinkoperator-flinkjobcl
 
 This will deploy a Flink cluster in Application-mode that makes use of the pre-loaded custom Docker image with the NetFlow driver's Flink application.
 
-Within the [flink-cluster-templates/netflow-driver/flinkoperator-flinkjobcluster-netflow.yaml](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml), in the `job` section we need to specify some properties relative to the Flink application, such as the executable JAR file (i.e., the `jarFile` field), the name of the Java main class (i.e., the `className` field), and the arguments (i.e., the `args` field) required to run the Flink job. In the case of the NetFlow driver's Flink application, we have to specify the Kafka input and output topics. The Kafka input topic aggregates the flow samples generated by the GoFlow2 collector. Then, the NetFlow driver's Flink application will basically consume the flows from this input topic, normalize the NetFlow monitoring data according to its YANG model, and write the flows already normalized in the Kafka output topic.
+Within the [`flink-cluster-templates/netflow-driver/flinkoperator-flinkjobcluster-netflow.yaml`](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) template, in the `job` section we need to specify some properties relative to the Flink application, such as the executable JAR file (i.e., the `jarFile` field), the name of the Java main class (i.e., the `className` field), and the arguments (i.e., the `args` field) required to run the Flink job. In the case of the NetFlow driver's Flink application, we have to specify the Kafka input and output topics. The Kafka input topic aggregates the flow samples generated by the GoFlow2 collector. Then, the NetFlow driver's Flink application will basically consume the flows from this input topic, normalize the NetFlow monitoring data according to its YANG model, and write the flows already normalized in the Kafka output topic.
 
 If we want to test the NetFlow driver, we need to generate flow samples in the Kafka input topic called `netflow-input-1`. To do this, we can access to the container associated with the Kafka service Pod from the CLI client `kubectl`. First, we can discover the name of the Kafka Service Pod running on the Kubernetes cluster with:
 
@@ -260,7 +260,7 @@ kafka-topics.sh --list --bootstrap-server localhost:9092
 
 we will discover that there is a `netflow-input-1` topic from where the NetFlow driver expects to consume the NetFlow monitoring data.
 
-Now, we need to produce sample NetFlow flows in the `netflow-input-1` topic. In the [flink-cluster-templates/netflow-driver/goflow2-sample.json](../flink-operator/flink-cluster-templates/netflow-driver/goflow2-sample.json) file there is a sample of flow generated by the GoFlow2 collector.
+Now, we need to produce sample NetFlow flows in the `netflow-input-1` topic. In the [`flink-cluster-templates/netflow-driver/goflow2-sample.json`](../flink-operator/flink-cluster-templates/netflow-driver/goflow2-sample.json) file there is a sample of flow generated by the GoFlow2 collector.
 
 We can write copies of that flow sample in the `netflow-input-1` topic thanks to the Kafka producer with:
 
