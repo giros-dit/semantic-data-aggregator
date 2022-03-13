@@ -1,16 +1,16 @@
-# Running Flink clusters in Application-mode on Kubernetes
+# Running Flink clusters in Application mode on Kubernetes
 
-Spotify has developed a Kubernetes operator called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Apache Flink applications. The operator introduces the concept of Flink Cluster as CRD (Custom Resource Definition) in Kubernetes. It allows setting up `session-based` and `job-based` Flink clusters in Kubernetes – the second type refers to the [Application-mode](https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/overview/#application-mode) deployment. Basically, this deployment mode allows deploying a dedicated Flink cluster for submitting a particular job. So the Flink cluster only runs this job and then exits. Additionally, this operator allows for submitting Application-mode jobs that may build on JAR files or Python scripts that leverage PyFlink API.
+Spotify has developed a Kubernetes operator called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Apache Flink applications. The operator introduces the concept of Flink Cluster as CRD (Custom Resource Definition) in Kubernetes. It allows setting up `session-based` and `job-based` Flink clusters in Kubernetes – the second type refers to the [Application mode](https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/overview/#application-mode) deployment. Basically, this deployment mode allows deploying a dedicated Flink cluster for submitting a particular job. So the Flink cluster only runs this job and then exits. Additionally, this operator allows for submitting Application-mode jobs that may build on JAR files or Python scripts that leverage PyFlink API.
 
-In summary, this Kubernetes operator allows orchestrating Flink jobs executed in Application-mode. Following the official [flink-on-k8s-operator user guide](https://github.com/spotify/flink-on-k8s-operator/blob/master/docs/user_guide.md), below are the basic steps to install the afomentioned Flink operator and an example of deploying Flink clusters in Application-mode running a sample job. In addition, an example use case is included to be able to run the NetFlow driver as a Flink job in application-mode.
+In summary, this Kubernetes operator allows orchestrating Flink jobs executed in Application mode. Following the official [flink-on-k8s-operator user guide](https://github.com/spotify/flink-on-k8s-operator/blob/master/docs/user_guide.md), below are the basic steps to install the afomentioned Flink operator and an example of deploying Flink clusters in Application mode running a sample job. In addition, an example use case is included to be able to run the NetFlow driver as a Flink job in Application mode.
 
 
 # Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [Installation of the Kubernetes Operator for Apache Flink](#installation-of-the-kubernetes-operator-for-apache-flink)
-3. [Deployment and management of Flink clusters in Application-mode](#deployment-and-management-of-flink-clusters-in-application-mode)
-4. [Use case: Deploying a NetFlow driver as a Flink job in Application-mode](#use-case-deploying-a-netflow-driver-as-a-flink-job-in-application-mode)
+3. [Deployment and management of Flink clusters in Application mode](#deployment-and-management-of-flink-clusters-in-application-mode)
+4. [Use case: Deploying a NetFlow driver as a Flink job in Application mode](#use-case-deploying-a-netflow-driver-as-a-flink-job-in-application-mode)
 
 
 ## Prerequisites
@@ -83,11 +83,11 @@ Undeploy the operator and CRDs from the Kubernetes cluster with:
 kubectl delete -f https://github.com/spotify/flink-on-k8s-operator/releases/download/v0.3.9/flink-operator.yaml
 ```
 
-## Deployment and management of Flink clusters in Application-mode
+## Deployment and management of Flink clusters in Application mode
 
-After deploying the Flink CRDs and Operator in a Kubernetes cluster, the operator serves as a control plane for Flink applications. In other words, previously the cluster only understands the language of Kubernetes, now it understands the language of Flink. Then, you can create custom resources representing Flink clusters in Application-mode.
+After deploying the Flink CRDs and Operator in a Kubernetes cluster, the operator serves as a control plane for Flink applications. In other words, previously the cluster only understands the language of Kubernetes, now it understands the language of Flink. Then, you can create custom resources representing Flink clusters in Application mode.
 
-Deploy a [sample Flink cluster in Application-mode](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) custom resource with:
+Deploy a [sample Flink cluster in Application mode](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) custom resource with:
 
 ```bash
 kubectl apply -f flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml
@@ -121,7 +121,7 @@ And check the cluster status with:
 kubectl describe flinkclusters <CLUSTER-NAME>
 ```
 
-In a Flink cluster in Application-mode, the job is automatically submitted by the operator. The operator creates a submitter for a Flink job. The job submitter itself is created as a Kubernetes job. When the job submitter starts, it first checks the status of Flink job manager. And it submits a Flink job when confirmed that Flink job manager is ready and then terminates.
+In a Flink cluster in Application mode, the job is automatically submitted by the operator. The operator creates a submitter for a Flink job. The job submitter itself is created as a Kubernetes job. When the job submitter starts, it first checks the status of Flink job manager. And it submits a Flink job when confirmed that Flink job manager is ready and then terminates.
 
 You can check the Flink job submission status and logs with:
 
@@ -162,9 +162,9 @@ kubectl delete flinkclusters <CLUSTER-NAME>
 
 The operator will cancel the current job and then shutdown the Flink cluster.
 
-## Use case: Deploying a NetFlow driver as a Flink job in Application-mode
+## Use case: Deploying a NetFlow driver as a Flink job in Application mode
 
-The NetFlow driver is a Java application responsible for normalizing NetFlow-based monitoring data by parsing the raw data provided by a NetFlow collector and producing data structured according to an associated YANG model. This driver is implemented based on the [YANG Tools](https://github.com/opendaylight/yangtools) OpenDayLight project and particularized for a [GoFlow2](https://github.com/netsampler/goflow2) collector. Here is a detailed guide on how to run the NetFlow driver as a Flink job in Application-mode.
+The NetFlow driver is a Java application responsible for normalizing NetFlow-based monitoring data by parsing the raw data provided by a NetFlow collector and producing data structured according to an associated YANG model. This driver is implemented based on the [YANG Tools](https://github.com/opendaylight/yangtools) OpenDayLight project and particularized for a [GoFlow2](https://github.com/netsampler/goflow2) collector. Here is a detailed guide on how to run the NetFlow driver as a Flink job in Application mode.
 
 First, a Kafka service will be deployed in Kubernetes in order to aggregate flow samples generated by the GoFlow2 collector to a particular input topic. In addition, the flows already normalized by the NetFlow driver's application will be aggregated in a specific Kafka output topic. To do this, using the `kubectl` command line tool, we will deploy a Kafka broker and the dependent Zookeeper service:
 
@@ -173,7 +173,7 @@ kubectl apply -f flink-cluster-templates/netflow-driver/kafka-service/zookeeper.
 kubectl apply -f flink-cluster-templates/netflow-driver/kafka-service/kafka.yaml
 ```
 
-In order to deploy a Flink cluster in Application-mode with the NetFlow driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [`flink-cluster-templates/netflow-driver/Dockerfile`](../flink-operator/flink-cluster-templates/netflow-driver/Dockerfile) file is a simple Dockerfile example to include the NetFlow driver application related JAR in the Flink Docker image. Build the related Docker image with:
+In order to deploy a Flink cluster in Application mode with the NetFlow driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [`flink-cluster-templates/netflow-driver/Dockerfile`](../flink-operator/flink-cluster-templates/netflow-driver/Dockerfile) file is a simple Dockerfile example to include the NetFlow driver application related JAR in the Flink Docker image. Build the related Docker image with:
 
 ```bash
 docker build -t netflow-driver flink-cluster-templates/netflow-driver/Dockerfile
@@ -236,7 +236,7 @@ Now, we can deploy the [Flink cluster with the NetFlow driver job](../flink-oper
 kubectl apply -f flink-cluster-templates/netflow-driver/flinkoperator-flinkjobcluster-netflow.yaml
 ```
 
-This will deploy a Flink cluster in Application-mode that makes use of the pre-loaded custom Docker image with the NetFlow driver's Flink application.
+This will deploy a Flink cluster in Application mode that makes use of the pre-loaded custom Docker image with the NetFlow driver's Flink application.
 
 Within the [`flink-cluster-templates/netflow-driver/flinkoperator-flinkjobcluster-netflow.yaml`](../flink-operator/flink-cluster-templates/flinkoperator-flinkjobcluster-sample.yaml) template, in the `job` section we need to specify some properties relative to the Flink application, such as the executable JAR file (i.e., the `jarFile` field), the name of the Java main class (i.e., the `className` field), and the arguments (i.e., the `args` field) required to run the Flink job. In the case of the NetFlow driver's Flink application, we have to specify the Kafka input and output topics. The Kafka input topic aggregates the flow samples generated by the GoFlow2 collector. Then, the NetFlow driver's Flink application will basically consume the flows from this input topic, normalize the NetFlow monitoring data according to its YANG model, and write the flows already normalized in the Kafka output topic.
 
@@ -249,7 +249,7 @@ kubectl get pods | grep "kafka"
 After that, we can access the Kafka container's bash with:
 
 ```bash
-kubectl exec -it <Kafka-Pod-name> -- bash
+kubectl exec -it <kafka-pod-name> -- bash
 ```
 
 Once inside the Kafka container, if we list the current topics with:
@@ -311,4 +311,4 @@ you should be able to see output like:
 }
 ```
 
-For managing the lifecycle of the Flink cluster deployed in Application-mode and the relative job in execution, follow the steps indicated in [Deployment and management of Flink clusters in Application-mode](#deployment-and-management-of-flink-clusters-in-application-mode).
+For managing the lifecycle of the Flink cluster deployed in Application mode and the relative job in execution, follow the steps indicated in [Deployment and management of Flink clusters in Application mode](#deployment-and-management-of-flink-clusters-in-application-mode).
