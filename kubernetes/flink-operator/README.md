@@ -8,7 +8,7 @@ In summary, this Kubernetes operator allows orchestrating Flink jobs executed in
 # Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Installation of the Kubernetes Operator for Apache Flink](#installation-of-the-kubernetes-operator-for-apache-flink)
+2. [Installing Kubernetes Operator for Apache Flink](#installing-kubernetes-operator-for-apache-flink)
 3. [Deployment and management of Flink clusters in Application mode](#deployment-and-management-of-flink-clusters-in-application-mode)
 4. [Use case: Deploying a NetFlow driver as a Flink job in Application mode](#use-case-deploying-a-netflow-driver-as-a-flink-job-in-application-mode)
 
@@ -30,7 +30,7 @@ In summary, this Kubernetes operator allows orchestrating Flink jobs executed in
 - Install a private registry for Docker images in Kubernetes cluster.
 
 
-## Installation of the Kubernetes Operator for Apache Flink
+## Installing Kubernetes Operator for Apache Flink
 
 To install the Flink operator on Kubernetes cluster, the easiest option is using the `kubectl` command line tool. There are different [realeses](https://github.com/spotify/flink-on-k8s-operator/releases) available for the Flink operator, but we recommend to use the version `0.3.9`. Then, simply run:
 ```bash
