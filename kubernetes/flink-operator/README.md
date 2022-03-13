@@ -176,7 +176,7 @@ kubectl apply -f flink-cluster-templates/netflow-driver/kafka-service/kafka.yaml
 In order to deploy a Flink cluster in Application mode with the NetFlow driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [`flink-cluster-templates/netflow-driver/Dockerfile`](../flink-operator/flink-cluster-templates/netflow-driver/Dockerfile) file is a simple Dockerfile example to include the NetFlow driver application related JAR in the Flink Docker image. Build the related Docker image with:
 
 ```bash
-docker build -t netflow-driver flink-cluster-templates/netflow-driver/Dockerfile
+docker build -t netflow-driver flink-cluster-templates/netflow-driver/.
 ```
 
 To use this custom Docker image in your Kubernetes cluster, you must have a private registry for Docker images installed as a service in the cluster. Having a private Docker registry can significantly improve your productivity by reducing the time spent in uploading and downloading Docker images. Once this private registry service is available, it will allow uploading custom Docker images.
