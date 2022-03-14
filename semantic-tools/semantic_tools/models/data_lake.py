@@ -1,4 +1,3 @@
-
 from typing import Literal
 
 from semantic_tools.models.ngsi_ld.entity import Entity, Property, Relationship
@@ -14,7 +13,6 @@ class Bucket(Entity):
 
 class DataLake(Entity):
     type: Literal["DataLake"] = "DataLake"
-    apiKey: Property
     region: Property
     uri: Property
 

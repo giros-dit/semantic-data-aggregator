@@ -4,7 +4,6 @@
         "DataLake": "http://s3.amazonaws.com/doc/2006-03-01/DataLake",
         "Object": "http://s3.amazonaws.com/doc/2006-03-01/Object",
         "Owner": "http://s3.amazonaws.com/doc/2006-03-01/Owner",
-        "apiKey": "http://s3.amazonaws.com/doc/2006-03-01/apiKey",
         "belongsTo": "http://s3.amazonaws.com/doc/2006-03-01/belongsTo",
         "containedIn": "http://s3.amazonaws.com/doc/2006-03-01/containedIn",
         "creationDate": "http://s3.amazonaws.com/doc/2006-03-01/creationDate",
