@@ -2,8 +2,8 @@ version: '3'
 services:
   app-manager:
     build:
-        context: .
-        dockerfile: ./docker/app-manager/Dockerfile
+      context: .
+      dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -21,54 +21,6 @@ services:
     depends_on:
       - nifi
       - scorpio
-  ceos1:
-    image: "ceos-image:4.25.4M"
-    hostname: ceos1
-    container_name: ceos1
-    ports:
-      - "6030:6030"
-    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
-    privileged: true
-    environment:
-      INTFTYPE: eth
-      ETBA: 1
-      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
-      CEOS: 1
-      EOS_PLATFORM: ceoslab
-      container: docker
-    networks:
-      default:
-      net1:
-      net2:
-  ceos2:
-    image: "ceos-image:4.25.4M"
-    hostname: ceos2
-    container_name: ceos2
-    ports:
-      - "6031:6030"
-    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker
-    privileged: true
-    environment:
-      INTFTYPE: eth
-      ETBA: 1
-      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
-      CEOS: 1
-      EOS_PLATFORM: ceoslab
-      container: docker
-    networks:
-      default:
-      net1:
-      net2:
-  consumer:
-    build:
-      context: .
-      dockerfile: ./docker/consumer/Dockerfile
-    hostname: consumer
-    container_name: consumer
-    ports:
-      - "8080"
-    volumes:
-      - ./docker/consumer/consumer:/opt/sda/consumer/consumer
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -77,40 +29,12 @@ services:
       - "8080"
     volumes:
       - ./docker/context-catalog:/web
-  complex-publisher:
-    build:
-      context: .
-      dockerfile: ./docker/complex-publishers/Dockerfile
-    hostname: complex-publisher
-    container_name: complex-publisher
   eureka:
     image: scorpiobroker/scorpio:eureka-server_2.1.1
     hostname: eureka
     container_name: eureka
     ports:
       - "8761"
-  experimenter:
-    build:
-      context: .
-      dockerfile: ./docker/experimenter/Dockerfile
-    hostname: experimenter
-    container_name: experimenter
-    environment:
-      - BROKER_URI=${BROKER_URI}
-      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
-      - EXPERIMENTER_URI=${EXPERIMENTER_URI}
-    ports:
-      - "8080"
-    volumes:
-      - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
-  gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
-    hostname: gateway
-    container_name: gateway
-    ports:
-      - "9090:9090"
-    depends_on:
-      - eureka
   flink-jobmanager:
     image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -136,6 +60,14 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
+  gateway:
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    hostname: gateway
+    container_name: gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
   kafka:
     image: bitnami/kafka
     hostname: kafka
@@ -177,22 +109,6 @@ services:
       - ./docker/nifi/drivers/jinja-templates:/jinja-templates
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
       - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
-  node-exporter-1:
-    image: prom/node-exporter
-    hostname: node-exporter-1
-    container_name: node-exporter-1
-    ports:
-      - "9100:9100"
-    depends_on:
-      - prometheus
-  node-exporter-2:
-    image: prom/node-exporter
-    hostname: node-exporter-2
-    container_name: node-exporter-2
-    ports:
-      - "9101:9100"
-    depends_on:
-      - prometheus
   postgres:
     image: postgis/postgis
     hostname: postgres
@@ -205,14 +121,6 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
-  prometheus:
-    image: prom/prometheus
-    hostname: prometheus
-    container_name: prometheus
-    ports:
-      - "9099:9090"
-    volumes:
-      - ./docker/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
     hostname: scorpio
@@ -224,21 +132,6 @@ services:
       - eureka
       - postgres
       - kafka
-  source-manager:
-    build:
-        context: .
-        dockerfile: ./docker/source-manager/Dockerfile
-    hostname: source-manager
-    container_name: source-manager
-    environment:
-      - BROKER_URI=${BROKER_URI}
-      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
-    ports:
-      - "8083:8080"
-    volumes:
-      - ./docker/source-manager/source_manager:/opt/sda/source-manager/source_manager
-    depends_on:
-      - scorpio
   weaver:
     build:
       context: .
@@ -253,6 +146,8 @@ services:
       - NIFI_USERNAME=${NIFI_USERNAME}
       - NIFI_PASSWORD=${NIFI_PASSWORD}
       - WEAVER_URI=${WEAVER_URI}
+    ports:
+      - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
@@ -266,6 +161,3 @@ services:
       - "2181"
     logging:
       driver: none
-networks:
-  net1:
-  net2:

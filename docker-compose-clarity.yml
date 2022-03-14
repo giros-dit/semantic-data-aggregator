@@ -2,8 +2,8 @@ version: '3'
 services:
   app-manager:
     build:
-        context: .
-        dockerfile: ./docker/app-manager/Dockerfile
+      context: .
+      dockerfile: ./docker/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -31,8 +31,8 @@ services:
       - ./docker/context-catalog:/web
   data-lake-explorer:
     build:
-        context: .
-        dockerfile: ./docker/data-lake-explorer/Dockerfile
+      context: .
+      dockerfile: ./docker/data-lake-explorer/Dockerfile
     hostname: data-lake-explorer
     container_name: data-lake-explorer
     environment:
@@ -158,6 +158,8 @@ services:
       - NIFI_USERNAME=${NIFI_USERNAME}
       - NIFI_PASSWORD=${NIFI_PASSWORD}
       - WEAVER_URI=${WEAVER_URI}
+    ports:
+      - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:

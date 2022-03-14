@@ -1,0 +1,168 @@
+syntax = "proto3";
+package flowpb;
+option go_package = "goflow2-collector/pb;flowpb";
+
+message FlowMessage {
+
+  enum FlowType {
+    FLOWUNKNOWN = 0;
+    SFLOW_5 = 1;
+    NETFLOW_V5 = 2;
+    NETFLOW_V9 = 3;
+    IPFIX = 4;
+  }
+
+  FlowType Type = 1;
+
+  uint64 TimeReceived = 2;
+
+  // Sampler information
+  bytes  SamplerAddress = 3;
+  uint32 SamplingRate = 4;
+
+  // Found inside header
+  uint32 SequenceNum = 5;
+  uint32 Count = 6;
+  uint32 SystemUptime = 7;
+  uint32 UnixSeconds = 8;
+  uint32 SourceId= 9;
+
+  // Found inside each data record
+  // Flows 
+  uint32 FlowDirection = 10;
+
+  // Time
+  uint64 TimeFlowStart = 11;
+  uint64 TimeFlowEnd = 12;
+
+  // Size of the sampled packet
+  uint64 BytesIn = 13;
+  uint64 PacketsIn = 14;
+  uint64 BytesOut = 15;
+  uint64 PacketsOut = 16;
+
+  // Layer 3 protocol (IPv4/IPv6/ARP/MPLS...)
+  uint32 Etype = 17;
+
+  // Layer 4 protocol
+  uint32 Proto = 18;
+
+  // Source/destination addresses
+  bytes SrcAddr = 19;
+  bytes DstAddr = 20;
+  bytes NextHop = 21;
+
+  // Ports for UDP and TCP
+  uint32 SrcPort = 22;
+  uint32 DstPort = 23;
+
+  // Interfaces
+  uint32 InIf = 24;
+  uint32 OutIf = 25;
+
+  // Ethernet information
+  uint64 SrcMacIn = 26;
+  uint64 DstMacIn = 27;
+  uint64 SrcMacOut = 28;
+  uint64 DstMacOut = 29;
+
+  // Vlan
+  uint32 SrcVlan = 30;
+  uint32 DstVlan = 31;
+  // 802.1q VLAN in sampled packet
+  uint32 VlanId = 32;
+
+  // IP and TCP special flags
+  uint32 SrcTos = 33;
+  uint32 DstTos = 34;
+  uint32 ForwardingStatus = 35;
+  uint32 MinTTL = 36;
+  uint32 MaxTTL = 37;
+  uint32 TCPFlags = 38;
+  uint32 IcmpType = 39;
+  uint32 IcmpCode = 40;
+  uint32 IPv6FlowLabel = 41;
+  uint32 IPv6OptionHeaders = 42;
+
+  // Fragments (IPv4/IPv6)
+  uint32 FragmentId = 43;
+  uint32 FragmentOffset = 44;
+  uint32 BiFlowDirection = 45;
+
+  // Autonomous system information
+  uint32 SrcAS = 46;
+  uint32 DstAS = 47;
+  bytes BgpNextHop = 48;
+
+  // Prefix size
+  uint32 SrcNet = 49;
+  uint32 DstNet = 50;
+
+  // Prefix
+  bytes SrcPrefix = 51;
+  bytes DstPrefix = 52;
+
+  // MPLS information
+  bool HasMPLS = 53;
+  uint32 MPLSCount = 54;
+  uint64 MPLSPalRd = 55;
+  uint32 MPLSPrefixLen = 56;
+  uint32 MPLSTopLabelType = 57;
+  bytes MPLSTopLabelIP = 58;
+
+  // MPLS Stack
+  uint32 MPLS1TTL = 59; // First TTL
+  uint32 MPLS1Label = 60; // First Label
+
+  uint32 MPLS2TTL = 61; // Second TTL
+  uint32 MPLS2Label = 62; // Second Label
+
+  uint32 MPLS3TTL = 63; // Third TTL
+  uint32 MPLS3Label = 64; // Third Label
+
+  uint32 MPLS4TTL = 65; // Third TTL
+  uint32 MPLS4Label = 66; // Third Label
+
+  uint32 MPLS5TTL = 67; // Third TTL
+  uint32 MPLS5Label = 68; // Third Label
+
+  uint32 MPLS6TTL = 69; // Third TTL
+  uint32 MPLS6Label = 70; // Third Label
+
+  uint32 MPLS7TTL = 71; // Third TTL
+  uint32 MPLS7Label = 72; // Third Label
+
+  uint32 MPLS8TTL = 73; // Third TTL
+  uint32 MPLS8Label = 74; // Third Label
+
+  uint32 MPLS9TTL = 75; // Third TTL
+  uint32 MPLS9Label = 76; // Third Label
+
+  uint32 MPLS10TTL = 77; // Third TTL
+  uint32 MPLS10Label = 78; // Third Label
+
+  //uint32 MPLSLastTTL = 88; // Last TTL
+  //uint32 MPLSLastLabel = 89; // Last Label
+
+  // Engine information
+  uint32 EngineType = 79;
+  uint32 EngineId = 80;
+
+
+  // Custom fields: start after ID 1000:
+  // uint32 MyCustomField = 1000;
+
+  // Custom allocations
+  uint64 CustomInteger1 = 1001;
+  uint64 CustomInteger2 = 1002;
+  uint64 CustomInteger3 = 1003;
+  uint64 CustomInteger4 = 1004;
+  uint64 CustomInteger5 = 1005;
+
+  bytes CustomBytes1 = 1011;
+  bytes CustomBytes2 = 1012;
+  bytes CustomBytes3 = 1013;
+  bytes CustomBytes4 = 1014;
+  bytes CustomBytes5 = 1015;
+
+}
