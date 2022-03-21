@@ -181,17 +181,17 @@ docker build -t netflow-driver flink-cluster-templates/netflow-driver/.
 
 To use this custom Docker image in your Kubernetes cluster, you must have a private registry for Docker images installed as a service in the cluster. Having a private Docker registry can significantly improve your productivity by reducing the time spent in uploading and downloading Docker images. Once this private registry service is available, it will allow uploading custom Docker images.
 
-Let’s assume the private insecure registry is available on the Kubernetes cluster at endpoint reachable via the `k8s-cluster` domain name and port `5000`. The images we build need to be tagged with the registry endpoint before pushing them:
+Let’s assume the private insecure registry is available on the Kubernetes cluster at endpoint reachable via the `192.168.159.9` IP address (which is the cluster address) and port `31320`. The images we build need to be tagged with the registry endpoint before pushing them:
 
 ```bash
-docker tag <IMAGE ID> k8s-cluster:5000/netflow-driver:latest
+docker tag <IMAGE ID> 192.168.159.9:31320/netflow-driver:latest
 ```
 
 Pushing the tagged image at this point will fail because the local Docker does not trust the private insecure registry. The docker daemon used for building images should be configured to trust the private insecure registry. This is done by marking the registry endpoint in `/etc/docker/daemon.json` file:
 
 ```bash
 {
-  "insecure-registries" : ["k8s-cluster:5000"]
+  "insecure-registries" : ["192.168.159.9:31320"]
 }
 ```
 
@@ -204,13 +204,13 @@ sudo systemctl restart docker
 Now that the image is tagged correctly and the registry is trusted, the image can be pushed to the registry with:
 
 ```bash
-docker push k8s-cluster:5000/netflow-driver:latest
+docker push 192.168.159.9:31320/netflow-driver:latest
 ```
 
 Using the Docker registry API, we can list the Docker images available on each time in the Kubernetes private registry with:
 
 ```bash
-curl k8s-cluster:5000/v2/_catalog
+curl -k https://192.168.159.9:31320/v2/_catalog
 ```
 
 you should be able to see output like:
@@ -221,7 +221,7 @@ you should be able to see output like:
 Also, you can check the list of tags associated with the different realeases of the Docker image with:
 
 ```bash
-curl k8s-cluster:5000/v2/netflow-driver/tags/list
+curl -k https://192.168.159.9:31320/v2/netflow-driver/tags/list
 ```
 
 you should be able to see output like:
