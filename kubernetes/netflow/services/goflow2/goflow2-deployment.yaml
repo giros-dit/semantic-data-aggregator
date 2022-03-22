@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-palantir.yml
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: goflow2
+  name: goflow2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: goflow2
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-palantir.yml
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: goflow2
+    spec:
+      containers:
+        - args:
+            - -transport=kafka
+            - -transport.kafka.brokers=kafka:9092
+            - -transport.kafka.topic=
+            - -format=json
+            - -listen=netflow://:9995
+          image: goflow2
+          name: goflow2
+          ports:
+            - containerPort: 9995
+              protocol: UDP
+          resources: {}
+      hostname: goflow2
+      restartPolicy: Always
+status: {}

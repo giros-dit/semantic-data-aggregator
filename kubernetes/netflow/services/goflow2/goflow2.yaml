@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goflow2-ensemble
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goflow2-app
+  template:
+    metadata:
+      labels:
+        app: goflow2-app
+    spec:
+      containers:
+      - name: gof2
+        image: digitalwonderland/zookeeper
+        ports:
+        - containerPort: 2181
+        env:
+        - name: ZOOKEEPER_ID
+          value: "1"
+        - name: ZOOKEEPER_SERVER_1
+          value: zoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gof2
+  labels:
+    app: goflow2-app
+spec:
+  ports:
+  - name: client
+    port: 2181
+    protocol: TCP
+  - name: follower
+    port: 2888
+    protocol: TCP
+  - name: leader
+    port: 3888
+    protocol: TCP
+  selector:
+    app: zookeeper-app
