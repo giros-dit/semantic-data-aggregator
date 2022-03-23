@@ -3,15 +3,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: goflow2
+  labels:
+    app: goflow2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: goflow2-app
+      app: goflow2
   template:
     metadata:
       labels:
-        app: goflow2-app
+        app: goflow2
     spec:
       containers:
         - name: goflow2
@@ -19,20 +21,22 @@ spec:
           ports:
             - containerPort: 9995
               protocol: UDP
-          args:
-            - -transport=kafka
-            - -transport.kafka.brokers=kafka:9092
-            - -transport.kafka.topic=flows
-            - -format=json
-            - -listen=netflow://:9995
-      restartPolicy: Always      
+          args: [
+            "-transport=kafka",
+            "-transport.kafka.brokers=kafka-service:9092",
+            "-transport.kafka.topic=flows",
+            "-format=json",
+            "-listen=netflow://:9995"
+          ]
+      restartPolicy: Always
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: goflow2
   labels:
-    app: goflow2-app
+    app: goflow2
 spec:
   ports:
     - name: client
@@ -40,4 +44,4 @@ spec:
       protocol: UDP
       targetPort: 9995
   selector:
-    app: goflow2-app
+    app: goflow2
