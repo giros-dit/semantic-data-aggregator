@@ -14,30 +14,29 @@ spec:
         app: goflow2-app
     spec:
       containers:
-        - name: goflow2
-          image: 192.168.159.9:31320/goflow2
+        - name: gof2
+          image: 192.168.159.9:31320/goflow2:latest
           ports:
-            - containerPort: 9995
-              protocol: UDP
+            - containerPort: 999protocol: UDP
           args:
             - -transport=kafka
             - -transport.kafka.brokers=kafka:9092
             - -transport.kafka.topic=flows
             - -format=json
-            - -listen=netflow://:9995
+            - -listen="netflow://:9995" 
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: goflow2
+  name: gof2
   labels:
     app: goflow2-app
 spec:
   ports:
-    - name: client
-      port: 9995
-      protocol: UDP
-      targetPort: 9995
+  - name: client
+    port: 9995
+    protocol: UDP
+    targetPort: 9995
   selector:
     app: goflow2-app
