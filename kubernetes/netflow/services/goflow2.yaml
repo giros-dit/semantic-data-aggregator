@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: goflow2
-          image: 192.168.159.9:31320/goflow2
+          image: kubernetes:31320/goflow2
           ports:
             - containerPort: 9995
               protocol: UDP
@@ -25,7 +25,7 @@ spec:
             - -transport.kafka.topic=flows
             - -format=json
             - -listen=netflow://:9995
-
+      restartPolicy: Always      
 ---
 apiVersion: v1
 kind: Service

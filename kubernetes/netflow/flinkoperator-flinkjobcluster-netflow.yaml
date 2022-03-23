@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: 192.168.159.9:31320/netflow-driver:latest 
+    name: kubernetes:31320/netflow-driver:latest 
   jobManager:
     ports:
       ui: 8081
