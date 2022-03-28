@@ -35,6 +35,15 @@ services:
     container_name: eureka
     ports:
       - "8761"
+  event-generator: # reading and writting in kafka topic randomly used as
+  # an example of producer and consumer for the python-worker statefun app
+    build:
+      context: ./docker/statefun-apps/generator/
+      dockerfile: ./Dockerfile
+    hostname: statefun-eventGenerator
+    container_name: statefun-eventGenerator
+    depends_on:
+      - kafka
   flink-jobmanager:
     image: flink:1.14.0-scala_2.12-java11
     hostname: flink-jobmanager
@@ -87,6 +96,21 @@ services:
       - zookeeper
     logging:
       driver: none
+  master: # for FLINK-STATEFUN master
+    build:
+      context: ./docker/statefun-apps
+      dockerfile: ./Dockerfile
+    hostname: statefun-master
+    container_name: statefun-master
+    expose:
+      - "6123"
+    ports:
+      - "8088:8088"
+    environment:
+      - ROLE=master   
+      - MASTER_HOST=master
+    volumes:
+      - ./checkpoint-dir/master:/checkpoint-dir
   nifi:
     build:
       context: .
@@ -121,6 +145,14 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
+  python-worker: # FLINK-STATEFUN aggregator application
+    build:
+      context: ./docker/statefun-apps/aggregator
+      dockerfile: ./Dockerfile
+    hostname: statefun-pythonApp
+    container_name: statefun-pythonApp
+    expose:
+      - "8060"
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
     hostname: scorpio
@@ -153,32 +185,7 @@ services:
     depends_on:
       - nifi
       - scorpio
-  zookeeper:
-    image: zookeeper
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181"
-    logging:
-      driver: none
-
-  ### ADDED FOR EVENT-DRIVEN (STATEFUN) APPLICATION
-  master: # for flink-statefun master
-    build:
-      context: ./docker/statefun-apps
-      dockerfile: ./Dockerfile
-    hostname: statefun-master
-    container_name: statefun-master
-    expose:
-      - "6123"
-    ports:
-      - "8088:8088"
-    environment:
-      - ROLE=master
-      - MASTER_HOST=master
-    volumes:
-      - ./checkpoint-dir/master:/checkpoint-dir
-  worker: # for flink-statefun worker
+  worker: # for FLINK-STATEFUN worker
     build:
       context: ./docker/statefun-apps
       dockerfile: ./Dockerfile
@@ -198,19 +205,11 @@ services:
       - MASTER_HOST=master
     volumes:
       - ./checkpoint-dir/worker:/checkpoint-dir
-  python-worker: # aggregator application (statefun application)
-    build:
-      context: ./docker/statefun-apps/aggregator
-      dockerfile: ./Dockerfile
-    hostname: statefun-pythonApp
-    container_name: statefun-pythonApp
-    expose:
-      - "8060"
-  event-generator: # reading and writting in kafka topic randomly
-    build:
-      context: ./docker/statefun-apps/generator/
-      dockerfile: ./Dockerfile
-    hostname: statefun-eventGenerator
-    container_name: statefun-eventGenerator
-    depends_on:
-      - kafka
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181"
+    logging:
+      driver: none
