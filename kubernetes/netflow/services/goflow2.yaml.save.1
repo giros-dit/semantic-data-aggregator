@@ -21,14 +21,22 @@ spec:
           ports:
             - containerPort: 9995
               protocol: UDP
-          args:
+          command:
+            - /bin/sh
+           -
             - -transport=kafka
-            - -transport.kafka.brokers=kafka-service:9092
+            - -transport.kafka.brokers=kafka:9092
             - -transport.kafka.topic=flows
             - -format=json
             - -listen=netflow://:9995
-      #hostname: goflow2
-      #restartPolicy: Always
+          #args: [
+           # "-transport=kafka",
+           # "-transport.kafka.brokers=kafka-service:9092",
+           # "-transport.kafka.topic=flows",
+           # "-format=json",
+           # "-listen=netflow://:9995"
+          #]
+      restartPolicy: Always
 
 ---
 apiVersion: v1
