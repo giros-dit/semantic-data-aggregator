@@ -197,9 +197,6 @@ services:
     depends_on:
       - master
       - kafka
-    links:
-      - "master:master"
-      - "kafka:kafka"
     environment:
       - ROLE=worker
       - MASTER_HOST=master
