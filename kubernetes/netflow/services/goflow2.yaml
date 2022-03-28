@@ -16,18 +16,18 @@ spec:
         app: goflow2
     spec:
       containers:
-        - name: goflow2
-          image: kubernetes:31320/goflow2
+        - args:
+            - -transport=kafka
+            - -transport.kafka.brokers=kafka-service:9092
+            - -transport.kafka.topic=flows
+            - -format=json
+            - -listen=netflow://:9995
+          image: kubernetes:31320/goflow2:latest
+          name: goflow2
           ports:
             - containerPort: 9995
               protocol: UDP
-          args: [
-            "-transport=kafka",
-            "-transport.kafka.brokers=kafka-service:9092",
-            "-transport.kafka.topic=flows",
-            "-format=json",
-            "-listen=netflow://:9995"
-          ]
+      hostname: goflow2
       restartPolicy: Always
 
 ---
