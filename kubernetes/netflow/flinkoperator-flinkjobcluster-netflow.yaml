@@ -34,9 +34,9 @@ spec:
         memory: "2048Mi"
         cpu: "500m"
   job:
-    jarFile: /opt/flink/usrlib/netflow-driver-1.0-SNAPSHOT.jar
+    jarFile: /opt/flink/usrlib/netflow-driver-1.0.jar
     className: tid.NetflowDriver
-    args: ["netflow-output"]
+    args: ["kafka-service:9092", "netflow-output"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:

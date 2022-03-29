@@ -21,14 +21,16 @@ spec:
           ports:
             - containerPort: 9995
               protocol: UDP
+          #command:
+          #  - /bin/sh
+          #  - -c
+          #  - /goflow2 -transport=kafka -transport.kafka.brokers=kafka-service:9092 -transport.kafka.topic=flows -format=json -listen=netflow://:9995
           args:
-            - -transport=kafka
-            - -transport.kafka.brokers=kafka-service:9092
-            - -transport.kafka.topic=flows
-            - -format=json
-            - -listen=netflow://:9995
-      #hostname: goflow2
-      #restartPolicy: Always
+           - -transport=kafka
+           - -transport.kafka.brokers=kafka-service:9092
+           - -transport.kafka.topic=flows
+           - -format=json
+           - -listen=netflow://:9995
 
 ---
 apiVersion: v1
@@ -38,10 +40,12 @@ metadata:
   labels:
     app: goflow2
 spec:
+  selector:
+    app: goflow2
+  type: NodePort
   ports:
     - name: client
       port: 9995
-      protocol: UDP
       targetPort: 9995
-  selector:
-    app: goflow2
+      nodePort: 31000
+      protocol: UDP
