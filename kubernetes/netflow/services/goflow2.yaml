@@ -21,10 +21,6 @@ spec:
           ports:
             - containerPort: 9995
               protocol: UDP
-          #command:
-          #  - /bin/sh
-          #  - -c
-          #  - /goflow2 -transport=kafka -transport.kafka.brokers=kafka-service:9092 -transport.kafka.topic=flows -format=json -listen=netflow://:9995
           args:
            - -transport=kafka
            - -transport.kafka.brokers=kafka-service:9092
