@@ -263,7 +263,7 @@ kubectl exec -it <kafka-pod-name> -- bash
 Once inside the Kafka container, if we list the current topics with:
 
 ```bash
-kafka-topics.sh --list --bootstrap-server localhost:9092
+kafka-topics.sh --list --bootstrap-server <kafka-endpoint>
 ```
 
 We will discover that there is a `flows` topic from where the NetFlow driver expects to consume the NetFlow monitoring data. This data can be read by a Kafka consumer by running the following:
