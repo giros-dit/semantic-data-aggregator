@@ -34,9 +34,19 @@ Example:
 curl -X PATCH http://localhost:8084/jobs/dc6dcc99b55184a40e2c0390559a3b84?mode=cancel
 ```
 
-5. Returns an overview over all jobs and their current state.
+5. Delete a jar previously uploaded.
+
+Example:
+```bash
+curl -X DELETE http://localhost:8084/jars/d18cd4e3-09cf-4556-8072-3a6409270b0d_netflow-driver-1.0.jar
+```
+
+6. Returns an overview over all jobs and their current state.
 
 Example:
 ```bash
 curl -X GET http://localhost:8084/jobs
 ```
+
+### Documentation
+- [Apache Flink REST API](https://nightlies.apache.org/flink/flink-docs-release-1.14/docs/ops/rest_api/)
