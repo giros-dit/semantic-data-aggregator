@@ -394,7 +394,8 @@ func ConvertNetFlowDataSet(version uint16, baseTime uint32, uptime uint32, recor
 					var timeFirstSwitched uint32
 					DecodeUNumber(v, &timeFirstSwitched)
 					timeDiff := (uptime - timeFirstSwitched)
-					flowMessage.TimeFlowStart = uint64(baseTime*1000 - timeDiff)
+					//flowMessage.TimeFlowStart = uint64(baseTime*1000 - timeDiff)
+					flowMessage.TimeFlowStart = uint64(timeFirstSwitched)
 					fmt.Println("uptime: ", uptime)
 					fmt.Println("timeFirstSwitched: ", timeFirstSwitched)
 					fmt.Println("timeDiff: ", timeDiff)
@@ -403,7 +404,8 @@ func ConvertNetFlowDataSet(version uint16, baseTime uint32, uptime uint32, recor
 					var timeLastSwitched uint32
 					DecodeUNumber(v, &timeLastSwitched)
 					timeDiff := (uptime - timeLastSwitched)
-					flowMessage.TimeFlowEnd = uint64(baseTime*1000 - timeDiff)
+					//flowMessage.TimeFlowEnd = uint64(baseTime*1000 - timeDiff)
+					flowMessage.TimeFlowStart = uint64(timeLastSwitched)
 				}
 			} else if version == 10 {
 				switch df.Type {
