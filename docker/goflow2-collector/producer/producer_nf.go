@@ -11,8 +11,6 @@ import (
 
 	"goflow2-collector/decoders/netflow"
 	flowmessage "goflow2-collector/pb"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type SamplingRateSystem interface {
@@ -397,17 +395,11 @@ func ConvertNetFlowDataSet(version uint16, baseTime uint32, uptime uint32, recor
 					DecodeUNumber(v, &timeFirstSwitched)
 					timeDiff := (uptime - timeFirstSwitched)
 					flowMessage.TimeFlowStart = uint64(uint64(baseTime)*1000 - uint64(timeDiff))
-					log.Info("uptime: ", uptime)
-					log.Info("timeFirstSwitched: ", timeFirstSwitched)
-					log.Info("timeDiff: ", timeDiff)
-					log.Info("baseTime: ", baseTime)
-					log.Info("TimeFlowStart: ", flowMessage.TimeFlowStart)
 				case netflow.NFV9_FIELD_LAST_SWITCHED:
 					var timeLastSwitched uint32
 					DecodeUNumber(v, &timeLastSwitched)
 					timeDiff := (uptime - timeLastSwitched)
 					flowMessage.TimeFlowEnd = uint64(uint64(baseTime)*1000 - uint64(timeDiff))
-					flowMessage.TimeFlowStart = uint64(timeLastSwitched)
 				}
 			} else if version == 10 {
 				switch df.Type {
