@@ -35,7 +35,7 @@ spec:
         cpu: "500m"
   job:
     jarFile: /opt/flink/usrlib/netflowAggregator-1.0.jar
-    className: tid.netflowAggregator
+    className: tid.NetflowAggregator
     args: ["kafka-service:9092", "netflow-output-json", "netflow-output-aggreg"]
     parallelism: 2
     restartPolicy: Never
