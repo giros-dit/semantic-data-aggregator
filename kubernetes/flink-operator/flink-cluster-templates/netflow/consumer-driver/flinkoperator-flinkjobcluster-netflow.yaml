@@ -35,8 +35,8 @@ spec:
         cpu: "500m"
   job:
     jarFile: /opt/flink/usrlib/netflow2csv-1.0.jar
-    className: tid.netflow2csv
-    args: ["kafka-service:9092", "netflow-output-json", "netflow-output-csv"]
+    className: tid.Netflow2Csv
+    args: ["kafka-service:9092", "netflow-output-aggreg", "netflow-output-csv"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:
