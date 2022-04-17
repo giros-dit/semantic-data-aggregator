@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: flink:1.14.2
+    name: flink:1.14.4-scala_2.12-java11
   batchSchedulerName: volcano
   jobManager:
     accessScope: Cluster

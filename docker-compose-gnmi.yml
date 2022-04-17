@@ -97,6 +97,31 @@ services:
       - "8080"
     volumes:
       - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
+  flink-jobmanager:
+    image: flink:1.14.4-scala_2.12-java11
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    ports:
+      - "8084:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+    volumes:
+      - ./flink-conf:/flink-conf
+  flink-taskmanager:
+    image: flink:1.14.4-scala_2.12-java11
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 2
   gateway:
     image: scorpiobroker/scorpio:gateway_aaio_2.1.1
     hostname: gateway
