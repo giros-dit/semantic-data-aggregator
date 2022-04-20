@@ -39,4 +39,4 @@ worker:
 module:
   functions: normfuncs/aggregatorApp
   url_path_template: http://python-worker:8060/statefun
-  kafka_address: kafka:9092
+  kafka_address: kafka-service:9092
