@@ -38,5 +38,5 @@ worker:
 
 module:
   functions: normfuncs/aggregatorApp
-  url_path_template: http://python-worker:8060/statefun
+  url_path_template: http://aggregatorapp-python-service:8060/statefun
   kafka_address: kafka-service:9092

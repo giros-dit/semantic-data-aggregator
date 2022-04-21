@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: aggregatorapp-python-container
-          image: httpd:latest
+          image: kubernetes:31320/python-aggregator-app:latest
           ports:
             - containerPort: 8060
 ---

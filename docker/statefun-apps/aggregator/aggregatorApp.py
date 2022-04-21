@@ -15,6 +15,9 @@ functions = StatefulFunctions()
 # def aggregate(context, message: MessageRequest):
 def aggregate(context, message):
 
+
+    print("ARRIVE:", message, "\n\n", flush=True)
+
     try:
         if(not message.is_string()):
             raise UnicodeDecodeError('utf-8', enc, 1, 2, 'Is the Input of type String utf-8?')
