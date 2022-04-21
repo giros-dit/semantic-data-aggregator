@@ -59,16 +59,8 @@ services:
       - "8080"
     volumes:
       - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
-  gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
-    hostname: gateway
-    container_name: gateway
-    ports:
-      - "9090:9090"
-    depends_on:
-      - eureka
   flink-jobmanager:
-    image: flink:latest
+    image: flink:1.14.4-scala_2.12-java11
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
@@ -81,7 +73,7 @@ services:
     volumes:
       - ./flink-conf:/flink-conf
   flink-taskmanager:
-    image: flink:latest
+    image: flink:1.14.4-scala_2.12-java11
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     depends_on:
@@ -91,7 +83,15 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
-        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 2  
+  gateway:
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    hostname: gateway
+    container_name: gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka
   kafka:
     image: bitnami/kafka
     hostname: kafka

@@ -45,7 +45,7 @@ services:
     depends_on:
       - kafka
   flink-jobmanager:
-    image: flink:1.14.0-scala_2.12-java11
+    image: flink:1.14.4-scala_2.12-java11
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     ports:
@@ -58,7 +58,7 @@ services:
     volumes:
       - ./flink-conf:/flink-conf
   flink-taskmanager:
-    image: flink:1.14.0-scala_2.12-java11
+    image: flink:1.14.4-scala_2.12-java11
     hostname: flink-taskmanager
     container_name: flink-taskmanager
     depends_on:
