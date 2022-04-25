@@ -1,4 +1,4 @@
-# Deployment as an [standalone Flink cluster](https://ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/kubernetes.html#common-cluster-resource-definitions) on Kubernetes
+# Deployment as an [standalone Flink cluster](https://nightlies.apache.org/flink/flink-docs-release-1.14/docs/deployment/resource-providers/standalone/overview/) on Kubernetes
 For flink-statefun clusters the working solution of using spotify operator for flink is not working. In this case the deployment of a standalone flink-statefun-cluster on kubernetes is proposed as solution.
 There are two possible solutions documented, both are indeed the same but with a minor difference in the way of giving configuration parameters to the statefun cluster relative to the application module (ingress, egress, functions).
 
