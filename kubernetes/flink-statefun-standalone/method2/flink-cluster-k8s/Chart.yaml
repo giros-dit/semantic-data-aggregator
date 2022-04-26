@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -13,8 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-FROM apache/flink-statefun:3.2.0
-
-RUN mkdir -p /opt/statefun/modules/aggregatorApp
-ADD module.yaml /opt/statefun/modules/aggregatorApp
+#
+apiVersion: v2
+name: statefun-k8s-method2
+description: A Helm chart for a Stateful function application deployed on Kubernetes, using custom flink-statefun application
+type: application
+version: 3.3-SNAPSHOT
+appVersion: 1.16.0
+maintainers:
+  - name: Alejandro Antonio Moreno Sancho 
+    email: alejandro.moreno.practicas@telefonica.com

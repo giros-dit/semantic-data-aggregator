@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -13,8 +12,32 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-FROM apache/flink-statefun:3.2.0
+checkpoint:
+  dir: file:///checkpoint-dir
+  mode: EXACTLY_ONCE
+  interval: 10sec
 
-RUN mkdir -p /opt/statefun/modules/aggregatorApp
-ADD module.yaml /opt/statefun/modules/aggregatorApp
+ha:
+  id: statefun-application
+  dir: file:///ha-ir
+
+master:
+  name: flink-statefun-master
+  image: apache/flink-statefun:3.2.0 # replace with your image
+  jvm_mem: 1g
+  container_mem: 1.5Gi
+
+worker:
+  name: flink-statefun-worker
+  image: apache/flink-statefun:3.2.0 # replace with your image
+  jvm_mem: 1g
+  container_mem: 1.5Gi
+  replicas: 1
+
+module:
+  functions: normfuncs/aggregatorApp
+  url_path_template: http://aggregatorapp-python-service:8060/statefun
+  kafka_address: kafka-service:9092
+
