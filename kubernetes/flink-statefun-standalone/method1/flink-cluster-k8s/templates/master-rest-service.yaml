@@ -18,7 +18,7 @@ kind: Service
 metadata:
   name: {{.Values.master.name}}-rest
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: rest
       port: 8081
