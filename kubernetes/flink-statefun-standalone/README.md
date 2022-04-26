@@ -61,9 +61,11 @@ In the `master-deployment.yaml` and `worker-deployment.yaml` templates use this 
 
 ## Deploy with Helm
 To ease the deployment a custom Helm chart has been configured for both of the methods
-First install helm with:
+Helm can be installed fetching the binary as described in the [official documentation](https://helm.sh/docs/intro/install/#from-the-binary-releases), for AMD64:
 ```
-sudo snap install helm --classic
+wget "https://get.helm.sh/helm-v3.8.2-linux-amd64.tar.gz"
+tar -zxvf helm-v3.8.2-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
 ```
 
 To deploy use the command:
