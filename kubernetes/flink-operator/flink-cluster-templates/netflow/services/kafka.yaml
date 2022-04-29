@@ -48,6 +48,6 @@ spec:
   selector:
     app: kafka-app
     id: "0"
-  type: LoadBalancer
+  type: ClusterIP
 
 
