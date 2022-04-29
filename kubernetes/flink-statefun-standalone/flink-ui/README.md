@@ -18,7 +18,7 @@ where *31353* is the NodePort choosen randomly by kubernetes or stablished in th
 
 
 ## Using Ingress
-It is not a type of service but it is used to expose traffic to the internet. Acts as an intelligent router, it is like a HTTP LoadBalancer. It is really usefull if you want to expose multiple services over the same IP address and all this services uses the same L7 protocol (normally HTTP). An ingress file needs to be configured to indicate the host, the name and port of the service, the path and the ip of the load balancer. In this case [NGINX-ingress-controller](https://kubernetes.github.io/ingress-nginx/) is used to route the traffic. An example of configuration file is [flink-master-ingress.yaml](). To use Ingress we have to apply this ingress file with:
+It is not a type of service but it is used to expose traffic to the internet. Acts as an intelligent router, it is like a HTTP LoadBalancer. It is really usefull if you want to expose multiple services over the same IP address and all this services uses the same L7 protocol (normally HTTP). An ingress file needs to be configured to indicate the host, the name and port of the service, the path and the ip of the load balancer. In this case [NGINX-ingress-controller](https://kubernetes.github.io/ingress-nginx/) is used to route the traffic. An example of configuration file is [flink-master-ingress.yaml](https://github.com/giros-dit/semantic-data-aggregator/blob/3549a2684263b78507d2930421c8380169d54cd5/kubernetes/flink-statefun-standalone/flink-ui/flink-master-ingress.yaml). To use Ingress we have to apply this ingress file with:
 ```
 kubectl apply -f flink-master-ingress.yaml
 ```
