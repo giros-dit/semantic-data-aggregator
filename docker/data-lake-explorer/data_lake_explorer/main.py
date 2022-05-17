@@ -1,10 +1,15 @@
 import argparse
+import json
 import logging
 import sys
 import xml.etree.ElementTree as ET
 from typing import List, Tuple
 
-from semantic_tools.models.data_lake import Bucket, DataLake, Object, Owner
+from semantic_tools.bindings.clarity_data_lake.bucket import Bucket
+from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
+from semantic_tools.bindings.clarity_data_lake.object import Object
+from semantic_tools.bindings.clarity_data_lake.owner import Owner
+from semantic_tools.bindings.entity import DateTime
 from semantic_tools.ngsi_ld.api import Options
 from semantic_tools.ngsi_ld.client import NGSILDAPI
 
@@ -24,15 +29,16 @@ def _chunks(lst, n):
                how-do-you-split-a-list-into-evenly-sized-chunks
     """
     for i in range(0, len(lst), n):
-        yield lst[i : i + n]
+        yield lst[i: i + n]
 
 
-def build_data_lake(dl_uri: str, dl_region: str) -> DataLake:
+def build_data_lake(dl_key: str, dl_uri: str, dl_region: str) -> DataLake:
     # Build data lake context
     dl_entity = DataLake(
         id="urn:ngsi-ld:DataLake:{0}".format(DATA_LAKE_NAME),
+        api_key={"value": dl_key},
         region={"value": dl_region},
-        uri={"value": dl_uri},
+        uri={"value": dl_uri}
     )
     logger.info("Building {0}".format(dl_entity.id))
     return dl_entity
@@ -48,8 +54,8 @@ def discover_buckets(
     owner_id = b_xml_root.find("Owner", NS)[0].text
     owner = Owner(
         id="urn:ngsi-ld:Owner:{0}".format(owner_id),
-        ownerId={"value": owner_id},
-        memberOf={"object": data_lake.id},
+        owner_id={"value": owner_id},
+        member_of={"object": data_lake.id},
     )
     logger.info("Building {0}".format(owner.id))
     # Build bucket context
@@ -60,10 +66,10 @@ def discover_buckets(
         b_cdate = b_xml_bucket.find("CreationDate", NS).text
         bucket_entity = Bucket(
             id="urn:ngsi-ld:Bucket:{0}".format(b_name),
-            creationDate={"value": b_cdate},
+            creation_date={"value": DateTime(value=b_cdate)},
             name={"value": b_name},
-            belongsTo={"object": data_lake.id},
-            ownedBy={"object": owner.id},
+            belongs_to={"object": data_lake.id},
+            owned_by={"object": owner.id},
         )
         logger.info("Building {0}".format(bucket_entity.id))
         buckets.append(bucket_entity)
@@ -84,8 +90,8 @@ def discover_objects(
         owner_id = o_xml_object.find("Owner", NS)[0].text
         owner = Owner(
             id="urn:ngsi-ld:Owner:{0}".format(owner_id),
-            ownerId={"value": owner_id},
-            memberOf={"object": data_lake.id},
+            owner_id={"value": owner_id},
+            member_of={"object": data_lake.id},
         )
         logger.info("Building {0}".format(owner.id))
         # Build object context
@@ -96,13 +102,13 @@ def discover_objects(
         o_sc = o_xml_object.find("StorageClass", NS).text
         object = Object(
             id="urn:ngsi-ld:Object:{0}:{1}".format(bucket.name.value, o_key),
-            eTag={"value": o_etag},
+            e_tag={"value": o_etag},
             key={"value": o_key},
-            lastModified={"value": o_lm},
-            size={"value": o_size},
-            storageClass={"value": o_sc},
-            containedIn={"object": bucket.id},
-            ownedBy={"object": owner.id},
+            last_modified={"value": DateTime(value=o_lm)},
+            size={"value": int(o_size)},
+            storage_class={"value": o_sc},
+            contained_in={"object": bucket.id},
+            owned_by={"object": owner.id},
         )
         logger.info("Building {0}".format(object.id))
         objects.append((object, owner))
@@ -113,18 +119,26 @@ def discover_objects(
 def main(ngsi_ld_client: NGSILDAPI, ag_client: APIGateway):
     logger.info("Data-lake-explorer service started!")
     # Build and upsert Data Lake
-    data_lake = build_data_lake(ag_client.url, ag_client.region)
+    data_lake = build_data_lake(
+        ag_client.api_key,
+        ag_client.url,
+        ag_client.region)
+    # https://github.com/samuelcolvin/pydantic/issues/1409
     ngsi_ld_client.batchEntityUpsert(
-        [data_lake.dict(exclude_none=True)], Options.update.value
+        [json.loads(data_lake.json(
+            exclude_none=True, by_alias=True))], Options.update.value
     )
     # Discover and upsert Buckets plus Owner
     logger.info("Collecting Bucket context information")
     buckets, owner = discover_buckets(ag_client, data_lake)
     ngsi_ld_client.batchEntityUpsert(
-        [bucket.dict(exclude_none=True) for bucket in buckets], Options.update.value
+        [json.loads(bucket.json(
+            exclude_none=True, by_alias=True)) for bucket in buckets],
+        Options.update.value
     )
     ngsi_ld_client.batchEntityUpsert(
-        [owner.dict(exclude_none=True)], Options.update.value
+        [json.loads(owner.json(
+            exclude_none=True, by_alias=True))], Options.update.value
     )
     # Discover and upsert Objects
     logger.info("Collecting Object context information.")
@@ -138,7 +152,10 @@ def main(ngsi_ld_client: NGSILDAPI, ag_client: APIGateway):
             try:
                 entities_chunk = next(entity_iterator)
                 ngsi_ld_client.batchEntityUpsert(
-                    [e.dict(exclude_none=True) for e in entities_chunk],
+                    [json.loads(
+                        e.json(
+                            exclude_none=True,
+                            by_alias=True)) for e in entities_chunk],
                     Options.update.value,
                 )
             except StopIteration:
@@ -168,7 +185,8 @@ if __name__ == "__main__":
         help="Context Catalog URI.",
     )
     parser.add_argument(
-        "--data-lake-uri", dest="data_lake_uri", required=True, help="Data Lake URI."
+        "--data-lake-uri", dest="data_lake_uri",
+        required=True, help="Data Lake URI."
     )
     parser.add_argument(
         "--data-lake-key",
@@ -187,7 +205,7 @@ if __name__ == "__main__":
 
     # Init NGSI-LD REST API Client
     headers = {"Accept": "application/json"}
-    debug = False
+    debug = True
     ngsi_ld_client = NGSILDAPI(
         known_args.broker_uri,
         headers=headers,
@@ -197,7 +215,9 @@ if __name__ == "__main__":
 
     # Init IDCC API Gateway Client
     ag_client = APIGateway(
-        known_args.data_lake_uri, known_args.data_lake_key, known_args.data_lake_region
+        known_args.data_lake_uri,
+        known_args.data_lake_key,
+        known_args.data_lake_region
     )
 
     # Call main method
