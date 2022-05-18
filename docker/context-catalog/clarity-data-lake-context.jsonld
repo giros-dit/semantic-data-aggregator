@@ -4,17 +4,11 @@
         "belongsTo": "https://semantic-data-aggregator.org/clarity-data-lake/Bucket/belongsTo",
         "Bucket": "https://semantic-data-aggregator.org/clarity-data-lake/Bucket",
         "containedIn": "https://semantic-data-aggregator.org/clarity-data-lake/Object/containedIn",
-        "creationDate": {
-            "@type": "https://uri.etsi.org/ngsi-ld/DateTime",
-            "@id": "https://semantic-data-aggregator.org/clarity-data-lake/Bucket/creationDate"
-        },
+        "creationDate": "https://semantic-data-aggregator.org/clarity-data-lake/Bucket/creationDate",
         "DataLake": "https://semantic-data-aggregator.org/clarity-data-lake/DataLake",
         "eTag": "https://semantic-data-aggregator.org/clarity-data-lake/Object/eTag",
         "key": "https://semantic-data-aggregator.org/clarity-data-lake/Object/key",
-        "lastModified": {
-            "@type": "https://uri.etsi.org/ngsi-ld/DateTime",
-            "@id": "https://semantic-data-aggregator.org/clarity-data-lake/Object/lastModified"
-        },
+        "lastModified": "https://semantic-data-aggregator.org/clarity-data-lake/Object/lastModified",
         "memberOf": "https://semantic-data-aggregator.org/clarity-data-lake/Owner/memberOf",
         "name": "https://smartdatamodels.org/name",
         "Object": "https://semantic-data-aggregator.org/clarity-data-lake/Object",

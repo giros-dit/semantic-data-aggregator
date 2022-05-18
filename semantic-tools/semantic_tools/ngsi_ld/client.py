@@ -24,7 +24,7 @@ class WeaverSubscriptionType(Enum):
     Task = "urn:ngsi-ld:Subscription:Task:weaver-subs"
 
 
-class NGSILDClient(object):
+class NGSILDClient(NGSILDAPI):
     """
     Class encapsulating the main operations with NGSI-LD.
     """
@@ -34,8 +34,8 @@ class NGSILDClient(object):
                  context: str = "http://context-catalog:8080/context.jsonld",
                  debug: bool = False):
         # Init NGSI-LD REST API Client
-        self.api = NGSILDAPI(url, headers=headers,
-                             context=context, debug=debug)
+        super().__init__(url=url, headers=headers,
+                         context=context, debug=debug)
 
     def check_orion_status(self):
         """
@@ -336,18 +336,18 @@ class NGSILDClient(object):
         yang_module = YANGModule.parse_obj(yang_module_entity)
         return yang_module
 
-    def subscribe_to_entity(self, entity_type: str,
-                            endpoint: str,
-                            attributes: list = None,
-                            subscription_id: str = None):
+    def subscribe_to_entity_type(self, entity_type: str,
+                                 endpoint: str,
+                                 attributes: list = None,
+                                 subscription_id: str = None):
         """
-        Base method to create subscription for the specified entity
+        Base method to create subscription for the specified entity type
         """
         logger.debug("Subscribing to '%s' entity type ..."
                      % entity_type)
         if subscription_id:
             try:
-                self.api.retrieveSubscription(
+                self.retrieveSubscription(
                     subscription_id)
             except Exception:
                 subscription = Subscription(
@@ -365,7 +365,7 @@ class NGSILDClient(object):
                 )
                 if attributes:
                     subscription.watchedAttributes = attributes
-                self.api.createSubscription(
+                self.createSubscription(
                     (subscription.dict(exclude_none=True)))
             else:
                 logger.info(
@@ -385,7 +385,7 @@ class NGSILDClient(object):
                     }
                 }
             )
-            self.api.createSubscription(
+            self.createSubscription(
                 (subscription.dict(exclude_none=True)))
 
     def append_internal_id(self, entity: Entity,

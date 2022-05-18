@@ -8,6 +8,7 @@ authors = ["Ignacio Dominguez Martinez-Casanueva <i.dominguezm@alumnos.upm.es>"]
 python = ">=3.9,<4.0"
 semantic-tools = ">=0.1.0"
 lxml = "^4.7.1"
+fastapi = {extras = ["all"], version = "^0.78.0"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

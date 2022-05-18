@@ -5,9 +5,6 @@ set -e
 # activate our virtual environment here
 . /venv/bin/activate
 
-exec python data_lake_explorer/main.py \
-     --broker-uri "${BROKER_URI}" \
-     --context-catalog-uri "${CONTEXT_CATALOG_URI}" \
-     --data-lake-uri "${DATA_LAKE_URI}" \
-     --data-lake-key "${DATA_LAKE_KEY}" \
-     --data-lake-region "${DATA_LAKE_REGION}"
+exec uvicorn data_lake_explorer.main:app --host 0.0.0.0 \
+     --port 8080 --reload \
+     --log-config data_lake_explorer/config/log.yaml
