@@ -7,7 +7,7 @@ from semantic_tools.bindings.clarity_data_lake.bucket import Bucket
 from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
 from semantic_tools.bindings.clarity_data_lake.object import Object
 from semantic_tools.bindings.clarity_data_lake.owner import Owner
-from semantic_tools.bindings.entity import DateTime
+from semantic_tools.bindings.entity import DateTime, Entity
 from semantic_tools.ngsi_ld.api import Options
 from semantic_tools.ngsi_ld.client import NGSILDAPI
 
@@ -104,10 +104,17 @@ def discover_objects(
 
 def register_data_lake(
         ngsi_ld: NGSILDAPI,
-        agw: APIGateway,
-        notification: dict):
+        entity: Entity):
     logger.info("Processing registration of Data Lake platform...")
-    data_lake = DataLake.parse_obj(notification)
+    data_lake = DataLake.parse_obj(entity.dict())
+
+    # Init IDCC API Gateway
+    agw = APIGateway(
+        api_key=data_lake.api_key.value,
+        region=data_lake.region.value,
+        url=data_lake.uri.value
+    )
+
     # Discover and upsert Buckets plus Owner
     logger.info("Collecting Bucket context information")
     buckets, owner = discover_buckets(agw, data_lake)

@@ -23,18 +23,6 @@ class ContainedIn(Relationship):
     object: StrictStr
 
 
-class OwnedBy(Relationship):
-    """
-    Relationship. AWS S3 owner by whom the object is owned.
-    """
-
-    class Config:
-        extra = Extra.forbid
-        allow_population_by_field_name = True
-
-    object: StrictStr
-
-
 class ETag(Property):
     """
     Property. AWS eTag identifier of the object.
@@ -69,6 +57,18 @@ class LastModified(Property):
         allow_population_by_field_name = True
 
     value: entity.DateTime
+
+
+class OwnedBy(Relationship):
+    """
+    Relationship. AWS S3 owner by whom the object is owned.
+    """
+
+    class Config:
+        extra = Extra.forbid
+        allow_population_by_field_name = True
+
+    object: StrictStr
 
 
 class Size(Property):

@@ -23,18 +23,6 @@ class BelongsTo(Relationship):
     object: StrictStr
 
 
-class OwnedBy(Relationship):
-    """
-    Relationship. AWS S3 owner by whom the bucket is owned.
-    """
-
-    class Config:
-        extra = Extra.forbid
-        allow_population_by_field_name = True
-
-    object: StrictStr
-
-
 class CreationDate(Property):
     """
     Property. Date when the bucket was created in the DataLake.
@@ -57,6 +45,18 @@ class Name(Property):
         allow_population_by_field_name = True
 
     value: StrictStr
+
+
+class OwnedBy(Relationship):
+    """
+    Relationship. AWS S3 owner by whom the bucket is owned.
+    """
+
+    class Config:
+        extra = Extra.forbid
+        allow_population_by_field_name = True
+
+    object: StrictStr
 
 
 class Bucket(Entity):

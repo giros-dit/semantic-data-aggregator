@@ -4,12 +4,12 @@ from enum import Enum
 from typing import List, Optional
 
 from pydantic import parse_obj_as
+from semantic_tools.bindings.subscription import Subscription
 from semantic_tools.models.application import Application, Task
 from semantic_tools.models.common import Endpoint, Infrastructure, State
 from semantic_tools.models.metric import (Metric, MetricFamily, Prometheus,
                                           PrometheusExporter)
 from semantic_tools.models.ngsi_ld.entity import Entity, Property
-from semantic_tools.models.ngsi_ld.subscription import Subscription
 from semantic_tools.models.stream import KafkaBroker, KafkaTopic
 from semantic_tools.models.telemetry import Device, YANGModule
 from semantic_tools.ngsi_ld.api import NGSILDAPI
@@ -352,6 +352,7 @@ class NGSILDClient(NGSILDAPI):
             except Exception:
                 subscription = Subscription(
                     id=subscription_id,
+                    type="Subscription",
                     entities=[
                         {
                             "type": entity_type
@@ -374,6 +375,7 @@ class NGSILDClient(NGSILDAPI):
                 )
         else:
             subscription = Subscription(
+                type="Subscription",
                 entities=[
                     {
                         "type": entity_type
