@@ -7,13 +7,14 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyUrl, BaseModel, Extra, Field, StrictStr
+from pydantic import AnyUrl, BaseModel, Field, StrictStr
 
 from . import geometry
 
 
 class NgsiLdCommonDefinitions(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: Any = Field(
@@ -23,14 +24,14 @@ class NgsiLdCommonDefinitions(BaseModel):
 
 class Name(BaseModel):
     class Config:
-        extra = Extra.forbid
-        allow_population_by_field_name = True
+        validate_assignment = True
 
     __root__: StrictStr = Field(..., description='NGSI-LD Name')
 
 
 class PropertyNames(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: StrictStr
@@ -38,6 +39,7 @@ class PropertyNames(BaseModel):
 
 class ObservedAt(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: datetime
@@ -45,6 +47,7 @@ class ObservedAt(BaseModel):
 
 class CreatedAt(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: datetime
@@ -52,6 +55,7 @@ class CreatedAt(BaseModel):
 
 class ModifiedAt(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: datetime
@@ -59,6 +63,7 @@ class ModifiedAt(BaseModel):
 
 class LdContextItem(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: List[Any] = Field(..., min_items=1)
@@ -66,6 +71,7 @@ class LdContextItem(BaseModel):
 
 class LdContext(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: Union[Dict[str, Any], AnyUrl, LdContextItem]
@@ -78,6 +84,7 @@ class Accept(Enum):
 
 class Endpoint(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     uri: AnyUrl
@@ -86,6 +93,7 @@ class Endpoint(BaseModel):
 
 class EntityInfo(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     id: Optional[StrictStr]
@@ -95,6 +103,7 @@ class EntityInfo(BaseModel):
 
 class ProblemDetails(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: AnyUrl
@@ -113,6 +122,7 @@ class GeorelEnum(Enum):
 
 class GeorelItem(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: StrictStr
@@ -120,6 +130,7 @@ class GeorelItem(BaseModel):
 
 class Georel(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: Union[GeorelEnum, GeorelItem]
@@ -127,6 +138,7 @@ class Georel(BaseModel):
 
 class Coordinates(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: Union[

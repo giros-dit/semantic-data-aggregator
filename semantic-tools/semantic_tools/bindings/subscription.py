@@ -14,6 +14,7 @@ from . import common
 
 class Attribute(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: StrictStr
@@ -32,6 +33,7 @@ class Status1(Enum):
 
 class NotificationParams(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     attributes: Optional[List[Attribute]] = Field(
@@ -50,6 +52,7 @@ class NotificationParams(BaseModel):
 
 class GeoQuery(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     georel: common.Georel
@@ -59,6 +62,7 @@ class GeoQuery(BaseModel):
 
 class SubscriptionFragment(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     context: Optional[common.LdContext] = Field(None, alias='@context')
@@ -79,6 +83,7 @@ class SubscriptionFragment(BaseModel):
 
 class Subscription(SubscriptionFragment):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     id: Optional[StrictStr]
@@ -97,4 +102,5 @@ class NgsiLdSubscription(Subscription):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True

@@ -16,6 +16,7 @@ class ApiKey(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -28,6 +29,7 @@ class Region(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -40,6 +42,7 @@ class Uri(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -52,6 +55,7 @@ class DataLake(Entity):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
