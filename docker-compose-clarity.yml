@@ -203,6 +203,23 @@ services:
       - eureka
       - postgres
       - kafka
+  telemetry-explorer:
+    build:
+      context: .
+      dockerfile: ./docker/telemetry-explorer/Dockerfile
+    hostname: telemetry-explorer
+    container_name: telemetry-explorer
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - TELEMETRY_EXPLORER_URI=${TELEMETRY_EXPLORER_URI}
+      - TELEMETRY_EXPLORER_SUBSCRIPTION_ID=${TELEMETRY_EXPLORER_SUBSCRIPTION_ID}
+    ports:
+      - "8080"
+    volumes:
+      - ./docker/telemetry-explorer/telemetry_explorer:/opt/sda/telemetry-explorer/telemetry_explorer
+    depends_on:
+      - scorpio
   weaver:
     build:
       context: .

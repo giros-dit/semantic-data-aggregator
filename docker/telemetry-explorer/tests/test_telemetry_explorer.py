@@ -36,7 +36,7 @@ class TelemetryExplorer(unittest.TestCase):
         # https://github.com/samuelcolvin/pydantic/issues/1409
         self.ngsi_ld.batchEntityUpsert(
             [json.loads(gnmi_updated.json(
-                exclude_none=True, by_alias=True))], Options.update.value
+                exclude_none=True, by_alias=True))], "update"
         )
 
     def test_netconf_discovery(self):
@@ -47,7 +47,7 @@ class TelemetryExplorer(unittest.TestCase):
         # https://github.com/samuelcolvin/pydantic/issues/1409
         self.ngsi_ld.batchEntityUpsert(
             [json.loads(netconf_updated.json(
-                exclude_none=True, by_alias=True))], Options.update.value
+                exclude_none=True, by_alias=True))], "update"
         )
 
     def test_yang_modules_discovery(self):
@@ -62,7 +62,7 @@ class TelemetryExplorer(unittest.TestCase):
         self.ngsi_ld.batchEntityUpsert(
             [json.loads(module.json(
                 exclude_none=True, by_alias=True)) for module in modules],
-            Options.update.value
+            "update"
         )
 
     def test_register_device(self):
@@ -70,3 +70,4 @@ class TelemetryExplorer(unittest.TestCase):
             "urn:ngsi-ld:Device:r1")
         device = Device.parse_obj(device_entity)
         register_device(self.ngsi_ld, device)
+

@@ -150,7 +150,7 @@ def register_device(
         # https://github.com/samuelcolvin/pydantic/issues/1409
         ngsi_ld.batchEntityUpsert(
             [json.loads(gnmi_updated.json(
-                exclude_none=True, by_alias=True))], Options.update.value
+                exclude_none=True, by_alias=True))], "update"
         )
 
     # Discover NETCONF
@@ -162,15 +162,18 @@ def register_device(
     logger.info("Creating %s" % netconf_updated.id)
     ngsi_ld.batchEntityUpsert(
         [json.loads(netconf_updated.json(
-            exclude_none=True, by_alias=True))], Options.update.value
+            exclude_none=True, by_alias=True))], "update"
     )
     # Thus far, rely on NETCONF capabilities to discover YANG modules
     # NETCONF hello retrieves features, deviations,
     # and submodules (as other modules though)
     logger.info("Collecting implemented YANG modules")
     modules = discover_yang_modules(ngsi_ld, netconf, device)
-    ngsi_ld.batchEntityUpsert(
+    res = ngsi_ld.batchEntityUpsert(
         [json.loads(module.json(
             exclude_none=True, by_alias=True)) for module in modules],
-        Options.update.value
+        "update"
     )
+    logger.error(res.request.headers)
+    logger.error(res.request.path_url)
+    logger.error(res.request.body)
