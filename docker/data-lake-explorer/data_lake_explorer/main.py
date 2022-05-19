@@ -16,7 +16,7 @@ CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
 # Data Lake Explorer
 DATA_LAKE_EXPLORER_SUBSCRIPTION_ID = os.getenv(
-    "DATA_LAKE_SUBSCRIPTION_ID",
+    "DATA_LAKE_EXPLORER_SUBSCRIPTION_ID",
     "urn:ngsi-ld:Subscription:DataLake:data-lake-explorer-subs")
 DATA_LAKE_EXPLORER_URI = os.getenv(
     "DATA_LAKE_EXPLORER_URI", "http://data-lake-explorer:8080/notify")
