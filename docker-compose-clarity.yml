@@ -7,20 +7,19 @@ services:
     hostname: app-manager
     container_name: app-manager
     environment:
-      - APP_MANAGER_URI=${APP_MANAGER_URI}
-      - BROKER_URI=${BROKER_URI}
-      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
       - FLINK_MANAGER_URI=${FLINK_MANAGER_URI}
       - NIFI_URI=${NIFI_URI}
       - NIFI_USERNAME=${NIFI_USERNAME}
       - NIFI_PASSWORD=${NIFI_PASSWORD}
-    ports:
-      - "8082:8080"
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
       - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
     depends_on:
+      - flink-jobmanager
       - nifi
-      - scorpio
+      - redis
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -192,6 +191,14 @@ services:
         ipv4_address: 10.0.20.12
     volumes:
       - ./docker/ceos-arista/r2/startup-config.cfg:/mnt/flash/startup-config
+  redis:
+    image: bitnami/redis:latest
+    hostname: redis
+    container_name: redis
+    environment:
+      - REDIS_PASSWORD=redis
+    ports:
+      - "6379"
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio
