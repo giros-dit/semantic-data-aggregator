@@ -2,8 +2,8 @@ import logging
 import os
 from typing import List, Tuple
 
-from semantic_tools.flink.client import FlinkClient
-from semantic_tools.nifi.client import NiFiClient
+from app_manager.orchestration.flink import FlinkClient
+from app_manager.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
 

@@ -3,10 +3,10 @@ import os
 import time
 
 from redis import Redis
-from semantic_tools.flink.client import FlinkClient
-from semantic_tools.nifi.client import NiFiClient
 
 from app_manager import loader
+from app_manager.orchestration.flink import FlinkClient
+from app_manager.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
 
