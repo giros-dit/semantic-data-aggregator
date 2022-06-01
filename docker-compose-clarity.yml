@@ -46,7 +46,7 @@ services:
     depends_on:
       - scorpio
   eureka:
-    image: scorpiobroker/scorpio:eureka-server_2.1.1
+    image: scorpiobroker/scorpio:eureka-server_2.1.13
     hostname: eureka
     container_name: eureka
     ports:
@@ -196,7 +196,7 @@ services:
     hostname: redis
     container_name: redis
     environment:
-      - REDIS_PASSWORD=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379"
   scorpio:
@@ -241,10 +241,14 @@ services:
       - NIFI_USERNAME=${NIFI_USERNAME}
       - NIFI_PASSWORD=${NIFI_PASSWORD}
       - WEAVER_URI=${WEAVER_URI}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
+      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio

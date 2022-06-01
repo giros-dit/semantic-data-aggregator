@@ -87,9 +87,3 @@ class FlinkClient(FlinkAPI):
                 arguments += arguments_list[i]
 
         return arguments
-
-    def upload_jar(self, file_path: str) -> dict:
-        """
-        Upload JAR file to Flink from a given path.
-        """
-        return self.uploadJar(file_path)

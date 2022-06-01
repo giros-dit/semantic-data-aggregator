@@ -2,7 +2,9 @@ import json
 import logging
 from urllib.parse import urlparse
 
-from semantic_tools.models.application import Task
+from semantic_tools.bindings.pipelines.clarity.gnmi import GnmiCollector
+from semantic_tools.bindings.pipelines.task import Task
+from semantic_tools.bindings.telemetry.device import Device
 from semantic_tools.ngsi_ld.client import NGSILDClient
 from semantic_tools.ngsi_ld.units import UnitCode
 
@@ -176,35 +178,22 @@ def config_metric_target_exporter(task: Task, ngsi_ld: NGSILDClient) -> dict:
     return arguments
 
 
-def config_telemetry_source(task: Task, ngsi_ld: NGSILDClient) -> dict:
+def config_telemetry_source(gnmi_collector: GnmiCollector, ngsi_ld: NGSILDClient) -> dict:
     """
     Deploys a TelemetrySource NiFi template
     from a passed TelemetrySource NGSI-LD entity.
     """
 
     # Task Input
-    # Get YANG Module as source
-    module = ngsi_ld.get_yang_module(
-        task.hasInput.object
-    )
     # Get source Device
     source_device = ngsi_ld.get_device_from_module(
         module
     )
+    source_device = ngsi_ld.retrieveEntityById()
+
     # Get Endpoint for source device
     source_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
         source_device)
-
-    # Task Output
-    # Get sink Kafka topic
-    sink_topic = ngsi_ld.get_kafka_topic(
-        task.hasOutput.object)
-    # Get sink Kafka broker
-    sink_broker = ngsi_ld.get_kafka_broker_from_topic(
-        sink_topic)
-    # Get Endpoint for sink Kafka broker
-    sink_endpoint = ngsi_ld.get_endpoint_from_infrastructure(
-        sink_broker)
 
     xpath = task.arguments.value['XPath']
     subscription_mode = task.arguments.value['subscriptionMode']
