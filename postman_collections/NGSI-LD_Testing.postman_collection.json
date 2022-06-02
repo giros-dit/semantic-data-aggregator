@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ac7e41a5-20ee-495d-8ef4-81c4b64d8b22",
-		"name": "NGSI-LD Testing",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "031b9b24-3aeb-40ad-af63-b454f9838b32",
+		"name": "NGSI-LD_Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21273335"
 	},
 	"item": [
 		{
@@ -99,10 +100,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "            {\r\n                \"type\": \"Relationship\",\r\n                \"object\": \"urn:ngsi-ld:house1:Room:room5\",\r\n                \"datasetId\": \"urn:ngsi-ld:Relationship:1\"\r\n            }\r\n"
+									"raw": "{\r\n    \"speed\": {\r\n        \"type\": \"Property\", \r\n        \"value\": 130\r\n    }\r\n}"
 								},
 								"url": {
-									"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:Vehicle:A100/attrs/hasRoom",
+									"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:Vehicle:A100/attrs",
 									"protocol": "http",
 									"host": [
 										"{{broker}}"
@@ -112,8 +113,7 @@
 										"v1",
 										"entities",
 										"urn:ngsi-ld:Vehicle:A100",
-										"attrs",
-										"hasRoom"
+										"attrs"
 									]
 								},
 								"description": "partially update the attribute of entity"
@@ -310,7 +310,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"type\": \"Subscription\",\r\n\t\"entities\": [{\r\n\t\t\"type\": \"Vehicle\"\r\n\t}],\r\n    \"watchedAttributes\": [\"brandName\"],\r\n\t\"notification\": {\r\n\t\t\"endpoint\": {\r\n\t\t\t\"uri\": \"http://consumer:8080/notify\",\r\n\t\t\t\"accept\": \"application/json\"\r\n\t\t}\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"type\": \"Subscription\",\r\n\t\"entities\": [{\r\n\t\t\"type\": \"Vehicle\"\r\n\t}],\r\n    \"watchedAttributes\": [\"speed\"],\r\n\t\"notification\": {\r\n\t\t\"endpoint\": {\r\n\t\t\t\"uri\": \"http://consumer:8080/notify\",\r\n\t\t\t\"accept\": \"application/json\"\r\n\t\t}\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/",
@@ -576,6 +576,15 @@
 		{
 			"key": "context.jsonld",
 			"value": "https://fiware.github.io/data-models/full-context.jsonld"
+		},
+		{
+			"key": "broker",
+			"value": "localhost:9090",
+			"type": "string"
+		},
+		{
+			"key": "subscription1",
+			"value": ""
 		}
 	]
 }
