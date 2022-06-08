@@ -3,7 +3,8 @@ import os
 
 from fastapi import FastAPI, Request, status
 from semantic_tools.bindings.notification import NgsiLdNotification
-from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.bindings.subscription import Subscription
+from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 from telemetry_explorer.registration import register_device
 
@@ -23,7 +24,7 @@ TELEMETRY_EXPLORER_URI = os.getenv(
 
 
 # Init NGSI-LD API
-ngsi_ld = NGSILDClient(
+ngsi_ld = NGSILDAPI(
         url=BROKER_URI,
         context=CONTEXT_CATALOG_URI
     )
@@ -38,10 +39,27 @@ app = FastAPI(
 async def startup_event():
     logger.info("Starting telemetry-explorer service...")
     # Subscribe to Device entity
-    ngsi_ld.subscribe_to_entity_type(
-        entity_type="Device",
-        endpoint=TELEMETRY_EXPLORER_URI,
-        subscription_id=TELEMETRY_EXPLORER_SUBSCRIPTION_ID)
+    try:
+        ngsi_ld.createSubscription(
+            Subscription(
+                id=TELEMETRY_EXPLORER_SUBSCRIPTION_ID,
+                entities=[
+                    {
+                        "type": "Device"
+                    }
+                ],
+                notification={
+                    "endpoint": {
+                        "uri": TELEMETRY_EXPLORER_URI
+                    }
+                }
+            ).dict(exclude_none=True, by_alias=True)
+        )
+    except Exception:
+        logger.info(
+            "Subscription {0} already created".format(
+                TELEMETRY_EXPLORER_SUBSCRIPTION_ID))
+
     logger.info("telemetry-explorer service ready!")
 
 
