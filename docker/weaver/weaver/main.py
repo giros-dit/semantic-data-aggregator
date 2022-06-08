@@ -1,11 +1,9 @@
 import logging
 import os
 import time
-from pickle import TRUE
 
 from fastapi import FastAPI, Request, status
 from redis import Redis
-from semantic_tools.bindings import subscription
 from semantic_tools.bindings.notification import NgsiLdNotification
 from semantic_tools.bindings.pipelines.clarity.datalake import \
     DataLakeDispatcher
@@ -13,10 +11,11 @@ from semantic_tools.bindings.pipelines.clarity.gnmi import GnmiCollector
 from semantic_tools.bindings.pipelines.clarity.interfaceKPI import \
     InterfaceKpiAggregator
 from semantic_tools.bindings.subscription import Subscription
-from semantic_tools.flink.client import FlinkClient
 from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 from weaver.applications.gnmi import process_gnmi_collector
+from weaver.applications.interfaceKPI import process_interface_kpi_aggregator
+from weaver.orchestration.flink import FlinkClient
 from weaver.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
@@ -122,8 +121,13 @@ async def receiveNotification(request: Request):
         if entity.type.__root__ == "GnmiCollector":
             gnmi_collector = GnmiCollector.parse_obj(
                 entity.dict(exclude_none=True, by_alias=True))
-            process_gnmi_collector(gnmi_collector, flink, nifi, ngsi_ld, redis)
+            process_gnmi_collector(
+                gnmi_collector, flink, nifi, ngsi_ld, redis)
         if entity.type.__root__ == "InterfaceKpiAggregator":
-            if_kpi_aggr = InterfaceKpiAggregator.parse_obj(entity)
+            if_kpi_aggr = InterfaceKpiAggregator.parse_obj(
+                entity.dict(exclude_none=True, by_alias=True))
+            process_interface_kpi_aggregator(
+                if_kpi_aggr, flink, ngsi_ld, redis)
         if entity.type.__root__ == "DataLakeDispatcher":
-            data_lake_dispatcher = DataLakeDispatcher.parse_obj(entity)
+            data_lake_dispatcher = DataLakeDispatcher.parse_obj(
+                entity.dict(exclude_none=True, by_alias=True))

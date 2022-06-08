@@ -125,7 +125,7 @@ class Paths(Property):
         extra = Extra.forbid
         allow_population_by_field_name = True
 
-    value: List[StrictStr]
+    value: Union[List[StrictStr], StrictStr]
 
 
 class Prefix(Property):

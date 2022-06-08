@@ -57,9 +57,12 @@ def config_nifi_gnmic_source(
     subscription_data['log-file'] = logfile
     subscriptions = {}
     subscription = {
-        "mode": gnmi_collector.mode.value.value,
-        "paths": gnmi_collector.paths.value
+        "mode": gnmi_collector.mode.value.value
     }
+    if type(gnmi_collector.paths.value) == list:
+        subscription["paths"] = gnmi_collector.paths.value
+    else:
+        subscription["paths"] = [gnmi_collector.paths.value]
     if gnmi_collector.encoding:
         subscription["encoding"] = gnmi_collector.encoding.value.value
     if gnmi_collector.heartbeat_interval:
@@ -144,16 +147,17 @@ def process_gnmi_collector(
         # Instantiate Flink job with gNMIcDriver jar
         #
         # Get jar ID from redis based on jar name
-        #jar_name = "gNMIcDriver"
-        jar_name = "TrafficRate"  # TODO: Change to gNMIcDriver once ready
+        jar_name = "PrometheusConsumerJob"  # TODO: Change to gNMIcDriver once ready
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for gNMIcDriver
-        gnmic_topic = "gnmic-source-" + \
+        source_topic = "gnmic-source-" + \
+            gnmi_collector.id.split(":")[-1]  # Use last part of URN
+        sink_topic = "gnmic-driver-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         flink_arguments = {
-            "source_topics": gnmic_topic,
-            "sink_topic": "gnmic-driver-" + gnmi_collector.id
+            "source_topics": source_topic,
+            "sink_topic": sink_topic
         }
         job = flink.instantiate_job_from_task(
                 gnmi_collector, jar_id, flink_arguments)
