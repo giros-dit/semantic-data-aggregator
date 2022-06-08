@@ -8,8 +8,7 @@ from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
 from semantic_tools.bindings.clarity_data_lake.object import Object
 from semantic_tools.bindings.clarity_data_lake.owner import Owner
 from semantic_tools.bindings.entity import DateTime, Entity
-from semantic_tools.ngsi_ld.api import Options
-from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.ngsi_ld.api import NGSILDAPI, Options
 
 from data_lake_explorer.clients.data_lake import APIGateway
 
@@ -103,7 +102,7 @@ def discover_objects(
 
 
 def register_data_lake(
-        ngsi_ld: NGSILDClient,
+        ngsi_ld: NGSILDAPI,
         entity: Entity):
     logger.info("Processing registration of Data Lake platform...")
     data_lake = DataLake.parse_obj(entity.dict())
