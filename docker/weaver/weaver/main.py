@@ -123,7 +123,7 @@ async def receiveNotification(request: Request):
                 entity.dict(exclude_none=True, by_alias=True))
             process_gnmi_collector(
                 gnmi_collector, flink, nifi, ngsi_ld, redis)
-        if entity.type.__root__ == "InterfaceKpiAggregator":
+        if entity.type.__root__ == "InterfaceKPIAggregator":
             if_kpi_aggr = InterfaceKpiAggregator.parse_obj(
                 entity.dict(exclude_none=True, by_alias=True))
             process_interface_kpi_aggregator(
