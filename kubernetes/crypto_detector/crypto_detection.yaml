@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-detector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: crypto-app
+        id: "0"
+  template:
+    metadata:
+      labels:
+        app: crypto-app
+        id: "0"
+    spec:
+      containers:
+      - name: crypto-service
+        image: wurstmeister/kafka
+        ports:
+        - containerPort: 12000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crypto-service
+  labels:
+    name: crypto-app
+    id: "0"
+spec:
+  ports:
+  - name: kafka-port
+    port: 12000
+    protocol: TCP
+  selector:
+    app: crypto-app
+    id: "0"
