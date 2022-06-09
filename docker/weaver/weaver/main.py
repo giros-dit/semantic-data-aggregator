@@ -13,6 +13,7 @@ from semantic_tools.bindings.pipelines.clarity.interfaceKPI import \
 from semantic_tools.bindings.subscription import Subscription
 from semantic_tools.ngsi_ld.api import NGSILDAPI
 
+from weaver.applications.datalake import process_data_lake_dispatcher
 from weaver.applications.gnmi import process_gnmi_collector
 from weaver.applications.interfaceKPI import process_interface_kpi_aggregator
 from weaver.orchestration.flink import FlinkClient
@@ -131,3 +132,5 @@ async def receiveNotification(request: Request):
         if entity.type.__root__ == "DataLakeDispatcher":
             data_lake_dispatcher = DataLakeDispatcher.parse_obj(
                 entity.dict(exclude_none=True, by_alias=True))
+            process_data_lake_dispatcher(
+                data_lake_dispatcher, flink, ngsi_ld, redis)
