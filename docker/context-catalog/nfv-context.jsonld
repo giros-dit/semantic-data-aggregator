@@ -1,7 +1,0 @@
-{
-    "@context": {
-        "VNF": "http://example.org/VNF",
-        "descriptorId": "http://example.org/descriptorId",
-        "hasMetrics": "http://example.org/hasMetrics"
-    }
-}
