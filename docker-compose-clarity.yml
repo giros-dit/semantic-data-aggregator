@@ -121,7 +121,7 @@ services:
       # Used by Prometheus exporter
       - "8444:8444"
     volumes:
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - gnmic-subscriptions:/gnmic-cfgs
       - ./docker/nifi/drivers/jinja-templates:/jinja-templates
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
       - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
@@ -248,7 +248,7 @@ services:
       - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - gnmic-subscriptions:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
@@ -309,3 +309,7 @@ networks:
       driver: default
       config:
         - subnet: 10.0.20.0/24
+
+
+volumes:
+  gnmic-subscriptions:
