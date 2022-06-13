@@ -1,4 +1,5 @@
 import logging
+import os
 
 from redis import Redis
 from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
@@ -11,6 +12,8 @@ from weaver.orchestration.flink import FlinkClient
 from weaver.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
+
+KAFKA_ADDRESS = os.getenv("KAFKA_ADDRESS", "kafka:9092")
 
 
 def config_nifi_data_lake_consumer(
@@ -29,6 +32,7 @@ def config_nifi_data_lake_consumer(
     api_gw_endpoint = str(out_data_lake.uri.value)
     api_gw_key = out_data_lake.api_key.value
     bucket = data_lake_dispatcher.bucket.value
+    instance_file_name = data_lake_dispatcher.instance_file_name.value
     source_group_id = "sda"
     source_topic = "yang-instance-driver-" + \
                    data_lake_dispatcher.id.split(":")[-1]  # Use last part of URN
@@ -38,6 +42,8 @@ def config_nifi_data_lake_consumer(
         "api_gw_key": api_gw_key,
         "bucket": bucket,
         "group_id": source_group_id,
+        "kafka_address": KAFKA_ADDRESS,
+        "instance_file_name": instance_file_name,
         "source_topics": source_topic,
     }
     return arguments
@@ -57,7 +63,6 @@ def process_data_lake_dispatcher(
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for YangInstanceDriver
-        kafka_address = "kafka:9092"
         # Get input InterfaceKpiAggregator entity
         if_kpi_aggregator = InterfaceKpiAggregator.parse_obj(
             ngsi_ld.retrieveEntityById(data_lake_dispatcher.has_input.object)
@@ -68,7 +73,7 @@ def process_data_lake_dispatcher(
             data_lake_dispatcher.id.split(":")[-1]  # Use last part of URN
         instance_file_name = data_lake_dispatcher.instance_file_name.value
         flink_arguments = {
-            "kafka_address": kafka_address,
+            "kafka_address": KAFKA_ADDRESS,
             "source_topics": source_topic,
             "sink_topic": sink_topic,
             "instance_file_name": instance_file_name

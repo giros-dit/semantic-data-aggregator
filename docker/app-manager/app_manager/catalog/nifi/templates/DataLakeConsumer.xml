@@ -1,95 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template encoding-version="1.3">
     <description></description>
-    <groupId>6948cfa3-017f-1000-7441-747ea84cb818</groupId>
+    <groupId>5cfdc7a3-0181-1000-08a7-ca9a40cf24e1</groupId>
     <name>DataLakeConsumer</name>
     <snippet>
         <connections>
-            <id>5724f819-d4a4-3462-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
+            <id>27d49a29-7794-3fd5-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>e2a94607-9429-3704-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </destination>
-            <flowFileExpiration>0 sec</flowFileExpiration>
-            <labelIndex>1</labelIndex>
-            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
-            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
-            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-            <name></name>
-            <selectedRelationships>Failure</selectedRelationships>
-            <selectedRelationships>No Retry</selectedRelationships>
-            <selectedRelationships>Response</selectedRelationships>
-            <selectedRelationships>Retry</selectedRelationships>
-            <source>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>b6b47c9b-7b49-3e9f-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </source>
-            <zIndex>0</zIndex>
-        </connections>
-        <connections>
-            <id>88abfed1-3c32-328d-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-            <destination>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>35577f74-7951-36fc-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </destination>
-            <flowFileExpiration>0 sec</flowFileExpiration>
-            <labelIndex>1</labelIndex>
-            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
-            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
-            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-            <name></name>
-            <selectedRelationships>success</selectedRelationships>
-            <source>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>7d702184-946f-3aa3-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </source>
-            <zIndex>0</zIndex>
-        </connections>
-        <connections>
-            <id>f6ce58d5-2517-327e-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-            <destination>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>b6dc0418-782b-332e-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </destination>
-            <flowFileExpiration>0 sec</flowFileExpiration>
-            <labelIndex>1</labelIndex>
-            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
-            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
-            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
-            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
-            <name></name>
-            <selectedRelationships>success</selectedRelationships>
-            <source>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>a7ed7392-131c-3d1b-0000-000000000000</id>
-                <type>PROCESSOR</type>
-            </source>
-            <zIndex>0</zIndex>
-        </connections>
-        <connections>
-            <id>feac15b4-e59d-39cd-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
-            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
-            <destination>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>e2a94607-9429-3704-0000-000000000000</id>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>9807943a-e333-35c6-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -104,39 +26,97 @@
             <selectedRelationships>Original</selectedRelationships>
             <selectedRelationships>Retry</selectedRelationships>
             <source>
-                <groupId>c0065a32-bf64-333c-0000-000000000000</groupId>
-                <id>b6dc0418-782b-332e-0000-000000000000</id>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>82e35050-6c5a-3fa1-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>2d0044da-d610-3e44-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>82e35050-6c5a-3fa1-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>a47ec773-1a19-300e-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>8ae5e1a9-5730-3362-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>fce58092-3f08-3666-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>05982541-e57e-3a67-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>dc29c199-ee3c-328e-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>a47ec773-1a19-300e-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>matched</selectedRelationships>
+            <source>
+                <groupId>f6d34a0c-b67d-3ad4-0000-000000000000</groupId>
+                <id>fce58092-3f08-3666-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <labels>
-            <id>8e4e6fa6-c755-38d0-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
+            <id>e75e26b4-479b-3738-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
             <position>
-                <x>848.0</x>
-                <y>0.0</y>
+                <x>894.0</x>
+                <y>80.0</y>
             </position>
-            <height>64.0</height>
-            <label>Send yang instance data file with content-schema</label>
-            <style>
-                <entry>
-                    <key>font-size</key>
-                    <value>16px</value>
-                </entry>
-            </style>
-            <width>376.0</width>
-        </labels>
-        <labels>
-            <id>c162f4f2-3727-3784-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <position>
-                <x>912.0</x>
-                <y>568.0</y>
-            </position>
-            <height>64.0</height>
-            <label>Send yang instance data file with content-data 
-and URI method to reference content-schema
+            <height>56.0</height>
+            <label>Get timestamp from JSON
+and replace colons with underscores
 </label>
             <style>
                 <entry>
@@ -144,462 +124,14 @@ and URI method to reference content-schema
                     <value>16px</value>
                 </entry>
             </style>
-            <width>376.0</width>
+            <width>304.0</width>
         </labels>
         <processors>
-            <id>35577f74-7951-36fc-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <position>
-                <x>376.0</x>
-                <y>960.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-kafka-2-6-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.15.3</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>bootstrap.servers</key>
-                        <value>
-                            <name>bootstrap.servers</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>topic</key>
-                        <value>
-                            <name>topic</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>use-transactions</key>
-                        <value>
-                            <name>use-transactions</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>transactional-id-prefix</key>
-                        <value>
-                            <dependencies>
-<dependentValues>true</dependentValues>
-<propertyName>use-transactions</propertyName>
-                            </dependencies>
-                            <name>transactional-id-prefix</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>message-demarcator</key>
-                        <value>
-                            <name>message-demarcator</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Failure Strategy</key>
-                        <value>
-                            <name>Failure Strategy</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>acks</key>
-                        <value>
-                            <name>acks</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>attribute-name-regex</key>
-                        <value>
-                            <name>attribute-name-regex</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>message-header-encoding</key>
-                        <value>
-                            <name>message-header-encoding</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>security.protocol</key>
-                        <value>
-                            <name>security.protocol</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.mechanism</key>
-                        <value>
-                            <name>sasl.mechanism</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>kerberos-credentials-service</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.kerberos.KerberosCredentialsService</identifiesControllerService>
-                            <name>kerberos-credentials-service</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>kerberos-user-service</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.kerberos.SelfContainedKerberosUserService</identifiesControllerService>
-                            <name>kerberos-user-service</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.service.name</key>
-                        <value>
-                            <name>sasl.kerberos.service.name</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.principal</key>
-                        <value>
-                            <name>sasl.kerberos.principal</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.keytab</key>
-                        <value>
-                            <name>sasl.kerberos.keytab</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.username</key>
-                        <value>
-                            <name>sasl.username</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.password</key>
-                        <value>
-                            <name>sasl.password</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>sasl.token.auth</key>
-                        <value>
-                            <name>sasl.token.auth</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>ssl.context.service</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
-                            <name>ssl.context.service</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>kafka-key</key>
-                        <value>
-                            <name>kafka-key</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>key-attribute-encoding</key>
-                        <value>
-                            <name>key-attribute-encoding</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>max.request.size</key>
-                        <value>
-                            <name>max.request.size</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>ack.wait.time</key>
-                        <value>
-                            <name>ack.wait.time</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>max.block.ms</key>
-                        <value>
-                            <name>max.block.ms</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>partitioner.class</key>
-                        <value>
-                            <name>partitioner.class</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>partition</key>
-                        <value>
-                            <name>partition</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>compression.type</key>
-                        <value>
-                            <name>compression.type</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>bootstrap.servers</key>
-                        <value>kafka:9092</value>
-                    </entry>
-                    <entry>
-                        <key>topic</key>
-                        <value>#{source_topics}</value>
-                    </entry>
-                    <entry>
-                        <key>use-transactions</key>
-                        <value>true</value>
-                    </entry>
-                    <entry>
-                        <key>transactional-id-prefix</key>
-                    </entry>
-                    <entry>
-                        <key>message-demarcator</key>
-                    </entry>
-                    <entry>
-                        <key>Failure Strategy</key>
-                        <value>Route to Failure</value>
-                    </entry>
-                    <entry>
-                        <key>acks</key>
-                        <value>all</value>
-                    </entry>
-                    <entry>
-                        <key>attribute-name-regex</key>
-                    </entry>
-                    <entry>
-                        <key>message-header-encoding</key>
-                        <value>UTF-8</value>
-                    </entry>
-                    <entry>
-                        <key>security.protocol</key>
-                        <value>PLAINTEXT</value>
-                    </entry>
-                    <entry>
-                        <key>sasl.mechanism</key>
-                        <value>GSSAPI</value>
-                    </entry>
-                    <entry>
-                        <key>kerberos-credentials-service</key>
-                    </entry>
-                    <entry>
-                        <key>kerberos-user-service</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.service.name</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.principal</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.kerberos.keytab</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.username</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.password</key>
-                    </entry>
-                    <entry>
-                        <key>sasl.token.auth</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>ssl.context.service</key>
-                    </entry>
-                    <entry>
-                        <key>kafka-key</key>
-                    </entry>
-                    <entry>
-                        <key>key-attribute-encoding</key>
-                        <value>utf-8</value>
-                    </entry>
-                    <entry>
-                        <key>max.request.size</key>
-                        <value>1 MB</value>
-                    </entry>
-                    <entry>
-                        <key>ack.wait.time</key>
-                        <value>5 secs</value>
-                    </entry>
-                    <entry>
-                        <key>max.block.ms</key>
-                        <value>5 sec</value>
-                    </entry>
-                    <entry>
-                        <key>partitioner.class</key>
-                        <value>org.apache.kafka.clients.producer.internals.DefaultPartitioner</value>
-                    </entry>
-                    <entry>
-                        <key>partition</key>
-                    </entry>
-                    <entry>
-                        <key>compression.type</key>
-                        <value>none</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>PublishKafka_2_6</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>success</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.kafka.pubsub.PublishKafka_2_6</type>
-        </processors>
-        <processors>
-            <id>7d702184-946f-3aa3-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
+            <id>05982541-e57e-3a67-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
             <position>
                 <x>0.0</x>
-                <y>656.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.15.3</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>File Size</key>
-                        <value>
-                            <name>File Size</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Batch Size</key>
-                        <value>
-                            <name>Batch Size</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Data Format</key>
-                        <value>
-                            <name>Data Format</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Unique FlowFiles</key>
-                        <value>
-                            <name>Unique FlowFiles</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>generate-ff-custom-text</key>
-                        <value>
-                            <name>generate-ff-custom-text</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>character-set</key>
-                        <value>
-                            <name>character-set</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>mime-type</key>
-                        <value>
-                            <name>mime-type</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>File Size</key>
-                        <value>0B</value>
-                    </entry>
-                    <entry>
-                        <key>Batch Size</key>
-                        <value>1</value>
-                    </entry>
-                    <entry>
-                        <key>Data Format</key>
-                        <value>Text</value>
-                    </entry>
-                    <entry>
-                        <key>Unique FlowFiles</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>generate-ff-custom-text</key>
-                        <value>   {
-     "ietf-yang-instance-data:instance-data-set": {
-       "name": "acme-router-netconf-diagnostics",
-       "content-schema": {
-         "same-schema-as-file": "#{api_gw_endpoint}/acme-diagnostics-schema.json"
-       },
-       "timestamp": "2018-01-25T17:00:38Z",
-       "description":  ["NETCONF statistics, \
-           The data may change at any time."],
-       "content-data": {
-         "ietf-netconf-monitoring:netconf-state": {
-           "statistics": {
-             "netconf-start-time ": "2018-12-05T17:45:00Z",
-             "in-bad-hellos ": "32",
-             "in-sessions ": "397",
-             "dropped-sessions ": "87",
-             "in-rpcs ": "8711",
-             "in-bad-rpcs ": "408",
-             "out-rpc-errors ": "408",
-             "out-notifications": "39007"
-           }
-         }
-       }
-     }
-   }</value>
-                    </entry>
-                    <entry>
-                        <key>character-set</key>
-                        <value>UTF-8</value>
-                    </entry>
-                    <entry>
-                        <key>mime-type</key>
-                        <value>application/json</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>10 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>GenerateFlowFile</name>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>success</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.GenerateFlowFile</type>
-        </processors>
-        <processors>
-            <id>a7ed7392-131c-3d1b-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <position>
-                <x>320.0</x>
-                <y>448.0</y>
+                <y>240.0</y>
             </position>
             <bundle>
                 <artifact>nifi-kafka-2-6-nar</artifact>
@@ -781,7 +313,7 @@ and URI method to reference content-schema
                 <properties>
                     <entry>
                         <key>bootstrap.servers</key>
-                        <value>kafka:9092</value>
+                        <value>#{kafka_address}</value>
                     </entry>
                     <entry>
                         <key>topic</key>
@@ -890,14 +422,14 @@ and URI method to reference content-schema
             <type>org.apache.nifi.processors.kafka.pubsub.ConsumeKafka_2_6</type>
         </processors>
         <processors>
-            <id>b6b47c9b-7b49-3e9f-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
+            <id>82e35050-6c5a-3fa1-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
             <position>
-                <x>1104.0</x>
-                <y>160.0</y>
+                <x>926.0</x>
+                <y>488.0</y>
             </position>
             <bundle>
-                <artifact>nifi-aws-nar</artifact>
+                <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
                 <version>1.15.3</version>
             </bundle>
@@ -907,142 +439,88 @@ and URI method to reference content-schema
                 <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
                 <descriptors>
                     <entry>
-                        <key>aws-gateway-http-method</key>
+                        <key>HTTP Method</key>
                         <value>
-                            <name>aws-gateway-http-method</name>
+                            <name>HTTP Method</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-region</key>
+                        <key>Remote URL</key>
                         <value>
-                            <name>aws-gateway-region</name>
+                            <name>Remote URL</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>Access Key</key>
+                        <key>SSL Context Service</key>
                         <value>
-                            <name>Access Key</name>
+                            <identifiesControllerService>org.apache.nifi.ssl.SSLContextService</identifiesControllerService>
+                            <name>SSL Context Service</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>Secret Key</key>
+                        <key>Connection Timeout</key>
                         <value>
-                            <name>Secret Key</name>
+                            <name>Connection Timeout</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>Credentials File</key>
+                        <key>Read Timeout</key>
                         <value>
-                            <name>Credentials File</name>
+                            <name>Read Timeout</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>AWS Credentials Provider service</key>
+                        <key>idle-timeout</key>
                         <value>
-                            <identifiesControllerService>org.apache.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderService</identifiesControllerService>
-                            <name>AWS Credentials Provider service</name>
+                            <name>idle-timeout</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>Communications Timeout</key>
+                        <key>max-idle-connections</key>
                         <value>
-                            <name>Communications Timeout</name>
+                            <name>max-idle-connections</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-resource</key>
+                        <key>Include Date Header</key>
                         <value>
-                            <name>aws-gateway-resource</name>
+                            <name>Include Date Header</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-api-endpoint</key>
+                        <key>Follow Redirects</key>
                         <value>
-                            <name>aws-gateway-api-endpoint</name>
+                            <name>Follow Redirects</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-api-key</key>
+                        <key>disable-http2</key>
                         <value>
-                            <name>aws-gateway-api-key</name>
+                            <name>disable-http2</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-attributes-to-send</key>
+                        <key>Attributes to Send</key>
                         <value>
-                            <name>aws-gateway-attributes-to-send</name>
+                            <name>Attributes to Send</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-put-response-body-in-attribute</key>
+                        <key>Useragent</key>
                         <value>
-                            <name>aws-gateway-put-response-body-in-attribute</name>
+                            <name>Useragent</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-content-type</key>
+                        <key>Basic Authentication Username</key>
                         <value>
-                            <name>aws-gateway-content-type</name>
+                            <name>Basic Authentication Username</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-send-message-body</key>
+                        <key>Basic Authentication Password</key>
                         <value>
-                            <name>aws-gateway-send-message-body</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-always-output-response</key>
-                        <value>
-                            <name>aws-gateway-always-output-response</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-penalize-no-retry</key>
-                        <value>
-                            <name>aws-gateway-penalize-no-retry</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Proxy Host</key>
-                        <value>
-                            <name>Proxy Host</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Proxy Host Port</key>
-                        <value>
-                            <name>Proxy Host Port</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>proxy-user-name</key>
-                        <value>
-                            <name>proxy-user-name</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>proxy-user-password</key>
-                        <value>
-                            <name>proxy-user-password</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-query-parameters</key>
-                        <value>
-                            <name>aws-gateway-query-parameters</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-max-attribute-length</key>
-                        <value>
-                            <name>aws-gateway-max-attribute-length</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-add-response-headers-request</key>
-                        <value>
-                            <name>aws-gateway-add-response-headers-request</name>
+                            <name>Basic Authentication Password</name>
                         </value>
                     </entry>
                     <entry>
@@ -1052,240 +530,6 @@ and URI method to reference content-schema
                             <name>proxy-configuration-service</name>
                         </value>
                     </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>aws-gateway-http-method</key>
-                        <value>GET</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-region</key>
-                        <value>eu-west-2</value>
-                    </entry>
-                    <entry>
-                        <key>Access Key</key>
-                    </entry>
-                    <entry>
-                        <key>Secret Key</key>
-                    </entry>
-                    <entry>
-                        <key>Credentials File</key>
-                    </entry>
-                    <entry>
-                        <key>AWS Credentials Provider service</key>
-                    </entry>
-                    <entry>
-                        <key>Communications Timeout</key>
-                        <value>30 secs</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-resource</key>
-                        <value>#{bucket}</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-api-endpoint</key>
-                        <value>#{api_gw_endpoint}</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-api-key</key>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-attributes-to-send</key>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-put-response-body-in-attribute</key>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-content-type</key>
-                        <value>application/xml</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-send-message-body</key>
-                        <value>true</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-always-output-response</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-penalize-no-retry</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>Proxy Host</key>
-                    </entry>
-                    <entry>
-                        <key>Proxy Host Port</key>
-                    </entry>
-                    <entry>
-                        <key>proxy-user-name</key>
-                    </entry>
-                    <entry>
-                        <key>proxy-user-password</key>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-query-parameters</key>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-max-attribute-length</key>
-                        <value>256</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-add-response-headers-request</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>proxy-configuration-service</key>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>10 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>InvokeAWSGatewayApi</name>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>Failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>No Retry</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>Original</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>Response</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>Retry</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.aws.wag.InvokeAWSGatewayApi</type>
-        </processors>
-        <processors>
-            <id>b6dc0418-782b-332e-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
-            <position>
-                <x>956.2462675906114</x>
-                <y>687.2638887260338</y>
-            </position>
-            <bundle>
-                <artifact>nifi-aws-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.15.3</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>aws-gateway-http-method</key>
-                        <value>
-                            <name>aws-gateway-http-method</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-region</key>
-                        <value>
-                            <name>aws-gateway-region</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Access Key</key>
-                        <value>
-                            <name>Access Key</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Secret Key</key>
-                        <value>
-                            <name>Secret Key</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Credentials File</key>
-                        <value>
-                            <name>Credentials File</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>AWS Credentials Provider service</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderService</identifiesControllerService>
-                            <name>AWS Credentials Provider service</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Communications Timeout</key>
-                        <value>
-                            <name>Communications Timeout</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-resource</key>
-                        <value>
-                            <name>aws-gateway-resource</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-api-endpoint</key>
-                        <value>
-                            <name>aws-gateway-api-endpoint</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-api-key</key>
-                        <value>
-                            <name>aws-gateway-api-key</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-attributes-to-send</key>
-                        <value>
-                            <name>aws-gateway-attributes-to-send</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-put-response-body-in-attribute</key>
-                        <value>
-                            <name>aws-gateway-put-response-body-in-attribute</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-content-type</key>
-                        <value>
-                            <name>aws-gateway-content-type</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-send-message-body</key>
-                        <value>
-                            <name>aws-gateway-send-message-body</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-always-output-response</key>
-                        <value>
-                            <name>aws-gateway-always-output-response</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-penalize-no-retry</key>
-                        <value>
-                            <name>aws-gateway-penalize-no-retry</name>
-                        </value>
-                    </entry>
                     <entry>
                         <key>Proxy Host</key>
                         <value>
@@ -1293,46 +537,117 @@ and URI method to reference content-schema
                         </value>
                     </entry>
                     <entry>
-                        <key>Proxy Host Port</key>
+                        <key>Proxy Port</key>
                         <value>
-                            <name>Proxy Host Port</name>
+                            <name>Proxy Port</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>proxy-user-name</key>
+                        <key>Proxy Type</key>
                         <value>
-                            <name>proxy-user-name</name>
+                            <name>Proxy Type</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>proxy-user-password</key>
+                        <key>invokehttp-proxy-user</key>
                         <value>
-                            <name>proxy-user-password</name>
+                            <name>invokehttp-proxy-user</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-query-parameters</key>
+                        <key>invokehttp-proxy-password</key>
                         <value>
-                            <name>aws-gateway-query-parameters</name>
+                            <name>invokehttp-proxy-password</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-max-attribute-length</key>
+                        <key>Put Response Body In Attribute</key>
                         <value>
-                            <name>aws-gateway-max-attribute-length</name>
+                            <name>Put Response Body In Attribute</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-add-response-headers-request</key>
+                        <key>Max Length To Put In Attribute</key>
                         <value>
-                            <name>aws-gateway-add-response-headers-request</name>
+                            <name>Max Length To Put In Attribute</name>
                         </value>
                     </entry>
                     <entry>
-                        <key>proxy-configuration-service</key>
+                        <key>Digest Authentication</key>
                         <value>
-                            <identifiesControllerService>org.apache.nifi.proxy.ProxyConfigurationService</identifiesControllerService>
-                            <name>proxy-configuration-service</name>
+                            <name>Digest Authentication</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Always Output Response</key>
+                        <value>
+                            <name>Always Output Response</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Add Response Headers to Request</key>
+                        <value>
+                            <name>Add Response Headers to Request</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Content-Type</key>
+                        <value>
+                            <name>Content-Type</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>send-message-body</key>
+                        <value>
+                            <name>send-message-body</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Use Chunked Encoding</key>
+                        <value>
+                            <name>Use Chunked Encoding</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Penalize on "No Retry"</key>
+                        <value>
+                            <name>Penalize on "No Retry"</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>use-etag</key>
+                        <value>
+                            <name>use-etag</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>etag-max-cache-size</key>
+                        <value>
+                            <name>etag-max-cache-size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>ignore-response-content</key>
+                        <value>
+                            <name>ignore-response-content</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>form-body-form-name</key>
+                        <value>
+                            <name>form-body-form-name</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>set-form-filename</key>
+                        <value>
+                            <name>set-form-filename</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>x-api-key</key>
+                        <value>
+                            <name>x-api-key</name>
                         </value>
                     </entry>
                 </descriptors>
@@ -1341,87 +656,132 @@ and URI method to reference content-schema
                 <penaltyDuration>30 sec</penaltyDuration>
                 <properties>
                     <entry>
-                        <key>aws-gateway-http-method</key>
+                        <key>HTTP Method</key>
                         <value>PUT</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-region</key>
-                        <value>eu-west-2</value>
+                        <key>Remote URL</key>
+                        <value>#{api_gw_endpoint}/#{bucket}/#{instance_file_name}@${timestamp}.json</value>
                     </entry>
                     <entry>
-                        <key>Access Key</key>
+                        <key>SSL Context Service</key>
                     </entry>
                     <entry>
-                        <key>Secret Key</key>
+                        <key>Connection Timeout</key>
+                        <value>5 secs</value>
                     </entry>
                     <entry>
-                        <key>Credentials File</key>
+                        <key>Read Timeout</key>
+                        <value>15 secs</value>
                     </entry>
                     <entry>
-                        <key>AWS Credentials Provider service</key>
+                        <key>idle-timeout</key>
+                        <value>5 mins</value>
                     </entry>
                     <entry>
-                        <key>Communications Timeout</key>
-                        <value>30 secs</value>
+                        <key>max-idle-connections</key>
+                        <value>5</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-resource</key>
-                        <value>#{bucket}/acme-router-netconf-diagnostics@2018-01-25T17_00_38Z.json</value>
+                        <key>Include Date Header</key>
+                        <value>True</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-api-endpoint</key>
-                        <value>#{api_gw_endpoint}</value>
+                        <key>Follow Redirects</key>
+                        <value>True</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-api-key</key>
+                        <key>disable-http2</key>
+                        <value>False</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-attributes-to-send</key>
+                        <key>Attributes to Send</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-put-response-body-in-attribute</key>
+                        <key>Useragent</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-content-type</key>
-                        <value>${mime.type}</value>
+                        <key>Basic Authentication Username</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-send-message-body</key>
-                        <value>true</value>
+                        <key>Basic Authentication Password</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-always-output-response</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>aws-gateway-penalize-no-retry</key>
-                        <value>false</value>
+                        <key>proxy-configuration-service</key>
                     </entry>
                     <entry>
                         <key>Proxy Host</key>
                     </entry>
                     <entry>
-                        <key>Proxy Host Port</key>
+                        <key>Proxy Port</key>
                     </entry>
                     <entry>
-                        <key>proxy-user-name</key>
+                        <key>Proxy Type</key>
+                        <value>http</value>
                     </entry>
                     <entry>
-                        <key>proxy-user-password</key>
+                        <key>invokehttp-proxy-user</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-query-parameters</key>
+                        <key>invokehttp-proxy-password</key>
                     </entry>
                     <entry>
-                        <key>aws-gateway-max-attribute-length</key>
+                        <key>Put Response Body In Attribute</key>
+                    </entry>
+                    <entry>
+                        <key>Max Length To Put In Attribute</key>
                         <value>256</value>
                     </entry>
                     <entry>
-                        <key>aws-gateway-add-response-headers-request</key>
+                        <key>Digest Authentication</key>
                         <value>false</value>
                     </entry>
                     <entry>
-                        <key>proxy-configuration-service</key>
+                        <key>Always Output Response</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>Add Response Headers to Request</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>Content-Type</key>
+                        <value>${mime.type}</value>
+                    </entry>
+                    <entry>
+                        <key>send-message-body</key>
+                        <value>true</value>
+                    </entry>
+                    <entry>
+                        <key>Use Chunked Encoding</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>Penalize on "No Retry"</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>use-etag</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>etag-max-cache-size</key>
+                        <value>10MB</value>
+                    </entry>
+                    <entry>
+                        <key>ignore-response-content</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>form-body-form-name</key>
+                    </entry>
+                    <entry>
+                        <key>set-form-filename</key>
+                        <value>true</value>
+                    </entry>
+                    <entry>
+                        <key>x-api-key</key>
+                        <value>#{api_gw_key}</value>
                     </entry>
                 </properties>
                 <runDurationMillis>0</runDurationMillis>
@@ -1430,7 +790,7 @@ and URI method to reference content-schema
                 <yieldDuration>1 sec</yieldDuration>
             </config>
             <executionNodeRestricted>false</executionNodeRestricted>
-            <name>InvokeAWSGatewayApi</name>
+            <name>InvokeHTTP</name>
             <relationships>
                 <autoTerminate>false</autoTerminate>
                 <name>Failure</name>
@@ -1453,14 +813,14 @@ and URI method to reference content-schema
             </relationships>
             <state>STOPPED</state>
             <style/>
-            <type>org.apache.nifi.processors.aws.wag.InvokeAWSGatewayApi</type>
+            <type>org.apache.nifi.processors.standard.InvokeHTTP</type>
         </processors>
         <processors>
-            <id>e2a94607-9429-3704-0000-000000000000</id>
-            <parentGroupId>c0065a32-bf64-333c-0000-000000000000</parentGroupId>
+            <id>9807943a-e333-35c6-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
             <position>
-                <x>1614.2462675906113</x>
-                <y>642.2638887260338</y>
+                <x>288.0</x>
+                <y>496.0</y>
             </position>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
@@ -1521,6 +881,188 @@ and URI method to reference content-schema
             <style/>
             <type>org.apache.nifi.processors.standard.LogMessage</type>
         </processors>
+        <processors>
+            <id>a47ec773-1a19-300e-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
+            <position>
+                <x>830.0</x>
+                <y>232.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-update-attribute-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.15.3</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>Delete Attributes Expression</key>
+                        <value>
+                            <name>Delete Attributes Expression</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Store State</key>
+                        <value>
+                            <name>Store State</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Stateful Variables Initial Value</key>
+                        <value>
+                            <name>Stateful Variables Initial Value</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>canonical-value-lookup-cache-size</key>
+                        <value>
+                            <name>canonical-value-lookup-cache-size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>timestamp</key>
+                        <value>
+                            <name>timestamp</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>Delete Attributes Expression</key>
+                    </entry>
+                    <entry>
+                        <key>Store State</key>
+                        <value>Do not store state</value>
+                    </entry>
+                    <entry>
+                        <key>Stateful Variables Initial Value</key>
+                    </entry>
+                    <entry>
+                        <key>canonical-value-lookup-cache-size</key>
+                        <value>100</value>
+                    </entry>
+                    <entry>
+                        <key>timestamp</key>
+                        <value>${timestamp:replaceAll(':','_')}</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>UpdateAttribute</name>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
+        </processors>
+        <processors>
+            <id>fce58092-3f08-3666-0000-000000000000</id>
+            <parentGroupId>f6d34a0c-b67d-3ad4-0000-000000000000</parentGroupId>
+            <position>
+                <x>478.0</x>
+                <y>0.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.15.3</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>Destination</key>
+                        <value>
+                            <name>Destination</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Return Type</key>
+                        <value>
+                            <name>Return Type</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Path Not Found Behavior</key>
+                        <value>
+                            <name>Path Not Found Behavior</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Null Value Representation</key>
+                        <value>
+                            <name>Null Value Representation</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>timestamp</key>
+                        <value>
+                            <name>timestamp</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>Destination</key>
+                        <value>flowfile-attribute</value>
+                    </entry>
+                    <entry>
+                        <key>Return Type</key>
+                        <value>json</value>
+                    </entry>
+                    <entry>
+                        <key>Path Not Found Behavior</key>
+                        <value>ignore</value>
+                    </entry>
+                    <entry>
+                        <key>Null Value Representation</key>
+                        <value>empty string</value>
+                    </entry>
+                    <entry>
+                        <key>timestamp</key>
+                        <value>$.ietf-yang-instance-data:instance-data-set.timestamp</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>EvaluateJsonPath</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>matched</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>unmatched</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.EvaluateJsonPath</type>
+        </processors>
     </snippet>
-    <timestamp>03/08/2022 16:00:23 UTC</timestamp>
+    <timestamp>06/13/2022 12:18:52 UTC</timestamp>
 </template>

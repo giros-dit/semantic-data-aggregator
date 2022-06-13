@@ -1,6 +1,6 @@
 {
     "@context": [
-        "http://context-catalog:8080/context/clarity_data_lake/context.jsonld",
+        "http://context-catalog:8080/context/clarity-data-lake/context.jsonld",
         "http://context-catalog:8080/context/pipelines/context.jsonld",
         "http://context-catalog:8080/context/telemetry/context.jsonld",
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
