@@ -57,6 +57,7 @@ def process_data_lake_dispatcher(
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for YangInstanceDriver
+        kafka_address = "kafka:9092"
         # Get input InterfaceKpiAggregator entity
         if_kpi_aggregator = InterfaceKpiAggregator.parse_obj(
             ngsi_ld.retrieveEntityById(data_lake_dispatcher.has_input.object)
@@ -67,6 +68,7 @@ def process_data_lake_dispatcher(
             data_lake_dispatcher.id.split(":")[-1]  # Use last part of URN
         instance_file_name = data_lake_dispatcher.instance_file_name.value
         flink_arguments = {
+            "kafka_address": kafka_address,
             "source_topics": source_topic,
             "sink_topic": sink_topic,
             "instance_file_name": instance_file_name

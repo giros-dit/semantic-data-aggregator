@@ -151,11 +151,13 @@ def process_gnmi_collector(
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for gNMIcDriver
+        kafka_address = "kafka:9092"
         source_topic = "gnmic-source-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         sink_topic = "gnmic-driver-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         flink_arguments = {
+            "kafka_address": kafka_address,
             "source_topics": source_topic,
             "sink_topic": sink_topic
         }

@@ -19,12 +19,13 @@ def process_interface_kpi_aggregator(
         jar_name = None
         if if_kpi_aggregator.kpi == KpiOptions.packet_loss:
             jar_name = "PrometheusConsumerJob"  # TODO: Change to packet-loss once ready
-        else: # Then it's throughput
+        else:  # Then it's throughput
             jar_name = "PrometheusConsumerJob"  # TODO: Change to throughput once ready
         # Get jar ID from redis based on jar name
         jar_id = redis.hget(
                 "FLINK", jar_name).decode('UTF-8')
         # Build arguments for packet-loss
+        kafka_address = "kafka:9092"
         # Get input GnmiCollector entity
         gnmi_collector = GnmiCollector.parse_obj(
             ngsi_ld.retrieveEntityById(if_kpi_aggregator.has_input.object)
@@ -34,6 +35,7 @@ def process_interface_kpi_aggregator(
         sink_topic = "interface-kpi-aggregator-" + \
             if_kpi_aggregator.id.split(":")[-1]  # Use last part of URN
         flink_arguments = {
+            "kafka_address": kafka_address,
             "source_topics": source_topic,
             "sink_topic": sink_topic,
             "window_size": str(if_kpi_aggregator.window_size.value)
