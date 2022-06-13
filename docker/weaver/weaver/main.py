@@ -133,4 +133,4 @@ async def receiveNotification(request: Request):
             data_lake_dispatcher = DataLakeDispatcher.parse_obj(
                 entity.dict(exclude_none=True, by_alias=True))
             process_data_lake_dispatcher(
-                data_lake_dispatcher, flink, ngsi_ld, redis)
+                data_lake_dispatcher, flink, nifi, ngsi_ld, redis)

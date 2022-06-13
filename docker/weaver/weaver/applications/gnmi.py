@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 UNIT_CODES = {
     "C26": "ms"
 }
+KAFKA_ADDRESS = os.getenv("KAFKA_ADDRESS", "kafka:9092")
 
 
 def config_nifi_gnmic_source(
@@ -98,7 +99,7 @@ def config_nifi_gnmic_source(
     outputs = {}
     output = {}
     output['type'] = 'kafka'
-    output['address'] = 'kafka:9092'
+    output['address'] = KAFKA_ADDRESS
     output['topic'] = gnmic_topic
     output['max-retry'] = 2
     output['timeout'] = '5s'
@@ -151,13 +152,12 @@ def process_gnmi_collector(
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for gNMIcDriver
-        kafka_address = "kafka:9092"
         source_topic = "gnmic-source-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         sink_topic = "gnmic-driver-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         flink_arguments = {
-            "kafka_address": kafka_address,
+            "kafka_address": KAFKA_ADDRESS,
             "source_topics": source_topic,
             "sink_topic": sink_topic
         }
