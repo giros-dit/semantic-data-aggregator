@@ -148,7 +148,7 @@ def process_gnmi_collector(
         # Instantiate Flink job with gNMIcDriver jar
         #
         # Get jar ID from redis based on jar name
-        jar_name = "PrometheusConsumerJob"  # TODO: Change to gNMIcDriver once ready
+        jar_name = "gnmi-source-1.0"
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for gNMIcDriver

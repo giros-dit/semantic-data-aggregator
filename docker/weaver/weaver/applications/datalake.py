@@ -59,7 +59,7 @@ def process_data_lake_dispatcher(
         # Instantiate Flink job with YangInstanceDriver jar
         #
         # Get jar ID from redis based on jar name
-        jar_name = "PrometheusConsumerJob"  # TODO: Change to YangInstanceDriver once ready
+        jar_name = "gnmi-consumer-1.0"
         jar_id = redis.hget(
             "FLINK", jar_name).decode('UTF-8')
         # Build arguments for YangInstanceDriver
