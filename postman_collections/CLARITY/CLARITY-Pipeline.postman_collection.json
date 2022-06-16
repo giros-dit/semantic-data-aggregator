@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "28c50e86-7333-469b-9c50-e731e5e503a3",
+		"_postman_id": "c1c046e7-51a6-41e1-b516-03d19cc7d9ab",
 		"name": "CLARITY-Pipeline",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21273335"
+		"_exporter_id": "13163340"
 	},
 	"item": [
 		{
@@ -73,7 +73,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Netconf",
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Module",
 							"protocol": "http",
 							"host": [
 								"{{broker}}"
@@ -87,7 +87,50 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "Netconf"
+									"value": "Module"
+								}
+							]
+						},
+						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtain openconfig-interfaces Module entity",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Link",
+								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Module&q=name==\"openconfig-interfaces\"",
+							"protocol": "http",
+							"host": [
+								"{{broker}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "Module"
+								},
+								{
+									"key": "q",
+									"value": "name==\"openconfig-interfaces\""
 								}
 							]
 						},
@@ -148,7 +191,7 @@
 					"response": []
 				},
 				{
-					"name": "Obtain Entity Data by type Copy",
+					"name": "Obtain Entity Data by type",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -179,6 +222,49 @@
 								{
 									"key": "type",
 									"value": "Bucket"
+								}
+							]
+						},
+						"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtain Object entities from tansport-telemetry Bucket",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Link",
+								"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=Object&q=containedIn==urn:ngsi-ld:Bucket:transport-telemetry",
+							"protocol": "http",
+							"host": [
+								"{{broker}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "Object"
+								},
+								{
+									"key": "q",
+									"value": "containedIn==urn:ngsi-ld:Bucket:transport-telemetry"
 								}
 							]
 						},
@@ -244,7 +330,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:GnmiCollector:1\",\n    \"type\": \"GnmiCollector\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"encoding\": {\n        \"type\": \"Property\",\n        \"value\": \"JSON_IETF\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Device:r1\"\n    },\n    \"mode\": {\n        \"type\": \"Property\",\n        \"value\": \"STREAM\"\n    },\n    \"paths\": {\n        \"type\": \"Property\",\n        \"value\": \n            \"/interfaces/interface[name=Ethernet1]/state/counters/out-octets\"\n        \n    },\n    \"sampleInterval\": {\n        \"type\": \"Property\",\n        \"value\": 10000\n    },\n    \"streamMode\": {\n        \"type\": \"Property\",\n        \"value\": \"SAMPLE\"\n    }\n}\n"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:GnmiCollector:1\",\n    \"type\": \"GnmiCollector\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"encoding\": {\n        \"type\": \"Property\",\n        \"value\": \"JSON_IETF\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:Device:r1\"\n    },\n    \"mode\": {\n        \"type\": \"Property\",\n        \"value\": \"STREAM\"\n    },\n    \"paths\": {\n        \"type\": \"Property\",\n        \"value\": \n            \"/interfaces/interface[name=Ethernet1]/state/counters\"\n        \n    },\n    \"sampleInterval\": {\n        \"type\": \"Property\",\n        \"value\": 10000\n    },\n    \"streamMode\": {\n        \"type\": \"Property\",\n        \"value\": \"SAMPLE\"\n    }\n}\n"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
@@ -497,7 +583,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id\": \"urn:ngsi-ld:InterfaceKPIAggregator:1\",\n    \"type\": \"InterfaceKPIAggregator\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:GnmiCollector:1\"\n    },\n    \"kpi\": {\n        \"type\": \"Property\",\n        \"value\": \"throughput\"\n    },\n    \"windowSize\": {\n        \"type\": \"Property\",\n        \"value\": 60000\n    }\n}\n"
+									"raw": "{\n    \"id\": \"urn:ngsi-ld:InterfaceKPIAggregator:1\",\n    \"type\": \"InterfaceKPIAggregator\",\n    \"action\": {\n        \"type\": \"Property\",\n        \"value\": \"START\"\n    },\n    \"hasInput\": {\n        \"type\": \"Relationship\",\n        \"object\": \"urn:ngsi-ld:GnmiCollector:1\"\n    },\n    \"kpi\": {\n        \"type\": \"Property\",\n        \"value\": \"throughput\"\n    },\n    \"windowSize\": {\n        \"type\": \"Property\",\n        \"value\": 10000\n    }\n}\n"
 								},
 								"url": {
 									"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
