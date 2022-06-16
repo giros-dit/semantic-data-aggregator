@@ -21,7 +21,7 @@ class NgsiLdNotification(BaseModel):
         allow_population_by_field_name = True
 
     id: StrictStr
-    type: Literal['Notification']
+    type: Optional[Literal['Notification']] = 'Notification'
     subscription_id: Optional[StrictStr] = Field(None, alias='subscriptionId')
     context: Optional[common.LdContext] = Field(None, alias='@context')
     notified_at: datetime = Field(..., alias='notifiedAt')

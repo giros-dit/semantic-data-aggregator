@@ -87,7 +87,7 @@ class Subscription(SubscriptionFragment):
         allow_population_by_field_name = True
 
     id: Optional[StrictStr]
-    type: Optional[Literal['Subscription']]
+    type: Optional[Literal['Subscription']] = 'Subscription'
     notification: Optional[NotificationParams]
     status: Optional[Status1]
     created_at: Optional[common.CreatedAt] = Field(None, alias='createdAt')

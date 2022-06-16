@@ -1,13 +1,13 @@
-from semantic_tools.flink.api import FlinkAPI
-from semantic_tools.models.application import Task
-
 import logging
 import time
+
+from semantic_tools.bindings.pipelines.task import Task
+from semantic_tools.flink.api import FlinkAPI
 
 logger = logging.getLogger(__name__)
 
 
-class FlinkClient(object):
+class FlinkClient(FlinkAPI):
     """
     Class encapsulating the main operations with Apache Flink.
     """
@@ -16,8 +16,8 @@ class FlinkClient(object):
                  headers: dict = {
                     "Accept": "application/json",
                     "Content-Type": "application/json"}):
-        # Init Flink REST API Client
-        self.api = FlinkAPI(url, headers=headers)
+        # Init NGSI-LD REST API Client
+        super().__init__(url=url, headers=headers)
 
     def check_flink_status(self):
         """
@@ -26,7 +26,7 @@ class FlinkClient(object):
         """
         logger.info("Checking Flink REST API status ...")
         while True:
-            if self.api.checkFlinkHealth():
+            if self.checkFlinkHealth():
                 logger.info(
                     "Successfully connected to Flink REST API!")
                 break
@@ -40,7 +40,7 @@ class FlinkClient(object):
         """
         Deletes a Flink job from a given Task entity.
         """
-        job = self.api.deleteJob(task.internalId.value)
+        job = self.deleteJob(task.internalId.value)
         logger.info("Job '{0}' deleted in Flink engine.".format(
             task.internalId.value))
         return job
@@ -53,17 +53,17 @@ class FlinkClient(object):
         and its associated Application, i.e., JAR.
         """
         # Get a entry class of the Stream Aplication (if it exists)
-        if args["entryClass"]:
+        if hasattr(args, "entryClass"):
             entryClass = args["entryClass"]
             # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
             arguments = self.get_job_arguments_list(args)
             # Run job for JAR id
-            job = self.api.submitJob(applicationId, entryClass, arguments)
+            job = self.submitJob(applicationId, entryClass, arguments)
         else:
             # Get a list of arguments separated by commas (e.g. arg1, arg2, ...) to run the Flink job
             arguments = self.get_job_arguments_list(args)
             # Run job for JAR id
-            job = self.api.submitJob(applicationId, None, arguments)
+            job = self.submitJob(applicationId, None, arguments)
 
         logger.info(
             "Job '{0}' with '{1}' JAR instantiated in Flink engine.".format(
@@ -74,7 +74,7 @@ class FlinkClient(object):
         """
         Get all the arguments for a specific Flink job Task entity as a list separated by commas.
         """
-        arguments=""
+        arguments = ""
         arguments_list = []
         for key, value in args.items():
             if key != "entryClass":
@@ -87,9 +87,3 @@ class FlinkClient(object):
                 arguments += arguments_list[i]
 
         return arguments
-
-    def upload_jar(self, file_path: str) -> dict:
-        """
-        Upload JAR file to Flink from a given path.
-        """
-        return self.api.uploadJar(file_path)

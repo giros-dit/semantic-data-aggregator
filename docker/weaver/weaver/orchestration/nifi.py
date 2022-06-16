@@ -12,8 +12,7 @@ from nipyapi.nifi.models.documented_type_dto import DocumentedTypeDTO
 from nipyapi.nifi.models.process_group_entity import ProcessGroupEntity
 from nipyapi.nifi.models.process_group_flow_entity import \
     ProcessGroupFlowEntity
-from nipyapi.nifi.models.template_entity import TemplateEntity
-from semantic_tools.models.application import Task
+from semantic_tools.bindings.pipelines.task import Task
 
 logger = logging.getLogger(__name__)
 
@@ -224,7 +223,9 @@ class NiFiClient(object):
         self.set_parameter_context(task_pg, args)
 
         # Deploy Task template
-        task_template = nipyapi.templates.get_template(application_id, "id")
+        logger.warning(application_id)
+        task_template = nipyapi.templates.get_template(
+            application_id, "id")
         task_pg_flow = nipyapi.templates.deploy_template(
             task_pg.id,
             task_template.id,
@@ -347,13 +348,3 @@ class NiFiClient(object):
             nipyapi.nifi.ProcessorConfigDTO(
                 scheduling_period='{0}{1}'.format(interval,
                                                   interval_unit)))
-
-    def upload_template(self, template_path: str) -> TemplateEntity:
-        """
-        Uploads template to root process group
-        """
-        # Get root PG
-        root_pg = nipyapi.canvas.get_process_group("root")
-        template = nipyapi.templates.upload_template(
-            root_pg.id, template_path)
-        return template

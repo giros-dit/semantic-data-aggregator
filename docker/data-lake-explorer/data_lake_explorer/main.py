@@ -3,7 +3,8 @@ import os
 
 from fastapi import FastAPI, Request, status
 from semantic_tools.bindings.notification import NgsiLdNotification
-from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.bindings.subscription import Subscription
+from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 from data_lake_explorer.registration import register_data_lake
 
@@ -23,7 +24,7 @@ DATA_LAKE_EXPLORER_URI = os.getenv(
 
 
 # Init NGSI-LD API
-ngsi_ld = NGSILDClient(
+ngsi_ld = NGSILDAPI(
         url=BROKER_URI,
         context=CONTEXT_CATALOG_URI
     )
@@ -38,10 +39,27 @@ app = FastAPI(
 async def startup_event():
     logger.info("Starting data-lake-explorer service...")
     # Subscribe to DataLake entity
-    ngsi_ld.subscribe_to_entity_type(
-        entity_type="DataLake",
-        endpoint=DATA_LAKE_EXPLORER_URI,
-        subscription_id=DATA_LAKE_EXPLORER_SUBSCRIPTION_ID)
+    try:
+        ngsi_ld.createSubscription(
+            Subscription(
+                id=DATA_LAKE_EXPLORER_SUBSCRIPTION_ID,
+                entities=[
+                    {
+                        "type": "DataLake"
+                    }
+                ],
+                notification={
+                    "endpoint": {
+                        "uri": DATA_LAKE_EXPLORER_URI
+                    }
+                }
+            ).dict(exclude_none=True, by_alias=True)
+        )
+    except Exception:
+        logger.info(
+            "Subscription {0} already created".format(
+                DATA_LAKE_EXPLORER_SUBSCRIPTION_ID))
+
     logger.info("Data-lake-explorer service ready!")
 
 

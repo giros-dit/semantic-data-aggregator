@@ -10,13 +10,12 @@ from semantic_tools.bindings.telemetry.device import Device
 from semantic_tools.bindings.telemetry.gnmi import Gnmi, GnmiEncodings
 from semantic_tools.bindings.telemetry.module import ImplementedBy, Module
 from semantic_tools.bindings.telemetry.netconf import Netconf
-from semantic_tools.ngsi_ld.api import Options
-from semantic_tools.ngsi_ld.client import NGSILDClient
+from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 logger = logging.getLogger(__name__)
 
 
-def discover_gnmi_protocol(ngsi_ld: NGSILDClient, gnmi: Gnmi) -> Gnmi:
+def discover_gnmi_protocol(ngsi_ld: NGSILDAPI, gnmi: Gnmi) -> Gnmi:
     # Get credentials for gnmi service
     credentials_entity = ngsi_ld.queryEntities(
         "Credentials", q='authenticates=={0}'.format(gnmi.id))[0]
@@ -39,7 +38,7 @@ def discover_gnmi_protocol(ngsi_ld: NGSILDClient, gnmi: Gnmi) -> Gnmi:
 
 
 def discover_netconf_protocol(
-        ngsi_ld: NGSILDClient, netconf: Netconf) -> Netconf:
+        ngsi_ld: NGSILDAPI, netconf: Netconf) -> Netconf:
     # Get credentials for gnmi service
     credentials_entity = ngsi_ld.queryEntities(
         "Credentials", q='authenticates=={0}'.format(netconf.id))[0]
@@ -73,7 +72,7 @@ def discover_netconf_protocol(
 
 
 def discover_yang_modules(
-        ngsi_ld: NGSILDClient, netconf: Netconf,
+        ngsi_ld: NGSILDAPI, netconf: Netconf,
         device: Device) -> List[Module]:
     # Get credentials for gnmi service
     credentials_entity = ngsi_ld.queryEntities(
@@ -133,7 +132,7 @@ def discover_yang_modules(
 
 
 def register_device(
-        ngsi_ld: NGSILDClient,
+        ngsi_ld: NGSILDAPI,
         entity: Entity):
 
     logger.info("Processing registration of network device...")

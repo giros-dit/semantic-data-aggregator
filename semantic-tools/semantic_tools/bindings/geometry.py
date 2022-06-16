@@ -77,7 +77,7 @@ class Point(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['Point']]
+    type: Optional[Literal['Point']] = 'Point'
     coordinates: Optional[Position]
 
 
@@ -86,7 +86,7 @@ class MultiPoint(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['MultiPoint']]
+    type: Optional[Literal['MultiPoint']] = 'MultiPoint'
     coordinates: Optional[PositionArray]
 
 
@@ -95,7 +95,7 @@ class Polygon1(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['Polygon']]
+    type: Optional[Literal['Polygon']] = 'Polygon'
     coordinates: Optional[Polygon]
 
 
@@ -104,7 +104,7 @@ class LineString1(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['LineString']]
+    type: Optional[Literal['LineString']] = 'LineString'
     coordinates: Optional[LineString]
 
 
@@ -113,7 +113,7 @@ class MultiLineString(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['MultiLineString']]
+    type: Optional[Literal['MultiLineString']] = 'MultiLineString'
     coordinates: Optional[List[LineString]]
 
 
@@ -122,7 +122,7 @@ class MultiPolygon(BaseModel):
         validate_assignment = True
         allow_population_by_field_name = True
 
-    type: Optional[Literal['MultiPolygon']]
+    type: Optional[Literal['MultiPolygon']] = 'MultiPolygon'
     coordinates: Optional[List[Polygon]]
 
 

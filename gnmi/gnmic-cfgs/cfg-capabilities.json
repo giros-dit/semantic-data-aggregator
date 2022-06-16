@@ -1,7 +1,0 @@
-{
-    "address": "ceos1:6030",
-    "username": "admin",
-    "password": "xxxx",
-    "insecure": true,
-    "log-file": "/tmp/gnmic.log"
-}
