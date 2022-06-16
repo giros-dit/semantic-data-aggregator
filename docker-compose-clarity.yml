@@ -162,7 +162,7 @@ services:
     logging:
       driver: none
   r1:
-    image: "ceos-image:4.27.3F"
+    image: "ceos-image:4.27.4M"
     hostname: r1
     container_name: r1
     ports:
@@ -189,7 +189,7 @@ services:
     volumes:
       - ./docker/ceos-arista/r1/startup-config.cfg:/mnt/flash/startup-config
   r2:
-    image: "ceos-image:4.27.3F"
+    image: "ceos-image:4.27.4M"
     hostname: r2
     container_name: r2
     ports:
