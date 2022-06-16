@@ -38,9 +38,14 @@ services:
     environment:
       - BROKER_URI=${BROKER_URI}
       - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
-      - DATA_LAKE_URI=${DATA_LAKE_URI}
-      - DATA_LAKE_KEY=${DATA_LAKE_KEY}
-      - DATA_LAKE_REGION=${DATA_LAKE_REGION}
+      - DATA_LAKE_EXPLORER_URI=${DATA_LAKE_EXPLORER_URI}
+      - DATA_LAKE_EXPLORER_SUBSCRIPTION_ID=${DATA_LAKE_EXPLORER_SUBSCRIPTION_ID}
+    ports:
+      - "8080"
+    volumes:
+      - ./docker/data-lake-explorer/data_lake_explorer:/opt/sda/data-lake-explorer/data_lake_explorer
+    depends_on:
+      - scorpio
   eureka:
     image: scorpiobroker/scorpio:eureka-server_2.1.1
     hostname: eureka
