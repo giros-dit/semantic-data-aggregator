@@ -64,10 +64,10 @@ services:
         jobmanager.rpc.address: flink-jobmanager
     volumes:
       - ./flink-conf:/flink-conf
-  flink-taskmanager:
+  flink-taskmanager-1:
     image: flink:1.14.4-scala_2.12-java11
-    hostname: flink-taskmanager
-    container_name: flink-taskmanager
+    hostname: flink-taskmanager-1
+    container_name: flink-taskmanager-1
     depends_on:
       - flink-jobmanager
     command: taskmanager
@@ -75,7 +75,31 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
-        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 1
+  flink-taskmanager-2:
+    image: flink:1.14.4-scala_2.12-java11
+    hostname: flink-taskmanager-2
+    container_name: flink-taskmanager-2
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 1
+  flink-taskmanager-3:
+    image: flink:1.14.4-scala_2.12-java11
+    hostname: flink-taskmanager-3
+    container_name: flink-taskmanager-3
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 1
   gateway:
     image: scorpiobroker/scorpio:gateway_aaio_2.1.13
     hostname: gateway
@@ -121,7 +145,7 @@ services:
       # Used by Prometheus exporter
       - "8444:8444"
     volumes:
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - gnmic-subscriptions:/gnmic-cfgs
       - ./docker/nifi/drivers/jinja-templates:/jinja-templates
       - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
       - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
@@ -248,7 +272,7 @@ services:
       - "8080"
     volumes:
       - ./docker/weaver/weaver:/opt/sda/weaver/weaver
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
+      - gnmic-subscriptions:/gnmic-cfgs
     depends_on:
       - nifi
       - scorpio
@@ -309,3 +333,7 @@ networks:
       driver: default
       config:
         - subnet: 10.0.20.0/24
+
+
+volumes:
+  gnmic-subscriptions:

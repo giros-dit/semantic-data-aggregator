@@ -21,9 +21,9 @@ def process_interface_kpi_aggregator(
         jar_id = None
         jar_name = None
         if if_kpi_aggregator.kpi == KpiOptions.packet_loss:
-            jar_name = "PrometheusConsumerJob"  # TODO: Change to packet-loss once ready
+            jar_name = "gnmi-aggregator-packetloss-1.0"
         else:  # Then it's throughput
-            jar_name = "PrometheusConsumerJob"  # TODO: Change to throughput once ready
+            jar_name = "gnmi-aggregator-throughput-1.0"
         # Get jar ID from redis based on jar name
         jar_id = redis.hget(
                 "FLINK", jar_name).decode('UTF-8')

@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import time
 
 from redis import Redis
@@ -58,4 +59,8 @@ def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        stream=sys.stdout, level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
     main()
