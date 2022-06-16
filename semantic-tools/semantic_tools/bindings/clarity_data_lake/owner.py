@@ -16,6 +16,7 @@ class MemberOf(Relationship):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -28,6 +29,7 @@ class OwnerId(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -40,6 +42,7 @@ class Owner(Entity):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 

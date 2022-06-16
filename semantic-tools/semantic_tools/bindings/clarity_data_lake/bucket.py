@@ -17,6 +17,7 @@ class BelongsTo(Relationship):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -29,6 +30,7 @@ class CreationDate(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -41,8 +43,7 @@ class Name(Property):
     """
 
     class Config:
-        extra = Extra.forbid
-        allow_population_by_field_name = True
+        validate_assignment = True
 
     value: StrictStr
 
@@ -53,6 +54,7 @@ class OwnedBy(Relationship):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -65,6 +67,7 @@ class Bucket(Entity):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 

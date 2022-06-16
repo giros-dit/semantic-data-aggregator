@@ -6,14 +6,14 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import (BaseModel, Extra, Field, StrictBool, StrictFloat,
-                      StrictStr)
+from pydantic import BaseModel, Extra, Field, StrictBool, StrictFloat, StrictStr
 
 from . import common, geometry
 
 
 class DateTime(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['DateTime']] = Field('DateTime', alias='@type')
@@ -22,6 +22,7 @@ class DateTime(BaseModel):
 
 class DatasetId(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: StrictStr
@@ -29,6 +30,7 @@ class DatasetId(BaseModel):
 
 class InstanceId(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: StrictStr
@@ -36,6 +38,7 @@ class InstanceId(BaseModel):
 
 class Property(BaseModel):
     class Config:
+        validate_assignment = True
         extra = Extra.allow
         allow_population_by_field_name = True
 
@@ -50,6 +53,7 @@ class Property(BaseModel):
 
 class Relationship(BaseModel):
     class Config:
+        validate_assignment = True
         extra = Extra.allow
         allow_population_by_field_name = True
 
@@ -64,6 +68,7 @@ class Relationship(BaseModel):
 
 class GeoProperty(BaseModel):
     class Config:
+        validate_assignment = True
         extra = Extra.allow
         allow_population_by_field_name = True
 
@@ -78,6 +83,7 @@ class GeoProperty(BaseModel):
 
 class EntityFragment(BaseModel):
     class Config:
+        validate_assignment = True
         extra = Extra.allow
         allow_population_by_field_name = True
 
@@ -97,6 +103,7 @@ class Entity(EntityFragment):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
 
@@ -108,4 +115,5 @@ class NgsiLdEntity(Entity):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True

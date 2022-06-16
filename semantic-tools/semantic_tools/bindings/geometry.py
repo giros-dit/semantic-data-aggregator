@@ -14,6 +14,7 @@ class Position(BaseModel):
     """
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: List[StrictFloat] = Field(
@@ -27,6 +28,7 @@ class PositionArray(BaseModel):
     """
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: List[Position] = Field(..., description='An array of positions')
@@ -40,6 +42,7 @@ class LineString(BaseModel):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
 
@@ -51,6 +54,7 @@ class LinearRing(BaseModel):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
 
@@ -60,6 +64,7 @@ class Polygon(BaseModel):
     """
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: List[LinearRing] = Field(
@@ -69,6 +74,7 @@ class Polygon(BaseModel):
 
 class Point(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['Point']]
@@ -77,6 +83,7 @@ class Point(BaseModel):
 
 class MultiPoint(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['MultiPoint']]
@@ -85,6 +92,7 @@ class MultiPoint(BaseModel):
 
 class Polygon1(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['Polygon']]
@@ -93,6 +101,7 @@ class Polygon1(BaseModel):
 
 class LineString1(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['LineString']]
@@ -101,6 +110,7 @@ class LineString1(BaseModel):
 
 class MultiLineString(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['MultiLineString']]
@@ -109,6 +119,7 @@ class MultiLineString(BaseModel):
 
 class MultiPolygon(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     type: Optional[Literal['MultiPolygon']]
@@ -117,6 +128,7 @@ class MultiPolygon(BaseModel):
 
 class Geometry(BaseModel):
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True
 
     __root__: Union[
@@ -132,4 +144,5 @@ class GeometryModel(BaseModel):
     pass
 
     class Config:
+        validate_assignment = True
         allow_population_by_field_name = True

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 services:
   app-manager:
     build:
@@ -138,6 +138,60 @@ services:
       POSTGRES_DB: ngb
     logging:
       driver: none
+  r1:
+    image: "ceos-image:4.27.3F"
+    hostname: r1
+    container_name: r1
+    ports:
+      - "6030" # gNMI
+      - "830" # NETCONF
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker systemd.setenv=MAPETH0=1 systemd.setenv=MGMT_INTF=eth0
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+      MAPETH0: 1
+      MGMT_INTF: eth0
+    networks:
+      default:
+        ipv4_address: 172.16.238.11
+      r1r2:
+        ipv4_address: 10.0.0.11
+      vm1r1:
+        ipv4_address: 10.0.10.11
+    volumes:
+      - ./docker/ceos-arista/r1/startup-config.cfg:/mnt/flash/startup-config
+  r2:
+    image: "ceos-image:4.27.3F"
+    hostname: r2
+    container_name: r2
+    ports:
+      - "6030" # gNMI
+      - "830" # NETCONF
+    command: /sbin/init  systemd.setenv=INTFTYPE=eth systemd.setenv=ETBA=1 systemd.setenv=SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT=1 systemd.setenv=CEOS=1 systemd.setenv=EOS_PLATFORM=ceoslab systemd.setenv=container=docker systemd.setenv=MAPETH0=1 systemd.setenv=MGMT_INTF=eth0
+    privileged: true
+    environment:
+      INTFTYPE: eth
+      ETBA: 1
+      SKIP_ZEROTOUCH_BARRIER_IN_SYSDBINIT: 1
+      CEOS: 1
+      EOS_PLATFORM: ceoslab
+      container: docker
+      MAPETH0: 1
+      MGMT_INTF: eth0
+    networks:
+      default:
+        ipv4_address: 172.16.238.12
+      r1r2:
+        ipv4_address: 10.0.0.12
+      vm2r2:
+        ipv4_address: 10.0.20.12
+    volumes:
+      - ./docker/ceos-arista/r2/startup-config.cfg:/mnt/flash/startup-config
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
     hostname: scorpio
@@ -149,6 +203,23 @@ services:
       - eureka
       - postgres
       - kafka
+  telemetry-explorer:
+    build:
+      context: .
+      dockerfile: ./docker/telemetry-explorer/Dockerfile
+    hostname: telemetry-explorer
+    container_name: telemetry-explorer
+    environment:
+      - BROKER_URI=${BROKER_URI}
+      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
+      - TELEMETRY_EXPLORER_URI=${TELEMETRY_EXPLORER_URI}
+      - TELEMETRY_EXPLORER_SUBSCRIPTION_ID=${TELEMETRY_EXPLORER_SUBSCRIPTION_ID}
+    ports:
+      - "8080"
+    volumes:
+      - ./docker/telemetry-explorer/telemetry_explorer:/opt/sda/telemetry-explorer/telemetry_explorer
+    depends_on:
+      - scorpio
   weaver:
     build:
       context: .
@@ -170,6 +241,28 @@ services:
     depends_on:
       - nifi
       - scorpio
+  vm1:
+    image: praqma/network-multitool
+    hostname: vm1
+    container_name: vm1
+    networks:
+      vm1r1:
+        ipv4_address: 10.0.10.100
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "ip route del default && ip route add default via 10.0.10.11 && tail -f /dev/null"
+  vm2:
+    image: praqma/network-multitool
+    hostname: vm2
+    container_name: vm2
+    networks:
+      vm2r2:
+        ipv4_address: 10.0.20.100
+    cap_add:
+      - NET_ADMIN
+    command: >-
+      sh -c "ip route del default && ip route add default via 10.0.20.12 && tail -f /dev/null"
   zookeeper:
     image: zookeeper
     hostname: zookeeper
@@ -178,3 +271,30 @@ services:
       - "2181"
     logging:
       driver: none
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1
+  r1r2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
+  vm1r1:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.10.0/24
+  vm2r2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.20.0/24

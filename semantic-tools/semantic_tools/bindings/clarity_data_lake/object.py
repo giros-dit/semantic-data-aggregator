@@ -17,6 +17,7 @@ class ContainedIn(Relationship):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -29,6 +30,7 @@ class ETag(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -41,6 +43,7 @@ class Key(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -53,6 +56,7 @@ class LastModified(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -65,6 +69,7 @@ class OwnedBy(Relationship):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -77,6 +82,7 @@ class Size(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -89,6 +95,7 @@ class StorageClass(Property):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
@@ -101,6 +108,7 @@ class Object(Entity):
     """
 
     class Config:
+        validate_assignment = True
         extra = Extra.forbid
         allow_population_by_field_name = True
 
