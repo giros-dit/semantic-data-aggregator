@@ -1,0 +1,14 @@
+{%- for metric_family in content['openmetrics:metric-families']['metric-family'] %}
+    {%- if metric_family -%}
+        {%- if '-' in metric_family['name'] -%}
+            {% set metric_family_name = metric_family['name'] | replace('-', '_') %}
+        {%- else -%}
+            {% set metric_family_name = metric_family['name'] %}
+        {%- endif %}
+# HELP {{metric_family_name}} {{metric_family['help']}}
+# TYPE {{metric_family_name}} {{metric_family['metric-type']}}
+        {%- for metric in metric_family['metrics']['metric'] %}
+{{metric['name']}}{{"{"}}{%- for label in metric['labels']['label'] -%}{{label['name']}}="{{label['value']}}"{{ "," if not loop.last else "" }}{%- endfor %}{{"}"}} {{metric['metric-points']['value']}} {{metric['metric-points']['timestamp']}}
+        {%- endfor %}{{ "\n\n" if not loop.last }}
+    {%- endif %}
+{%- endfor %}

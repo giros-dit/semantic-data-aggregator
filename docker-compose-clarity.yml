@@ -31,7 +31,7 @@ services:
   data-lake-explorer:
     build:
       context: .
-      dockerfile: ./docker/data-lake-explorer/Dockerfile
+      dockerfile: ./consumers/clarity-data-lake/data-lake-explorer/Dockerfile
     hostname: data-lake-explorer
     container_name: data-lake-explorer
     environment:
@@ -42,7 +42,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/data-lake-explorer/data_lake_explorer:/opt/sda/data-lake-explorer/data_lake_explorer
+      - ./consumers/clarity-data-lake/data-lake-explorer/data_lake_explorer:/opt/sda/data-lake-explorer/data_lake_explorer
     depends_on:
       - scorpio
   eureka:

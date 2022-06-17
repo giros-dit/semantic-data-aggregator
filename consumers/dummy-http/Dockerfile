@@ -6,7 +6,7 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 
 # Set hierarchy with folders
-ENV APP_NAME=consumer
+ENV APP_NAME=dummy-http
 ENV APP_DIR=/opt/sda/${APP_NAME}
 RUN mkdir -p ${APP_DIR}
 WORKDIR ${APP_DIR}
@@ -22,17 +22,17 @@ RUN pip install "poetry==$POETRY_VERSION"
 RUN python -m venv /venv
 
 # Copy app artifacts
-COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
+COPY consumers/${APP_NAME}/pyproject.toml consumers/${APP_NAME}/poetry.lock ./
 RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin
 
-COPY docker/${APP_NAME}/ .
+COPY consumers/${APP_NAME}/ .
 RUN poetry build && /venv/bin/pip install dist/*.whl
 
 FROM base as final
 
 COPY --from=builder /venv /venv
 COPY --from=builder ${APP_DIR} .
-COPY docker/${APP_NAME}/docker-entrypoint.sh .
+COPY consumers/${APP_NAME}/docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
 CMD ["./docker-entrypoint.sh"]

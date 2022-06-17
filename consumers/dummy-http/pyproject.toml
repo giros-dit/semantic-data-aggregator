@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "consumer"
+name = "dummy-http"
 version = "0.1.0"
 description = ""
 authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
