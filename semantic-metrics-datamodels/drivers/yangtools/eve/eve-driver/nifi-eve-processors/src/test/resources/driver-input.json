@@ -1,0 +1,7 @@
+{
+    "metric_value": -1.8017399486024122,
+    "timestamp": 1619778809.0177128,
+    "unit": "random",
+    "device_id": "vnf-1",
+    "context": "value1=1 value2=2"
+}

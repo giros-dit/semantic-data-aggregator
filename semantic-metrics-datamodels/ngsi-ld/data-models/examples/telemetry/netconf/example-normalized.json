@@ -1,0 +1,28 @@
+{
+    "id": "urn:ngsi-ld:Netconf:r1",
+    "type": "Netconf",
+    "address": {
+        "type": "Property",
+        "value": "172.16.238.11"
+    },
+    "capabilities": {
+        "type": "Property",
+        "value": [
+            "urn:ietf:params:netconf:base:1.0",
+            "urn:ietf:params:netconf:base:1.1",
+            "urn:ietf:params:xml:ns:netconf:base:1.0",
+            "urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring",
+            "urn:ietf:params:netconf:capability:writable-running:1.0",
+            "urn:ietf:params:netconf:capability:candidate:1.0",
+            "urn:ietf:params:netconf:capability:url:1.0"
+        ]
+    },
+    "port": {
+        "type": "Property",
+        "value": 830
+    },
+    "supportedBy": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Device:r1"
+    }
+}

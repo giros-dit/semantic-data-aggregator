@@ -1,0 +1,170 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$schemaVersion": "1.0",
+    "title": "Gnmi",
+    "description": "Entity that represents a gNMI service which is supported by a specific network device",
+    "type": "object",
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "$ref": "../entity.json#/definitions/Entity"
+        },
+        {
+            "properties": {
+                "type": {
+                    "description": "NGSI-LD Entity identifier. It has to be Gnmi",
+                    "type": "string",
+                    "enum": [
+                        "Gnmi"
+                    ],
+                    "default": "Gnmi"
+                },
+                "address": {
+                    "$ref": "#/definitions/Address"
+                },
+                "encodings": {
+                    "$ref": "#/definitions/Encodings"
+                },
+                "port": {
+                    "$ref": "#/definitions/Port"
+                },
+                "supportedBy": {
+                    "$ref": "#/definitions/SupportedBy"
+                },
+                "version": {
+                    "$ref": "#/definitions/Version"
+                }
+            },
+            "required": [
+                "type",
+                "address",
+                "port",
+                "supportedBy"
+            ]
+        }
+    ],
+    "definitions": {
+        "Address": {
+            "description": "Property. Address of this gNMI service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "format": "ipv4"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Encodings": {
+            "description": "Property. List of encodings formats supported by this gNMI service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "oneOf": [
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/GnmiEncodings"
+                                    }
+                                },
+                                {
+                                    "$ref": "#/definitions/GnmiEncodings"
+                                }
+                            ]
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "GnmiEncodings": {
+            "description": "Encoding formats allowed by the gNMI protocol.",
+            "type": "string",
+            "enum": [
+                "JSON",
+                "BYTES",
+                "PROTO",
+                "ASCII",
+                "JSON_IETF"
+            ]
+        },
+        "Port": {
+            "description": "Property. Port of the gNMI service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "SupportedBy": {
+            "description": "Relationship. Network device that supports this gNMI service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Relationship"
+                },
+                {
+                    "properties": {
+                        "object": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "object"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Version": {
+            "description": "Property. Version of this gNMI service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        }
+    }
+}

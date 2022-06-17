@@ -1,0 +1,324 @@
+{
+    "openmetrics:metric-families": {
+        "metric-family": [
+            {
+                "name": "logparser-so-metrics",
+                "unit": "s",
+                "metric-type": "counter",
+                "metrics": {
+                    "metric": [
+                        {
+                            "label-set-id": "-2134337854",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time required in the interaction between Service Orchestration Engine (SOE) and Monitoring Manager to remove alert-based objects in case they have been configured in the 5Gr-VoMS."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "TerminatingMonitoringJobs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "144"
+                            }
+                        },
+                        {
+                            "label-set-id": "720551411",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Network service total termination time. The time it takes to the 5Gr-SO to perform the termination operation since the request arrives to the Northbound Interface (NBI)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "TotalTerminationTime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "42631"
+                            }
+                        },
+                        {
+                            "label-set-id": "815642643",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove data engineering pipeline elements (Kafka topic, Spark job) in case they have been configured in the 5Gr-VoMs and the Inference Platform (Apache Spark)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "TerminatingAIMLAlertJobs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "1474"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1733607093",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time spent in the Resource Orchestration Engine (ROE) module during the instantiation or termination process."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "ROETime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "2331"
+                            }
+                        },
+                        {
+                            "label-set-id": "1430428168",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time spent in the Service Orchestration Engine (SOE) module (both at SOE parent, SOE child sub-modules) during the instantiation or termination process."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "SOETime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "1637"
+                            }
+                        },
+                        {
+                            "label-set-id": "1612819360",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time it takes the Northbound Interface (NBI) to generate an ID to identify the termination operation."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "OperationIDForTerminationOp_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "4"
+                            }
+                        },
+                        {
+                            "label-set-id": "219315011",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time required in the interaction between Service Orchestration Engine (SOE) and SLA Manager to remove alert-based objects in case they have been configured in the 5Gr-VoMS."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "TerminatingThresholdBasedAlerts_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "122"
+                            }
+                        },
+                        {
+                            "label-set-id": "-614657262",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "For instantiation operation: Time spent in the Core MANO Wrapper module during the instantiation process to create virtual network supporting the Virtual Links (VLs), the VMs supporting the VNFs, and update the Network Service Instantiation Resource (NSIR) database. For termination operation: Time spent in the Core MANO Wrapper module during the termination process to delete virtual network supporting the vitual links (VLs) and the VMs supporting the VNFs."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "CoreMANOWrapperTime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "38661"
+                            }
+                        },
+                        {
+                            "label-set-id": "1144131959",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation or termination process based on the nature of the service (single NS, composite NS)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "HierarchicalSOEDispatchingSOEpSOEc_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "6"
+                            }
+                        },
+                        {
+                            "label-set-id": "-894623139",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time in the Resource Orchestration Engine (ROE) to interact with the Resource Layer (RL) to deallocate resources in the logical links (LLs) serving the virtual link (VL) connections between VNFs deployed in multiple Virtualized Infrastructure Managers (VIMs)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "ROEDeletingLLs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "0"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1424117191",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time to update databases (DBs) to declare the network service as operative and the instantiation or termination operation as successful."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "termination"
+                                    }
+                                ]
+                            },
+                            "name": "ROEUpdatingDBs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "12"
+                            }
+                        }
+                    ]
+                },
+                "help": "Time-related metrics provided by the 5Growth Service Orchestrator (5Gr-SO) Log Management Tool during the network service instantiation, scaling and termination operations."
+            }
+        ]
+    }
+}

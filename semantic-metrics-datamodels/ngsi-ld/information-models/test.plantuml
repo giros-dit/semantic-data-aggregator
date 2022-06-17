@@ -1,0 +1,94 @@
+
+@startuml
+
+skinparam shadowing false
+
+
+skinparam ClassHeaderBackgroundColor<<entity>> #f6f688
+skinparam ClassBackgroundColor<<entity>> #White
+skinparam ClassBorderColor<<entity>> #d4d50f
+
+skinparam ClassHeaderBackgroundColor<<relationship>> #a8e5ad
+skinparam ClassBackgroundColor<<relationship>> #White
+skinparam ClassBorderColor<<relationship>> #66d270
+
+skinparam ClassFontStyle bold
+skinparam ClassFontSize 14
+skinparam ClassFontName Helvetica
+
+skinparam ClassStereotypeFontSize 12
+
+skinparam ClassAttributeFontName Helvetica
+skinparam ClassAttributeFontSize 12
+
+skinparam nodesep 40
+skinparam ranksep 10
+
+skinparam linetype ortho
+skinparam ArrowColor #312d2b
+skinparam ArrowFontSize 14
+skinparam ArrowThickness 1
+
+hide methods
+hide <<entity>> circle
+hide <<relationship>> circle
+show <<entity>> fields
+
+
+class Device <<entity>> {
+  name
+  softwareVersion
+  vendor
+}
+
+class Module <<entity>> {
+  name
+  namespace
+  revision
+}
+
+class Gnmi <<entity>> {
+  address
+  encodings
+  port
+  version
+}
+
+class Netconf <<entity>> {
+  address
+  capabilities
+  port
+}
+
+class Credentials <<entity>> {
+  username
+  password
+}
+
+class implementedBy <<relationship>> {
+  feature
+  deviation
+}
+Device "1..*" <-d- "1..*" Module
+(Device, Module) . implementedBy
+
+class supportedBy <<relationship>> {
+}
+Netconf "1" --> "1" Device
+(Netconf, Device) . supportedBy
+
+Gnmi "1" --> "1" Device
+supportedBy . (Gnmi, Device)
+
+
+class authenticates <<relationship>>{
+}
+Credentials "1" --> "1" Netconf
+(Credentials, Netconf) . authenticates
+
+Credentials "1" --> "1" Gnmi
+authenticates . (Credentials, Gnmi)
+
+@enduml
+
+

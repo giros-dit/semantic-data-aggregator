@@ -1,0 +1,267 @@
+module openmetrics {
+
+    yang-version 1.1;
+    namespace 'http://data-aggregator.com/ns/open-metrics';
+    prefix "om";
+
+    organization "GIROS research group";
+
+    contact "gi.giros@upm.es";
+
+    description
+        "YANG module to represent metrics.
+        This module has been inspired by OpenMetrics specification.";
+
+    reference
+        "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md";
+
+    revision 2021-03-16 {
+        description
+            "Initial revision. Alignment with OpenMetrics specification.";
+        reference "0.1.0";
+    }
+
+    typedef metric-type {
+        type enumeration {
+            enum unknown {
+                description "Unknown must use unknown MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#unknown";
+            }
+            enum gauge {
+                description "Gauge must use gauge MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gauge";
+            }
+            enum counter {
+                description "Counter must use counter MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#counter";
+            }
+            enum state_set {
+                description "State set must use state set MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#stateset-1";
+            }
+            enum info {
+                description "Info must use info MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#info-1";
+            }
+            enum histogram {
+                description "Histogram must use histogram value MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#histogram-1";
+            }
+            enum gauge_histogram {
+                description "Gauge histogram must use histogram value MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#gaugehistogram-1";
+            }
+            enum summary {
+                description "Summary quantiles must use summary value MetricPoint values.";
+                reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#summary-1";
+            }
+        }
+        description
+            "The type of a Metric.";
+    }
+
+    grouping metric-set {
+        description
+            "Metrics associated with a MetricFamily";
+        container metrics {
+             description
+                "Enclosing container for the list of Metrics
+                associated with a MetricFamily";
+            list metric {
+                key "label-set-id";
+                description
+                    "Metrics are defined by a unique LabelSet within a MetricFamily.
+                    Metrics MUST contain a list of one or more MetricPoints.
+                    Metrics with the same name for a given MetricFamily
+                    SHOULD have the same set of label names in their LabelSet.
+
+                    MetricPoints SHOULD NOT have explicit timestamps.
+
+                    If more than one MetricPoint is exposed for a Metric,
+                    then its MetricPoints MUST have monotonically increasing timestamps";
+
+                leaf label-set-id {
+                    type string;
+                    description
+                        "LabelSet ID that uniquely identifies a Metric within a MetricFamily.
+                        Identifies generated from the calculated hash of the LabelSet dictionary.
+                        Prometheus internally generates hashes in order to identify label sets.";
+                    reference
+                        "https://github.com/prometheus/prometheus/blob/main/pkg/labels/labels.go";
+                }
+
+                leaf name {
+                    type string;
+                    mandatory true;
+                    description
+                        "Name of the Metric. Combination of the MetricFamily's name plus
+                        one of the available suffixes - if any - given the type of the Metric.
+
+                        Suffixes for the respective types are:
+                            Counter: '_total', '_created'
+                            Summary: '_count', '_sum', '_created', '' (empty)
+                            Histogram: '_count', '_sum', '_bucket', '_created'
+                            GaugeHistogram: '_gcount', '_gsum', '_bucket'
+                            Info: '_info'
+                            Gauge: '' (empty)
+                            StateSet: '' (empty)
+                            Unknown: '' (empty)";
+                }
+
+                uses label-set;
+                uses metric-point-set;
+            }
+        }
+    }
+
+    grouping label-set {
+        description
+            "LabelSet associated with a Metric";
+        container labels {
+            description
+                "Enclosing container for the list of Labels
+                associated with a Metric";
+            list label {
+                key "name";
+                description
+                    "A name-value pair. These are used in multiple places:
+                    identifying timeseries, value of INFO metrics,
+                    and exemplars in Histograms";
+
+                leaf name {
+                    type string;
+                    description
+                        "Key of the label";
+                }
+                leaf value {
+                    type string;
+                    mandatory true;
+                    description
+                        "Value of the label's key";
+                }
+            }
+        }
+    }
+
+    grouping metric-point-set {
+        description
+            "MetricPoints associated with a Metric";
+        container metric-points {
+            choice metric-points-choice {
+                mandatory true;
+                description
+                    "Enclosing container for the list of MetricPoints
+                    associated with a Metric";
+                case metric-point-single {
+                    description
+                        "A MetricPoint in a Metric. If more than one MetricPoint
+                        is exposed for a Metric, then its MetricPoints MUST have
+                        monotonically increasing timestamps.";
+                    leaf value {
+                        type decimal64 {
+                            fraction-digits 2;
+                        }
+                        mandatory true;
+                        description
+                            "Required. The value of the metric's sample";
+                    }
+                    leaf timestamp {
+                        type int64;
+                        description
+                            "Optional. The measurement timestamp of the metric's sample. UNIX epoch with millisecond precision.";
+                    }
+                }
+                case metric-point-list {
+                    list metric-point {
+                        when "not(../metric-point)";
+                        key "timestamp";
+                        min-elements 2;
+                        description
+                            "A list of MetricPoints in a Metric. If more than one MetricPoint
+                            is exposed for a Metric, then its MetricPoints MUST have
+                            monotonically increasing timestamps.";
+                        leaf value {
+                            type decimal64 {
+                                fraction-digits 2;
+                            }
+                            mandatory true;
+                            description
+                                "Required. The value of the metric's sample";
+                        }
+                        leaf timestamp {
+                            type int64;
+                            mandatory true;
+                            description
+                                "Optional. The measurement timestamp of the metric's sample. UNIX epoch with millisecond precision.";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    container metric-families {
+        config false;
+        description
+            "A MetricSet is the top level object exposed by OpenMetrics.
+            It MUST consist of MetricFamilies and MAY be empty.
+
+            Each MetricFamily name MUST be unique. The same label name and value
+            SHOULD NOT appear on every Metric within a MetricSet.
+
+            There is no specific ordering of MetricFamilies required within a MetricSet.
+            An exposer MAY make an exposition easier to read for humans,
+            for example sort alphabetically if the performance tradeoff makes sense.";
+        list metric-family {
+            key name;
+            description
+                "A MetricFamily MAY have zero or more Metrics.
+                A MetricFamily MUST have a name, HELP, TYPE, and UNIT metadata.
+                Every Metric within a MetricFamily MUST have a unique LabelSet.";
+
+            reference "https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md#metricfamily";
+
+            leaf name {
+                type string;
+                description
+                    "MetricFamily names are a string and MUST be unique within a MetricSet.
+                    Names SHOULD be in snake_case.
+                    Metric names MUST follow the restrictions in the ABNF section.
+
+                    Colons in MetricFamily names are RESERVED to signal that
+                    the MetricFamily is the result of a calculation or aggregation
+                    of a general purpose monitoring system.
+
+                    MetricFamily names beginning with underscores are RESERVED
+                    and MUST NOT be used unless specified by this standard.
+
+                    The name of a MetricFamily MUST NOT result in a potential clash
+                    for sample metric names as per the ABNF with another MetricFamily
+                    in the Text Format within a MetricSet. An example would be
+                    a gauge called 'foo_created' as a counter called 'foo'
+                    could create a 'foo_created' in the text format.";
+            }
+            leaf metric-type {
+                type metric-type;
+                description
+                    "Type specifies the MetricFamily type";
+            }
+            leaf unit {
+                type string;
+                description
+                    "Unit specifies MetricFamily units. If non-empty,
+                    it MUST be a suffix of the MetricFamily name
+                    separated by an underscore. Be aware that further generation
+                    rules might make it an infix in the text format.";
+            }
+            leaf help {
+                type string;
+                description
+                    "Help is a string and SHOULD be non-empty. It is used to give
+                    a brief description of the MetricFamily for human consumption
+                    and SHOULD be short enough to be used as a tooltip.";
+            }
+            uses metric-set;
+        }
+    }
+}

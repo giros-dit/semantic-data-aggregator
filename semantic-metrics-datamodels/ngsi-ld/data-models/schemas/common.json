@@ -1,0 +1,162 @@
+{
+    "title": "NGSI-LD Common Definitions",
+    "description": "NGSI-LD Common",
+    "definitions": {
+        "Name": {
+            "type": "string",
+            "pattern": "^((\\d|[a-zA-Z]|_)+(:(\\d|[a-zA-Z]|_)+)?(#\\d+)?)$",
+            "minLength": 1,
+            "description": "NGSI-LD Name"
+        },
+        "PropertyNames": {
+            "type": "string",
+            "pattern": "^((\\d|[a-zA-Z]|_)+(:(\\d|[a-zA-Z]|_)+)?(#\\d+)?)$|^(@context)$"
+        },
+        "observedAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "modifiedAt": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "LdContext": {
+            "oneOf": [
+                {
+                    "type": "object"
+                },
+                {
+                    "type": "string",
+                    "format": "uri"
+                },
+                {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "object"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Endpoint": {
+            "type": "object",
+            "required": [
+                "uri"
+            ],
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "accept": {
+                    "type": "string",
+                    "enum": [
+                        "application/json",
+                        "application/ld+json"
+                    ]
+                }
+            }
+        },
+        "EntityInfo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/Name"
+                },
+                "idPattern": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ]
+        },
+        "ProblemDetails": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ]
+        },
+        "georel": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": [
+                        "equals",
+                        "disjoint",
+                        "intersects",
+                        "within",
+                        "contains",
+                        "overlaps"
+                    ]
+                },
+                {
+                    "type": "string",
+                    "pattern": "^near;((maxDistance==\\d+)|(minDistance==\\d+))$"
+                }
+            ]
+        },
+        "coordinates": {
+            "oneOf": [
+                {
+                    "$ref": "./geometry.json#/definitions/position"
+                },
+                {
+                    "$ref": "./geometry.json#/definitions/positionArray"
+                },
+                {
+                    "$ref": "./geometry.json#/definitions/lineString"
+                },
+                {
+                    "$ref": "./geometry.json#/definitions/polygon"
+                }
+            ]
+        },
+        "geometry": {
+            "type": "string",
+            "enum": [
+                "Point",
+                "MultiPoint",
+                "LineString",
+                "MultiLineString",
+                "Polygon",
+                "MultiPolygon"
+            ]
+        },
+        "timerel": {
+            "type": "string",
+            "enum": [
+                "before",
+                "after",
+                "between"
+            ]
+        }
+    }
+}

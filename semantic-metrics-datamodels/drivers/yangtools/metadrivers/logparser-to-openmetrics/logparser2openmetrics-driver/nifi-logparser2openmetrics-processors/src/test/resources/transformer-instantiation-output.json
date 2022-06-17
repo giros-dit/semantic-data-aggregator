@@ -1,0 +1,464 @@
+{
+    "openmetrics:metric-families": {
+        "metric-family": [
+            {
+                "name": "logparser-so-metrics",
+                "unit": "s",
+                "metric-type": "counter",
+                "metrics": {
+                    "metric": [
+                        {
+                            "label-set-id": "-824112743",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time it takes the Northbound Interface (NBI) to generate an ID to identify the instantiation operation."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "OperationIDForInstantiationOp_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "4"
+                            }
+                        },
+                        {
+                            "label-set-id": "1430428168",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time spent in the Service Orchestration Engine (SOE) module (both at SOE parent, SOE child sub-modules) during the instantiation or termination process."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "SOETime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "1637"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1733607093",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time spent in the Resource Orchestration Engine (ROE) module during the instantiation or termination process."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROETime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "2331"
+                            }
+                        },
+                        {
+                            "label-set-id": "600751141",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time interaction between SOE-SLA Manager modules of the 5Gr-SO to determine the threshold-alerts objects (if there is not AI/ML treatment) to be configured at the 5Gr-VoMS plus the interaction to configure them at the 5GR-VoMs and receive the associated object identifiers and update the information in Network Service Instantiation Resource (NSIR) database."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "CreateThresholdBasedAlerts_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "9"
+                            }
+                        },
+                        {
+                            "label-set-id": "-614657262",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "For instantiation operation: Time spent in the Core MANO Wrapper module during the instantiation process to create virtual network supporting the Virtual Links (VLs), the VMs supporting the VNFs, and update the Network Service Instantiation Resource (NSIR) database. For termination operation: Time spent in the Core MANO Wrapper module during the termination process to delete virtual network supporting the vitual links (VLs) and the VMs supporting the VNFs."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "CoreMANOWrapperTime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "38661"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1641976188",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time interaction between SOE-SLA Manager to configure the AI/ML workflow to drive scaling operations. The creation and configuration of the data engineering pipeline consist of: i) interaction with 5Gr-VoMs to create a Kafka Topic, ii) interaction with the 5Gr-AIML platform to download the required model, iii) creation of inference job at Apache Spark, iv) update of Network Service Instantiation Resource (NSIR) database."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "CreateAIMLAlerts_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "1474"
+                            }
+                        },
+                        {
+                            "label-set-id": "1864437242",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time it takes the Resource Orchestration Engine (ROE) to determine the request of the different Virtual Links (VLs) needing resources in the Logical Links (LLs) because connected VNFs have been deployed in multiple Virtualized Infrastructure Managers (VIMs)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROEExtractVLs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "5"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1937213148",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time interaction between SOE-Monitoring Manager modules of 5Gr-SO to determine the monitoring jobs (exporters) and dashboards to be configured at the 5Gr-VoMS plus the interaction to configure them and receive the associated object identifiers and update the information in Network Service Instantiation Resource (NSIR) database."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "CreateMonitoringJobs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "144"
+                            }
+                        },
+                        {
+                            "label-set-id": "467001689",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time to recollect the information from the Resource Layer (RL)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROERetrieveRLResources_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "2310"
+                            }
+                        },
+                        {
+                            "label-set-id": "1471435808",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time to collect the descriptor from the network service descriptor (NSD) catalogue."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "RetrievingDescriptorFromCatalogueDBs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "4"
+                            }
+                        },
+                        {
+                            "label-set-id": "1271471491",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time in the interaction between Resource Orchestration Engine (ROE) and Resource Layer (RL) to allocate resources in the Logical Links (LLs) based on the ROE extract request."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROECreatedVLs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "3"
+                            }
+                        },
+                        {
+                            "label-set-id": "1144131959",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time the hierarchical Service Orchestration Engine (SOE) uses to select the appropriate instantiation or termination process based on the nature of the service (single NS, composite NS)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "HierarchicalSOEDispatchingSOEpSOEc_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "6"
+                            }
+                        },
+                        {
+                            "label-set-id": "-4532440",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Network service total instantiation time. The time it takes since the 5Gr-SO created the service identifier for a network service until it has been totally instantiated."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "TotalInstantiationTime_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "42631"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1424117191",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "Time to update databases (DBs) to declare the network service as operative and the instantiation or termination operation as successful."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROEUpdatingDBs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "12"
+                            }
+                        },
+                        {
+                            "label-set-id": "-1508789054",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time at Resource Orchestration Engine (ROE) submodule to parse NSD and VNFDs of an network service to get the required information for Placement Algorithm (PA)."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "ROEParsingNSDs_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "0"
+                            }
+                        },
+                        {
+                            "label-set-id": "1290419654",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "Description",
+                                        "value": "The time to build the request to the Placement Algorithm (PA), send it to the external PA service and receive its answers."
+                                    },
+                                    {
+                                        "name": "NS_ID",
+                                        "value": "fgt-a3f272b-9af6-4ba5-ae52-7fbea8465413"
+                                    },
+                                    {
+                                        "name": "NSD_ID",
+                                        "value": "vCDN_aiml"
+                                    },
+                                    {
+                                        "name": "Operation",
+                                        "value": "instantiation"
+                                    }
+                                ]
+                            },
+                            "name": "PACalculation_total",
+                            "metric-points": {
+                                "timestamp": "1621237993000",
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                "help": "Time-related metrics provided by the 5Growth Service Orchestrator (5Gr-SO) Log Management Tool during the network service instantiation, scaling and termination operations."
+            }
+        ]
+    }
+}

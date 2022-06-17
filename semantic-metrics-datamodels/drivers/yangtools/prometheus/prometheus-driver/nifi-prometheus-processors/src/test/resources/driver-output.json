@@ -1,0 +1,19 @@
+{
+   "prometheus:metric": { 
+      "timestamp": 1435781451.781,
+      "name": "up",
+      "value": 1,
+      "labels": {
+         "label": [
+            {
+               "name": "job",
+               "value": "prometheus"
+            },
+            {
+               "name": "instance",
+               "value": "localhost:9090"
+            }
+         ]
+      }
+   }
+ }

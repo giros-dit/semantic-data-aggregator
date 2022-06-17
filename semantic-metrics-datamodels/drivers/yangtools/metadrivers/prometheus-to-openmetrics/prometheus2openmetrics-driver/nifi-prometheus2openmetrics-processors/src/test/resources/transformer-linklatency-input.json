@@ -1,0 +1,70 @@
+{
+  "prometheus:metrics": {
+    "metric": [
+      {
+        "label-set-id": "236264325",
+        "labels": {
+          "label": [
+            {
+              "name": "exported_job",
+              "value": "lvs3"
+            },
+            {
+              "name": "instance",
+              "value": "pushgateway:9091"
+            },
+            {
+              "name": "exported_instance",
+              "value": "5growth_probe_efacec_e_UC2"
+            },
+            {
+              "name": "job",
+              "value": "pushgateway"
+            },
+            {
+              "name": "host",
+              "value": "192.168.13.17"
+            }
+          ]
+        },
+        "metric-points": {
+          "timestamp": "1637426612.19",
+          "value": "4006.5"
+        },
+        "name": "linklatency"
+      },
+      {
+        "label-set-id": "-1961091979",
+        "labels": {
+          "label": [
+            {
+              "name": "exported_job",
+              "value": "gsmart"
+            },
+            {
+              "name": "instance",
+              "value": "pushgateway:9091"
+            },
+            {
+              "name": "exported_instance",
+              "value": "5growth_probe_efacec_e"
+            },
+            {
+              "name": "job",
+              "value": "pushgateway"
+            },
+            {
+              "name": "host",
+              "value": "192.168.13.16"
+            }
+          ]
+        },
+        "metric-points": {
+          "timestamp": "1637426612.19",
+          "value": "18"
+        },
+        "name": "linklatency"
+      }
+    ]
+  }
+}

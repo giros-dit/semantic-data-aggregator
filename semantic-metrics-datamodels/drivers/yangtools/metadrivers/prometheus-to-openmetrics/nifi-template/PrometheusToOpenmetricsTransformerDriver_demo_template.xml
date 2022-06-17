@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template encoding-version="1.3">
+    <description></description>
+    <groupId>4c0bec90-017d-1000-f6d0-fb1c41e239a2</groupId>
+    <name>PrometheusToOpenmetricsTransformerDriver_demo_template</name>
+    <snippet>
+        <connections>
+            <id>041bbfea-b1da-3892-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>c4ec30ee-4fc9-315b-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>SUCCESS</selectedRelationships>
+            <source>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>4805b695-6972-3836-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>48090849-a4e3-352a-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>4805b695-6972-3836-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>300b28c7-8a08-3b9e-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>90b7d9c9-4517-3829-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>ce62777c-97b9-342d-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>FAILURE</selectedRelationships>
+            <source>
+                <groupId>227f8d7c-8718-3bb7-0000-000000000000</groupId>
+                <id>4805b695-6972-3836-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <processors>
+            <id>300b28c7-8a08-3b9e-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <position>
+                <x>0.0</x>
+                <y>10.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.14.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>10</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>File Size</key>
+                        <value>
+                            <name>File Size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Batch Size</key>
+                        <value>
+                            <name>Batch Size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Data Format</key>
+                        <value>
+                            <name>Data Format</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Unique FlowFiles</key>
+                        <value>
+                            <name>Unique FlowFiles</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>generate-ff-custom-text</key>
+                        <value>
+                            <name>generate-ff-custom-text</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>character-set</key>
+                        <value>
+                            <name>character-set</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>mime-type</key>
+                        <value>
+                            <name>mime-type</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>File Size</key>
+                        <value>0B</value>
+                    </entry>
+                    <entry>
+                        <key>Batch Size</key>
+                        <value>1</value>
+                    </entry>
+                    <entry>
+                        <key>Data Format</key>
+                        <value>Text</value>
+                    </entry>
+                    <entry>
+                        <key>Unique FlowFiles</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>generate-ff-custom-text</key>
+                        <value>{
+  "prometheus:metrics": {
+    "metric": [
+      {
+        "label-set-id": "236264325",
+        "labels": {
+          "label": [
+            {
+              "name": "exported_job",
+              "value": "lvs3"
+            },
+            {
+              "name": "instance",
+              "value": "pushgateway:9091"
+            },
+            {
+              "name": "exported_instance",
+              "value": "5growth_probe_efacec_e_UC2"
+            },
+            {
+              "name": "job",
+              "value": "pushgateway"
+            },
+            {
+              "name": "host",
+              "value": "192.168.13.17"
+            }
+          ]
+        },
+        "metric-points": {
+          "timestamp": "1637426612.19",
+          "value": "4006.5"
+        },
+        "name": "linklatency"
+      },
+      {
+        "label-set-id": "-1961091979",
+        "labels": {
+          "label": [
+            {
+              "name": "exported_job",
+              "value": "gsmart"
+            },
+            {
+              "name": "instance",
+              "value": "pushgateway:9091"
+            },
+            {
+              "name": "exported_instance",
+              "value": "5growth_probe_efacec_e"
+            },
+            {
+              "name": "job",
+              "value": "pushgateway"
+            },
+            {
+              "name": "host",
+              "value": "192.168.13.16"
+            }
+          ]
+        },
+        "metric-points": {
+          "timestamp": "1637426612.19",
+          "value": "18"
+        },
+        "name": "linklatency"
+      }
+    ]
+  }
+}</value>
+                    </entry>
+                    <entry>
+                        <key>character-set</key>
+                        <value>UTF-8</value>
+                    </entry>
+                    <entry>
+                        <key>mime-type</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>1 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>GenerateFlowFile</name>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.GenerateFlowFile</type>
+        </processors>
+        <processors>
+            <id>4805b695-6972-3836-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <position>
+                <x>674.0</x>
+                <y>0.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-prometheus2openmetrics-nar</artifact>
+                <group>upm.dit.giros</group>
+                <version>1.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>YANG-TOOLS Driver type</key>
+                        <value>
+                            <name>YANG-TOOLS Driver type</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family name</key>
+                        <value>
+                            <name>Prometheus Metric Family name</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family type</key>
+                        <value>
+                            <name>Prometheus Metric Family type</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family unit</key>
+                        <value>
+                            <name>Prometheus Metric Family unit</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family help</key>
+                        <value>
+                            <name>Prometheus Metric Family help</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>YANG-TOOLS Driver type</key>
+                        <value>PrometheusToOpenmetricsTransformer</value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family name</key>
+                        <value>${mf_name}</value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family type</key>
+                        <value>${mf_type}</value>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family unit</key>
+                    </entry>
+                    <entry>
+                        <key>Prometheus Metric Family help</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>PrometheusToOpenmetricsTransformerDriver</name>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>FAILURE</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>SUCCESS</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>upm.dit.giros.processors.prometheus2openmetrics.PrometheusToOpenmetricsMetaDriver</type>
+        </processors>
+        <processors>
+            <id>c4ec30ee-4fc9-315b-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <position>
+                <x>1330.0</x>
+                <y>8.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.14.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>log-level</key>
+                        <value>
+                            <name>log-level</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                        <value>
+                            <name>log-prefix</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                        <value>
+                            <name>log-message</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>log-level</key>
+                        <value>info</value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>LogMessage</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.LogMessage</type>
+        </processors>
+        <processors>
+            <id>ce62777c-97b9-342d-0000-000000000000</id>
+            <parentGroupId>227f8d7c-8718-3bb7-0000-000000000000</parentGroupId>
+            <position>
+                <x>674.0</x>
+                <y>280.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.14.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>log-level</key>
+                        <value>
+                            <name>log-level</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                        <value>
+                            <name>log-prefix</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                        <value>
+                            <name>log-message</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>log-level</key>
+                        <value>info</value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>LogMessage</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.LogMessage</type>
+        </processors>
+    </snippet>
+    <timestamp>11/23/2021 09:11:24 UTC</timestamp>
+</template>

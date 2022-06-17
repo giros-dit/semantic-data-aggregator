@@ -1,0 +1,102 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$schemaVersion": "1.0",
+    "title": "Device",
+    "description": "Entity that represents a model-based network device",
+    "type": "object",
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "$ref": "../entity.json#/definitions/Entity"
+        },
+        {
+            "properties": {
+                "type": {
+                    "description": "NGSI-LD Entity identifier. It has to be Device",
+                    "type": "string",
+                    "enum": [
+                        "Device"
+                    ],
+                    "default": "Device"
+                },
+                "name": {
+                    "$ref": "#/definitions/Name"
+                },
+                "softwareVersion": {
+                    "$ref": "#/definitions/SoftwareVersion"
+                },
+                "vendor": {
+                    "$ref": "#/definitions/Vendor"
+                }
+            },
+            "required": [
+                "type",
+                "name",
+                "softwareVersion",
+                "vendor"
+            ]
+        }
+    ],
+    "definitions": {
+        "Name": {
+            "description": "Property. Name of the network device.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "SoftwareVersion": {
+            "description": "Property. Software version of the network device.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Vendor": {
+            "description": "Property. Vendor of the network device.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        }
+    }
+}
