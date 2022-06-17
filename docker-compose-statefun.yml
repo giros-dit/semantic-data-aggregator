@@ -3,7 +3,7 @@ services:
   app-manager:
     build:
       context: .
-      dockerfile: ./docker/app-manager/Dockerfile
+      dockerfile: ./core/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8082:8080"
     volumes:
-      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+      - ./core/app-manager/app_manager:/opt/sda/app-manager/app_manager
     depends_on:
       - nifi
       - scorpio
@@ -28,9 +28,9 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/context-catalog:/web
+      - ./core/context-catalog:/web
   eureka:
-    image: scorpiobroker/scorpio:eureka-server_2.1.1
+    image: scorpiobroker/scorpio:eureka-server_2.1.13
     hostname: eureka
     container_name: eureka
     ports:
@@ -114,7 +114,7 @@ services:
   nifi:
     build:
       context: .
-      dockerfile: ./docker/nifi/Dockerfile
+      dockerfile: ./core/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
@@ -126,13 +126,6 @@ services:
       NIFI_JVM_HEAP_MAX: 6g
     ports:
       - "8443:8443"
-      # Used by Prometheus exporter
-      - "8444:8444"
-    volumes:
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./docker/nifi/drivers/jinja-templates:/jinja-templates
-      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
-      - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
   postgres:
     image: postgis/postgis
     hostname: postgres
@@ -167,7 +160,7 @@ services:
   weaver:
     build:
       context: .
-      dockerfile: ./docker/weaver/Dockerfile
+      dockerfile: ./core/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
     environment:
@@ -181,7 +174,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
+      - ./core/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
       - nifi
       - scorpio

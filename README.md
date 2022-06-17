@@ -65,17 +65,17 @@ The SDA is composed of several microservices that are deployed as Docker contain
 
 ### Weaver
 
-The [weaver](docker/weaver) container implements the orchestration of Apache NiFi flows and Apache Flink jobs by consuming context information defined in the Context Broker.
+The [weaver](core/weaver) container implements the orchestration of Apache NiFi flows and Apache Flink jobs by consuming context information defined in the Context Broker.
 
 ### Application-Manager
 
-The [app-manager](docker/app-manager) container offers a catalog of applications that can be used in the SDA. Within the scope of the SDA, these applications are NiFi templates and Flink applications, i.e., JARs. The app-manager implements a REST API that facilitates the on-boarding of applications in the SDA. This REST API takes as input the type of application, a name, a description, and the file of the application. The app-manager gathers all this information and makes sure that the application is properly uploaded in the target runner - NiFi or Flink - and that the context associated to the application is created in the Context Broker.
+The [app-manager](core/app-manager) container offers a catalog of applications that can be used in the SDA. Within the scope of the SDA, these applications are NiFi templates and Flink applications, i.e., JARs. The app-manager implements a REST API that facilitates the on-boarding of applications in the SDA. This REST API takes as input the type of application, a name, a description, and the file of the application. The app-manager gathers all this information and makes sure that the application is properly uploaded in the target runner - NiFi or Flink - and that the context associated to the application is created in the Context Broker.
 
 The full OpenAPI specification is available [here](docs/architecture/microservices/app-manager/openapi.json).
 
 ### Context-Catalog
 
-The [context-catalog](docker/context-catalog) container provides a static web server where JSON-LD vocabularies can be uploaded. Interactions with the NGSI-LD API can link to this webserver rather than appending the JSON-LD vocabulary in the request's body.
+The [context-catalog](core/context-catalog) container provides a static web server where JSON-LD vocabularies can be uploaded. Interactions with the NGSI-LD API can link to this webserver rather than appending the JSON-LD vocabulary in the request's body.
 
 ### Source-Manager
 
@@ -97,7 +97,7 @@ Most of SDA microservices are applications based on Python. To ease management o
 
 The following guidelines are proposed to develop Python-based microservices for the SDA:
 
-1. Create folder for your application following a structure similar to [this](docker/app-manager)
+1. Create folder for your application following a structure similar to [this](core/app-manager)
 2. Start poetry project with `poetry init`
 3. Init virtual environment  with `poetry env use python3.9`. This should create a folder `.venv`.
 4. Activate virtual environment for development using `poetry shell`. Make sure venv is configured for your shell. In case this command fails, you must activate the environment manually by running `source <path to bin/activate script within venv>

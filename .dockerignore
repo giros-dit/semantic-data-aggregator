@@ -28,8 +28,7 @@ venv
 
 # SDA folders
 **/.venv
-docker/app-manager/catalog
-docker/nifi/drivers
+core/app-manager/catalog
 docker-compose*
 docs
 flink-conf

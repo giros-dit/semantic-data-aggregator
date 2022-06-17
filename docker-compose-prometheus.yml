@@ -3,7 +3,7 @@ services:
   app-manager:
     build:
       context: .
-      dockerfile: ./docker/app-manager/Dockerfile
+      dockerfile: ./core/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8082:8080"
     volumes:
-      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+      - ./core/app-manager/app_manager:/opt/sda/app-manager/app_manager
     depends_on:
       - nifi
       - scorpio
@@ -38,27 +38,13 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/context-catalog:/web
+      - ./core/context-catalog:/web
   eureka:
-    image: scorpiobroker/scorpio:eureka-server_2.1.1
+    image: scorpiobroker/scorpio:eureka-server_2.1.13
     hostname: eureka
     container_name: eureka
     ports:
       - "8761"
-  experimenter:
-    build:
-      context: .
-      dockerfile: ./docker/experimenter/Dockerfile
-    hostname: experimenter
-    container_name: experimenter
-    environment:
-      - BROKER_URI=${BROKER_URI}
-      - CONTEXT_CATALOG_URI=${CONTEXT_CATALOG_URI}
-      - EXPERIMENTER_URI=${EXPERIMENTER_URI}
-    ports:
-      - "8080"
-    volumes:
-      - ./docker/experimenter/experimenter:/opt/sda/experimenter/experimenter
   flink-jobmanager:
     image: flink:1.14.4-scala_2.12-java11
     hostname: flink-jobmanager
@@ -114,7 +100,7 @@ services:
   nifi:
     build:
       context: .
-      dockerfile: ./docker/nifi/Dockerfile
+      dockerfile: ./core/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
@@ -128,10 +114,6 @@ services:
       - "8443:8443"
       # Used by Prometheus exporter
       - "8444:8444"
-    volumes:
-      - ./gnmi/gnmic-cfgs:/gnmic-cfgs
-      - ./docker/nifi/drivers/jinja-templates:/jinja-templates
-      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
   node-exporter-1:
     image: prom/node-exporter
     hostname: node-exporter-1
@@ -182,7 +164,7 @@ services:
   weaver:
     build:
       context: .
-      dockerfile: ./docker/weaver/Dockerfile
+      dockerfile: ./core/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
     environment:
@@ -196,7 +178,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
+      - ./core/weaver/weaver:/opt/sda/weaver/weaver
     depends_on:
       - nifi
       - scorpio

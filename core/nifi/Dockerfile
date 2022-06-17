@@ -3,7 +3,7 @@ FROM apache/nifi:1.15.3
 USER root
 
 # Install gNMIc
-RUN bash -c "$(curl -sL https://get-gnmic.kmrd.dev)"
+RUN bash -c "$(curl -sL https://get-gnmic.kmrd.dev)" -- -v 0.25.1
 
 RUN apt-get --allow-releaseinfo-change update
 

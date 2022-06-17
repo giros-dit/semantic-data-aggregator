@@ -3,7 +3,7 @@ services:
   app-manager:
     build:
       context: .
-      dockerfile: ./docker/app-manager/Dockerfile
+      dockerfile: ./core/app-manager/Dockerfile
     hostname: app-manager
     container_name: app-manager
     environment:
@@ -15,7 +15,7 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - ./docker/app-manager/app_manager:/opt/sda/app-manager/app_manager
+      - ./core/app-manager/app_manager:/opt/sda/app-manager/app_manager
     depends_on:
       - flink-jobmanager
       - nifi
@@ -27,7 +27,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/context-catalog:/web
+      - ./core/context-catalog:/web
   data-lake-explorer:
     build:
       context: .
@@ -130,7 +130,7 @@ services:
   nifi:
     build:
       context: .
-      dockerfile: ./docker/nifi/Dockerfile
+      dockerfile: ./core/nifi/Dockerfile
     hostname: nifi
     container_name: nifi
     user: root
@@ -146,9 +146,6 @@ services:
       - "8444:8444"
     volumes:
       - gnmic-subscriptions:/gnmic-cfgs
-      - ./docker/nifi/drivers/jinja-templates:/jinja-templates
-      - ./docker/nifi/drivers/nars:/opt/nifi/nifi-current/extensions
-      - ./docker/nifi/drivers/yang-models:/opt/nifi/yang-models
   postgres:
     image: postgis/postgis
     hostname: postgres
@@ -254,7 +251,7 @@ services:
   weaver:
     build:
       context: .
-      dockerfile: ./docker/weaver/Dockerfile
+      dockerfile: ./core/weaver/Dockerfile
     hostname: weaver
     container_name: weaver
     environment:
@@ -271,7 +268,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/weaver/weaver:/opt/sda/weaver/weaver
+      - ./core/weaver/weaver:/opt/sda/weaver/weaver
       - gnmic-subscriptions:/gnmic-cfgs
     depends_on:
       - nifi

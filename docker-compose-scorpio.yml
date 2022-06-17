@@ -17,9 +17,9 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/context-catalog:/web
+      - ./core/context-catalog:/web
   eureka:
-    image: scorpiobroker/scorpio:eureka-server_2.1.1
+    image: scorpiobroker/scorpio:eureka-server_2.1.13
     hostname: eureka
     container_name: eureka
     ports:
