@@ -54,6 +54,7 @@ import org.opendaylight.yangtools.yang.model.api.AugmentationSchemaNode;
 import org.opendaylight.yangtools.yang.model.api.ContainerSchemaNode;
 import org.opendaylight.yangtools.yang.model.api.DataSchemaNode;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
+import org.opendaylight.yangtools.yang.model.api.LeafSchemaNode;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.Interfaces;
 import org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.interfaces.top.interfaces.Interface;
@@ -71,7 +72,7 @@ import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.openconfig.inter
  */
 public class GnmiConsumerDriver {
 
-	private static String instance_name;
+	private static String yang_instance_name;
 
 	public static void main(String[] args) throws Exception {
 		
@@ -82,8 +83,8 @@ public class GnmiConsumerDriver {
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
-		// Set instance data name
-		instance_name = args[3];
+		// Set YANG instance data name
+		yang_instance_name = args[3];
 		
 		// set up the streaming execution environment
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -93,19 +94,8 @@ public class GnmiConsumerDriver {
 
 		DataStream<String> stringInputStream = env.addSource(consumer);
 
-		DataStream<String> json_ietf = stringInputStream.map(new MapFunction<String, String>(){
-			@Override
-		    public String map(String json) throws Exception{
-				try {                    
-                    JsonReader gnmi_event = new JsonReader(new StringReader(json));
-                    json = driver(gnmi_event, json);
-				} catch (JsonParseException | NullPointerException e) {
-					e.printStackTrace();
-					json = "";
-				}
-				return json;
-		    }
-		}).filter(new FilterFunction<String>() {
+		DataStream<String> json_ietf = stringInputStream.map(new ConsumerDriverMapper(yang_instance_name))
+		.filter(new FilterFunction<String>() {
 			// make sure only valid json values are written into the topic
 			@Override
 			public boolean filter(String value) throws Exception {
@@ -162,7 +152,7 @@ public class GnmiConsumerDriver {
         }
     }
 
-	public static String driver(JsonReader reader, String json) throws Exception {
+	private static String driver(JsonReader reader, String json, String instance_data_name) throws Exception {
 		Interfaces interfaces_kpis = null;
 		try{
             NormalizedNodeResult result = new NormalizedNodeResult();
@@ -191,8 +181,10 @@ public class GnmiConsumerDriver {
 		Iterator augmentation;
 		Iterator container;
 		Iterator nodes;
+		Iterator data;
 		AugmentationSchemaNode augmentationSchemaNode;
 		ContainerSchemaNode kpi = null;
+		LeafSchemaNode leaf = null;
         Map<String, String> container_description_map = new HashMap<String, String>();
         while(modules.hasNext()){
             org.opendaylight.yangtools.yang.model.api.Module module = (org.opendaylight.yangtools.yang.model.api.Module) modules.next();
@@ -209,7 +201,14 @@ public class GnmiConsumerDriver {
 							DataSchemaNode dataSchemaNode = (DataSchemaNode) nodes.next();
 							if(dataSchemaNode instanceof ContainerSchemaNode){
 								kpi = (ContainerSchemaNode) dataSchemaNode;
-								container_description_map.put(kpi.getQName().getLocalName(), kpi.getDescription().get());
+								data = kpi.getChildNodes().iterator();
+								while(data.hasNext()){
+									DataSchemaNode leafSchemaNode = (DataSchemaNode) data.next();
+									if(leafSchemaNode instanceof LeafSchemaNode){
+										leaf = (LeafSchemaNode) leafSchemaNode;
+										container_description_map.put(leaf.getQName().getLocalName(), leaf.getDescription().get());
+									}
+								}
 							}
 						}
 					}
@@ -235,17 +234,33 @@ public class GnmiConsumerDriver {
 		for (Map.Entry<InterfaceKey, Interface> interface_entry: interfaces_kpis.getInterface().entrySet()) {
 			Interface1 iface = (Interface1) interface_entry.getValue().augmentations().values().iterator().next();
 			if(iface.getPacketLossKpiNotification() != null){
-				instanceDataSetBuilder.setName(instance_name);
+				instanceDataSetBuilder.setName(instance_data_name);
 				instanceDataSetBuilder.setTimestamp(iface.getPacketLossKpiNotification().getEventTime());
 				List<String> desc = new ArrayList<String>();
-				desc.add(container_description_map.get("packet-loss-kpi"));
+				for(Map.Entry<String, String> entry: container_description_map.entrySet()){
+					if(entry.getKey().equals("packet-loss-in")){
+						desc.add(entry.getValue());
+					}else{
+						if(entry.getKey().equals("packet-loss-out")){
+							desc.add(entry.getValue());
+						}
+					}
+				}
 				instanceDataSetBuilder.setDescription(desc);
 			} else {
 				if(iface.getThroughputKpiNotification() != null){
-					instanceDataSetBuilder.setName(instance_name);
+					instanceDataSetBuilder.setName(instance_data_name);
 					instanceDataSetBuilder.setTimestamp(iface.getThroughputKpiNotification().getEventTime());
 					List<String> desc = new ArrayList<String>();
-					desc.add(container_description_map.get("throughput-kpi"));
+					for(Map.Entry<String, String> entry: container_description_map.entrySet()){
+						if(entry.getKey().equals("throughput-in")){
+							desc.add(entry.getValue());
+						}else{
+							if(entry.getKey().equals("throughput-out")){
+								desc.add(entry.getValue());
+							}
+						}
+					}
 					instanceDataSetBuilder.setDescription(desc);
 				}
 			}
@@ -296,5 +311,27 @@ public class GnmiConsumerDriver {
 		Gson json_format = new GsonBuilder().setPrettyPrinting().create();
 
         return  json_format.toJson(instance_data);
+	}
+
+	private static class ConsumerDriverMapper implements MapFunction<String, String>{
+
+		private String instance_data_name;
+
+		ConsumerDriverMapper(String instance_data_name){
+			this.instance_data_name = instance_data_name;
+		}
+
+		@Override
+		public String map(String json) throws Exception {
+			try {                    
+				JsonReader gnmi_event = new JsonReader(new StringReader(json));
+				json = driver(gnmi_event, json, instance_data_name);
+			} catch (JsonParseException | NullPointerException e) {
+				e.printStackTrace();
+				json = "";
+			}
+			return json;
+		}
+
 	}
 }

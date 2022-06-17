@@ -61,7 +61,7 @@ public class GnmiAggregatorThroughput {
 		//Produce data stream on the Kafka output topic
 		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>(args[2], new SimpleStringSchema(), props);
 
-		//Set interval duration
+		//Set interval duration to ms unit
 		duration = String.valueOf(Integer.parseInt(args[3])/1000);
 
 		DataStreamSource<String> dss  = env.addSource((SourceFunction<String>) consumer);
