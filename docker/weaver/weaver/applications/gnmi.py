@@ -64,6 +64,9 @@ def config_nifi_gnmic_source(
         subscription["paths"] = gnmi_collector.paths.value
     else:
         subscription["paths"] = [gnmi_collector.paths.value]
+    if gnmi_collector.allow_aggregation:
+        subscription[
+            "allow-aggregation"] = gnmi_collector.allow_aggregation.value
     if gnmi_collector.encoding:
         subscription["encoding"] = gnmi_collector.encoding.value.value
     if gnmi_collector.heartbeat_interval:
