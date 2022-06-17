@@ -1,6 +1,10 @@
 # Semantic Data Aggregator
 
-Docker-based prototype that deploys the `Semantic Data Aggregator` (`SDA`).
+Docker-based prototype that deploys the `Semantic Data Aggregator (SDA)`.
+
+> **IMPORTANT NOTE:**
+>
+> In 5G-CLARITY project this work is known as the `Data Semantics Fabric (DSF)`.
 
 The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by [`Kafka`](https://kafka.apache.org/). These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
 
