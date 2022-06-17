@@ -184,7 +184,7 @@ services:
       vm1r1:
         ipv4_address: 10.0.10.11
     volumes:
-      - ./docker/ceos-arista/r1/startup-config.cfg:/mnt/flash/startup-config
+      - ./sources/telemetry/ceos-arista/r1/startup-config.cfg:/mnt/flash/startup-config
   r2:
     image: "ceos-image:4.27.4M"
     hostname: r2
@@ -211,7 +211,7 @@ services:
       vm2r2:
         ipv4_address: 10.0.20.12
     volumes:
-      - ./docker/ceos-arista/r2/startup-config.cfg:/mnt/flash/startup-config
+      - ./sources/telemetry/ceos-arista/r2/startup-config.cfg:/mnt/flash/startup-config
   redis:
     image: bitnami/redis:latest
     hostname: redis
@@ -234,7 +234,7 @@ services:
   telemetry-explorer:
     build:
       context: .
-      dockerfile: ./docker/telemetry-explorer/Dockerfile
+      dockerfile: ./sources/telemetry/telemetry-explorer/Dockerfile
     hostname: telemetry-explorer
     container_name: telemetry-explorer
     environment:
@@ -245,7 +245,7 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./docker/telemetry-explorer/telemetry_explorer:/opt/sda/telemetry-explorer/telemetry_explorer
+      - ./sources/telemetry/telemetry-explorer/telemetry_explorer:/opt/sda/telemetry-explorer/telemetry_explorer
     depends_on:
       - scorpio
   weaver:
