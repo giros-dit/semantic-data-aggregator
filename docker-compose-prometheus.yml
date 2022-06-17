@@ -24,13 +24,13 @@ services:
   consumer:
     build:
       context: .
-      dockerfile: ./docker/consumer/Dockerfile
+      dockerfile: ./consumers/dummy-http/Dockerfile
     hostname: consumer
     container_name: consumer
     ports:
       - "8080"
     volumes:
-      - ./docker/consumer/consumer:/opt/sda/consumer/consumer
+      - ./consumers/dummy-http/consumer:/opt/sda/consumer/consumer
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
@@ -149,7 +149,7 @@ services:
     ports:
       - "9099:9090"
     volumes:
-      - ./docker/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./sources/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
     image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio

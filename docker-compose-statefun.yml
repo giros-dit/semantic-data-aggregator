@@ -38,7 +38,7 @@ services:
   event-generator: # reading and writting in kafka topic randomly used as
   # an example of producer and consumer for the python-worker statefun app
     build:
-      context: ./docker/statefun-apps/generator/
+      context: ./aggregators/statefun-apps/generator/
       dockerfile: ./Dockerfile
     hostname: statefun-eventGenerator
     container_name: statefun-eventGenerator
@@ -98,7 +98,7 @@ services:
       driver: none
   master: # for FLINK-STATEFUN master
     build:
-      context: ./docker/statefun-apps
+      context: ./aggregators/statefun-apps
       dockerfile: ./Dockerfile
     hostname: statefun-master
     container_name: statefun-master
@@ -140,7 +140,7 @@ services:
       driver: none
   python-worker: # FLINK-STATEFUN aggregator application
     build:
-      context: ./docker/statefun-apps/aggregator
+      context: ./aggregators/statefun-apps/aggregator
       dockerfile: ./Dockerfile
     hostname: statefun-pythonApp
     container_name: statefun-pythonApp
@@ -180,7 +180,7 @@ services:
       - scorpio
   worker: # for FLINK-STATEFUN worker
     build:
-      context: ./docker/statefun-apps
+      context: ./aggregators/statefun-apps
       dockerfile: ./Dockerfile
     hostname: statefun-worker
     container_name: statefun-worker

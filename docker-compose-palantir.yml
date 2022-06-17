@@ -70,7 +70,7 @@ services:
       - eureka
   goflow2:
     build:
-       context: ./docker/goflow2-collector
+       context: ./sources/netflow/goflow2-collector
        dockerfile: Dockerfile
     hostname: goflow2
     container_name: goflow2
