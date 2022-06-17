@@ -22,15 +22,29 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
         6. [Experimenter](#experimenter)
     2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
 
-2. [Scenarios](#scenarios)
-    1. [All-in-one scenario](#all-in-one-scenario)
-    2. [Data Source specific scenarios](#data-source-specific-scenarios)
-        1. [Prometheus](#prometheus-based-data-sources)
-        2. [gNMI](#gNMI-based-data-sources-(Arista-cEOS))
-        3. [Kafka](#kafka-based-data-sources)
-3. [SDA Orchestration](#sda-orchestration)
-4. [Stream processing aplications management](#stream-processing-aplications-management)
-5. [Postman collections](#postman-collections)
+- [Semantic Data Aggregator](#semantic-data-aggregator)
+- [Table of Contents](#table-of-contents)
+- [Prototype](#prototype)
+  - [Requirements](#requirements)
+  - [Microservices](#microservices)
+    - [Weaver](#weaver)
+    - [Application-Manager](#application-manager)
+    - [Context-Catalog](#context-catalog)
+    - [Source-Manager](#source-manager)
+    - [Complex-Publisher](#complex-publisher)
+    - [Experimenter](#experimenter)
+  - [Developing microservices using Poetry](#developing-microservices-using-poetry)
+- [Scenarios](#scenarios)
+  - [All-in-one Scenario](#all-in-one-scenario)
+  - [Data Source Specific Scenarios](#data-source-specific-scenarios)
+    - [Prometheus-based Data Sources](#prometheus-based-data-sources)
+    - [gNMI-based Data Sources (Arista cEOS)](#gnmi-based-data-sources-arista-ceos)
+    - [Kafka-based Data Sources](#kafka-based-data-sources)
+- [SDA Orchestration](#sda-orchestration)
+- [Stream Processing Aplications Management](#stream-processing-aplications-management)
+- [Postman Collections](#postman-collections)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
 # Prototype
 
@@ -210,6 +224,18 @@ This repository contains Postman collections that you can use to play with the R
 - [`Flink REST API`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
 
 - [`YANG Catalog REST API`](postman_collections/yangcatalog.postman_collection.json) provides a collection of sample requests for interacting with the REST API of [YANG Catalog](https://yangcatalog.org). For more details, visit [Contribute to YANG Catalog](https://yangcatalog.org/contribute.html) webpage.
+
+# Acknowledgements
+
+[![eu-comission](docs/logos/european-comission-h2020.png)](https://ec.europa.eu/info/research-and-innovation/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-2020_en)
+
+This work has been funded by the European Union’s Research and Innovation Programme Horizon 2020 under the following Grant Agreements:
+
+
+
+[5GROWTH](https://5growth.eu)<br />(No. 856709) | [5G-CLARITY](https://www.5gclarity.com)<br />(No. 871428) | [PALANTIR](https://www.palantir-project.eu)<br />(No. 883335)
+:-------------------------:|:-------------------------:|:-------------------------:
+[![](docs/logos/5growth.png)](https://5growth.eu) | [![](docs/logos/5g-clarity.png)](https://www.5gclarity.com) | [![](docs/logos/palantir.png)](https://www.palantir-project.eu)
 
 # License
 
