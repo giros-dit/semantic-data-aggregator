@@ -1,0 +1,21 @@
+[ {
+    "metric" : {
+      "__name__" : "linklatency",
+      "exported_instance" : "5growth_probe_efacec_e",
+      "exported_job" : "gsmart",
+      "host" : "192.168.13.16",
+      "instance" : "pushgateway:9091",
+      "job" : "pushgateway"
+    },
+    "value" : [ 1.63742661219E9, "18" ]
+  }, {
+    "metric" : {
+      "__name__" : "linklatency",
+      "exported_instance" : "5growth_probe_efacec_e_UC2",
+      "exported_job" : "lvs3",
+      "host" : "192.168.13.17",
+      "instance" : "pushgateway:9091",
+      "job" : "pushgateway"
+    },
+    "value" : [ 1.63742661219E9, "4006.5" ]
+  } ]

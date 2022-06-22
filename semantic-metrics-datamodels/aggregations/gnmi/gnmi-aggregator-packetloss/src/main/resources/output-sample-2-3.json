@@ -1,0 +1,17 @@
+{
+    "openconfig-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "Ethernet1",
+                "openconfig-interfaces-kpis:packet-loss-kpi-notification": {
+                    "event-time": "2022-06-14T23:36:24Z",
+                    "packet-loss-kpi": {
+                        "duration": 10,
+                        "packet-loss-in": "25.0",
+                        "packet-loss-out": "40.0"
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,109 @@
+module netflow-v9-agg {
+
+  yang-version 1.1;
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace 'http://data-aggregator.com/ns/netflow-aggregated';
+
+  prefix "net-v9-agg";
+
+  /*** LINKAGE (IMPORTS / INCLUDES / AUGMENTATIONS) ***/
+  import netflow-v9 {
+    prefix net-v9;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      reference
+          "RFC 6991: Common YANG Data Types";
+  }
+
+
+  /*** META INFORMATION ***/
+
+  organization "Telefonica I+D";
+
+  contact "alejandro.moreno.practicas@telefonica.com";
+
+  description
+      "YANG model that aggregates some of the information collected in a Netflow version 9 export packet";
+
+  reference
+      "NetSampler, GoFlow2, (2021), GitHub repository, https://github.com/netsampler/goflow2.
+       Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011), https://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9.html";
+
+  revision "2022-03-02" {
+      description
+          "Initial revision.";
+      reference "0.1.0";
+  }
+
+
+  /*** TYPE DEFINITIONS ***/
+  typedef per-decimal {
+    type decimal64 {
+      fraction-digits 5;
+      range "0.00000 .. max";
+    }
+    description
+      "Decimal value used to describe all values that have a rate: (per-packet), (per-second)";
+  }
+
+
+  /*** DATA NODES ***/
+  augment
+    "/net-v9:netflow/net-v9:export-packet/net-v9:flow-data-record" {
+
+      leaf flow-duration {
+          type yang:timestamp;
+          units "milliseconds";
+          description
+            "Duration of the flow. Difference between last-switched and first-switched leafs";
+      }
+
+      leaf bytes-in-per-second {
+          type per-decimal;
+          units "bytes";
+          description
+              "Incoming counter for the number of bytes per second associated with an IP flow.";
+      }
+
+      leaf bytes-out-per-second {
+          type per-decimal;
+          units "bytes";
+          description
+              "Outgoing counter for the number of bytes per second associated with an IP flow.";
+      }
+
+      leaf pkts-in-per-second {
+          type per-decimal;
+          units "packets";
+          description
+              "Incoming counter for the number of packets per second associated with an IP flow.";
+      }
+
+      leaf pkts-out-per-second {
+          type per-decimal;
+          units "packets";
+          description
+              "Outgoing counter for the number of packets per second associated with an IP flow.";
+      }
+
+      leaf bytes-in-per-packet {
+          type per-decimal;
+          units "bytes";
+          description
+            "Incoming counter for the number of bytes per packet associated with an IP flow.";
+      }
+
+      leaf bytes-out-per-packet {
+          type per-decimal;
+          units "bytes";
+          description
+            "Outgoing counter for the number of bytes per packet associated with an IP flow.";
+      }
+
+  }
+
+}

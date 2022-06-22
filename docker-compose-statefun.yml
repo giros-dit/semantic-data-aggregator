@@ -70,7 +70,7 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
   gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.13
     hostname: gateway
     container_name: gateway
     ports:
@@ -107,7 +107,7 @@ services:
     ports:
       - "8088:8088"
     environment:
-      - ROLE=master   
+      - ROLE=master
       - MASTER_HOST=master
     volumes:
       - ./checkpoint-dir/master:/checkpoint-dir
@@ -154,7 +154,7 @@ services:
     expose:
       - "8060"
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
+    image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio
     container_name: scorpio
     ports:

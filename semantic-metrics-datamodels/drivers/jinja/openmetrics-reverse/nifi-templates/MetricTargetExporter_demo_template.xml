@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<template encoding-version="1.3">
+    <description></description>
+    <groupId>2e4ee0b5-017d-1000-b440-e06135424684</groupId>
+    <name>MetricTargetExporter_demo_template.xml</name>
+    <snippet>
+        <connections>
+            <id>67215c45-c751-3f39-0000-000000000000</id>
+            <parentGroupId>c9892433-7796-317a-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>c9892433-7796-317a-0000-000000000000</groupId>
+                <id>03ee6467-59f0-3d9c-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>failure</selectedRelationships>
+            <selectedRelationships>json_failure</selectedRelationships>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>c9892433-7796-317a-0000-000000000000</groupId>
+                <id>913157ff-70b2-3378-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>edd88193-972c-35f0-0000-000000000000</id>
+            <parentGroupId>c9892433-7796-317a-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>c9892433-7796-317a-0000-000000000000</groupId>
+                <id>913157ff-70b2-3378-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>c9892433-7796-317a-0000-000000000000</groupId>
+                <id>711c8f4a-ecdd-320f-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <processors>
+            <id>03ee6467-59f0-3d9c-0000-000000000000</id>
+            <parentGroupId>c9892433-7796-317a-0000-000000000000</parentGroupId>
+            <position>
+                <x>1456.0</x>
+                <y>0.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.14.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>log-level</key>
+                        <value>
+                            <name>log-level</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                        <value>
+                            <name>log-prefix</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                        <value>
+                            <name>log-message</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>log-level</key>
+                        <value>info</value>
+                    </entry>
+                    <entry>
+                        <key>log-prefix</key>
+                    </entry>
+                    <entry>
+                        <key>log-message</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>LogMessage</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.LogMessage</type>
+        </processors>
+        <processors>
+            <id>711c8f4a-ecdd-320f-0000-000000000000</id>
+            <parentGroupId>c9892433-7796-317a-0000-000000000000</parentGroupId>
+            <position>
+                <x>0.0</x>
+                <y>16.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.14.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>File Size</key>
+                        <value>
+                            <name>File Size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Batch Size</key>
+                        <value>
+                            <name>Batch Size</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Data Format</key>
+                        <value>
+                            <name>Data Format</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Unique FlowFiles</key>
+                        <value>
+                            <name>Unique FlowFiles</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>generate-ff-custom-text</key>
+                        <value>
+                            <name>generate-ff-custom-text</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>character-set</key>
+                        <value>
+                            <name>character-set</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>mime-type</key>
+                        <value>
+                            <name>mime-type</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>File Size</key>
+                        <value>0B</value>
+                    </entry>
+                    <entry>
+                        <key>Batch Size</key>
+                        <value>1</value>
+                    </entry>
+                    <entry>
+                        <key>Data Format</key>
+                        <value>Text</value>
+                    </entry>
+                    <entry>
+                        <key>Unique FlowFiles</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>generate-ff-custom-text</key>
+                        <value>{
+  "openmetrics:metric-families": {
+    "metric-family": [
+      {
+        "name": "my_first_custom_metric",
+        "help": "an awesome description",
+        "metric-type": "gauge",
+        "unit": "celsius",
+        "metrics": {
+          "metric": [
+            {
+              "label-set-id": "292a2efc9f4fb54d086d5cc45cc78801",
+              "name": "my_first_custom_metric",
+              "labels": {
+                "label": [
+                  {
+                    "name": "code",
+                    "value": "200"
+                  },
+                  {
+                    "name": "handler",
+                    "value": "/api/v1/query"
+                  }
+                ]
+              },
+              "metric-points": {
+                "value": "${random():mod(10):plus(1)}",
+                "timestamp": "${now():toNumber()}"
+              }
+            },
+            {
+              "label-set-id": "383986c754e312f4525eceadd7e3f68e",
+              "name": "my_first_custom_metric",
+              "labels": {
+                "label": [
+                  {
+                    "name": "code",
+                    "value": "200"
+                  },
+                  {
+                    "name": "handler",
+                    "value": "/metrics"
+                  }
+                ]
+              },
+              "metric-points": {
+                "value": "${random():mod(10):plus(1)}",
+                "timestamp": "${now():toNumber()}"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "my_second_custom_metric",
+        "help": "an even more awesome description",
+        "metric-type": "gauge",
+        "metrics": {
+          "metric": [
+            {
+              "label-set-id": "292a2efc9f4fb54d086d5dd45cc78801",
+              "name": "my_second_custom_metric",
+              "labels": {
+                "label": [
+                  {
+                    "name": "identifier",
+                    "value": "vnf-1"
+                  }
+                ]
+              },
+              "metric-points": {
+                "value": "${random():mod(10):plus(1)}",
+                "timestamp": "${now():toNumber()}"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}</value>
+                    </entry>
+                    <entry>
+                        <key>character-set</key>
+                        <value>UTF-8</value>
+                    </entry>
+                    <entry>
+                        <key>mime-type</key>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>30 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>GenerateOpenMetricsJsonData</name>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.GenerateFlowFile</type>
+        </processors>
+        <processors>
+            <id>913157ff-70b2-3378-0000-000000000000</id>
+            <parentGroupId>c9892433-7796-317a-0000-000000000000</parentGroupId>
+            <position>
+                <x>727.0</x>
+                <y>81.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-jsontojinja-nar</artifact>
+                <group>upm.dit.giros</group>
+                <version>1.0</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>Resources Path</key>
+                        <value>
+                            <name>Resources Path</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Template Path</key>
+                        <value>
+                            <name>Template Path</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>Resources Path</key>
+                    </entry>
+                    <entry>
+                        <key>Template Path</key>
+                        <value>/tmp/openmetrics-template.j2</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>EncodeToPrometheusTextFormat</name>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>json_failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>upm.dit.giros.processors.jsontojinja.JsonToJinja</type>
+        </processors>
+    </snippet>
+    <timestamp>11/17/2021 14:36:57 UTC</timestamp>
+</template>

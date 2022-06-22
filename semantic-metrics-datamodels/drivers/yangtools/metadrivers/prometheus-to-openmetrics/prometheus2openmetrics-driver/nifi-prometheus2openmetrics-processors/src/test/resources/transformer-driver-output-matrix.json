@@ -1,0 +1,80 @@
+{
+    "openmetrics:metric-families": {
+        "metric-family": [
+            {
+                "help": "up",
+                "metric-type": "gauge",
+                "metrics": {
+                    "metric": [
+                        {
+                            "label-set-id": "-181020729",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "prometheus"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "localhost:9090"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "metric-point": [
+                                    {
+                                        "timestamp": "1435781430781",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "timestamp": "1435781445781",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "timestamp": "1435781460781",
+                                        "value": "1"
+                                    }
+                                ]
+                            },
+                            "name": "up"
+                        },
+                        {
+                            "label-set-id": "-885523918",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "node"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "localhost:9091"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "metric-point": [
+                                    {
+                                        "timestamp": "1435781430781",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "timestamp": "1435781445781",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "timestamp": "1435781460781",
+                                        "value": "1"
+                                    }
+                                ]
+                            },
+                            "name": "up"
+                        }
+                    ]
+                },
+                "name": "up",
+                "unit": " "
+            }
+        ]
+    }
+}

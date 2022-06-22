@@ -1,0 +1,17 @@
+{
+    "openconfig-interfaces-notification-wrapper:notification": {
+        "event-time": "2021-06-20T18:08:20Z",
+        "interfaces": {
+            "interface": [
+                {
+                    "name": "Ethernet1",
+                    "state": {
+                        "counters": {
+                            "in-octets": "3104"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

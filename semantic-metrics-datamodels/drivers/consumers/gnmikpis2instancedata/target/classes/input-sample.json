@@ -1,0 +1,17 @@
+{
+    "openconfig-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "Ethernet1",
+                "openconfig-interfaces-kpis:throughput-kpi-notification": {
+                    "event-time": "2022-06-03T13:41:45Z",
+                    "throughput-kpi": {
+                        "duration": 10,
+                        "throughput-in": "160.0",
+                        "throughput-out": "9.0"
+                    }
+                }
+            }
+        ]
+    }
+}

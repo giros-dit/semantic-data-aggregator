@@ -1,0 +1,31 @@
+{
+    "ietf-yang-instance-data:instance-data-set": {
+      "timestamp": "2022-06-03T13:41:45Z",
+      "description": [
+        "The effective data rate calculated as the number of bits per unit of time sent through a specific network device interface."
+      ],
+      "name": "throughput-kpi",
+      "content-schema": {
+        "module": [
+          "openconfig-interfaces-kpis@2022-05-13"
+        ]
+      },
+      "content-data": {
+        "openconfig-interfaces:interfaces": {
+          "interface": [
+            {
+              "name": "Ethernet1",
+              "openconfig-interfaces-kpis:throughput-kpi-notification": {
+                "event-time": "2022-06-03T13:41:45Z",
+                "throughput-kpi": {
+                  "duration": 10,
+                  "throughput-in": "160.0",
+                  "throughput-out": "9.0"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }

@@ -1,0 +1,99 @@
+module gnmic {
+
+    yang-version 1.1;
+    namespace 'http://data-aggregator.com/ns/gnmic';
+    prefix "gnmic";
+
+    organization "GIROS research group";
+
+    contact "gi.giros@upm.es";
+
+    description
+        "YANG module to represent the event output format for telemetry data collected from a gNMI client (i.e., gNMIc) through Subscribe RPC.";
+
+    reference
+        "https://gnmic.kmrd.dev/user_guide/outputs/output_intro/";
+
+    revision 2021-07-19 {
+        description
+            "Minor revision. Updated field nomenclature and descriptions.";
+        reference "0.2.0";
+    }
+
+    revision 2021-06-20 {
+        description
+            "Initial revision.";
+        reference "0.1.0";
+    }
+
+    grouping value-set {
+        description
+            "The values of the event's sample.";
+        container values {
+            description
+                "Enclosing container for the list of values
+                associated with an event.";
+            list value {
+                key "name";
+                description
+                    "A name-value pair.";
+                leaf name {
+                    type string;
+                    description
+                        "Key of the value.";
+                }
+                leaf value {
+                    type string;
+                    mandatory true;
+                    description
+                        "Value of the value's key.";
+                }
+            }
+        }
+    }
+
+    grouping tag-set {
+        description
+            "Tags associated with an event.";
+        container tags {
+            description
+                "Enclosing container for the list of tags
+                associated with an event.";
+            list tag {
+                key "name";
+                description
+                    "A name-value pair.";
+                leaf name {
+                    type string;
+                    description
+                        "Key of the tag.";
+                }
+                leaf value {
+                    type string;
+                    mandatory true;
+                    description
+                        "Value of the tag's key.";
+                }
+            }
+        }
+    }
+
+    container gnmic-event {
+        description
+          "Enclosing container for a sample of telemetry data in event format collected by the gNMIc client through Subscribe RPC.";
+        leaf name {
+            type string;
+			mandatory true;
+            description
+                "Name of the gNMI subscription.";
+        }
+        leaf timestamp {
+            type int64;
+			mandatory true;
+            description
+                "The measurement timestamp of the event's sample.";
+        }
+		uses value-set;
+        uses tag-set;
+	}
+}

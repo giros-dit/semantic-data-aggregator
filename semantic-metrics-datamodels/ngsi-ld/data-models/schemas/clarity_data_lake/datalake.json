@@ -1,0 +1,106 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$schemaVersion": "1.0",
+    "title": "DataLake",
+    "description": "Entity that represents a 5G-CLARITY's DataLake platform.",
+    "type": "object",
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "$ref": "../entity.json#/definitions/Entity"
+        },
+        {
+            "properties": {
+                "type": {
+                    "description": "NGSI-LD Entity identifier. It has to be DataLake",
+                    "type": "string",
+                    "enum": [
+                        "DataLake"
+                    ],
+                    "default": "DataLake"
+                },
+                "apiKey": {
+                    "$ref": "#/definitions/ApiKey"
+                },
+                "region": {
+                    "$ref": "#/definitions/Region"
+                },
+                "uri": {
+                    "$ref": "#/definitions/Uri"
+                }
+            },
+            "required": [
+                "type",
+                "apiKey",
+                "region",
+                "uri"
+            ]
+        }
+    ],
+    "definitions": {
+        "ApiKey": {
+            "description": "Property. AWS ApiKey credentials.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Region": {
+            "description": "Property. AWS region. Thus far, only supported region is 'eu-west-2'.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "enum": [
+                                "eu-west-2"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Uri": {
+            "description": "Property. DataLake API Gateway URI.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        }
+    }
+}

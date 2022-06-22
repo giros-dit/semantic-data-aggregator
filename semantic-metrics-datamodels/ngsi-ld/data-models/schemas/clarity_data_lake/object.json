@@ -1,0 +1,202 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$schemaVersion": "1.0",
+    "title": "Object",
+    "description": "Entity that represents an object stored in 5G-CLARITY's DataLake platform.",
+    "type": "object",
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "$ref": "../entity.json#/definitions/Entity"
+        },
+        {
+            "properties": {
+                "type": {
+                    "description": "NGSI-LD Entity identifier. It has to be Object",
+                    "type": "string",
+                    "enum": [
+                        "Object"
+                    ],
+                    "default": "Object"
+                },
+                "containedIn": {
+                    "$ref": "#/definitions/ContainedIn"
+                },
+                "eTag": {
+                    "$ref": "#/definitions/ETag"
+                },
+                "key": {
+                    "$ref": "#/definitions/Key"
+                },
+                "lastModified": {
+                    "$ref": "#/definitions/LastModified"
+                },
+                "ownedBy": {
+                    "$ref": "#/definitions/OwnedBy"
+                },
+                "size": {
+                    "$ref": "#/definitions/Size"
+                },
+                "storageClass": {
+                    "$ref": "#/definitions/StorageClass"
+                }
+            },
+            "required": [
+                "type",
+                "containedIn",
+                "eTag",
+                "key",
+                "lastModified",
+                "ownedBy",
+                "size",
+                "storageClass"
+            ]
+        }
+    ],
+    "definitions": {
+        "ContainedIn": {
+            "description": "Relationship. AWS S3 bucket which the object is contained in.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Relationship"
+                },
+                {
+                    "properties": {
+                        "object": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "object"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "ETag": {
+            "description": "Property. AWS eTag identifier of the object.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Key": {
+            "description": "Property. AWS key identifier of the object.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "LastModified": {
+            "description": "Property. Last modification date of the object.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "$ref": "../entity.json#/definitions/DateTime"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "OwnedBy": {
+            "description": "Relationship. AWS S3 owner by whom the object is owned.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Relationship"
+                },
+                {
+                    "properties": {
+                        "object": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "object"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Size": {
+            "description": "Property. Size of the object.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "StorageClass": {
+            "description": "Property. AWS S3 storage class of the object.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "enum": [
+                                "STANDARD"
+                            ],
+                            "default": "STANDARD"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        }
+    }
+}

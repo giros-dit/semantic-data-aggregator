@@ -83,9 +83,9 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: flink-jobmanager
-        taskmanager.numberOfTaskSlots: 2  
+        taskmanager.numberOfTaskSlots: 2
   gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.13
     hostname: gateway
     container_name: gateway
     ports:
@@ -169,7 +169,7 @@ services:
     volumes:
       - ./docker/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
+    image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio
     container_name: scorpio
     ports:

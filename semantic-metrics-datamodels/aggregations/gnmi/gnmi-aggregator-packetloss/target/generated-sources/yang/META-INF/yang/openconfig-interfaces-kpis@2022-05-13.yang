@@ -1,0 +1,150 @@
+module openconfig-interfaces-kpis {
+
+  yang-version 1.1;
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace 'http://data-aggregator.com/ns/openconfig-interfaces-aggregated';
+
+  prefix "oc-if-kpis";
+
+  /*** LINKAGE (IMPORTS / INCLUDES / AUGMENTATIONS) ***/
+  import openconfig-interfaces {
+    prefix oc-if;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      reference
+          "RFC 6991: Common YANG Data Types";
+  }
+
+
+  /*** META INFORMATION ***/
+
+  organization "GIROS research group";
+
+  contact "gi.giros@upm.es";
+
+  description
+      "YANG model that describes some derived KPIs calculated from the operational state data at the global interface 
+      level provided from the openconfig-interfaces module.";
+
+  
+  revision "2022-05-13" {
+      description
+          "Initial revision.";
+      reference "0.1.0";
+  }
+
+
+  /*** TYPE DEFINITIONS ***/
+  typedef per-decimal {
+    type decimal64 {
+      fraction-digits 5;
+      range "0.00000 .. max";
+    }
+    description
+      "Decimal value used to describe all values that have a rate.";
+  }
+
+
+  /*** DATA NODES ***/
+  augment
+    "/oc-if:interfaces/oc-if:interface" {
+
+      container throughput-kpi-notification {
+
+        config false;
+
+        description
+          "Enclosing container for the notification event generated about the Throughput KPI.";
+
+        leaf event-time {
+          type yang:date-and-time;
+          units true;
+          description
+            "Date and time in which the notification event generated (following the ISO 8601 format).";
+        }
+
+        container throughput-kpi {
+
+          config false;
+
+          description
+            "Enclosing container for the Throughput KPI metadata.";
+
+          leaf throughput-in {
+            type per-decimal;
+            units "bit/s";
+            description
+              "The effective input data rate calculated as the number of bits per unit of time sent through a specific network device interface.";
+          }
+
+          leaf throughput-out {
+            type per-decimal;
+            units "bit/s";
+            description
+              "The effective output data rate calculated as the number of bits per unit of time sent through a specific network device interface.";
+          }
+
+          leaf duration {
+            type yang:timestamp;
+            units "seconds";
+            description
+              "Interval of the measurement to compute the KPI.";
+          }
+        
+        }
+      
+      }
+
+      container packet-loss-kpi-notification {
+
+        config false;
+        
+        description
+          "Enclosing container for the notification event generated about the Packet Loss KPI.";
+        
+        leaf event-time {
+          type yang:date-and-time;
+          units true;
+          description
+            "Date and time in which the notification event generated (following the ISO 8601 format).";
+        }
+
+        container packet-loss-kpi {
+
+          config false;
+
+          description
+            "Enclosing container for the Packet Loss KPI metadata.";
+
+          leaf packet-loss-in {
+            type per-decimal;
+            units "packets";
+            description
+              "The percentage of input packets that fail to reach their destination in a period of time, measured across the interfaces of network devices.";
+          }
+
+          leaf packet-loss-out {
+            type per-decimal;
+            units "packets";
+            description
+              "The percentage of output packets that fail to reach their destination in a period of time, measured across the interfaces of network devices.";
+          }
+
+          leaf duration {
+            type yang:timestamp;
+            units "seconds";
+            description
+              "Interval of the measurement to compute the KPI.";
+          }
+
+        }  
+
+    }
+  
+  }
+
+}

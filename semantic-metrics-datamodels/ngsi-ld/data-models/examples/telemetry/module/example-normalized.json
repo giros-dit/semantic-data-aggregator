@@ -1,0 +1,28 @@
+{
+    "id": "urn:ngsi-ld:Module:openconfig-interfaces:2021-04-06",
+    "type": "Module",
+    "implementedBy": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:Device:r1",
+        "deviation": {
+            "type": "Property",
+            "value": "arista-intf-deviations"
+        },
+        "feature": {
+            "type": "Property",
+            "value": "arbitrary-names"
+        }
+    },
+    "name": {
+        "type": "Property",
+        "value": "openconfig-interfaces"
+    },
+    "namespace": {
+        "type": "Property",
+        "value": "http://openconfig.net/yang/interface"
+    },
+    "revision": {
+        "type": "Property",
+        "value": "2021-04-06"
+    }
+}

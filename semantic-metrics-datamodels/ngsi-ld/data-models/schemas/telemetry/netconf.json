@@ -1,0 +1,136 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$schemaVersion": "1.0",
+    "title": "Netconf",
+    "description": "Entity that represents a Netconf service which is supported by a specific network device",
+    "type": "object",
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "$ref": "../entity.json#/definitions/Entity"
+        },
+        {
+            "properties": {
+                "type": {
+                    "description": "NGSI-LD Entity identifier. It has to be Netconf",
+                    "type": "string",
+                    "enum": [
+                        "Netconf"
+                    ],
+                    "default": "Netconf"
+                },
+                "address": {
+                    "$ref": "#/definitions/Address"
+                },
+                "capabilities": {
+                    "$ref": "#/definitions/Capabilities"
+                },
+                "port": {
+                    "$ref": "#/definitions/Port"
+                },
+                "supportedBy": {
+                    "$ref": "#/definitions/SupportedBy"
+                }
+            },
+            "required": [
+                "type",
+                "address",
+                "port",
+                "supportedBy"
+            ]
+        }
+    ],
+    "definitions": {
+        "Address": {
+            "description": "Property. Address of this Netconf service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "string",
+                            "format": "ipv4"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Capabilities": {
+            "description": "Property. List of capabilities supported by this Netconf service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "oneOf": [
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "Port": {
+            "description": "Property. Port of this Netconf service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Property"
+                },
+                {
+                    "properties": {
+                        "value": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "SupportedBy": {
+            "description": "Relationship. Network device that supports this Netconf service.",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "../entity.json#/definitions/Relationship"
+                },
+                {
+                    "properties": {
+                        "object": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "object"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        }
+    }
+}

@@ -1,12 +1,8 @@
 {
     "@context": [
-        "http://context-catalog:8080/application-context.jsonld",
-        "http://context-catalog:8080/clarity-data-lake-context.jsonld",
-        "http://context-catalog:8080/common-context.jsonld",
-        "http://context-catalog:8080/metric-context.jsonld",
-        "http://context-catalog:8080/nfv-context.jsonld",
-        "http://context-catalog:8080/telemetry-context.jsonld",
-        "http://context-catalog:8080/stream-context.jsonld",
+        "http://context-catalog:8080/context/clarity-data-lake/context.jsonld",
+        "http://context-catalog:8080/context/pipelines/context.jsonld",
+        "http://context-catalog:8080/context/telemetry/context.jsonld",
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
     ]
 }
