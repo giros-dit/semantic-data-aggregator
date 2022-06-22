@@ -43,5 +43,5 @@ spec:
     - name: client
       port: 9995
       targetPort: 9995
-      nodePort: 31001
+      nodePort: 31000
       protocol: UDP
