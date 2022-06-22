@@ -7,16 +7,14 @@ spec:
   selector:
     matchLabels:
         app: crypto-app
-        id: "0"
   template:
     metadata:
       labels:
         app: crypto-app
-        id: "0"
     spec:
       containers:
       - name: crypto-service
-        image: wurstmeister/kafka
+        image: kubernetes:31320/crypto-detector-system
         ports:
         - containerPort: 12000
 ---
@@ -29,9 +27,8 @@ metadata:
     id: "0"
 spec:
   ports:
-  - name: kafka-port
+  - name: crypto-port
     port: 12000
     protocol: TCP
   selector:
     app: crypto-app
-    id: "0"
