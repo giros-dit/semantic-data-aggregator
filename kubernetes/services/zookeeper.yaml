@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-ensemble
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper-app
+  template:
+    metadata:
+      labels:
+        app: zookeeper-app
+    spec:
+      containers:
+      - name: zoo
+        image: digitalwonderland/zookeeper
+        ports:
+        - containerPort: 2181
+        env:
+        - name: ZOOKEEPER_ID
+          value: "1"
+        - name: ZOOKEEPER_SERVER_1
+          value: zoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoo
+  labels:
+    app: zookeeper-app
+spec:
+  ports:
+  - name: client
+    port: 2181
+    protocol: TCP
+  - name: follower
+    port: 2888
+    protocol: TCP
+  - name: leader
+    port: 3888
+    protocol: TCP
+  selector:
+    app: zookeeper-app
