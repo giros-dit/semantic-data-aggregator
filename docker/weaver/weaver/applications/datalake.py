@@ -1,6 +1,7 @@
 import logging
 import os
 
+from flink_client.api.default_api import DefaultApi as FlinkClient
 from redis import Redis
 from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
 from semantic_tools.bindings.pipelines.clarity.datalake import \
@@ -8,7 +9,7 @@ from semantic_tools.bindings.pipelines.clarity.datalake import \
 from semantic_tools.bindings.pipelines.clarity.interfaceKPI import \
     InterfaceKpiAggregator
 from semantic_tools.ngsi_ld.api import NGSILDAPI
-from weaver.orchestration.flink import FlinkClient
+from weaver.orchestration.flink import instantiate_job_from_task
 from weaver.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
@@ -78,10 +79,10 @@ def process_data_lake_dispatcher(
             "sink_topic": sink_topic,
             "instance_file_name": instance_file_name
         }
-        job = flink.instantiate_job_from_task(
-                data_lake_dispatcher, jar_id, flink_arguments)
+        job = instantiate_job_from_task(
+            flink, data_lake_dispatcher, jar_id, flink_arguments)
         # Store job ID in redis
-        redis.hset(data_lake_dispatcher.id, "FLINK", job["jobid"])
+        redis.hset(data_lake_dispatcher.id, "FLINK", job["jobid"].value)
         #
         # Instantiate NiFi flow with DataLakeConsumer template
         #
@@ -108,7 +109,7 @@ def process_data_lake_dispatcher(
         job_id = redis.hget(
             data_lake_dispatcher.id, "FLINK").decode('UTF-8')
         try:
-            flink.deleteJob(job_id)
+            _ = flink.jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #

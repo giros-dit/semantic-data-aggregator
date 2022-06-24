@@ -3,6 +3,9 @@ import os
 import time
 
 from fastapi import FastAPI, Request, status
+from flink_client.api.default_api import DefaultApi as FlinkClient
+from flink_client.api_client import ApiClient
+from flink_client.configuration import Configuration
 from redis import Redis
 from semantic_tools.bindings.notification import NgsiLdNotification
 from semantic_tools.bindings.pipelines.clarity.datalake import \
@@ -16,7 +19,6 @@ from semantic_tools.ngsi_ld.api import NGSILDAPI
 from weaver.applications.datalake import process_data_lake_dispatcher
 from weaver.applications.gnmi import process_gnmi_collector
 from weaver.applications.interfaceKPI import process_interface_kpi_aggregator
-from weaver.orchestration.flink import FlinkClient
 from weaver.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
@@ -50,7 +52,9 @@ REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
 WEAVER_URI = os.getenv("WEAVER_URI", "http://weaver:8080/notify")
 
 # Init Flink REST API Client
-flink = FlinkClient(url=FLINK_MANAGER_URI)
+configuration = Configuration(host=FLINK_MANAGER_URI)
+api_client = ApiClient(configuration=configuration)
+flink = FlinkClient(api_client=api_client)
 # Init NGSI-LD Client
 ngsi_ld = NGSILDAPI(url=BROKER_URI, context=CONTEXT_CATALOG_URI)
 # Init NiFi REST API Client
@@ -110,7 +114,19 @@ async def startup_event():
     # Deploy exporter-service PG in root PG
     nifi.deploy_exporter_service()
     # Check Flink REST API is up
-    flink.check_flink_status()
+    # Check Flink REST API is up
+    logger.info("Checking Flink REST API status ...")
+    while True:
+        try:
+            _ = flink.config_get()
+            logger.info(
+                "Successfully connected to Flink REST API!")
+            break
+        except Exception:
+            logger.warning("Could not connect to Flink REST API. "
+                           "Retrying in 30 seconds ...")
+            time.sleep(30)
+            continue
 
 
 @app.post("/notify",

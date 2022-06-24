@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+from flink_client.api.default_api import DefaultApi as FlinkClient
 from redis import Redis
 from semantic_tools.bindings.pipelines.clarity.gnmi import (GnmiCollector,
                                                             StreamModeOptions)
@@ -9,7 +10,7 @@ from semantic_tools.bindings.telemetry.credentials import Credentials
 from semantic_tools.bindings.telemetry.device import Device
 from semantic_tools.bindings.telemetry.gnmi import Gnmi
 from semantic_tools.ngsi_ld.api import NGSILDAPI
-from weaver.orchestration.flink import FlinkClient
+from weaver.orchestration.flink import instantiate_job_from_task
 from weaver.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
@@ -164,10 +165,10 @@ def process_gnmi_collector(
             "source_topics": source_topic,
             "sink_topic": sink_topic
         }
-        job = flink.instantiate_job_from_task(
-                gnmi_collector, jar_id, flink_arguments)
+        job = instantiate_job_from_task(
+            flink, gnmi_collector, jar_id, flink_arguments)
         # Store job ID in redis
-        redis.hset(gnmi_collector.id, "FLINK", job["jobid"])
+        redis.hset(gnmi_collector.id, "FLINK", job["jobid"].value)
         return gnmi_collector
 
     elif gnmi_collector.action.value.value == "END":
@@ -194,7 +195,7 @@ def process_gnmi_collector(
         job_id = redis.hget(
             gnmi_collector.id, "FLINK").decode('UTF-8')
         try:
-            flink.deleteJob(job_id)
+            _ = flink.jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #

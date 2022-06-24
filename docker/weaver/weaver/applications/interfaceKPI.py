@@ -1,12 +1,13 @@
 import logging
 import os
 
+from flink_client.api.default_api import DefaultApi as FlinkClient
 from redis import Redis
 from semantic_tools.bindings.pipelines.clarity.gnmi import GnmiCollector
 from semantic_tools.bindings.pipelines.clarity.interfaceKPI import (
     InterfaceKpiAggregator, KpiOptions)
 from semantic_tools.ngsi_ld.api import NGSILDAPI
-from weaver.orchestration.flink import FlinkClient
+from weaver.orchestration.flink import instantiate_job_from_task
 
 logger = logging.getLogger(__name__)
 
@@ -42,10 +43,10 @@ def process_interface_kpi_aggregator(
             "sink_topic": sink_topic,
             "window_size": str(if_kpi_aggregator.window_size.value)
         }
-        job = flink.instantiate_job_from_task(
-                if_kpi_aggregator, jar_id, flink_arguments)
+        job = instantiate_job_from_task(
+                flink, if_kpi_aggregator, jar_id, flink_arguments)
         # Store job ID in redis
-        redis.hset(if_kpi_aggregator.id, "FLINK", job["jobid"])
+        redis.hset(if_kpi_aggregator.id, "FLINK", job["jobid"].value)
         return if_kpi_aggregator
 
     elif if_kpi_aggregator.action.value.value == "END":
@@ -57,7 +58,7 @@ def process_interface_kpi_aggregator(
         job_id = redis.hget(
             if_kpi_aggregator.id, "FLINK").decode('UTF-8')
         try:
-            flink.deleteJob(job_id)
+            _ = flink.jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #
