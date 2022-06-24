@@ -233,7 +233,7 @@ This repository contains Postman collections that you can use to play with the R
 
 [![eu-comission](docs/logos/european-comission-h2020.png)](https://ec.europa.eu/info/research-and-innovation/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-2020_en)
 
-This work has been funded by the European Union’s Research and Innovation Programme Horizon 2020 under the following Grant Agreements:
+This work has been partly funded by the European Union’s Research and Innovation Programme Horizon 2020 under the following Grant Agreements:
 
 
 
