@@ -1,12 +1,15 @@
+import json
 import logging
 import os
 
-from flink_client.api.default_api import DefaultApi as FlinkClient
+from flink_client.api.default_api import DefaultApi as FlinkDefaultApi
+from flink_client.api_client import ApiClient as FlinkClient
+from ngsi_ld_client.api.entities_api import EntitiesApi as NGSILDEntitiesApi
+from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from redis import Redis
 from semantic_tools.bindings.pipelines.clarity.gnmi import GnmiCollector
 from semantic_tools.bindings.pipelines.clarity.interfaceKPI import (
     InterfaceKpiAggregator, KpiOptions)
-from semantic_tools.ngsi_ld.api import NGSILDAPI
 from weaver.orchestration.flink import instantiate_job_from_task
 
 logger = logging.getLogger(__name__)
@@ -16,7 +19,7 @@ KAFKA_ADDRESS = os.getenv("KAFKA_ADDRESS", "kafka:9092")
 
 def process_interface_kpi_aggregator(
         if_kpi_aggregator: InterfaceKpiAggregator, flink: FlinkClient,
-        ngsi_ld: NGSILDAPI, redis: Redis) -> InterfaceKpiAggregator:
+        ngsi_ld: NGSILDClient, redis: Redis) -> InterfaceKpiAggregator:
     logger.info("Processing %s" % (if_kpi_aggregator.id))
     if if_kpi_aggregator.action.value.value == "START":
         jar_id = None
@@ -31,8 +34,16 @@ def process_interface_kpi_aggregator(
         # Build arguments for packet-loss
         # Get input GnmiCollector entity
         gnmi_collector = GnmiCollector.parse_obj(
-            ngsi_ld.retrieveEntityById(if_kpi_aggregator.has_input.object)
+            json.loads(
+                NGSILDEntitiesApi(ngsi_ld).retrieve_entity_by_id(
+                    path_params={
+                        "entityId": if_kpi_aggregator.has_input.object
+                    },
+                    skip_deserialization=True
+                ).response.data
+            )
         )
+
         source_topic = "gnmic-driver-" + \
             gnmi_collector.id.split(":")[-1]  # Use last part of URN
         sink_topic = "interface-kpi-aggregator-" + \
@@ -58,7 +69,7 @@ def process_interface_kpi_aggregator(
         job_id = redis.hget(
             if_kpi_aggregator.id, "FLINK").decode('UTF-8')
         try:
-            _ = flink.jobs_jobid_patch(job_id)
+            _ = FlinkDefaultApi(flink).jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #
@@ -66,4 +77,9 @@ def process_interface_kpi_aggregator(
         #
         logger.info(
             "Deleting '{0}' entity...".format(if_kpi_aggregator.id))
-        ngsi_ld.deleteEntity(if_kpi_aggregator.id)
+        _ = NGSILDEntitiesApi(ngsi_ld).remove_entity_by_id(
+            path_params={
+                "entityId": if_kpi_aggregator.id
+            },
+            skip_deserialization=True
+        )

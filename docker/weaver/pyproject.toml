@@ -6,11 +6,12 @@ authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-flink-client = { git = "https://github.com/giros-dit/python-flink-client.git", branch = "main" }
 semantic-tools = ">=0.1.0"
 fastapi = "^0.74.1"
 uvicorn = "^0.17.5"
 redis = "^4.3.1"
+flink-client = { git = "https://github.com/giros-dit/python-flink-client.git", branch = "main" }
+ngsi-ld-client = { git = "https://github.com/giros-dit/python-ngsi-ld-client.git", branch = "main" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

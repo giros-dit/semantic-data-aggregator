@@ -9,6 +9,7 @@ python = ">=3.9,<4.0"
 semantic-tools = ">=0.1.0"
 lxml = "^4.7.1"
 fastapi = {extras = ["all"], version = "^0.78.0"}
+ngsi-ld-client = { git = "https://github.com/giros-dit/python-ngsi-ld-client.git", branch = "main" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

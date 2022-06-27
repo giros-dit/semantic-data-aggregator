@@ -3,23 +3,33 @@ import logging
 from typing import List
 
 from ncclient import manager
+from ngsi_ld_client.api.entities_api import EntitiesApi as NGSILDEntitiesApi
+from ngsi_ld_client.api_client import ApiClient as NGSILDClient
+from ngsi_ld_client.model.entity import Entity
+from ngsi_ld_client.model.entity_list import EntityList
 from pygnmi.client import gNMIclient
-from semantic_tools.bindings.entity import Entity
 from semantic_tools.bindings.telemetry.credentials import Credentials
 from semantic_tools.bindings.telemetry.device import Device
 from semantic_tools.bindings.telemetry.gnmi import Gnmi, GnmiEncodings
 from semantic_tools.bindings.telemetry.module import ImplementedBy, Module
 from semantic_tools.bindings.telemetry.netconf import Netconf
-from semantic_tools.ngsi_ld.api import NGSILDAPI
 
 logger = logging.getLogger(__name__)
 
 
-def discover_gnmi_protocol(ngsi_ld: NGSILDAPI, gnmi: Gnmi) -> Gnmi:
+def discover_gnmi_protocol(ngsi_ld: NGSILDClient, gnmi: Gnmi) -> Gnmi:
     # Get credentials for gnmi service
-    credentials_entity = ngsi_ld.queryEntities(
-        "Credentials", q='authenticates=={0}'.format(gnmi.id))[0]
-    credentials = Credentials.parse_obj(credentials_entity)
+    credentials = Credentials.parse_obj(
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Credentials",
+                    "q": "authenticates=={0}".format(gnmi.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Assume there is only one entity
+    )
     gc = gNMIclient(
         target=(str(gnmi.address.value), str(gnmi.port.value)),
         username=credentials.username.value,
@@ -38,11 +48,19 @@ def discover_gnmi_protocol(ngsi_ld: NGSILDAPI, gnmi: Gnmi) -> Gnmi:
 
 
 def discover_netconf_protocol(
-        ngsi_ld: NGSILDAPI, netconf: Netconf) -> Netconf:
-    # Get credentials for gnmi service
-    credentials_entity = ngsi_ld.queryEntities(
-        "Credentials", q='authenticates=={0}'.format(netconf.id))[0]
-    credentials = Credentials.parse_obj(credentials_entity)
+        ngsi_ld: NGSILDClient, netconf: Netconf) -> Netconf:
+    # Get credentials for netconf service
+    credentials = Credentials.parse_obj(
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Credentials",
+                    "q": "authenticates=={0}".format(netconf.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Assume there is only one entity
+    )
     # https://community.cisco.com/t5/devnet-sandbox/
     # connect-to-ios-xr-always-on-sandbox-using-ncclient/td-p/4442858
     nc = manager.connect(
@@ -72,12 +90,20 @@ def discover_netconf_protocol(
 
 
 def discover_yang_modules(
-        ngsi_ld: NGSILDAPI, netconf: Netconf,
+        ngsi_ld: NGSILDClient, netconf: Netconf,
         device: Device) -> List[Module]:
     # Get credentials for gnmi service
-    credentials_entity = ngsi_ld.queryEntities(
-        "Credentials", q='authenticates=={0}'.format(netconf.id))[0]
-    credentials = Credentials.parse_obj(credentials_entity)
+    credentials = Credentials.parse_obj(
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Credentials",
+                    "q": "authenticates=={0}".format(netconf.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Assume there is only one entity
+    )
     # https://community.cisco.com/t5/devnet-sandbox/
     # connect-to-ios-xr-always-on-sandbox-using-ncclient/td-p/4442858
     nc = manager.connect(
@@ -132,47 +158,73 @@ def discover_yang_modules(
 
 
 def register_device(
-        ngsi_ld: NGSILDAPI,
-        entity: Entity):
+        ngsi_ld: NGSILDClient,
+        entity: dict):
 
     logger.info("Processing registration of network device...")
-    device = Device.parse_obj(entity.dict())
+    device = Device.parse_obj(entity)
 
     # Check gNMI support
-    gnmi_entities = ngsi_ld.queryEntities(
-        "Gnmi", q='supportedBy=={0}'.format(device.id))
+    gnmi_entities = NGSILDEntitiesApi(ngsi_ld).query_entities(
+        query_params={
+            "type": "Gnmi",
+            "q": "supportedBy=={0}".format(device.id)
+        },
+        skip_deserialization=True
+    ).response.data
+
     if gnmi_entities:
         # Device can only support one gnmi service
-        gnmi = Gnmi.parse_obj(gnmi_entities[0])
+        gnmi = Gnmi.parse_obj(
+            json.loads(gnmi_entities)[0]
+        )
         gnmi_updated = discover_gnmi_protocol(ngsi_ld, gnmi)
         logger.info("Updating %s" % gnmi_updated.id)
         # https://github.com/samuelcolvin/pydantic/issues/1409
-        ngsi_ld.batchEntityUpsert(
-            [json.loads(gnmi_updated.json(
-                exclude_none=True, by_alias=True))], "update"
+        _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+            query_params={
+                "options": "update"
+            },
+            body=EntityList([
+                Entity(json.loads(
+                    gnmi_updated.json(exclude_none=True, by_alias=True)))
+            ])
         )
 
     # Discover NETCONF
-    netconf_entities = ngsi_ld.queryEntities(
-        "Netconf", q='supportedBy=={0}'.format(device.id))
-    # Device can only support one netconf service
-    netconf = Netconf.parse_obj(netconf_entities[0])
+    netconf = Netconf.parse_obj(
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Netconf",
+                    "q": "supportedBy=={0}".format(device.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Device can only support one netconf service
+    )
     netconf_updated = discover_netconf_protocol(ngsi_ld, netconf)
     logger.info("Creating %s" % netconf_updated.id)
-    ngsi_ld.batchEntityUpsert(
-        [json.loads(netconf_updated.json(
-            exclude_none=True, by_alias=True))], "update"
-    )
+    _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+            query_params={
+                "options": "update"
+            },
+            body=EntityList([
+                Entity(json.loads(
+                    netconf_updated.json(exclude_none=True, by_alias=True)))
+            ])
+        )
     # Thus far, rely on NETCONF capabilities to discover YANG modules
     # NETCONF hello retrieves features, deviations,
     # and submodules (as other modules though)
     logger.info("Collecting implemented YANG modules")
     modules = discover_yang_modules(ngsi_ld, netconf, device)
-    res = ngsi_ld.batchEntityUpsert(
-        [json.loads(module.json(
-            exclude_none=True, by_alias=True)) for module in modules],
-        "update"
-    )
-    logger.error(res.request.headers)
-    logger.error(res.request.path_url)
-    logger.error(res.request.body)
+    _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+            query_params={
+                "options": "update"
+            },
+            body=EntityList([
+                Entity(json.loads(
+                    module.json(exclude_none=True, by_alias=True)))
+                for module in modules])
+        )
