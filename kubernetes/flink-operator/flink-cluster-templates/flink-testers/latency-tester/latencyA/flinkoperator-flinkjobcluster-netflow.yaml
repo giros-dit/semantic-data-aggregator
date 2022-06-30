@@ -28,7 +28,7 @@ spec:
         memory: "2048Mi"
         cpu: "500m"
   taskManager:
-    replicas: 1
+    replicas: 2
     resources:
       limits:
         memory: "2048Mi"
@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/FlinkLatencyA-1.0.jar
     className: tid.FlinkLatencyA
-    args: ["kafka-service:9092", "topicA", "flows", "flowStart"]
+    args: ["kafka-service:9092", "netflow-aggregated", "topicA", "flowStart"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:
