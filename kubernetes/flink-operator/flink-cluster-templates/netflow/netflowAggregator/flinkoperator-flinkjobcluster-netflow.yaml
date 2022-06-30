@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/netflowAggregator-1.0.jar
     className: tid.NetflowAggregator
-    args: ["kafka-service:9092", "topicA", "netflow-aggregated"]
+    args: ["kafka-service:9092", "bidi-flows", "netflow-aggregated"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:

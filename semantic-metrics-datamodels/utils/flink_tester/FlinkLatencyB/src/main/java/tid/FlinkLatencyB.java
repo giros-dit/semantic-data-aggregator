@@ -23,6 +23,39 @@ import org.apache.flink.util.Collector;
 public class FlinkLatencyB {
 
 
+
+        // This function can be used to directly caclulate the flowHash instead of calculating it
+        // With other script
+        // public static Integer flowHash(Netflow netflowv9){
+        //      // As there is only one record there is no need to iterate over FlowDataRecord
+    //     FlowDataRecord flow = netflowv9.getExportPacket().getFlowDataRecord().get(0);
+
+    //     // add to array
+    //     ArrayList<String> tuple6 = new ArrayList<String>();
+    //     // Add IPs
+    //     tuple6.add(flow.getIpv4().getSrcAddress().getValue());
+    //     tuple6.add(flow.getIpv4().getDstAddress().getValue());
+
+
+    //     // Add ports sorted ascendant
+    //     Integer srcPort = flow.getSrcPort().getValue().intValue();
+    //     Integer dstPort = flow.getDstPort().getValue().intValue();
+    //     tuple6.add(srcPort.toString());
+        //      tuple6.add(dstPort.toString());
+
+    //     // Add start and End of the flows
+    //     tuple6.add(flow.getFirstSwitched().toString());
+    //     tuple6.add(flow.getLastSwitched().toString());
+
+    //     // concatenate strings
+    //     String joined = String.join("-", tuple6);
+
+        //      // keyBy function is going to hash it so it is not necessary to do a hash here
+        //      return joined.hashCode();
+        // }
+
+
+
 	public static void main(String[] args) throws Exception {
 
 		// GET EXECUTION ENVIRONMENT

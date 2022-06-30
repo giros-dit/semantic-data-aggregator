@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/Netflow2Bidirectional-1.0.jar
     className: tid.Netflow2Bidirectional 
-    args: ["kafka-service:9092", "topicA", "bidi-flows"]
+    args: ["kafka-service:9092", "uni-flows", "bidi-flows"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:
