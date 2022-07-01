@@ -200,30 +200,47 @@ public class NetflowAggregator {
 				// PktsOutPerSecond
 				temp = fdr.getPktsOut().getValue().floatValue()/durationSeconds;
 				fdr1_builder.setPktsOutPerSecond(PerDecimal.getDefaultInstance(temp.toString()));
+			}else{
+				// BytesInPerSecond
+				fdr1_builder.setBytesInPerSecond(PerDecimal.getDefaultInstance("0"));
+				// PktsInPerSecond
+				fdr1_builder.setPktsInPerSecond(PerDecimal.getDefaultInstance("0"));
+				// BytesOutPerSecond
+				fdr1_builder.setBytesOutPerSecond(PerDecimal.getDefaultInstance("0"));
+				// PktsOutPerSecond
+				fdr1_builder.setPktsOutPerSecond(PerDecimal.getDefaultInstance("0"));
 			}
 
 			if(fdr.getPktsIn().getValue().floatValue()!=0){
 				// BytesInPerPacket
 				temp = fdr.getBytesIn().getValue().floatValue()/fdr.getPktsIn().getValue().floatValue();
 				fdr1_builder.setBytesInPerPacket(PerDecimal.getDefaultInstance(temp.toString()));
+			}else{
+				fdr1_builder.setBytesInPerPacket(PerDecimal.getDefaultInstance("0"));
 			}
 
 			if(fdr.getPktsOut().getValue().floatValue()!=0){
 				// BytesOutPerPacket
 				temp = fdr.getBytesOut().getValue().floatValue()/fdr.getPktsOut().getValue().floatValue();
 				fdr1_builder.setBytesOutPerPacket(PerDecimal.getDefaultInstance(temp.toString()));
+			}else{
+				fdr1_builder.setBytesOutPerPacket(PerDecimal.getDefaultInstance("0"));
 			}
 
 			if(fdr.getBytesOut().getValue().floatValue()!=0){
 				// RatioBytesInPerOut
 				temp = fdr.getBytesIn().getValue().floatValue()/fdr.getBytesOut().getValue().floatValue();
 				fdr1_builder.setRatioBytesInPerOut(PerDecimal.getDefaultInstance(temp.toString()));
+			}else{
+				fdr1_builder.setRatioBytesInPerOut(PerDecimal.getDefaultInstance("0"));
 			}
 
 			if(fdr.getPktsOut().getValue().floatValue()!=0){
 				// RatioPktsInPerOut
 				temp = fdr.getPktsIn().getValue().floatValue()/fdr.getPktsOut().getValue().floatValue();
 				fdr1_builder.setRatioPktsInPerOut(PerDecimal.getDefaultInstance(temp.toString()));
+			}else{
+				fdr1_builder.setRatioPktsInPerOut(PerDecimal.getDefaultInstance("0"));
 			}
 			// <--- AGGREGATIONS
 

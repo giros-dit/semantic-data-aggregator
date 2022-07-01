@@ -37,12 +37,18 @@ import com.google.gson.stream.JsonWriter;
 
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FilterFunction;
+import org.apache.flink.api.common.serialization.DeserializationSchema;
+import org.apache.flink.api.common.serialization.SerializationSchema;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.connector.base.DeliveryGuarantee;
+import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
+import org.apache.flink.connector.kafka.sink.KafkaSink;
+import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -122,13 +128,34 @@ public class NetflowDriver {
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
-		// Set up the streaming execution environment
+
+        // GET EXECUTION ENVIRONMENT
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-		// Consume data stream from the Kafka input topic where GoFlow2 writes the NetFlow traffic
-        FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer<String>("flows", new SimpleStringSchema(), props);
 
-		DataStream<String> stringInputStream = env.addSource(consumer);
+		// KAFKA CONSUMER
+		KafkaSource<String> consumer = KafkaSource.<String>builder()
+		.setTopics(args[1])
+		.setGroupId("netflow-source-group")
+		.setBootstrapServers(args[0])
+		.setStartingOffsets(OffsetsInitializer.latest())
+		.setValueOnlyDeserializer((DeserializationSchema<String>)new SimpleStringSchema())
+		.build();
+
+
+		// KAFKA PRODUCER
+		KafkaSink<String> producer = KafkaSink.<String>builder()
+		.setBootstrapServers(args[0])
+		.setRecordSerializer(KafkaRecordSerializationSchema.builder()
+		.setTopic(args[2])
+		.setValueSerializationSchema((SerializationSchema<String>)new SimpleStringSchema())
+		.build()
+        )
+		.setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+		.build();
+
+
+		DataStream<String> stringInputStream = env.fromSource(consumer, WatermarkStrategy.noWatermarks(), "Kafka Source");
 
 		DataStream<String> json_ietf = stringInputStream.map(new MapFunction<String, String>(){
 			@Override
@@ -152,9 +179,7 @@ public class NetflowDriver {
 			}
 		});
 
-        //Produce data stream on the Kafka output topic
-		FlinkKafkaProducer<String> producer = new FlinkKafkaProducer<String>(args[1], new SimpleStringSchema(), props);
-		json_ietf.addSink(producer);
+		json_ietf.sinkTo(producer);
 
 		// Execute program
 		env.execute("NetFlow driver");
@@ -481,9 +506,7 @@ public class NetflowDriver {
         * the JSON Object keys (.names() fuction).
         */
 
-        LOG.info("Driver output JSON: " + gson_obj.toString());
-        Gson gson_format = new GsonBuilder().setPrettyPrinting().create();
-        return gson_format.toJson(gson_obj);
+        return gson_obj.toString();
         
     }
 

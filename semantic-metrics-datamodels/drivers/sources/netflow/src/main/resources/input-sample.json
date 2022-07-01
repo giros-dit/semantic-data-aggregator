@@ -11,6 +11,8 @@
     "FlowDirection":0,
     "TimeFlowStart":1646564299574,
     "TimeFlowEnd":1646564427756,
+    "TimeFlowStartMs":1646564299574023,
+    "TimeFlowEndMs":1646564427756762,
     "BytesIn":228,
     "PacketsIn":3,
     "BytesOut":0,
