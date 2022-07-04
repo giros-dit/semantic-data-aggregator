@@ -41,6 +41,7 @@ metadata:
     name: kafka-app
     id: "0"
 spec:
+  type: ClusterIP
   ports:
   - name: kafka-port
     port: 9092

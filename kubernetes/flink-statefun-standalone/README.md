@@ -82,6 +82,11 @@ You can stop the deployment with:
 helm uninstall flink-statefun-chart 
 ```  
 
+Also the list of helm installed charts can be listed with:
+```
+helm list --all-namespaces
+```
+
 
 ## Deploy flink remote application
 In this case the application deployed will be a python appllication that aggregates in a single-flow way. Using the flink-statefun cluter we can develop and deploy applications in any language with SDK for flink (Javascript, Python, Java, Golang)
