@@ -1,6 +1,10 @@
 # Semantic Data Aggregator
 
-Docker-based prototype that deploys the `Semantic Data Aggregator` (`SDA`).
+Docker-based prototype that deploys the `Semantic Data Aggregator (SDA)`.
+
+> **IMPORTANT NOTE:**
+>
+> In 5G-CLARITY project this work is known as the `Data Semantics Fabric (DSF)`.
 
 The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by [`Kafka`](https://kafka.apache.org/). These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
 
@@ -22,15 +26,29 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
         6. [Experimenter](#experimenter)
     2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
 
-2. [Scenarios](#scenarios)
-    1. [All-in-one scenario](#all-in-one-scenario)
-    2. [Data Source specific scenarios](#data-source-specific-scenarios)
-        1. [Prometheus](#prometheus-based-data-sources)
-        2. [gNMI](#gNMI-based-data-sources-(Arista-cEOS))
-        3. [Kafka](#kafka-based-data-sources)
-3. [SDA Orchestration](#sda-orchestration)
-4. [Stream processing aplications management](#stream-processing-aplications-management)
-5. [Postman collections](#postman-collections)
+- [Semantic Data Aggregator](#semantic-data-aggregator)
+- [Table of Contents](#table-of-contents)
+- [Prototype](#prototype)
+  - [Requirements](#requirements)
+  - [Microservices](#microservices)
+    - [Weaver](#weaver)
+    - [Application-Manager](#application-manager)
+    - [Context-Catalog](#context-catalog)
+    - [Source-Manager](#source-manager)
+    - [Complex-Publisher](#complex-publisher)
+    - [Experimenter](#experimenter)
+  - [Developing microservices using Poetry](#developing-microservices-using-poetry)
+- [Scenarios](#scenarios)
+  - [All-in-one Scenario](#all-in-one-scenario)
+  - [Data Source Specific Scenarios](#data-source-specific-scenarios)
+    - [Prometheus-based Data Sources](#prometheus-based-data-sources)
+    - [gNMI-based Data Sources (Arista cEOS)](#gnmi-based-data-sources-arista-ceos)
+    - [Kafka-based Data Sources](#kafka-based-data-sources)
+- [SDA Orchestration](#sda-orchestration)
+- [Stream Processing Aplications Management](#stream-processing-aplications-management)
+- [Postman Collections](#postman-collections)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
 
 # Prototype
 
@@ -140,11 +158,11 @@ The purpose of this prototype is collect data of [`gNMI`](https://github.com/ope
 
 To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-telemetry-recipe/README.md).
 
-1) Before starting docker-compose it is necessary to import the [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.25.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the 64-bit version).
+1) Before starting docker-compose it is necessary to import the [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.27.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the 64-bit version).
 
 2) The command to import the image is:
 ```bash
-docker import cEOS64-lab-4.25.4M.tar.xz ceos-image:4.25.4M
+docker import cEOS64-lab-4.27.4M.tar.xz ceos-image:4.27.4M
 ```
 
 3) Then you can start the docker-compose:
@@ -210,3 +228,19 @@ This repository contains Postman collections that you can use to play with the R
 - [`Flink REST API`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
 
 - [`YANG Catalog REST API`](postman_collections/yangcatalog.postman_collection.json) provides a collection of sample requests for interacting with the REST API of [YANG Catalog](https://yangcatalog.org). For more details, visit [Contribute to YANG Catalog](https://yangcatalog.org/contribute.html) webpage.
+
+# Acknowledgements
+
+[![eu-comission](docs/logos/european-comission-h2020.png)](https://ec.europa.eu/info/research-and-innovation/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-2020_en)
+
+This work has been partly funded by the European Union’s Research and Innovation Programme Horizon 2020 under the following Grant Agreements:
+
+
+
+[5GROWTH](https://5growth.eu)<br />(No. 856709) | [5G-CLARITY](https://www.5gclarity.com)<br />(No. 871428) | [PALANTIR](https://www.palantir-project.eu)<br />(No. 883335)
+:-------------------------:|:-------------------------:|:-------------------------:
+[![](docs/logos/5growth.png)](https://5growth.eu) | [![](docs/logos/5g-clarity.png)](https://www.5gclarity.com) | [![](docs/logos/palantir.png)](https://www.palantir-project.eu)
+
+# License
+
+This project is licensed under [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0).

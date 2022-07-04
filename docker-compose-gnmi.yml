@@ -22,7 +22,7 @@ services:
       - nifi
       - scorpio
   ceos1:
-    image: "ceos-image:4.25.4M"
+    image: "ceos-image:4.27.4M"
     hostname: ceos1
     container_name: ceos1
     ports:
@@ -41,7 +41,7 @@ services:
       net1:
       net2:
   ceos2:
-    image: "ceos-image:4.25.4M"
+    image: "ceos-image:4.27.4M"
     hostname: ceos2
     container_name: ceos2
     ports:
@@ -123,7 +123,7 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
   gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.13
     hostname: gateway
     container_name: gateway
     ports:
@@ -181,7 +181,7 @@ services:
     logging:
       driver: none
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
+    image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio
     container_name: scorpio
     ports:

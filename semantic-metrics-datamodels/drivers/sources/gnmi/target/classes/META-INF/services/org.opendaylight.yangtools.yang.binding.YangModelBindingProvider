@@ -1,0 +1,8 @@
+org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.interfaces.rev180220.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.openconfig.net.yang.openconfig.types.rev190416.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.openconfig.net.yang.types.yang.rev210714.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.openconfig.net.yang.interfaces.rev210406.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.openconfig.interfaces.aggregated.rev220513.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.openconfig.interfaces.notification.wrapper.rev220513.$YangModelBindingProvider
+org.opendaylight.yang.gen.v1.http.openconfig.net.yang.openconfig.ext.rev200616.$YangModelBindingProvider

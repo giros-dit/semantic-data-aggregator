@@ -1,0 +1,16 @@
+{
+    "id": "urn:ngsi-ld:DataLake:production",
+    "type": "DataLake",
+    "apiKey": {
+        "type": "Property",
+        "value": "erstet233W2dcypT%"
+    },
+    "region": {
+        "type": "Property",
+        "value": "eu-west-2"
+    },
+    "uri": {
+        "type": "Property",
+        "value": "https://2yd7m1wqii.execute-api.eu-west-2.amazonaws.com/v1"
+    }
+}

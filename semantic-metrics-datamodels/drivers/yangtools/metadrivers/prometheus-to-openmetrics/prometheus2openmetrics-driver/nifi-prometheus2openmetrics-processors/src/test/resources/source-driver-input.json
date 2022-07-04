@@ -1,0 +1,10 @@
+[
+    {
+        "metric" : {
+            "__name__" : "up",
+            "job" : "prometheus",
+            "instance" : "localhost:9090"
+        },
+        "value": [ 1435781451.781, "1" ]
+    }
+]

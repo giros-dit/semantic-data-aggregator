@@ -1,5 +1,6 @@
 import logging
 from enum import Enum
+from typing import Literal, Union
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -266,7 +267,7 @@ class NGSILDAPI():
 
     # NGSI-LD Entity Operations. Upsert -> /entityOperations/upsert
     def batchEntityUpsert(self, entities: list,
-                          options: Options = Options.replace.value):
+                          options: Literal["replace", "update"] = "replace"):
         """
         Batch Entity create or update (upsert) within an NGSI-LD system.
         """
@@ -276,6 +277,7 @@ class NGSILDAPI():
             "{0}/ngsi-ld/v1/entityOperations/upsert".format(self.url),
             verify=self.ssl_verification,
             headers=self.headers,
-            json=entities
+            json=entities,
+            params=params
         )
         return response

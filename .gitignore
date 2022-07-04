@@ -142,4 +142,7 @@ cython_debug/
 # Desktop Services Store macOS
 .DS_Store
 
-#
+# Others
+.settings/
+.project
+target/

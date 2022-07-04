@@ -1,0 +1,12 @@
+{
+  "name": "default-1624205356",
+  "timestamp": 1624205300446746902,
+  "tags": {
+    "interface_name": "Ethernet1",
+    "source": "localhost:6030",
+    "subscription-name": "default-1624205356"
+  },
+  "values": {
+    "/interfaces/interface/state/counters/in-octets": 3104
+  }
+}

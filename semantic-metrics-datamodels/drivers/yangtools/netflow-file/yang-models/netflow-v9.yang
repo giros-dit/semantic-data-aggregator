@@ -1,0 +1,1632 @@
+module netflow-v9 {
+
+    yang-version 1.1;
+
+    /*** NAMESPACE / PREFIX DEFINITION ***/
+
+    namespace 'http://data-aggregator.com/ns/netflow';
+
+    prefix "net-v9";
+
+
+    /*** LINKAGE (IMPORTS / INCLUDES) ***/
+
+    import ietf-inet-types {
+        prefix inet;
+        reference
+            "RFC 6991: Common YANG Data Types";
+    }
+
+    import ietf-yang-types {
+        prefix yang;
+        reference
+            "RFC 6991: Common YANG Data Types";
+    }
+
+
+    /*** META INFORMATION ***/
+
+    organization "Telefonica I+D";
+
+    contact "cristina.mz.practicas@telefonica.com";
+
+    description
+        "YANG model to represent the information collected in a Netflow version 9 export packet";
+
+    reference
+        "NetSampler, GoFlow2, (2021), GitHub repository, https://github.com/netsampler/goflow2.
+         Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011), https://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9.html";
+
+    revision 2021-10-08 {
+        description
+            "Initial revision.";
+        reference "0.1.0";
+    }
+
+
+    /*** TYPE DEFINITIONS ***/
+
+    typedef prefix-length-ipv4{
+        type uint8 {
+            range 0..32;
+        }
+        description
+            "The length of subnet prefix in IPv4";
+
+        reference
+            "RFC 8344: A YANG Data Model for IP Management";
+    }
+
+    typedef prefix-length-ipv6{
+        type uint8 {
+            range 0..128;
+        }
+        description
+            "The length of the subnet prefix in IPv6";
+
+        reference
+            "RFC 8344: A YANG Data Model for IP Management";
+    }
+
+    typedef protocol-type{
+        type enumeration {
+            enum icmp {
+                value "1";
+                description
+                    "The protocol used is ICMP (Internet Control Message Protocol)";
+            }
+            enum igmp {
+                value "2";
+                description
+                    "The protocol used is IGMP (Internet Group Management Protocol)";
+            }
+            enum tcp {
+                value "6";
+                description
+                    "The protocol used is TCP (Transmission Control Protocol)";
+            }
+            enum egp {
+                value "8";
+                description
+                    "The protocol used is EGP (Exterior Gateway Protocol)";
+            }
+            enum igp {
+                value "9";
+                description
+                    "The protocol used is IGP (Interior Gateway Protocol)";
+            }
+            enum udp {
+                value "17";
+                description
+                    "The protocol used is UDP (User Datagram Protocol)";
+            }
+            enum icmp-ipv6 {
+                value "58";
+                description
+                    "The protocol used is IPv6-ICMP (ICMP for IPv6)";
+            }
+            enum pim{
+                value "103";
+                description
+                    "The protocol used is PIM (Protocol Independent Multicast)";
+            }
+            enum l2tp{
+                value "115";
+                description
+                    "The protocol used is L2TP (Layer Two Tunneling Protocol)";
+            }
+            enum sctp {
+                value "132";
+                description
+                    "The protocol used is SCTP (Stream Control Transmission Protocol)";
+            }
+            enum eth {
+                value "143";
+                description
+                    "The protocol used is Ethernet";
+            }
+        }
+
+        description
+            "Possible values of IP protocol byte";
+
+        reference
+            "IANA, Assigned Internet Protocol Numbers, https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml";
+
+    }
+
+    typedef engine-type{
+        type enumeration {
+            enum rp {
+                value "0";
+                description
+                    "The flow switching engine is a Route Processor";
+            }
+            enum vip-linecard {
+                value "1";
+                description
+                    "The flow switching engine is a VIP/Linecard";
+            }
+            enum pdc/dfc {
+                value "2";
+                description
+                    "The flow switching engine is a PDC/DFC";
+            }
+        }
+
+        description
+            "Possible types of flow switching engine for Netflow v9";
+
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format (ENGINE_TYPE)";
+    }
+
+    typedef top-label-type{
+        type enumeration {
+            enum unknown {
+                value "0";
+                    description
+                        "The MPLS label type is not known";
+                }
+            enum te-midpt {
+                value "1";
+                    description
+                        "Any TE tunnel mid-point or tail label";
+            }
+            enum atom {
+                value "2";
+                description
+                    "Cisco AToM based label";
+            }
+            enum vpn {
+                value "3";
+                description
+                    "Any label associated with VPN";
+            }
+            enum bgp {
+                value "4";
+                description
+                    "Any label associated with BGP or BGP routing";
+            }
+            enum ldp {
+                value "5";
+                description
+                    "Any label associated with dynamically assigned labels using LDP";
+            }
+        }
+
+        description
+            "Possible types of MPLS Top Label for Netflow v9";
+
+        reference
+            "Cisco IOS Release 15M&T, NetFlow Configuration Guide, Chapter: Configuring MPLS-aware NetFlow";
+    }
+
+
+    typedef forwarding-status-type{
+        type enumeration {
+            enum unknown {
+                value "0";
+                description
+                    "Status bits are 00. Unknown";
+            }
+            enum unknown-forwarded {
+                value "64";
+                description
+                    "Status bits are 01 (Forwarded). Unknown";
+            }
+            enum forwarded-frag {
+                value "65";
+                description
+                    "Status bits are 01 (Forwarded). Forwarded Fragmented";
+            }
+            enum forwarded-not-frag {
+                value "66";
+                description
+                    "Status bits are 01 (Forwarded). Forwarded not Fragmented";
+            }
+            enum unknown-dropped {
+                value "128";
+                description
+                    "Status bits are 10 (Dropped). Unknown";
+            }
+            enum acl-deny {
+                value "129";
+                description
+                    "Status bits are 10 (Dropped). Drop ACL Deny";
+            }
+            enum acl-drop {
+                value "130";
+                description
+                    "Status bits are 10 (Dropped). Drop ACL drop";
+            }
+            enum unroutable {
+                value "131";
+                description
+                    "Status bits are 10 (Dropped). Drop Unroutable";
+            }
+            enum adjacency {
+                value "132";
+                description
+                    "Status bits are 10 (Dropped). Drop Adjacency";
+            }
+            enum fragment-df {
+                value "133";
+                description
+                    "Status bits are 10 (Dropped). Drop Fragmentation & DF set";
+            }
+            enum bad-header-check {
+                value "134";
+                description
+                    "Status bits are 10 (Dropped). Drop Bad header checksum";
+            }
+            enum bad-tot-len {
+                value "135";
+                description
+                    "Status bits are 10 (Dropped). Drop Bad total Length";
+            }
+            enum bad-header-len {
+                value "136";
+                description
+                    "Status bits are 10 (Dropped). Drop Bad Header Length";
+            }
+            enum bad-ttl {
+                value "137";
+                description
+                    "Status bits are 10 (Dropped). Drop bad TTL";
+            }
+            enum policer {
+                value "138";
+                description
+                    "Status bits are 10 (Dropped). Drop Policer";
+            }
+            enum wred {
+                value "139";
+                description
+                    "Status bits are 10 (Dropped). Drop WRED";
+            }
+            enum rpf {
+                value "140";
+                description
+                    "Status bits are 10 (Dropped). Drop RPF";
+            }
+            enum for-us {
+                value "141";
+                description
+                    "Status bits are 10 (Dropped). Drop For us";
+            }
+            enum bad-out-interf {
+                value "142";
+                description
+                    "Status bits are 10 (Dropped). Drop Bad output interface";
+            }
+            enum hardware {
+                value "143";
+                description
+                    "Status bits are 10 (Dropped). Drop Hardware";
+            }
+            enum unknown-consumed {
+                value "192";
+                description
+                    "Status bits are 11 (Consumed). Unknown";
+            }
+            enum term-punt-adjacency {
+                value "193";
+                description
+                    "Status bits are 11 (Consumed). Terminate Punt Adjacency";
+            }
+            enum term-incomp-adjacency {
+                value "194";
+                description
+                    "Status bits are 11 (Consumed). Terminate Incomplete Adjacency";
+            }
+            enum term-for-us {
+                value "195";
+                description
+                    "Status bits are 11 (Consumed). Terminate For us";
+            }
+        }
+
+        description
+            "Possible types of forwarding status for Netflow v9";
+
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format (FORWARDING STATUS)";
+    }
+
+    typedef igmp-type {
+        type enumeration {
+            enum membership-query {
+                value "17";
+                description
+                    "IGMP Membership Query";
+            }
+            enum membership-report-v1 {
+                value "18";
+                description
+                    "IGMPv1 Membership Report";
+            }
+            enum dvmrp {
+                value "19";
+                description
+                    "DVMRP";
+            }
+            enum pim-v1 {
+                value "20";
+                description
+                    "PIM version 1";
+            }
+            enum trace-messages {
+                value "21";
+                description
+                    "Cisco Trace Messages";
+            }
+            enum membership-report-v2 {
+                value "22";
+                description
+                    "IGMPv2 Membership Report";
+            }
+            enum leave-group-v2 {
+                value "23";
+                description
+                    "IGMPv2 Leave Group";
+            }
+            enum mul-traceroute-resp {
+                value "30";
+                description
+                    "Multicast Traceroute Response";
+            }
+            enum mul-traceroute {
+                value "31";
+                description
+                    "Multicast Traceroute";
+            }
+            enum membership-report-v3 {
+                value "34";
+                description
+                    "IGMPv3 Membership Report";
+            }
+            enum mul-router-advert {
+                value "48";
+                description
+                    "Multicast Router Advertisement";
+            }
+            enum mul-router-sol {
+                value "49";
+                description
+                    "Multicast Router Solicitation";
+            }
+            enum mul-router-term {
+                value "50";
+                description
+                    "Multicast Router Termination";
+            }
+        }
+
+        description
+            "Possible values of Internet Group Management Protocol (IGMP) packet type";
+
+        reference
+            "IANA, Internet Group Management Protocol (IGMP) Type Numbers, https://www.iana.org/assignments/igmp-type-numbers/igmp-type-numbers.xhtml#igmp-type-numbers-1";
+
+    }
+
+    typedef sampling-mode-type{
+        type enumeration {
+            enum deterministic {
+                value "1";
+                description
+                    "Deterministic Sampling is used";
+            }
+            enum random {
+                value "2";
+                description
+                    "Random Sampling is used";
+            }
+        }
+        description
+            "Possible modes of sampling in Netflow v9";
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_SAMPLER_MODE)";
+    }
+
+    typedef ip-version-type{
+        type enumeration {
+            enum ipv4 {
+                value "4";
+                description
+                    "The IPv4 protocol as defined in RFC 791";
+            }
+            enum ipv6 {
+                value "6";
+                description
+                    "The IPv6 protocol as defined in RFC 2460";
+            }
+        }
+
+        description
+            "Possible versions of IP Protocol";
+
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format (IP_PROTOCOL_VERSION)";
+    }
+
+    typedef direction-type{
+        type enumeration {
+            enum ingress {
+                value "0";
+                description
+                    "Ingress flow";
+            }
+            enum egress {
+                value "1";
+                description
+                    "Egress flow";
+            }
+        }
+        description
+            "Possible Flow directions in Netflow v9";
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format (DIRECTION)";
+    }
+
+    typedef tcp-flags-type{
+        type bits{
+            bit fin {
+                position 0;
+                description
+                    "TCP finish flag";
+            }
+            bit syn {
+                position 1;
+                description
+                    "TCP synchronize flag";
+            }
+            bit rst {
+                position 2;
+                description
+                    "TCP reset flag";
+            }
+            bit psh {
+                position 3;
+                description
+                    "TCP push flag";
+            }
+            bit ack {
+                position 4;
+                description
+                    "TCP acknowledgement flag";
+            }
+            bit urg {
+                position 5;
+                description
+                    "TCP urgent flag";
+            }
+            bit ece {
+                position 6;
+                description
+                    "TCP ECN echo flag";
+            }
+            bit cwr {
+                position 7;
+                description
+                    "TCP congestion window reduced flag";
+            }
+        }
+        description
+            "Possible TCP flags seen in an IP flow";
+        reference
+            "Cisco IOS XE Release 3SE (Cisco WLC 5700 Series), Flexible NetFlow Command Reference, Chapter: Flexible NetFlow Commands";
+    }
+
+
+    /*** DATA NODES ***/
+
+    grouping common-flow-fields {
+        description
+            "Fields of a Netflow version 9 Flow Data Record.
+             The names and semantics of fields used follow table 6 of the Cisco white paper (mentioned in the references section).";
+
+        reference
+            "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+
+
+        leaf bytes-in {
+            mandatory true;
+
+            type yang:counter64;
+            units "bytes";
+            description
+                "Incoming counter for the number of bytes associated with an IP flow.";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_BYTES)";
+
+        }
+
+        leaf bytes-out {
+            type yang:counter64;
+            units "bytes";
+            description
+                "Outgoing counter for the number of bytes associated with an IP flow.";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (OUT_BYTES)";
+
+        }
+
+        leaf pkts-in {
+            mandatory true;
+
+            type yang:counter64;
+            units "packets";
+            description
+                "Incoming counter for the number of packets associated with an IP flow.";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_PKTS)";
+
+        }
+
+        leaf pkts-out {
+            type yang:counter64;
+            units "packets";
+            description
+                "Outgoing counter for the number of packets associated with an IP flow.";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (OUT_PKTS)";
+
+        }
+
+        leaf flows {
+            type yang:counter64;
+            units "flows";
+            description
+                "Number of flows that were aggregated";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOWS)";
+
+        }
+
+        leaf protocol {
+            mandatory true;
+
+            type net-v9:protocol-type;
+            description
+                "IP protocol byte";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (PROTOCOL)";
+
+        }
+
+        leaf src-tos {
+            type uint8;
+            description
+                "Type of service byte setting when entering incoming interface";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (SRC_TOS)";
+
+        }
+
+        leaf dst-tos {
+            type uint8;
+            description
+                "Type of service byte setting when exiting outgoing interface";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (DST_TOS)";
+
+        }
+
+        leaf tcp-flags {
+            type net-v9:tcp-flags-type;
+            description
+                "Cumulative of all the TCP flags seen in an IP flow";
+            reference
+                "Cisco IOS XE Release 3SE (Cisco WLC 5700 Series), Flexible NetFlow Command Reference, Chapter: Flexible NetFlow Commands.
+                 Cisco Systems, NetFlow Version 9 Flow-Record Format (TCP_FLAGS)";
+
+        }
+
+        leaf src-port {
+            mandatory true;
+
+            type inet:port-number;
+            description
+                "TCP/UDP source port number used in the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (L4_SRC_PORT)";
+
+        }
+
+        leaf dst-port {
+            mandatory true;
+
+            type inet:port-number;
+            description
+                "TCP/UDP destination port number used in the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (L4_DST_PORT)";
+
+        }
+
+        leaf snmp-in {
+            type int32 {
+                range "0..2147483647";
+            }
+            description
+                "Input interface index";
+            reference
+                "RFC 2863: The Interfaces Group MIB.
+                 Cisco Systems, NetFlow Version 9 Flow-Record Format (INPUT_SNMP)";
+
+        }
+
+        leaf snmp-out {
+            type int32 {
+                range "0..2147483647";
+            }
+            description
+                "Output interface index";
+            reference
+                "RFC 2863: The Interfaces Group MIB.
+                 Cisco Systems, NetFlow Version 9 Flow-Record Format (OUTPUT_SNMP)";
+
+        }
+
+
+        leaf bytes-out-mul {
+            type yang:counter64;
+            units "bytes";
+            description
+                "IP multicast outgoing byte counter associated with the IP flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MUL_DST_BYTES).";
+
+        }
+
+
+        leaf pkts-out-mul {
+            type yang:counter64;
+            units "packets";
+            description
+                "IP multicast outgoing packet counter associated with the IP flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MUL_DST_PKTS)";
+
+        }
+
+
+        leaf first-switched {
+            mandatory true;
+
+            type yang:timestamp;
+            units "milliseconds";
+            description
+                "System uptime at which the first packet of this flow was switched";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FIRST_SWITCHED)";
+
+        }
+
+        leaf last-switched {
+            mandatory true;
+
+            type yang:timestamp;
+            units "milliseconds";
+            description
+                "System uptime at which the last packet of this flow was switched";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (LAST_SWITCHED)";
+
+        }
+
+        leaf min-pkt-len {
+            type uint16;
+            description
+                "Minimum IP packet length on incoming packets of the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MIN_PKT_LNGTH)";
+
+        }
+
+        leaf max-pkt-len {
+            type uint16;
+            description
+                "Maximum IP packet length on incoming packets of the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MAX_PKT_LNGTH)";
+
+        }
+
+        leaf icmp-type {
+            type uint16;
+            description
+                "Internet Control Message Protocol (ICMP) packet type; reported as ((ICMP Type*256) + ICMP code)";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (ICMP_TYPE)";
+
+        }
+
+        leaf igmp-type {
+            type net-v9:igmp-type;
+            description
+                "Internet Group Management Protocol (IGMP) packet type";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MUL_IGMP_TYPE)";
+
+        }
+
+        leaf sampler-name {
+            type string;
+            description
+                "Name of the flow sampler";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (SAMPLER_NAME)";
+
+        }
+
+        leaf sampling-interval {
+            type uint32;
+            description
+                "When using sampled NetFlow, the rate at which packets are sampled";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (SAMPLING_INTERVAL)";
+
+        }
+
+        leaf sampling-algorithm {
+            type net-v9:sampling-mode-type;
+            description
+                "The type of algorithm used for sampled NetFlow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (SAMPLING_ALGORITHM)";
+
+        }
+
+        leaf flow-active-tout {
+            type uint16;
+            units "seconds";
+            default 1800;
+            description
+                "Timeout value (in seconds) for active flow entries in the NetFlow cache";
+            reference
+                "Cisco IOS Flexible NetFlow Command Reference, Chapter: cache (Flexible NetFlow) through match flow.
+                 Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_ACTIVE_TIMEOUT)";
+
+        }
+
+        leaf flow-inactive-tout {
+            type uint16;
+            units "seconds";
+            default 15;
+            description
+                "Timeout value (in seconds) for inactive flow entries in the NetFlow cache";
+            reference
+                "Cisco IOS Flexible NetFlow Command Reference, Chapter: cache (Flexible NetFlow) through match flow.
+                 Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_INACTIVE_TIMEOUT)";
+
+        }
+
+        leaf engine-type {
+            type net-v9:engine-type;
+            description
+                "Type of flow switching engine";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (ENGINE_TYPE)";
+
+        }
+
+        leaf engine-id {
+            type uint8;
+            description
+                "ID number of the flow switching engine";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (ENGINE_ID)";
+
+        }
+
+        leaf tot-bytes-exp {
+            type yang:counter64;
+            units "bytes";
+            description
+                "Counter for the number of bytes exported by the Observation Domain";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (TOTAL_BYTES_EXP)";
+
+        }
+
+        leaf tot-pkts-exp {
+            type yang:counter64;
+            units "packets";
+            description
+                "Counter for the number of packets exported by the Observation Domain";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (TOTAL_PKTS_EXP)";
+
+        }
+
+        leaf tot-flows-exp {
+            type yang:counter64;
+            units "flows";
+            description
+                "Counter for the number of flows exported by the Observation Domain";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (TOTAL_FLOWS_EXP)";
+
+        }
+
+        leaf flow-sampler-id {
+            type uint8;
+            description
+                "Identifier shown in 'show flow-sampler'";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_SAMPLER_ID)";
+
+        }
+
+        leaf flow-sampler-mode {
+            type net-v9:sampling-mode-type;
+            description
+                "The type of algorithm used for sampling data";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_SAMPLER_MODE)";
+
+        }
+
+        leaf flow-sampler-random {
+            type uint32;
+            description
+                "Packet interval at which to sample when Random Sampling is used";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FLOW_SAMPLER_RANDOM_INTERVAL)";
+
+        }
+
+        leaf min-ttl {
+            type uint8;
+            description
+                "Minimum TTL on incoming packets of the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MIN_TTL)";
+
+        }
+
+        leaf max-ttl {
+            type uint8;
+            description
+                "Maximum TTL on incoming packets of the flow";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (MAX_TTL)";
+
+        }
+
+        leaf src-mac-in{
+            mandatory true;
+
+            type yang:mac-address;
+            description
+                "Incoming source MAC address";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_SRC_MAC)";
+
+        }
+
+        leaf dst-mac-in {
+            mandatory true;
+
+            type yang:mac-address;
+            description
+                "Incoming destination MAC address";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_DST_MAC)";
+
+        }
+
+        leaf src-mac-out{
+            type yang:mac-address;
+            description
+                "Outgoing source MAC address";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (OUT_SRC_MAC)";
+
+        }
+
+        leaf dst-mac-out {
+            type yang:mac-address;
+            description
+                "Outgoing destination MAC address";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (OUT_DST_MAC)";
+
+        }
+
+        leaf ip-version {
+            mandatory true;
+
+            type net-v9:ip-version-type;
+            description
+                "IP Protocol version. If not present, version 4 is assumed";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IP_PROTOCOL_VERSION)";
+
+        }
+
+        leaf direction {
+            type net-v9:direction-type;
+            description
+                "Flow direction";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (DIRECTION)";
+
+        }
+
+        leaf if-name {
+            type string;
+            description
+                "Shortened interface name";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IF_NAME)";
+
+        }
+
+        leaf if-desc {
+            type string;
+            description
+                "Full interface name";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (IF_DESC)";
+
+        }
+
+        leaf frag-offset {
+            type uint16;
+            description
+                "The fragment-offset value from fragmented IP packets";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FRAGMENT_OFFSET)";
+
+        }
+
+        leaf forwarding-status {
+            type net-v9:forwarding-status-type;
+            description
+                "Forwarding status is encoded on 1 byte with the 2 left bits giving the status and the 6 remaining bits giving the reason code";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (FORWARDING STATUS)";
+
+        }
+
+        leaf postip-dscp {
+            type inet:dscp;
+            description
+                "The value of a Differentiated Services Code Point (DSCP) encoded in the Differentiated Services Field, after modification";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (postipDiffServCodePoint)";
+
+        }
+
+        leaf repl-factor-mul {
+            type uint32;
+            description
+                "Multicast replication factor";
+            reference
+                "Cisco Systems, NetFlow Version 9 Flow-Record Format (replication factor)";
+
+        }
+
+        container ipv4 {
+
+            description
+                "This container collects all metrics related to IPv4";
+
+            leaf src-address {
+                type inet:ipv4-address;
+                description
+                    "IPv4 source address";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_SRC_ADDR)";
+
+            }
+
+            leaf dst-address {
+                type inet:ipv4-address;
+                description
+                    "IPv4 destination address of the IP flow";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_DST_ADDR)";
+
+            }
+
+            leaf src-mask {
+                type prefix-length-ipv4;
+                description
+                    "The number of contiguous bits in the source address subnet mask i.e.: the submask in slash notation";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (SRC_MASK)";
+
+            }
+
+            leaf dst-mask {
+                type prefix-length-ipv4;
+                description
+                    "The number of contiguous bits in the destination address subnet mask i.e.: the submask in slash notation";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (DST_MASK)";
+
+            }
+
+            leaf src-prefix {
+                type inet:ipv4-prefix;
+                description
+                    "IPv4 source address prefix (specific for Catalyst architecture)";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_SRC_PREFIX)";
+
+            }
+
+            leaf dst-prefix {
+                type inet:ipv4-prefix;
+                description
+                    "IPv4 destination address prefix (specific for Catalyst architecture)";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_DST_PREFIX)";
+
+            }
+
+
+            leaf next-hop {
+                type inet:ipv4-address;
+                description
+                    "IPv4 address of the next-hop router";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_NEXT_HOP)";
+
+            }
+
+            leaf identification {
+                type uint16;
+                description
+                    "The IP v4 identification field";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV4_IDENT)";
+
+            }
+
+        }
+
+
+        container ipv6 {
+
+            description
+                "This container collects all metrics related to IPv6";
+
+            leaf src-address {
+                type inet:ipv6-address;
+                description
+                    "IPv6 source address";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_SRC_ADDR)";
+
+            }
+
+            leaf dst-address {
+                type inet:ipv6-address;
+                description
+                    "IPv6 destination address";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_DST_ADDR)";
+
+            }
+
+            leaf src-mask {
+                type prefix-length-ipv6;
+                description
+                    "Length of the IPv6 source mask in contiguous bits";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_SRC_MASK)";
+
+            }
+
+            leaf dst-mask {
+                type prefix-length-ipv6;
+                description
+                    "Length of the IPv6 destination mask in contiguous bits";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_DST_MASK)";
+
+            }
+
+            leaf next-hop {
+                type inet:ipv6-address;
+                description
+                    "IPv6 address of the next-hop router";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_NEXT_HOP)";
+
+            }
+
+            leaf flow-label {
+                type inet:ipv6-flow-label;
+                description
+                    "IPv6 flow label as defined in RFC 2460";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_FLOW_LABEL)";
+
+            }
+
+            leaf opt-headers {
+                type uint32;
+                description
+                    "Bit-encoded field identifying IPv6 option headers found in the flow";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IPV6_OPTION_HEADERS).";
+
+            }
+
+        }
+
+
+        container mpls {
+
+            description
+                "This container collects all the metrics associated with MPLS (MultiProtocol Label Switching)";
+
+            leaf pal-rd {
+                type uint64;
+                description
+                    "MPLS PAL Route Distinguisher";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS PAL RD)";
+
+            }
+
+            leaf prefix-len {
+                type prefix-length-ipv4;
+                description
+                    "Number of consecutive bits in the MPLS prefix length";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS PREFIX LEN)";
+
+            }
+
+            leaf top-label-type {
+                type net-v9:top-label-type;
+                description
+                    "MPLS Top Label Type";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_TOP_LABEL_TYPE)";
+
+            }
+
+            leaf top-label-ip {
+                type inet:ipv4-address;
+                description
+                    "Forwarding Equivalent Class corresponding to the MPLS Top Label";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_TOP_LABEL_IP_ADDR)";
+
+            }
+
+            leaf label-1 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 1 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_1)";
+
+            }
+
+            leaf label-2 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 2 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_2)";
+
+            }
+
+            leaf label-3 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 3 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_3)";
+
+            }
+
+            leaf label-4 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 4 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_4)";
+
+            }
+
+            leaf label-5 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 5 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_5)";
+
+            }
+
+            leaf label-6 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 6 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_6)";
+
+            }
+
+            leaf label-7 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 7 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_7)";
+
+            }
+
+            leaf label-8 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 8 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_8)";
+
+            }
+
+            leaf label-9 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 9 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_9)";
+
+            }
+
+            leaf label-10 {
+                type uint32{
+                    range "0..16777215";
+                }
+                description
+                    "MPLS label at position 10 in the stack. This comprises 20 bits of MPLS label, 3 EXP (experimental) bits and 1 S (end-of-stack) bit";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (MPLS_LABEL_10)";
+
+            }
+
+        }
+
+
+        container bgp {
+
+            description
+                "This container collects all the metrics associated with BGP (Border Gateway Protocol)";
+
+            leaf src-as {
+                type inet:as-number;
+                description
+                    "Source BGP autonomous system number";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (SRC_AS)";
+
+            }
+
+            leaf dst-as {
+                type inet:as-number;
+                description
+                    "Destination BGP autonomous system number";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (DST_AS)";
+
+            }
+
+            leaf next-hop {
+                type inet:ipv4-address;
+                description
+                    "Next-hop router's IPv4 in the BGP domain";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (BGP_IPV4_NEXT_HOP)";
+
+            }
+
+            leaf next-hop-ipv6 {
+                type inet:ipv6-address;
+                description
+                    "Next-hop router's IPv6 in the BGP domain";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (BGP_IPV6_NEXT_HOP)";
+
+            }
+
+            leaf src-traffic-id {
+                type uint32;
+                description
+                    "BGP Policy Accounting Source Traffic Index";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (SRC TRAFFIC INDEX)";
+
+            }
+
+            leaf dst-traffic-id {
+                type uint32;
+                description
+                    "BGP Policy Accounting Destination Traffic Index";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (DST TRAFFIC INDEX)";
+
+            }
+
+        }
+
+        container vlan {
+
+            description
+                "This container collects the metrics related to a VLAN";
+
+            leaf src-id {
+                type uint16 {
+                    range 0..4095;
+                }
+                description
+                    "Virtual LAN identifier associated with ingress interface";
+                reference
+                    "Cisco IOS Release 15M&T, NetFlow Configuration Guide, Chapter: NetFlow Layer 2 and Security Monitoring Exports.
+                     Cisco Systems, NetFlow Version 9 Flow-Record Format (SRC_VLAN)";
+
+            }
+
+            leaf dst-id {
+                type uint16 {
+                    range 0..4095;
+                }
+                description
+                    "Virtual LAN identifier associated with egress interface";
+                reference
+                    "Cisco IOS Release 15M&T, NetFlow Configuration Guide, Chapter: NetFlow Layer 2 and Security Monitoring Exports.
+                     Cisco Systems, NetFlow Version 9 Flow-Record Format  (DST_VLAN)";
+
+            }
+
+        }
+
+        container permanent-flow {
+
+            description
+                "This container collects all metrics related to a permanent flow";
+
+
+            leaf bytes-in {
+                type yang:counter64;
+                units "bytes";
+                description
+                    "Running byte counter for a permanent flow";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_PERMANENT_BYTES)";
+
+            }
+
+            leaf pkts-in {
+                type yang:counter64;
+                units "packets";
+                description
+                    "Running packet counter for a permanent flow";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (IN_PERMANENT_PKTS)";
+
+            }
+
+        }
+
+        container application {
+
+            description
+                "This container collects all application-related metrics";
+
+            leaf desc {
+                type string;
+                description
+                    "Application description";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (APPLICATION DESCRIPTION)";
+
+            }
+
+            leaf tag {
+                type string;
+                description
+                    "8 bits of engine ID, followed by n bits of classification";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (APPLICATION TAG)";
+
+            }
+
+            leaf name {
+                type string;
+                description
+                    "Name associated with a classification";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format (APPLICATION NAME)";
+
+            }
+
+        }
+
+        container layer2-pkt-section {
+
+            description
+                "This container collects all metrics related to the Layer 2 packet section";
+
+            leaf offset {
+                type uint16;
+                description
+                    "Layer 2 packet section offset. Potentially a generic offset";
+                reference
+                    "Internet-Draft, Cisco Specific Information Elements reused in IPFIX (layer2packetSectionOffset).
+                     Cisco Systems, NetFlow Version 9 Flow-Record Format (layer2packetSectionOffset)";
+
+            }
+
+            leaf size {
+                type uint16;
+                description
+                    "Layer 2 packet section size. Potentially a generic size";
+                reference
+                    "Internet-Draft, Cisco Specific Information Elements reused in IPFIX (layer2packetSectionSize)
+                     Cisco Systems, NetFlow Version 9 Flow-Record Format (layer2packetSectionSize)";
+
+            }
+
+            leaf data {
+                type string;
+                description
+                    "Layer 2 packet section data";
+                reference
+                    "Internet-Draft, Cisco Specific Information Elements reused in IPFIX (layer2packetSectionData)
+                     Cisco Systems, NetFlow Version 9 Flow-Record Format (layer2packetSectionData)";
+
+            }
+
+        }
+
+    }
+
+
+    container netflow {
+        config false;
+
+        description
+            "This container collects all information related to the NetFlow collecting or exporting process";
+
+        container collector-goflow2 {
+            description
+                "Within this container those data that are specific to the Goflow2 collector are included";
+
+            leaf time-received {
+                mandatory true;
+
+                type yang:timestamp;
+                description
+                    "Timestamp of when a NetFlow Export Packet was received at the collector";
+
+                reference
+                    "NetSampler, GoFlow2, (2021), GitHub repository";
+            }
+
+            leaf sampler-address {
+                type inet:ipv4-address;
+                description
+                    "IPv4 address of the device that generated the NetFlow Export Packet, i.e. Netflow Exporter";
+
+                reference
+                    "NetSampler, GoFlow2, (2021), GitHub repository";
+            }
+
+            leaf sampler-address-ipv6 {
+                type inet:ipv6-address;
+                description
+                    "IPv6 address of the device that generated the NetFlow Export Packet, i.e. Netflow Exporter";
+
+                reference
+                    "NetSampler, GoFlow2, (2021), GitHub repository";
+            }
+
+        }
+
+        container export-packet {
+            description
+                "This container collects all fields that appear in the NetFlow Export Packet header and possible fields of each Flow Data Record that is transmitted in this packet
+                 The names and semantics of the fields used follow the Cisco white paper (mentioned in the references section)";
+
+
+            leaf sequence-number {
+                mandatory true;
+
+                type yang:counter32;
+                description
+                    "Incremental sequence counter of all Export Packets sent by this export device";
+
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+            }
+
+            leaf count {
+                type uint16;
+                description
+                    "Number of FlowSet records (both template and data) contained within this packet";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+
+            }
+
+            leaf system-uptime {
+                type yang:timestamp;
+                units "milliseconds";
+                description
+                    "Time in milliseconds since this device was first booted";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+
+            }
+
+            leaf unix-seconds {
+                type yang:timestamp;
+                description
+                    "Seconds since 0000 Coordinated Universal Time (UTC) 1970";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+
+            }
+
+            leaf source-id {
+                type uint32;
+                description
+                    "A 32-bit value that is used to guarantee uniqueness for all flows exported from a particular device.
+                    The format of this field is vendor specific. In the Cisco implementation, the first two bytes are reserved for future expansion, and will always be zero.
+                    Byte 3 provides uniqueness with respect to the routing engine on the exporting device.
+                    Byte 4 provides uniqueness with respect to the particular line card or Versatile Interface Processor on the exporting device";
+                reference
+                    "Cisco Systems, NetFlow Version 9 Flow-Record Format, (2011)";
+
+            }
+
+            list flow-data-record {
+                ordered-by "user";
+                key "flow-id";
+
+                description
+                    "This list contains all possible fields of a Flow Data Record sent in a Export Packet";
+
+                leaf flow-id {
+                    type int32;
+                    description
+                        "Hash code of the 5-tuple identifying a Flow Data Record according to a certain export flow format (version 9)";
+                }
+
+                uses common-flow-fields;
+            }
+
+        }
+
+    }
+
+}

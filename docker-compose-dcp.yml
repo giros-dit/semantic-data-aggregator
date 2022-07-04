@@ -73,7 +73,7 @@ services:
         jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 1
   gateway:
-    image: scorpiobroker/scorpio:gateway_aaio_2.1.1
+    image: scorpiobroker/scorpio:gateway_aaio_2.1.13
     hostname: gateway
     container_name: gateway
     ports:
@@ -151,7 +151,7 @@ services:
     logging:
       driver: none
   scorpio:
-    image: scorpiobroker/scorpio:scorpio-aaio_2.1.1
+    image: scorpiobroker/scorpio:scorpio-aaio_2.1.13
     hostname: scorpio
     container_name: scorpio
     ports:
@@ -190,5 +190,5 @@ services:
       - "2181"
     logging:
       driver: none
-  
+
 

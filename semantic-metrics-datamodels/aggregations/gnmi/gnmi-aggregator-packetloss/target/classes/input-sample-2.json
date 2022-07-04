@@ -1,0 +1,29 @@
+{
+    "openconfig-interfaces-notification-wrapper:notification": {
+        "event-time": "2022-06-02T17:44:17Z",
+        "interfaces": {
+            "interface": [
+                {
+                    "name": "Ethernet1",
+                    "state": {
+                        "counters": {
+                            "in-broadcast-pkts": "20",
+                            "in-discards": "20",
+                            "in-errors": "0",
+                            "in-fcs-errors": "0",
+                            "in-multicast-pkts": "20",
+                            "in-octets": "20",
+                            "in-unicast-pkts": "20",
+                            "out-broadcast-pkts": "30",
+                            "out-discards": "20",
+                            "out-errors": "0",
+                            "out-multicast-pkts": "30",
+                            "out-octets": "30",
+                            "out-unicast-pkts": "30"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

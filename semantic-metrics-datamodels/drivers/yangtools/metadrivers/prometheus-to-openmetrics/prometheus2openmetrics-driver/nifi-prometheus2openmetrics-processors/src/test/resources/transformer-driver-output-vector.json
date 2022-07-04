@@ -1,0 +1,56 @@
+{
+    "openmetrics:metric-families": {
+        "metric-family": [
+            {
+                "help": "",
+                "metric-type": "gauge",
+                "metrics": {
+                    "metric": [
+                        {
+                            "label-set-id": "-885525287",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "node"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "localhost:9100"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "timestamp": "1435781451781",
+                                "value": "0"
+                            },
+                            "name": "up"
+                        },
+                        {
+                            "label-set-id": "-181020729",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "prometheus"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "localhost:9090"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "timestamp": "1435781451781",
+                                "value": "1"
+                            },
+                            "name": "up"
+                        }
+                    ]
+                },
+                "name": "",
+                "unit": ""
+            }
+        ]
+    }
+}

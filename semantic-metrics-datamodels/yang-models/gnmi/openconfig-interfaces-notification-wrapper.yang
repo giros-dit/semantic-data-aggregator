@@ -1,0 +1,52 @@
+module openconfig-interfaces-notification-wrapper {
+
+  yang-version 1.1;
+
+  /*** NAMESPACE / PREFIX DEFINITION ***/
+
+  namespace 'http://data-aggregator.com/ns/openconfig-interfaces-notification-wrapper';
+
+  prefix "oc-if-wrapper";
+
+  /*** LINKAGE (IMPORTS / INCLUDES / AUGMENTATIONS) ***/
+  import openconfig-interfaces {
+    prefix oc-if;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      reference
+          "RFC 6991: Common YANG Data Types";
+  }
+
+
+  /*** META INFORMATION ***/
+
+  organization "GIROS research group";
+
+  contact "gi.giros@upm.es";
+
+  description
+      "YANG model that provides a wrapper for the notification about the openconfig-interfaces module.";
+
+  
+  revision "2022-05-13" {
+      description
+          "Initial revision.";
+      reference "0.1.0";
+  }
+
+  /*** DATA NODES ***/
+  container notification {
+    config false;
+    description
+      "Enclosing container for the notification event generated about the openconfig-interfaces module.";
+    leaf event-time {
+      type yang:date-and-time;
+      units true;
+      description
+        "Date and time in which the notification event was generated (following the ISO 8601 format).";
+    }
+    uses oc-if:interfaces-top;
+  }
+}

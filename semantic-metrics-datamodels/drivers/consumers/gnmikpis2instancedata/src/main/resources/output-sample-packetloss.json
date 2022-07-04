@@ -1,0 +1,31 @@
+{
+  "ietf-yang-instance-data:instance-data-set": {
+    "timestamp": "2022-06-03T08:48:10Z",
+    "description": [
+      "The percentage of input packets that fail to reach their destination in a period of time, measured across the interfaces of network devices."
+    ],
+    "name": "packet-loss-kpi",
+    "content-schema": {
+      "module": [
+        "openconfig-interfaces-kpis@2022-05-13"
+      ]
+    },
+    "content-data": {
+      "openconfig-interfaces:interfaces": {
+        "interface": [
+          {
+            "name": "Ethernet1",
+            "openconfig-interfaces-kpis:packet-loss-kpi-notification": {
+              "event-time": "2022-06-03T08:48:10Z",
+              "packet-loss-kpi": {
+                "duration": 10,
+                "packet-loss-in": "25.0",
+                "packet-loss-out": "14.285714285714285"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

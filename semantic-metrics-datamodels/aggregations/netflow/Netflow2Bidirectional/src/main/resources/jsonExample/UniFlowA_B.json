@@ -1,0 +1,80 @@
+{
+    "netflow-v9:netflow": {
+        "collector-goflow2": {
+            "time-received": 1653306902,
+            "sampler-address": "172.26.0.1"
+        },
+        "export-packet": {
+            "count": 1384,
+            "flow-data-record": [
+                {
+                    "flow-id": -1747220356,
+                    "dst-port": 443,
+                    "bgp": {
+                        "src-as": 0,
+                        "next-hop": "0.0.0.0",
+                        "dst-as": 0
+                    },
+                    "forwarding-status": "unknown",
+                    "engine-type": "rp",
+                    "snmp-in": 0,
+                    "dst-mac-out": "00:00:00:00:00:00",
+                    "protocol": "tcp",
+                    "icmp-type": 0,
+                    "bytes-in": "2473",
+                    "max-ttl": 0,
+                    "bytes-out": "0",
+                    "src-mac-out": "00:00:00:00:00:00",
+                    "last-switched": "1652991012527",
+                    "src-tos": 0,
+                    "dst-tos": 0,
+                    "sampling-interval": 1,
+                    "first-switched": "1652991011213",
+                    "src-mac-in": "00:00:00:00:00:00",
+                    "vlan": {
+                        "dst-id": 0,
+                        "src-id": 0
+                    },
+                    "direction": "ingress",
+                    "tcp-flags": "syn psh ack",
+                    "pkts-in": "7",
+                    "dst-mac-in": "00:00:00:00:00:00",
+                    "ip-version": "ipv4",
+                    "ipv4": {
+                        "src-address": "1.4.2.252",
+                        "dst-mask": 0,
+                        "dst-address": "1.4.129.62",
+                        "next-hop": "0.0.0.0",
+                        "src-mask": 0,
+                        "identification": 0
+                    },
+                    "mpls": {
+                        "label-9": 0,
+                        "label-7": 0,
+                        "label-8": 0,
+                        "label-5": 0,
+                        "label-6": 0,
+                        "prefix-len": 0,
+                        "top-label-ip": "0.0.0.0",
+                        "label-3": 0,
+                        "pal-rd": "0",
+                        "label-4": 0,
+                        "label-1": 0,
+                        "label-2": 0,
+                        "top-label-type": "unknown",
+                        "label-10": 0
+                    },
+                    "min-ttl": 0,
+                    "src-port": 65106,
+                    "pkts-out": "0",
+                    "snmp-out": 0,
+                    "engine-id": 0
+                }
+            ],
+            "sequence-number": 64499,
+            "system-uptime": 20030,
+            "unix-seconds": 1653306901,
+            "source-id": 0
+        }
+    }
+}

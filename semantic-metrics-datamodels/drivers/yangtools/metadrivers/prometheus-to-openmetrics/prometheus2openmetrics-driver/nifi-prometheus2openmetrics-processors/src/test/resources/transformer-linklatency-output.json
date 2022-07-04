@@ -1,0 +1,78 @@
+{
+    "openmetrics:metric-families": {
+        "metric-family": [
+            {
+                "metric-type": "gauge",
+                "metrics": {
+                    "metric": [
+                        {
+                            "label-set-id": "236264325",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "pushgateway"
+                                    },
+                                    {
+                                        "name": "exported_job",
+                                        "value": "lvs3"
+                                    },
+                                    {
+                                        "name": "host",
+                                        "value": "192.168.13.17"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "pushgateway:9091"
+                                    },
+                                    {
+                                        "name": "exported_instance",
+                                        "value": "5growth_probe_efacec_e_UC2"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "timestamp": "1637426612190",
+                                "value": "4006.5"
+                            },
+                            "name": "linklatency"
+                        },
+                        {
+                            "label-set-id": "-1961091979",
+                            "labels": {
+                                "label": [
+                                    {
+                                        "name": "job",
+                                        "value": "pushgateway"
+                                    },
+                                    {
+                                        "name": "exported_job",
+                                        "value": "gsmart"
+                                    },
+                                    {
+                                        "name": "host",
+                                        "value": "192.168.13.16"
+                                    },
+                                    {
+                                        "name": "instance",
+                                        "value": "pushgateway:9091"
+                                    },
+                                    {
+                                        "name": "exported_instance",
+                                        "value": "5growth_probe_efacec_e"
+                                    }
+                                ]
+                            },
+                            "metric-points": {
+                                "timestamp": "1637426612190",
+                                "value": "18"
+                            },
+                            "name": "linklatency"
+                        }
+                    ]
+                },
+                "name": "linklatency"
+            }
+        ]
+    }
+}

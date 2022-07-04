@@ -1,0 +1,26 @@
+{
+    "@context": {
+        "address": "https://semantic-data-aggregator.org/telemetry/address",
+        "authenticates": "https://semantic-data-aggregator.org/telemetry/Credentials/authenticates",
+        "capabilities": "https://semantic-data-aggregator.org/telemetry/Netconf/capabilities",
+        "Credentials": "https://semantic-data-aggregator.org/telemetry/Credentials",
+        "deviation": "https://semantic-data-aggregator.org/telemetry/Module/deviation",
+        "Device": "https://semantic-data-aggregator.org/telemetry/Device",
+        "encodings": "https://semantic-data-aggregator.org/telemetry/Gnmi/encodings",
+        "feature": "https://semantic-data-aggregator.org/telemetry/Module/feature",
+        "Gnmi": "https://semantic-data-aggregator.org/telemetry/Gnmi",
+        "implementedBy": "https://semantic-data-aggregator.org/telemetry/Module/implementedBy",
+        "Module": "https://semantic-data-aggregator.org/telemetry/Module",
+        "name": "https://smartdatamodels.org/name",
+        "namespace": "https://semantic-data-aggregator.org/telemetry/Module/namespace",
+        "Netconf": "https://semantic-data-aggregator.org/telemetry/Netconf",
+        "password": "https://semantic-data-aggregator.org/telemetry/Credentials/password",
+        "port": "https://semantic-data-aggregator.org/telemetry/port",
+        "revision": "https://semantic-data-aggregator.org/telemetry/Module/revision",
+        "softwareVersion": "https://semantic-data-aggregator.org/telemetry/Device/softwareVersion",
+        "supportedBy": "https://semantic-data-aggregator.org/telemetry/supportedBy",
+        "username": "https://semantic-data-aggregator.org/telemetry/Credentials/username",
+        "vendor": "https://semantic-data-aggregator.org/telemetry/Device/vendor",
+        "version": "https://semantic-data-aggregator.org/telemetry/Gnmi/version"
+    }
+}
