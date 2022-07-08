@@ -25,11 +25,11 @@
           "max-ttl": 0,
           "bytes-out": "0",
           "src-mac-out": "00:00:00:00:00:00",
-          "last-switched": "1646564427756",
+          "last-switched": "1646564427756762",
           "src-tos": 184,
           "dst-tos": 0,
           "sampling-interval": 1,
-          "first-switched": "1646564299574",
+          "first-switched": "1646564299574023",
           "src-mac-in": "00:00:00:00:00:00",
           "vlan": {
             "dst-id": 0,
