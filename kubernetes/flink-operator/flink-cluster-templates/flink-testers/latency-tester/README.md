@@ -1,4 +1,4 @@
-# Accessing the web UI of the JobManager (Master)
+# Measuring Latency in Any SDA Component
 
 This directory contains the templates of Kubernetes in charge of deploying the applications needed to measure the latency of the different componentes of the SDA.
 
