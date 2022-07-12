@@ -20,10 +20,14 @@ spec:
   containers:
   - name: kaniko-demo
     image: gcr.io/kaniko-project/executor:debug
-    args: ["--context=git://github.com/aams-telefonica/kaniko-demo.git",
+    args: [ 
+            "--context=git://github.com/aams-telefonica/kaniko-demo.git",
+            "--context-sub-path=crypto-detector",
             "--destination=192.168.159.9:31320/kaniko-demo-v1:latest",
             "--dockerfile=Dockerfile",
-            "--insecure", "--skip-tls-verify", "--verbosity=debug"]
+            "--insecure", "--skip-tls-verify", "--verbosity=debug"
+           ]
+## If needed for the repository used
 #    volumeMounts:
 #      - name: kaniko-secret
 #        mountPath: /kaniko/.docker
