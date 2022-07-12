@@ -27,11 +27,11 @@ spec:
             "--dockerfile=Dockerfile",
             "--insecure", "--skip-tls-verify", "--verbosity=debug"
            ]
+  restartPolicy: Never
 ## If needed for the repository used
 #    volumeMounts:
 #      - name: kaniko-secret
 #        mountPath: /kaniko/.docker
-#  restartPolicy: Never
 #  volumes:
 #    - name: kaniko-secret
 #      secret:
