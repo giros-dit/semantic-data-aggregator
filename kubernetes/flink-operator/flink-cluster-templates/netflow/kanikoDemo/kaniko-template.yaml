@@ -19,18 +19,19 @@ metadata:
 spec:
   containers:
   - name: kaniko-demo
-    image: kubernetes:31320/kaniko-demo:latest
-    args: ["--context=git://github.com/agavitalis/kaniko-kubernetes.git",
-            "--destination=agavitalis/kaniko-build-demo:1.0.0",
-            "--dockerfile=dockerfile"]
-    volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker
-  restartPolicy: Never
-  volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: reg-credentials
-        items:
-          - key: .dockerconfigjson
-            path: config.json
+    image: gcr.io/kaniko-project/executor:debug
+    args: ["--context=git://github.com/aams-telefonica/kaniko-demo.git",
+            "--destination=192.168.159.9:31320/kaniko-demo-v1:latest",
+            "--dockerfile=Dockerfile",
+            "--insecure", "--skip-tls-verify", "--verbosity=debug"]
+#    volumeMounts:
+#      - name: kaniko-secret
+#        mountPath: /kaniko/.docker
+#  restartPolicy: Never
+#  volumes:
+#    - name: kaniko-secret
+#      secret:
+#        secretName: reg-credentials
+#        items:
+#          - key: .dockerconfigjson
+#            path: config.json
