@@ -34,6 +34,8 @@ def crypto_detector():
 
     # Load the Predictor
     rf = joblib.load("RandomForestTrained.joblib")
+    print("ML module loaded")
+    print("Detector Running!")
 
 
     # READ from kafka topic when messages available
@@ -50,18 +52,16 @@ def crypto_detector():
 
             # PROCESS MESSAGE to obtain necessary values (transform into numpy array)
             featuresl = message.split(",")
-            print(type(featuresl))
-            print(featuresl)
-            # featuresl = featuresl[] # TEMP*** take useful features
-            features_a = np.array(featuresl).reshape(1,-1)
+
+            # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
+            features_a = featuresl[62:]
+            features_a = np.array(features_a).reshape(1,-1)
 
 
             # MAKE PREDICTION
-            prediction = rf.predict(features_a)
-            if(prediction[0]==1):
-                output = "crypto"
-            else:
-                output = "normal"
+            cryptoproba = rf.predict_proba(features_a)
+            output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
+            output = ",".join(output)
 
             # WRITE PREDICTION in kafka topic
             print("OUTPUT: %s\n" % (output), flush=True)
@@ -97,6 +97,9 @@ def main(args):
     KAFKA_BROKER = args["broker"]
     KAFKA_TOPIC_CONSUME = args["consume"]
     KAFKA_TOPIC_PRODUCE = args["produce"]
+
+    print("Passed: -b " + KAFKA_BROKER + " -c " + KAFKA_TOPIC_CONSUME + " -p " + KAFKA_TOPIC_PRODUCE)
+    print("Launching detector")
 
     signal.signal(signal.SIGTERM, handler)
     detection = threading.Thread(target=safe_loop, args=[crypto_detector])
