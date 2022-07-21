@@ -2,8 +2,8 @@
 # Build stage
 #
 FROM maven:3.6.0-jdk-11-slim AS build
-COPY semantic-data-aggregator/aggregations/ /home/app/aggregations
-COPY semantic-data-aggregator/yang-models/ /home/app/yang-models
+COPY semantic-metrics-datamodels/aggregations/ /home/app/aggregations
+COPY semantic-metrics-datamodels/yang-models/ /home/app/yang-models
 RUN mvn -f /home/app/aggregations/netflow/goflowAggregator/pom.xml clean package
 
 #

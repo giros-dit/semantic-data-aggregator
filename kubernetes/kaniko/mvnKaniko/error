@@ -1,0 +1,39 @@
+DEBU[0000] Getting source context from git://github.com/giros-dit/semantic-data-aggregator.git#refs/heads/feature-105
+DEBU[0000] Getting source from reference refs/heads/feature-105
+Enumerating objects: 10373, done.
+Counting objects: 100% (10370/10370), done.
+Compressing objects: 100% (3529/3529), done.
+Total 10373 (delta 5381), reused 10334 (delta 5367), pack-reused 3
+DEBU[0288] Build context located at /kaniko/buildcontext/
+DEBU[0288] Copying file /kaniko/buildcontext/kubernetes/kaniko/mvnKaniko/Dockerfile to /kaniko/Dockerfile
+DEBU[0288] Skip resolving path /kaniko/Dockerfile
+DEBU[0288] Skip resolving path /kaniko/buildcontext/
+DEBU[0288] Skip resolving path /cache
+DEBU[0288] Skip resolving path
+DEBU[0288] Skip resolving path
+DEBU[0288] Skip resolving path
+DEBU[0288] Skip resolving path
+INFO[0288] Resolved base name maven:3.6.0-jdk-11-slim to build
+DEBU[0288] Built stage name to index map: map[build:0]
+INFO[0288] Using dockerignore file: /kaniko/buildcontext/.dockerignore
+INFO[0288] Retrieving image manifest maven:3.6.0-jdk-11-slim
+INFO[0288] Retrieving image maven:3.6.0-jdk-11-slim from registry index.docker.io
+INFO[0289] Retrieving image manifest flink:1.14.4-scala_2.12-java11
+INFO[0289] Retrieving image flink:1.14.4-scala_2.12-java11 from registry index.docker.io
+DEBU[0291] Resolved /home/app/aggregations/netflow/goflowAggregator/target/netflowAggregator-1.0.jar to /home/app/aggregations/netflow/goflowAggregator/target/netflowAggregator-1.0.jar
+DEBU[0291] Resolved /opt/flink/usrlib/netflowAggregator-1.0.jar to /opt/flink/usrlib/netflowAggregator-1.0.jar
+INFO[0291] Built cross stage deps: map[0:[/home/app/aggregations/netflow/goflowAggregator/target/netflowAggregator-1.0.jar]]
+INFO[0291] Retrieving image manifest maven:3.6.0-jdk-11-slim
+INFO[0291] Returning cached image manifest
+INFO[0291] Executing 0 build triggers
+INFO[0291] Unpacking rootfs as cmd COPY semantic-data-aggregator/aggregations/ /home/app/aggregations requires it.
+DEBU[0291] Ignore list: [{/kaniko false} {/etc/mtab false} {/tmp/apt-key-gpghome true} {/var/run false} {/proc false} {/dev false} {/dev/pts false} {/sys false} {/sys/fs/cgroup false} {/sys/fs/cgroup/systemd false} {/sys/fs/cgroup/freezer false} {/sys/fs/cgroup/net_cls,net_prio false} {/sys/fs/cgroup/perf_event false} {/sys/fs/cgroup/cpu,cpuacct false} {/sys/fs/cgroup/devices false} {/sys/fs/cgroup/rdma false} {/sys/fs/cgroup/pids false} {/sys/fs/cgroup/hugetlb false} {/sys/fs/cgroup/memory false} {/sys/fs/cgroup/cpuset false} {/sys/fs/cgroup/blkio false} {/dev/mqueue false} {/busybox false} {/dev/termination-log false} {/etc/resolv.conf false} {/etc/hostname false} {/etc/hosts false} {/dev/shm false} {/var/run/secrets/kubernetes.io/serviceaccount false} {/proc/bus false} {/proc/fs false} {/proc/irq false} {/proc/sys false} {/proc/sysrq-trigger false} {/proc/acpi false} {/proc/kcore false} {/proc/keys false} {/proc/timer_list false} {/proc/sched_debug false} {/proc/scsi false} {/sys/firmware false}]
+DEBU[0291] Not adding /dev because it is ignored
+DEBU[0291] Not adding /etc/hostname because it is ignored
+DEBU[0291] Not adding /etc/resolv.conf because it is ignored
+DEBU[0292] Not adding /proc because it is ignored
+DEBU[0292] Not adding /sys because it is ignored
+DEBU[0294] Not adding /var/run because it is ignored
+DEBU[0329] Resolved semantic-data-aggregator/aggregations/ to semantic-data-aggregator/aggregations/
+DEBU[0329] Resolved /home/app/aggregations to /home/app/aggregations
+error building image: error building stage: failed to get files used from context: failed to get fileinfo for /kaniko/buildcontext/semantic-data-aggregator/aggregations: lstat /kaniko/buildcontext/semantic-data-aggregator/aggregations: no such file or directory
