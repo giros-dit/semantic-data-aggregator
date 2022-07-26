@@ -24,7 +24,7 @@ spec:
             "--context=git://github.com/giros-dit/semantic-data-aggregator.git#refs/heads/feature-105",
 #            "--context-sub-path=semantic-metrics-datamodels/",
             "--dockerfile=kubernetes/kaniko/mvnKaniko/Dockerfile",
-            "--destination=192.168.159.9:31320/netflow2cds:latest",
+            "--destination=kubernetes:31320/netflow2cds:latest",
             "--insecure", "--skip-tls-verify", "--verbosity=debug"
            ]
   restartPolicy: Never
