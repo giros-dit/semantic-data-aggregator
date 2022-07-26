@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 COPY crypto-detector.py /app
 
-ENTRYPOINT ["python3", "/app/crypto-detector.py", "-b", "kafka:9092", "-c", "input", "-p", "output"]
+ENTRYPOINT ["python3", "/app/crypto-detector.py"]
