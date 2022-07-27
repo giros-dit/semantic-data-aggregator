@@ -21,10 +21,11 @@ spec:
   - name: kaniko-image-creator
     image: gcr.io/kaniko-project/executor:debug
     args: [ 
-            "--context=git://github.com/giros-dit/semantic-data-aggregator.git#refs/heads/feature-105",
+            "--context=git://github.com/giros-dit/semantic-data-aggregator.git",
+            "--git=branch=feature-105", # to select the git branch if context is a git repository
 #            "--context-sub-path=semantic-metrics-datamodels/",
             "--dockerfile=kubernetes/kaniko/mvnKaniko/Dockerfile",
-            "--destination=kubernetes:31320/netflow2cds:latest",
+            "--destination=private-repository-k8s.default.svc.cluster.local:5000/netflow2cds:latest",
             "--insecure", "--skip-tls-verify", "--verbosity=debug"
            ]
   restartPolicy: Never
