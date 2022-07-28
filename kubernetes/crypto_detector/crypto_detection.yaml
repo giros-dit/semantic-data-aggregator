@@ -17,6 +17,7 @@ spec:
         image: kubernetes:31320/crypto-detector-system
         ports:
         - containerPort: 12000
+        args: ["-b", "kafka-palantir:9092", "-c", "cds-input", "-p", "cds-result"]
 ---
 apiVersion: v1
 kind: Service

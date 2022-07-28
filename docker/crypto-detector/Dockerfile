@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 COPY crypto-detector.py /app
 
-CMD ["python3", "/app/crypto-detector.py", "-b", "kafka-service:9092", "-c", "CDS", "-p", "crypto-result"]
+ENTRYPOINT ["python3", "/app/crypto-detector.py"]
