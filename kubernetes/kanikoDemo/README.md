@@ -1,4 +1,0 @@
-## Using Kaniko to automate Docker Images building with Kubernetes
-To deploy an Apache Flink application in Kubernetes with the actual repository it is needed to create the image and push it in the private repository to later be used in the Kubernetes template. This issue tries to improve this solution and be able to build and push the image from a Kubernetes template so then later another template can use the previously pushed image, the final aim is to manage everything with Helm.
-
-Kaniko is able to build the image from different contexts (Github, local directories...) and to push the image in multiple destinations (Private repositories, Docker Hub, GCR...), for further information the [Kaniko documentation](https://github.com/GoogleContainerTools/kaniko#running-kaniko-in-a-kubernetes-cluster) is really usefull and very complete.
