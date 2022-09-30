@@ -1,74 +1,125 @@
 import signal
 import sys
-import time
 import threading
-import numpy as np
 import joblib
 import argparse
 
-from kafka.errors import NoBrokersAvailable
+#ADDED
+import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+from pyspark.sql.types import DoubleType
+from pyspark.sql.functions import lit,concat_ws, split
+import warnings
 
-from kafka import KafkaProducer
-from kafka import KafkaConsumer
 
 # CONFIGURATION GLOBAL VARIABLES
 KAFKA_BROKER = ""
 KAFKA_TOPIC_CONSUME = ""
 KAFKA_TOPIC_PRODUCE = ""
-
+headers = 'ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,cl,sl,al,ra,eng,exid,tr,tpkt,tbyt,cp,prtcp,prudp,pricmp,prigmp,prother,flga,flgs,flgf,flgr,flgp,flgu'
+feature_cols = ['inbound_packets_per_second','outbound_packets_per_second','inbound_unique_bytes_per_second','outbound_unique_bytes_per_second','inbound_bytes_per_packet','outbound_bytes_per_packet','ratio_bytes_inbound/bytes_outbound','ratio_packets_inbound/packets_outbound']
 
 def crypto_detector():
-
     print("Crypto Detection Engine started")
-    
+    scala_version = '2.12'
+    spark_version = '3.3.0'
+    # TODO: Ensure match above values match the correct versions
+    packages = [f'org.apache.spark:spark-sql-kafka-0-10_{scala_version}:{spark_version}',
+        'org.apache.kafka:kafka-clients:3.2.1']
+    spark = SparkSession.builder\
+        .master("local")\
+        .appName("crypto-detector")\
+        .config("spark.jars.packages", ",".join(packages))\
+        .config("spark.ui.showConsoleProgress", "false") \
+        .getOrCreate()
+
+    sc = spark.sparkContext
+    sc.setLogLevel('ERROR')
+
+    print("Built Spark session")
     # Kafka Source Topic
-    consumer = KafkaConsumer(
-        KAFKA_TOPIC_CONSUME,
-        bootstrap_servers=[KAFKA_BROKER],
-        auto_offset_reset='latest',
-        group_id='event-gen')
+    df = spark \
+        .readStream \
+        .format("kafka") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
+        .option("subscribe", KAFKA_TOPIC_CONSUME) \
+        .option("auto.offset.reset", "latest") \
+        .option("group_id", "event-gen") \
+        .load()
+    df = df.selectExpr("CAST(value AS STRING)")
 
-    # Kafka Sink Topic
-    producer = KafkaProducer(bootstrap_servers=[KAFKA_BROKER])
-
-
-    # Load the Predictor
-    rf = joblib.load("RandomForestTrained.joblib")
+    # Load classifier and broadcast to executors.
+    clf = sc.broadcast(joblib.load("RandomForestTrained.joblib"))
     print("ML module loaded")
-    print("Detector Running!")
 
+    # Function to make predictions given an Spark context, dataframe and model
+    def make_predictions(df, feature_cols):
+        # Define Pandas UDF
+        @F.pandas_udf(returnType=DoubleType())
+        def predict(*cols):
+            # Columns are passed as a tuple of Pandas Series'.
+            # Combine into a Pandas DataFrame
+            X = pd.concat(cols, axis=1)
+            # Make prediction.
+            with warnings.catch_warnings(): #To remove "X has feature names, but RandomForestClassifier was fitted without feature names" warning
+                warnings.simplefilter("ignore")
+                predictions = clf.value.predict_proba(X)[0][1]
+            # Return Pandas Series of predictions.
+            return pd.Series(predictions)
 
-    # READ from kafka topic when messages available
-    for received in consumer:
-        print("RECEIVED\n%s,%s\n\n" % (type(received.value), received.value), flush=True)
-        # DECODE the message
-        message = None
-        try:
-            message = received.value.decode("utf-8")
-        except UnicodeDecodeError as e:
-            print(e)
+        # Add columns for correct format
+        df = df.withColumn("headers", lit(headers))
+        df = df.withColumn("CryptoMalware", lit("Crypto,Malware"))
+        # Make predictions on Spark DataFrame.
+        df = df.withColumn("predictions", predict(*feature_cols))
+        df = df.select(concat_ws(',',df.headers, *feature_cols, df.CryptoMalware, df.predictions).alias("value"))
+        return df
 
-        if(message is not None):
+    print("Initializing detector")
 
-            # PROCESS MESSAGE to obtain necessary values (transform into numpy array)
-            featuresl = message.split(",")
+    # MAKE PREDICTION
+    # Split value into different columns
+    split_col = split(df['value'], ',')
+    #Add these columns into new dataframe
+    for i in range(62,70):
+        df2 = df.withColumn(feature_cols[i-62],split_col.getItem(i))
+        df = df2
+    # Make prediction
+    df_out = make_predictions(df2, feature_cols)
+    # Function to output stream to multiple sinks
+    def foreach_batch_function(df, epoch_id):
+    #persist dataframe in case you are reusing it multiple times
+        df.persist()
+        # Write to multiple sinks
+        print("WRITING TO SINK")
+        df_out \
+            .writeStream \
+            .trigger(processingTime='5 seconds') \
+            .outputMode("update") \
+            .format("kafka") \
+            .option("kafka.bootstrap.servers", KAFKA_BROKER) \
+            .option("topic", KAFKA_TOPIC_PRODUCE) \
+            .option("checkpointLocation", "./checkpoint") \
+            .option("failOnDataLoss", "false") \
+            .start()
+        df_out \
+            .writeStream \
+            .trigger(processingTime='5 seconds') \
+            .outputMode("append") \
+            .format("console") \
+            .option("truncate","false") \
+            .option("failOnDataLoss", "false") \
+            .start()
+        print("DONE WRITING")
+        #free memory
+        df.unpersist()
+        pass
+    output = df_out.writeStream.foreachBatch(foreach_batch_function).start()
+    print("Detector Ready")
+    output.awaitTermination()
 
-            # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
-            features_a = featuresl[62:]
-            features_a = np.array(features_a).reshape(1,-1)
-
-
-            # MAKE PREDICTION
-            cryptoproba = rf.predict_proba(features_a)
-            output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
-            output = ",".join(output)
-
-            # WRITE PREDICTION in kafka topic
-            print("OUTPUT: %s\n" % (output), flush=True)
-            producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'))
-            producer.flush()
-
-
+                
 def handler(number, frame):
     sys.exit(0)
 
@@ -80,9 +131,6 @@ def safe_loop(fn):
         except SystemExit:
             print("Good bye!")
             return
-        except NoBrokersAvailable:
-            time.sleep(2)
-            continue
         except Exception as e:
             print(e)
             return
@@ -105,6 +153,7 @@ def main(args):
     detection = threading.Thread(target=safe_loop, args=[crypto_detector])
     detection.start()
     detection.join()
+    
 
 
 if __name__ == "__main__":
