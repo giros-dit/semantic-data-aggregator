@@ -12,7 +12,6 @@ from pyspark.sql.types import DoubleType
 from pyspark.sql.functions import lit,concat_ws, split
 import warnings
 
-
 # CONFIGURATION GLOBAL VARIABLES
 KAFKA_BROKER = ""
 KAFKA_TOPIC_CONSUME = ""
@@ -22,9 +21,11 @@ feature_cols = ['inbound_packets_per_second','outbound_packets_per_second','inbo
 
 def crypto_detector():
     print("Crypto Detection Engine started")
+    # Spark Session Configuration
     scala_version = '2.12'
     spark_version = '3.3.0'
     # TODO: Ensure match above values match the correct versions
+    #Packages to support data streaming
     packages = [f'org.apache.spark:spark-sql-kafka-0-10_{scala_version}:{spark_version}',
         'org.apache.kafka:kafka-clients:3.2.1']
     spark = SparkSession.builder\
@@ -47,6 +48,7 @@ def crypto_detector():
         .option("auto.offset.reset", "latest") \
         .option("group_id", "event-gen") \
         .load()
+    # Get only value column from the dataframe
     df = df.selectExpr("CAST(value AS STRING)")
 
     # Load classifier and broadcast to executors.
@@ -73,6 +75,7 @@ def crypto_detector():
         df = df.withColumn("CryptoMalware", lit("Crypto,Malware"))
         # Make predictions on Spark DataFrame.
         df = df.withColumn("predictions", predict(*feature_cols))
+        # Concatenate all collumns to adapt format to the output
         df = df.select(concat_ws(',',df.headers, *feature_cols, df.CryptoMalware, df.predictions).alias("value"))
         return df
 
@@ -87,39 +90,21 @@ def crypto_detector():
         df = df2
     # Make prediction
     df_out = make_predictions(df2, feature_cols)
-    # Function to output stream to multiple sinks
-    def foreach_batch_function(df, epoch_id):
-    #persist dataframe in case you are reusing it multiple times
-        df.persist()
-        # Write to multiple sinks
-        print("WRITING TO SINK")
-        df_out \
-            .writeStream \
-            .trigger(processingTime='5 seconds') \
-            .outputMode("update") \
-            .format("kafka") \
-            .option("kafka.bootstrap.servers", KAFKA_BROKER) \
-            .option("topic", KAFKA_TOPIC_PRODUCE) \
-            .option("checkpointLocation", "./checkpoint") \
-            .option("failOnDataLoss", "false") \
-            .start()
-        df_out \
-            .writeStream \
-            .trigger(processingTime='5 seconds') \
-            .outputMode("append") \
-            .format("console") \
-            .option("truncate","false") \
-            .option("failOnDataLoss", "false") \
-            .start()
-        print("DONE WRITING")
-        #free memory
-        df.unpersist()
-        pass
-    output = df_out.writeStream.foreachBatch(foreach_batch_function).start()
+    # Kafka Sink Topic
+    output = df_out \
+        .writeStream \
+        .trigger(processingTime='5 seconds') \
+        .outputMode("update") \
+        .format("kafka") \
+        .option("kafka.bootstrap.servers", KAFKA_BROKER) \
+        .option("topic", KAFKA_TOPIC_PRODUCE) \
+        .option("checkpointLocation", "./test") \
+        .option("failOnDataLoss", "false") \
+        .start()
     print("Detector Ready")
+    # Wait for new data to arrive to the stream
     output.awaitTermination()
-
-                
+            
 def handler(number, frame):
     sys.exit(0)
 
