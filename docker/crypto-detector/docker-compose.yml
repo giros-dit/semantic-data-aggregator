@@ -19,7 +19,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "entrada:1:1,salida:1:1"
   crypto_detector:
-    image: crypto_detector
+    image: crypto_detector # Build this image with the Dockerfile: "docker build -t crypto_detector:latest ."
     hostname: crypto_detector
     container_name: crypto_detector
     ports:
