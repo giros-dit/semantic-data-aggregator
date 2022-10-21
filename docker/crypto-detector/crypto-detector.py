@@ -50,7 +50,6 @@ def crypto_detector():
     #Get value of timestamp to check if new data arrived
     df = df.where(df.timestamp > TIMESTAMP) if not(df.isEmpty()) else None
     timestamp = df.select("timestamp").collect()[-1][0] if not(df.isEmpty()) else None
-    print(timestamp)
 
     if(timestamp is not None and timestamp > TIMESTAMP):
         # Get only value column from the dataframe
