@@ -1,22 +1,22 @@
 import signal
+from sqlite3 import Timestamp
 import sys
 import threading
 import joblib
 import argparse
 
 #ADDED
-import pandas as pd
 from pyspark.sql import SparkSession
-from pyspark.sql import functions as F
 from pyspark.sql.functions import lit
 import numpy as np
+from datetime import datetime
 
 # CONFIGURATION GLOBAL VARIABLES
 KAFKA_BROKER = ""
 KAFKA_TOPIC_CONSUME = ""
 KAFKA_TOPIC_PRODUCE = ""
 SPARK_MASTER =""
-TIMESTAMP=pd.Timestamp.min
+TIMESTAMP=datetime.now()
 
 def crypto_detector():
     global TIMESTAMP
@@ -48,7 +48,9 @@ def crypto_detector():
         .option("group_id", "event-gen") \
         .load()
     #Get value of timestamp to check if new data arrived
-    timestamp = df.select("timestamp").collect()[-1][0] if len(df.select("timestamp").collect()) > 0 else None
+    df = df.where(df.timestamp > TIMESTAMP) if not(df.isEmpty()) else None
+    timestamp = df.select("timestamp").collect()[-1][0] if not(df.isEmpty()) else None
+    print(timestamp)
 
     if(timestamp is not None and timestamp > TIMESTAMP):
         # Get only value column from the dataframe
@@ -59,10 +61,10 @@ def crypto_detector():
         print("ML module loaded")
 
         print("Initializing detector")
-        def make_predictions(df):
+        def make_predictions(df, i):
             # PROCESS MESSAGE to obtain necessary values (transform into numpy array)
             featuresl = df.select("value").collect()
-            featuresl = featuresl[-1][0].split(",")
+            featuresl = featuresl[i][0].split(",")
             # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
             features_a = featuresl[62:]
             features_a = np.array(features_a).reshape(1,-1)
@@ -73,15 +75,16 @@ def crypto_detector():
             output = ",".join(output)
             df = df.limit(1).withColumn("value", lit(output))
             return df
-
-        df = make_predictions(df)
-        # Kafka Sink Topic
-        df.write \
-            .format("kafka") \
-            .option("kafka.bootstrap.servers", KAFKA_BROKER) \
-            .option("topic", KAFKA_TOPIC_PRODUCE) \
-            .save()
-        print("Detector Ready")
+        
+        for i in range(len(df.collect())):
+            df_out = make_predictions(df,i)
+            # Kafka Sink Topic
+            df_out.write \
+                .format("kafka") \
+                .option("kafka.bootstrap.servers", KAFKA_BROKER) \
+                .option("topic", KAFKA_TOPIC_PRODUCE) \
+                .save()
+            print("Detector Ready")
         #Update timestamp value
         TIMESTAMP = timestamp
             
