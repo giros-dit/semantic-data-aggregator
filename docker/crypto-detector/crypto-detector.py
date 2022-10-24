@@ -48,8 +48,10 @@ def crypto_detector():
         .option("group_id", "event-gen") \
         .load()
     #Get value of timestamp to check if new data arrived
-    df = df.where(df.timestamp > TIMESTAMP) if not(df.isEmpty()) else None
-    timestamp = df.select("timestamp").collect()[-1][0] if not(df.isEmpty()) else None
+    timestamp = 0
+    df = df.where(df.timestamp > TIMESTAMP) if len(df.select("timestamp").collect()) > 0 else None
+    if (df != None):
+        timestamp = df.select("timestamp").collect()[-1][0] if not(df.isEmpty()) else None
 
     if(timestamp is not None and timestamp > TIMESTAMP):
         # Get only value column from the dataframe
