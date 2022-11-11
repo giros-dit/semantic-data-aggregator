@@ -7,7 +7,7 @@ Change n with the number of seconds that the script will be collecting statistic
 
 To delete the scenario after being deployed:
 ```
-./clean-env.sh n
+./clean-env.sh
 ```
 
 ### Important notes:
