@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: producer-app
+  template:
+    metadata:
+      labels:
+        app: producer-app
+    spec:
+      containers:
+      - name: producer-service
+        image: producer
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 12001
+        args: ["-b", "kafka:9092", "-p", "entrada", "-t", "1"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: producer-service
+  labels:
+    name: producer-app
+    id: "1"
+spec:
+  ports:
+  - name: producer-port
+    port: 12001
+    protocol: TCP
+  selector:
+    app: producer-app

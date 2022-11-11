@@ -45,6 +45,7 @@ def crypto_detector():
         message = None
         try:
             message = received.value.decode("utf-8")
+            message = message.replace('"', '')
         except UnicodeDecodeError as e:
             print(e)
 
@@ -65,7 +66,7 @@ def crypto_detector():
 
             # WRITE PREDICTION in kafka topic
             print("OUTPUT: %s\n" % (output), flush=True)
-            producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'))
+            producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'), timestamp_ms=round(time.time() * 1000)-received.timestamp)
             producer.flush()
 
 

@@ -14,10 +14,11 @@ spec:
     spec:
       containers:
       - name: crypto-service
-        image: kubernetes:31320/crypto-detector-system
+        image: crypto_detector
+        imagePullPolicy: Never
         ports:
         - containerPort: 12000
-        args: ["-b", "kafka-palantir:9092", "-c", "cds-input", "-p", "cds-result"]
+        args: ["-b", "kafka:9092", "-c", "entrada", "-p", "salida"]
 ---
 apiVersion: v1
 kind: Service
@@ -33,3 +34,4 @@ spec:
     protocol: TCP
   selector:
     app: crypto-app
+

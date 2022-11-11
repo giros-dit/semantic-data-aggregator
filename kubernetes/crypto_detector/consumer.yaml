@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: consumer-app
+  template:
+    metadata:
+      labels:
+        app: consumer-app
+    spec:
+      containers:
+      - name: consumer-service
+        image: consumer
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 12002
+        args: ["-b", "kafka:9092", "-c", "salida"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consumer-service
+  labels:
+    name: consumer-app
+    id: "2"
+spec:
+  ports:
+  - name: consumer-port
+    port: 12002
+    protocol: TCP
+  selector:
+    app: consumer-app
