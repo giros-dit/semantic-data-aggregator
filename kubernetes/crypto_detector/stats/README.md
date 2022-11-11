@@ -17,4 +17,3 @@ To delete the scenario after being deployed:
 - The "crypto-detector" pod created reads data from topic "entrada" and writes data to topic "salida". Change these values in crypto_detection.yaml file. 
 - The "consumer" pod created reads data from topic "salida". Change this value in consumer.yaml file. 
 - Comment the "kubectl apply" lines of the pods that you do not want to deploy.
-- The clean-env.sh
