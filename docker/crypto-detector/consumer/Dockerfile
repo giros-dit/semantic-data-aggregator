@@ -1,8 +1,4 @@
-FROM ubuntu:22.04
-
-RUN apt-get update && apt-get install -y \
-    python3.4 \
-    python3-pip
+FROM python:3
 
 RUN mkdir -p /app
 WORKDIR /app

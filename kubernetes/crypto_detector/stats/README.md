@@ -9,6 +9,11 @@ To delete the scenario after being deployed:
 ```
 ./clean-env.sh
 ```
+### Requirements
+- Kubernetes cluster
+- Helm package manager
+- Docker
+- kubectl
 
 ### Important notes:
 - The script creates a local cluster with Zookeeper and Kafka in Step 1. Comment these lines if not needed

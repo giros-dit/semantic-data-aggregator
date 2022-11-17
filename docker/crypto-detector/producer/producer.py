@@ -37,8 +37,8 @@ def main(args):
     crypto_traffic = 'ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,cl,sl,al,ra,eng,exid,tr,tpkt,tbyt,cp,prtcp,prudp,pricmp,prigmp,prother,flga,flgs,flgf,flgr,flgp,flgu,31.94037796113921,31.94037796113921,14213.468192706949,3119.510247537929,445.0,97.66666666666669,4.5563139931740615,1.0'
     producer = Producer()
 
-    print("Passed: -b " + KAFKA_BROKER + " -p " + KAFKA_TOPIC_PRODUCE + " -t " + TIME_BETWEEN_PRODUCE)
-    print("Launching producer")
+    logging.info("Passed: -b " + KAFKA_BROKER + " -p " + KAFKA_TOPIC_PRODUCE + " -t " + TIME_BETWEEN_PRODUCE)
+    logging.info("Launching producer")
 
     while True:
         producer.publish_to_kafka(benign_traffic)

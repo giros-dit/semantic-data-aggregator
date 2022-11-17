@@ -26,7 +26,6 @@ metadata:
   name: producer-service
   labels:
     name: producer-app
-    id: "1"
 spec:
   ports:
   - name: producer-port

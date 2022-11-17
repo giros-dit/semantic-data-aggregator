@@ -26,7 +26,6 @@ metadata:
   name: consumer-service
   labels:
     name: consumer-app
-    id: "2"
 spec:
   ports:
   - name: consumer-port

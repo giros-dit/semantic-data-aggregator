@@ -18,6 +18,7 @@ kubectl apply -f ../consumer.yaml
 sleep $1
 # 4. Move csv stat file out of the cluster
 consumer=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -l app=consumer-app)
+echo "" > stats.csv
 kubectl cp $consumer:/app/stats.csv ./stats.csv
 # 5. Script to plot statistics
 python3 stats.py

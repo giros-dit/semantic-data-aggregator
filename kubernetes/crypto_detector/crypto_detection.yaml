@@ -26,7 +26,6 @@ metadata:
   name: crypto-service
   labels:
     name: crypto-app
-    id: "0"
 spec:
   ports:
   - name: crypto-port
