@@ -1,12 +1,13 @@
 import logging
 
-from flink_client.api.default_api import DefaultApi as FlinkClient
+from flink_client.api.default_api import DefaultApi
+from flink_client.api_client import ApiClient
 from semantic_tools.bindings.pipelines.task import Task
 
 logger = logging.getLogger(__name__)
 
 
-def instantiate_job_from_task(flink: FlinkClient, task: Task,
+def instantiate_job_from_task(flink: ApiClient, task: Task,
                               jarId: str, args: dict) -> dict:
     """
     Insantiates a Flink job from a given Task entity
@@ -18,13 +19,13 @@ def instantiate_job_from_task(flink: FlinkClient, task: Task,
         # Get a list of arguments separated by commas to run the Flink job
         arguments = get_job_arguments_list(args)
         # Run job for JAR id
-        job = flink.jars_jarid_run_post(
+        job = DefaultApi(flink).jars_jarid_run_post(
             jarid=jarId, entry_class=entryClass, program_arg=arguments)
     else:
         # Get a list of arguments separated by commas to run the Flink job
         arguments = get_job_arguments_list(args)
         # Run job for JAR id
-        job = flink.jars_jarid_run_post(
+        job = DefaultApi(flink).jars_jarid_run_post(
             jarid=jarId, program_arg=arguments)
 
     logger.info(

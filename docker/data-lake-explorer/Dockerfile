@@ -1,5 +1,5 @@
 # Based on https://stackoverflow.com/a/57886655
-FROM python:3.9-slim-buster as base
+FROM python:3.9-slim as base
 
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
@@ -20,6 +20,8 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 RUN pip install "poetry==$POETRY_VERSION"
 RUN python -m venv /venv
+
+RUN apt-get update && apt-get install git -y
 
 # Copy semantic-tools dependency
 RUN mkdir -p /opt/semantic-tools

@@ -1,14 +1,17 @@
+import json
 import logging
 import os
 
-from flink_client.api.default_api import DefaultApi as FlinkClient
+from flink_client.api.default_api import DefaultApi as FlinkDefaultApi
+from flink_client.api_client import ApiClient as FlinkClient
+from ngsi_ld_client.api.entities_api import EntitiesApi as NGSILDEntitiesApi
+from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from redis import Redis
 from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
 from semantic_tools.bindings.pipelines.clarity.datalake import \
     DataLakeDispatcher
 from semantic_tools.bindings.pipelines.clarity.interfaceKPI import \
     InterfaceKpiAggregator
-from semantic_tools.ngsi_ld.api import NGSILDAPI
 from weaver.orchestration.flink import instantiate_job_from_task
 from weaver.orchestration.nifi import NiFiClient
 
@@ -18,7 +21,8 @@ KAFKA_ADDRESS = os.getenv("KAFKA_ADDRESS", "kafka:9092")
 
 
 def config_nifi_data_lake_consumer(
-        data_lake_dispatcher: DataLakeDispatcher, ngsi_ld: NGSILDAPI) -> dict:
+        data_lake_dispatcher: DataLakeDispatcher,
+        ngsi_ld: NGSILDClient) -> dict:
     """
     Deploys a DataLakeConsumer NiFi template
     from the specified DataLakeDispatcher NGSI-LD entity.
@@ -27,8 +31,16 @@ def config_nifi_data_lake_consumer(
     # Task Output
     # Get output DataLake
     out_data_lake = DataLake.parse_obj(
-        ngsi_ld.retrieveEntityById(data_lake_dispatcher.has_output.object)
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).retrieve_entity_by_id(
+                path_params={
+                    "entityId": data_lake_dispatcher.has_output.object
+                },
+                skip_deserialization=True
+            ).response.data
+        )
     )
+
     # Build arguments
     api_gw_endpoint = str(out_data_lake.uri.value)
     api_gw_key = out_data_lake.api_key.value
@@ -36,7 +48,7 @@ def config_nifi_data_lake_consumer(
     instance_file_name = data_lake_dispatcher.instance_file_name.value
     source_group_id = "sda"
     source_topic = "yang-instance-driver-" + \
-                   data_lake_dispatcher.id.split(":")[-1]  # Use last part of URN
+        data_lake_dispatcher.id.split(":")[-1]  # Use last part of URN
     # Collect variables for DataLakeConsumer
     arguments = {
         "api_gw_endpoint": api_gw_endpoint,
@@ -52,7 +64,7 @@ def config_nifi_data_lake_consumer(
 
 def process_data_lake_dispatcher(
         data_lake_dispatcher: DataLakeDispatcher, flink: FlinkClient,
-        nifi: NiFiClient, ngsi_ld: NGSILDAPI, redis: Redis
+        nifi: NiFiClient, ngsi_ld: NGSILDClient, redis: Redis
         ) -> DataLakeDispatcher:
     logger.info("Processing %s" % (data_lake_dispatcher.id))
     if data_lake_dispatcher.action.value.value == "START":
@@ -66,7 +78,14 @@ def process_data_lake_dispatcher(
         # Build arguments for YangInstanceDriver
         # Get input InterfaceKpiAggregator entity
         if_kpi_aggregator = InterfaceKpiAggregator.parse_obj(
-            ngsi_ld.retrieveEntityById(data_lake_dispatcher.has_input.object)
+            json.loads(
+                NGSILDEntitiesApi(ngsi_ld).retrieve_entity_by_id(
+                    path_params={
+                        "entityId": data_lake_dispatcher.has_input.object
+                    },
+                    skip_deserialization=True
+                ).response.data
+            )
         )
         source_topic = "interface-kpi-aggregator-" + \
             if_kpi_aggregator.id.split(":")[-1]  # Use last part of URN
@@ -109,7 +128,7 @@ def process_data_lake_dispatcher(
         job_id = redis.hget(
             data_lake_dispatcher.id, "FLINK").decode('UTF-8')
         try:
-            _ = flink.jobs_jobid_patch(job_id)
+            _ = FlinkDefaultApi(flink).jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #
@@ -126,4 +145,9 @@ def process_data_lake_dispatcher(
         #
         logger.info(
             "Deleting '{0}' entity...".format(data_lake_dispatcher.id))
-        ngsi_ld.deleteEntity(data_lake_dispatcher.id)
+        _ = NGSILDEntitiesApi(ngsi_ld).remove_entity_by_id(
+            path_params={
+                "entityId": data_lake_dispatcher.id
+            },
+            skip_deserialization=True
+        )

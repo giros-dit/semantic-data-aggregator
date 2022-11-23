@@ -2,14 +2,16 @@ import json
 import logging
 import os
 
-from flink_client.api.default_api import DefaultApi as FlinkClient
+from flink_client.api.default_api import DefaultApi as FlinkDefaultApi
+from flink_client.api_client import ApiClient as FlinkClient
+from ngsi_ld_client.api.entities_api import EntitiesApi as NGSILDEntitiesApi
+from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from redis import Redis
 from semantic_tools.bindings.pipelines.clarity.gnmi import (GnmiCollector,
                                                             StreamModeOptions)
 from semantic_tools.bindings.telemetry.credentials import Credentials
 from semantic_tools.bindings.telemetry.device import Device
 from semantic_tools.bindings.telemetry.gnmi import Gnmi
-from semantic_tools.ngsi_ld.api import NGSILDAPI
 from weaver.orchestration.flink import instantiate_job_from_task
 from weaver.orchestration.nifi import NiFiClient
 
@@ -22,26 +24,46 @@ KAFKA_ADDRESS = os.getenv("KAFKA_ADDRESS", "kafka:9092")
 
 
 def config_nifi_gnmic_source(
-        gnmi_collector: GnmiCollector, ngsi_ld: NGSILDAPI) -> dict:
+        gnmi_collector: GnmiCollector, ngsi_ld: NGSILDClient) -> dict:
     """
     Deploys a gNMIcSource NiFi template
     from a passed GnmiCollector NGSI-LD entity.
     """
-
     # Task Input
     # Get source Device
     source_device = Device.parse_obj(
-        ngsi_ld.retrieveEntityById(gnmi_collector.has_input.object)
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).retrieve_entity_by_id(
+                path_params={
+                    "entityId": gnmi_collector.has_input.object
+                },
+                skip_deserialization=True
+            ).response.data
+        )
     )
     # Get Gnmi for source device
     source_gnmi = Gnmi.parse_obj(
-        ngsi_ld.queryEntities(
-            "Gnmi", q="supportedBy=={0}".format(source_device.id))[0]
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Gnmi",
+                    "q": "supportedBy=={0}".format(source_device.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Assume there is only one entity
     )
     # Get credentials for Credentials service
     source_gnmi_cred = Credentials.parse_obj(
-        ngsi_ld.queryEntities(
-            "Credentials", q="authenticates=={0}".format(source_gnmi.id))[0]
+        json.loads(
+            NGSILDEntitiesApi(ngsi_ld).query_entities(
+                query_params={
+                    "type": "Credentials",
+                    "q": "authenticates=={0}".format(source_gnmi.id)
+                },
+                skip_deserialization=True
+            ).response.data
+        )[0]  # Assume there is only one entity
     )
     # Build arguments
     gnmic_topic = "gnmic-source-" + \
@@ -129,7 +151,7 @@ def config_nifi_gnmic_source(
 
 def process_gnmi_collector(
         gnmi_collector: GnmiCollector, flink: FlinkClient,
-        nifi: NiFiClient, ngsi_ld: NGSILDAPI, redis: Redis
+        nifi: NiFiClient, ngsi_ld: NGSILDClient, redis: Redis
         ) -> GnmiCollector:
     logger.info("Processing %s" % (gnmi_collector.id))
     if gnmi_collector.action.value.value == "START":
@@ -195,7 +217,7 @@ def process_gnmi_collector(
         job_id = redis.hget(
             gnmi_collector.id, "FLINK").decode('UTF-8')
         try:
-            _ = flink.jobs_jobid_patch(job_id)
+            _ = FlinkDefaultApi(flink).jobs_jobid_patch(job_id)
         except Exception:
             logger.warning("Job not found")
         #
@@ -203,4 +225,9 @@ def process_gnmi_collector(
         #
         logger.info(
             "Deleting '{0}' entity...".format(gnmi_collector.id))
-        ngsi_ld.deleteEntity(gnmi_collector.id)
+        _ = NGSILDEntitiesApi(ngsi_ld).remove_entity_by_id(
+            path_params={
+                "entityId": gnmi_collector.id
+            },
+            skip_deserialization=True
+        )

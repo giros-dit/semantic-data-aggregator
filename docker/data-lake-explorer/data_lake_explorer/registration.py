@@ -3,12 +3,14 @@ import logging
 import xml.etree.ElementTree as ET
 from typing import List, Tuple
 
+from ngsi_ld_client.api.entities_api import EntitiesApi as NGSILDEntitiesApi
+from ngsi_ld_client.api_client import ApiClient as NGSILDClient
+from ngsi_ld_client.model.entity import Entity
+from ngsi_ld_client.model.entity_list import EntityList
 from semantic_tools.bindings.clarity_data_lake.bucket import Bucket
 from semantic_tools.bindings.clarity_data_lake.datalake import DataLake
 from semantic_tools.bindings.clarity_data_lake.object import Object
 from semantic_tools.bindings.clarity_data_lake.owner import Owner
-from semantic_tools.bindings.entity import DateTime, Entity
-from semantic_tools.ngsi_ld.api import NGSILDAPI, Options
 
 from data_lake_explorer.clients.data_lake import APIGateway
 
@@ -51,7 +53,12 @@ def discover_buckets(
         b_cdate = b_xml_bucket.find("CreationDate", NS).text
         bucket_entity = Bucket(
             id="urn:ngsi-ld:Bucket:{0}".format(b_name),
-            creation_date={"value": DateTime(value=b_cdate)},
+            creation_date={
+                "value": {
+                    "@type": "DateTime",
+                    "value": b_cdate
+                }
+            },
             name={"value": b_name},
             belongs_to={"object": data_lake.id},
             owned_by={"object": owner.id},
@@ -89,7 +96,12 @@ def discover_objects(
             id="urn:ngsi-ld:Object:{0}:{1}".format(bucket.name.value, o_key),
             e_tag={"value": o_etag},
             key={"value": o_key},
-            last_modified={"value": DateTime(value=o_lm)},
+            last_modified={
+                "value": {
+                    "@type": "DateTime",
+                    "value": o_lm
+                }
+            },
             size={"value": int(o_size)},
             storage_class={"value": o_sc},
             contained_in={"object": bucket.id},
@@ -102,10 +114,10 @@ def discover_objects(
 
 
 def register_data_lake(
-        ngsi_ld: NGSILDAPI,
-        entity: Entity):
+        ngsi_ld: NGSILDClient,
+        entity: dict):
     logger.info("Processing registration of Data Lake platform...")
-    data_lake = DataLake.parse_obj(entity.dict())
+    data_lake = DataLake.parse_obj(entity)
 
     # Init IDCC API Gateway
     agw = APIGateway(
@@ -118,14 +130,24 @@ def register_data_lake(
     logger.info("Collecting Bucket context information")
     buckets, owner = discover_buckets(agw, data_lake)
     # https://github.com/samuelcolvin/pydantic/issues/1409
-    ngsi_ld.batchEntityUpsert(
-        [json.loads(bucket.json(
-            exclude_none=True, by_alias=True)) for bucket in buckets],
-        Options.update.value
+    _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+        query_params={
+            "options": "update"
+        },
+        body=EntityList([
+            Entity(json.loads(
+                bucket.json(exclude_none=True,
+                            by_alias=True))) for bucket in buckets
+        ])
     )
-    ngsi_ld.batchEntityUpsert(
-        [json.loads(owner.json(
-            exclude_none=True, by_alias=True))], Options.update.value
+    _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+        query_params={
+            "options": "update"
+        },
+        body=EntityList([
+            Entity(json.loads(
+                owner.json(exclude_none=True, by_alias=True)))
+        ])
     )
     # Discover and upsert Objects
     logger.info("Collecting Object context information.")
@@ -138,12 +160,15 @@ def register_data_lake(
         while True:
             try:
                 entities_chunk = next(entity_iterator)
-                ngsi_ld.batchEntityUpsert(
-                    [json.loads(
-                        e.json(
-                            exclude_none=True,
-                            by_alias=True)) for e in entities_chunk],
-                    Options.update.value,
+                _ = NGSILDEntitiesApi(ngsi_ld).batch_entity_upsert(
+                    query_params={
+                        "options": "update"
+                    },
+                    body=EntityList([
+                        Entity(json.loads(
+                            bucket.json(exclude_none=True,
+                                    by_alias=True))) for e in entities_chunk
+                    ])
                 )
             except StopIteration:
                 break
