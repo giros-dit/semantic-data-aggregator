@@ -2,7 +2,8 @@ import logging
 import os
 from typing import List, Tuple
 
-from app_manager.orchestration.flink import FlinkClient
+from flink_client.api.default_api import DefaultApi as FlinkClient
+
 from app_manager.orchestration.nifi import NiFiClient
 
 logger = logging.getLogger(__name__)
@@ -27,11 +28,12 @@ def upload_local_flink_jars(flink: FlinkClient) -> List[Tuple]:
             "application JAR to Flink..." % file
         )
         try:
-            jar = flink.upload_jar(JARS_PATH + file)
+            api_response = flink.jars_upload_post(
+                jarfile=[open(JARS_PATH + file, "rb")])
         except Exception as e:
             logger.info(str(e))
             continue
-        jar_id = jar["filename"].split("/")[-1]
+        jar_id = api_response["filename"].split("/")[-1]
         flink_jar_name = jar_id.split("_")[-1].replace(".jar", "")
         jars.append(
             (flink_jar_name, jar_id)
