@@ -15,29 +15,21 @@
 apiVersion: flinkoperator.k8s.io/v1beta1
 kind: FlinkCluster
 metadata:
-  name: {{ .Values.netflowAgg.name }}
+  name: {{ .Values.netflowAggregator.name }}
 spec:
   flinkVersion: "1.14"
   image:
-    name: kubernetes:31320/netflowaggregator-driver:latest 
+    name: {{ .Values.netflowAggregator.repository }}
   jobManager:
     ports:
       ui: 8081
-    resources:
-      limits:
-        memory: {{ .Values.flinkConf.memory }}
-        cpu: "500m"
   taskManager:
     replicas: 1
-    resources:
-      limits:
-        memory: {{ .Values.flinkConf.memory }}
-        cpu: "500m"
   job:
     jarFile: /opt/flink/usrlib/netflowAggregator-1.0.jar
     className: tid.NetflowAggregator
-    args: ["kafka-service:9092", "bidi-flows", "netflow-aggregated"]
-    parallelism: 2
+    args: [{{ .Values.netflowAggregator.kafka }}, {{ .Values.netflowAggregator.input_topic }}, {{ .Values.netflowAggregator.output_topic }}]
+    parallelism: 1
     restartPolicy: Never
   flinkProperties:
     taskmanager.numberOfTaskSlots: "1"

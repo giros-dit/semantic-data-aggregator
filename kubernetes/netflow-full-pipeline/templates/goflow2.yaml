@@ -17,14 +17,14 @@ spec:
     spec:
       containers:
         - name: {{ .Values.goflow2.name }}
-          image: kubernetes:31320/goflow2:latest
+          image: {{ .Values.goflow2.repository }}
           ports:
             - containerPort: 9995
               protocol: UDP
           args:
            - -transport=kafka
-           - -transport.kafka.brokers=kafka-service:9092
-           - -transport.kafka.topic=flows
+           - -transport.kafka.brokers={{ .Values.goflow2.kafka }}
+           - -transport.kafka.topic={{ .Values.goflow2.topic }}
            - -format=json
            - -listen=netflow://:9995
 

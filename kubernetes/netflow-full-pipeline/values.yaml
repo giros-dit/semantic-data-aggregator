@@ -14,22 +14,48 @@
 # limitations under the License.
 #
 
-
 goflow2:
-  name: goflow2-1
+  name: goflow2
+  repository: kubernetes:31320/goflow2:latest
   nodePort: 32001
+  kafka: "kafka-service:9092"
+  topic: "flows"
 
-inputDriver:
-  name: flinkjobcluster-netflow-driver-1
+netflowDriver:
+  name: flinkjobcluster-netflow-driver
+  repository: kubernetes:31320/netflow-driver:latest
+  kafka: "kafka-service:9092"
+  input_topic: "flows"
+  output_topic: "uni-flows"
+  
+netflow2bidirectional:
+  name: flinkjobcluster-netflow2bidirectional
+  repository: kubernetes:31320/netflow2bidirectional:latest
+  kafka: "kafka-service:9092"
+  input_topic: "uni-flows"
+  output_topic: "bidi-flows"
 
-netflowAgg:
-  name: flinkjobcluster-netflow-aggregator-1
-
-netflow2bidi:
-  name: flinkjobcluster-netflow2bidi-1
+netflowAggregator:
+  name: flinkjobcluster-netflow-aggregator
+  repository: kubernetes:31320/netflowaggregator-driver:latest
+  kafka: "kafka-service:9092"
+  input_topic: "bidi-flows"
+  output_topic: "netflow-aggregated"
 
 consumerCDS:
-  name: flinkjobcluster-consumer-cds-1
+  name: flinkjobcluster-netflow-consumer-cds
+  repository: kubernetes:31320/netflow2cds:latest
+  kafka: "kafka-service:9092"
+  input_topic: "netflow-aggregated"
+  output_topic: "netflow-cds"
+
+consumerDCP:
+  name: flinkjobcluster-netflow-consumer-dcp
+  repository: kubernetes:31320/netflow2dcp:latest
+  kafka: "kafka-service:9092"
+  input_topic: "netflow-aggregated"
+  output_topic: "netflow-dcp"
 
 flinkConf:
   memory: "2042Mi"
+  cpu: "500m"
