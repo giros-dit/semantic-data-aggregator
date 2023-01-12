@@ -12,14 +12,14 @@ from kafka import KafkaProducer
 from kafka import KafkaConsumer
 
 # CONFIGURATION GLOBAL VARIABLES
-KAFKA_BROKER = ""
-KAFKA_TOPIC_CONSUME = ""
-KAFKA_TOPIC_PRODUCE = ""
+KAFKA_BROKER = "kafka:9092"
+KAFKA_TOPIC_CONSUME = "cds-input"
+KAFKA_TOPIC_PRODUCE = "cds-output"
 
 
 def crypto_detector():
 
-    print("Crypto Detection Engine started")
+    print("Crypto Detection Engine started.")
     
     # Kafka Source Topic
     consumer = KafkaConsumer(
@@ -34,13 +34,13 @@ def crypto_detector():
 
     # Load the Predictor
     rf = joblib.load("RandomForestTrained.joblib")
-    print("ML module loaded")
+    print("ML module loaded.")
     print("Detector Running!")
 
 
     # READ from kafka topic when messages available
     for received in consumer:
-        print("RECEIVED\n%s,%s\n\n" % (type(received.value), received.value), flush=True)
+        print("\nRECEIVED: %s\n" % (received.value), flush=True)
         # DECODE the message
         message = None
         try:
@@ -55,9 +55,9 @@ def crypto_detector():
             featuresl = message.split(",")
 
             # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
-            features_a = featuresl[62:]
+            features_a = featuresl[49:57]
             features_a = np.array(features_a).reshape(1,-1)
-
+            print("FEATURES: %s\n" % (features_a), flush=True)
 
             # MAKE PREDICTION
             cryptoproba = rf.predict_proba(features_a)
@@ -100,7 +100,7 @@ def main(args):
     KAFKA_TOPIC_PRODUCE = args["produce"]
 
     print("Passed: -b " + KAFKA_BROKER + " -c " + KAFKA_TOPIC_CONSUME + " -p " + KAFKA_TOPIC_PRODUCE)
-    print("Launching detector")
+    print("Launching detector!")
 
     signal.signal(signal.SIGTERM, handler)
     detection = threading.Thread(target=safe_loop, args=[crypto_detector])
