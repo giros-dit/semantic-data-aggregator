@@ -15,10 +15,12 @@
 #
 apiVersion: v2
 name: netflow-full-pipeline
-description: A Helm chart to deploy a netflow full SDA pipeline
+description: A Helm chart to deploy a Netflow full data pipeline related to SDA
 type: application
 version: 3.3-SNAPSHOT
 appVersion: 1.16.0
 maintainers:
-  - name: Alejandro Antonio Moreno Sancho 
-    email: alejandro.moreno.practicas@telefonica.com
+  - name: Daniel González Sánchez 
+    email: daniel.gonzalez.sanchez@upm.es
+  - name: Ignacio Domínguez Martínez-Casanueva
+    email: ignacio.dominguezmartinez@telefonica.com
