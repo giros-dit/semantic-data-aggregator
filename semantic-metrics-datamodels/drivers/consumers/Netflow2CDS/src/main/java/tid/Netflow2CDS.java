@@ -19,12 +19,14 @@ import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.rev21100
 
 
 /**
- * Flink Streaming Application with NetFlow YANGTools Consumer Driver to serialize the NetFlow data to CSV format.
+ * Flink Streaming Application with NetFlow YANGTools Consumer Driver to serialize the Netflow data (including the 
+ * aggregated features) according to the CSV schema “Raw Netflow Data + Aggregated features” suitable for the DCP 
+ * PALANTIR component.
  */
-public class Netflow2CDS {
+public class Netflow2DCP {
 
 
-	public static class Serialize2CDSMap implements MapFunction<String, String> {
+	public static class Serialize2DCPMap implements MapFunction<String, String> {
 
 		@Override
 		public String map(String input) throws Exception {
@@ -36,9 +38,10 @@ public class Netflow2CDS {
 
 			// Map the values in the Netflow Object to confluence csv
 			try {
-				serialized = StringNetflowSerialization.NetflowToCDS(netflowv9_netflow);
+				serialized = StringNetflowSerialization.NetflowToDCP(netflowv9_netflow);
 			} catch (NullPointerException e) {
 				System.out.println("EXCEPTION: One of the fields is Null");
+				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -49,7 +52,7 @@ public class Netflow2CDS {
 
 	public static class NonSerializableFilter implements FilterFunction<String> {
 	
-		// make sure only valid json values are processed, then filter by permissible sources (ceos, prometheus, netflow)
+		// make sure only valid json values are processed, then filter by permissible sources (netflow)
 		@Override
 		public boolean filter(String netflowString) throws Exception {
 
@@ -70,7 +73,7 @@ public class Netflow2CDS {
 		// KAFKA CONSUMER
 		KafkaSource<String> consumer = KafkaSource.<String>builder()
 		.setTopics(args[1])
-		.setGroupId("netflow-aggregation-group")
+		.setGroupId("netflow-consumer-group")
 		.setBootstrapServers(args[0])
 		.setStartingOffsets(OffsetsInitializer.latest())
 		.setValueOnlyDeserializer((DeserializationSchema<String>)new SimpleStringSchema())
@@ -83,6 +86,7 @@ public class Netflow2CDS {
 		.setBootstrapServers(args[0])
 		.setRecordSerializer(KafkaRecordSerializationSchema.builder()
 		.setTopic(args[2])
+		.setKeySerializationSchema((SerializationSchema<String>)new SimpleStringSchema())
 		.setValueSerializationSchema((SerializationSchema<String>)new SimpleStringSchema())
 		.build()
         )
@@ -93,12 +97,11 @@ public class Netflow2CDS {
 		// SOURCE DATASTREAM
 		DataStreamSource<String> dss =  environment.fromSource(consumer, WatermarkStrategy.noWatermarks(), "Kafka Source");
 
-
 		DataStream<String> serializedds = dss
 		.filter(new NonSerializableFilter())
-		.map(new Serialize2CDSMap())
+		.map(new Serialize2DCPMap())
 		.filter(new FilterFunction<String>() {
-			// make sure only valid json values are processed, then filter by permissible sources (ceos, prometheus, netflow)
+			// make sure only valid json values are processed, then filter by permissible sources (netflow)
 			@Override
 			public boolean filter(String value) throws Exception {
 				// if empty do not return
@@ -108,7 +111,7 @@ public class Netflow2CDS {
 
 		serializedds.sinkTo(producer);
 
-		environment.execute("Netflow2CDS");
+		environment.execute("Netflow2DCP");
 
 	}
 

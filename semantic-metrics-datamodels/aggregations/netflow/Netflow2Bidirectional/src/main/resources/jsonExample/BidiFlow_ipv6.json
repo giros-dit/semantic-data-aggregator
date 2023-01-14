@@ -1,0 +1,83 @@
+{
+    "netflow-v9:netflow": {
+        "collector-goflow2": {
+            "sampler-address": "10.244.0.0",
+            "time-received": 1673538899
+        },
+        "export-packet": {
+            "count": 1348,
+            "flow-data-record": [
+                {
+                    "bgp": {
+                        "dst-as": 0,
+                        "next-hop-ipv6": "0:0:0:0:0:0:0:0",
+                        "src-as": 0
+                    },
+                    "bytes-in": "2635",
+                    "bytes-out": "2635",
+                    "direction": "ingress",
+                    "dst-mac-in": "00:00:00:00:00:00",
+                    "dst-mac-out": "00:00:00:00:00:00",
+                    "dst-port": 5353,
+                    "dst-tos": 0,
+                    "engine-id": 0,
+                    "engine-type": "rp",
+                    "first-switched": "1673538865236",
+                    "flow-active-tout": 1800,
+                    "flow-id": 45739095,
+                    "flow-inactive-tout": 15,
+                    "forwarding-status": "unknown",
+                    "icmp-type": 0,
+                    "ip-version": "ipv6",
+                    "ipv6": {
+                        "dst-address": "ff02::fb",
+                        "dst-mask": 0,
+                        "flow-label": 0,
+                        "next-hop": "0:0:0:0:0:0:0:0",
+                        "opt-headers": 0,
+                        "src-address": "fe80::60df:46cb:1382:b255",
+                        "src-mask": 0
+                    },
+                    "last-switched": "1673538896252",
+                    "max-ttl": 0,
+                    "min-ttl": 0,
+                    "mpls": {
+                        "label-1": 0,
+                        "label-10": 0,
+                        "label-2": 0,
+                        "label-3": 0,
+                        "label-4": 0,
+                        "label-5": 0,
+                        "label-6": 0,
+                        "label-7": 0,
+                        "label-8": 0,
+                        "label-9": 0,
+                        "pal-rd": "0",
+                        "prefix-len": 0,
+                        "top-label-ip": "0.0.0.0",
+                        "top-label-type": "unknown"
+                    },
+                    "pkts-in": "31",
+                    "pkts-out": "31",
+                    "protocol": "udp",
+                    "sampling-interval": 1,
+                    "snmp-in": 0,
+                    "snmp-out": 0,
+                    "src-mac-in": "00:00:00:00:00:00",
+                    "src-mac-out": "00:00:00:00:00:00",
+                    "src-port": 5353,
+                    "src-tos": 0,
+                    "tcp-flags": "",
+                    "vlan": {
+                        "dst-id": 0,
+                        "src-id": 0
+                    }
+                }
+            ],
+            "sequence-number": 24,
+            "source-id": 0,
+            "system-uptime": 37396,
+            "unix-seconds": 1673538899
+        }
+    }
+}
