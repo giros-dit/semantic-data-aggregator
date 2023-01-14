@@ -1,4 +1,3 @@
-
 package tid;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -18,7 +17,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
-
+import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.rev211008.IpVersionType;
 // GENERATED-SOURCES imports
 import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.rev211008.Netflow;
 import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.rev211008.netflow.export.packet.FlowDataRecord;
@@ -50,8 +49,15 @@ public class Netflow2Bidirectional {
         // add to array
         ArrayList<String> tuple6 = new ArrayList<String>();
         // Add IPs
-        tuple6.add(flow.getIpv4().getSrcAddress().getValue());
-        tuple6.add(flow.getIpv4().getDstAddress().getValue());
+		if(flow.getIpVersion() == IpVersionType.Ipv4){
+			tuple6.add(flow.getIpv4().getSrcAddress().getValue());
+			tuple6.add(flow.getIpv4().getDstAddress().getValue());
+		} else{
+			if(flow.getIpVersion() == IpVersionType.Ipv6){
+				tuple6.add(flow.getIpv6().getSrcAddress().getValue());
+				tuple6.add(flow.getIpv6().getDstAddress().getValue());
+			}
+		}
         // sort IPs
         java.util.Collections.sort(tuple6);
 
