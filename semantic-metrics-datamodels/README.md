@@ -2,7 +2,7 @@
 
 This repository contains NGSI-LD information models that characterize those data sources and data consumers currently supported by the [semantic data aggregator (SDA)](https://github.com/giros-dit/semantic-data-aggregator).
 
-On the other hand, YANG
+On the other hand, YANG.
 
 ## Pre-requisites (ONLY Windows users)
 
