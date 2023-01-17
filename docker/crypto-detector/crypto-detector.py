@@ -12,9 +12,9 @@ from kafka import KafkaProducer
 from kafka import KafkaConsumer
 
 # CONFIGURATION GLOBAL VARIABLES
-KAFKA_BROKER = "kafka:9092"
-KAFKA_TOPIC_CONSUME = "cds-input"
-KAFKA_TOPIC_PRODUCE = "cds-output"
+KAFKA_BROKER = ""
+KAFKA_TOPIC_CONSUME = ""
+KAFKA_TOPIC_PRODUCE = ""
 
 
 def crypto_detector():
@@ -56,18 +56,27 @@ def crypto_detector():
 
             # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
             features_a = featuresl[49:57]
-            features_a = np.array(features_a).reshape(1,-1)
             print("FEATURES: %s\n" % (features_a), flush=True)
+            
+            agg_features_with_zero = 0
+            for feature in features_a:
+                if feature == "0.0":
+                    agg_features_with_zero += 1
+            
+            # ONLY MAKE PREDICTION IF THE SDA ADDED THE AGGREGATED FEATURES (NOT ALL AGGREGATED FEATURES WITH DEFAULT VALUE 0.0)
+            if agg_features_with_zero != 8:
+                features_a = np.array(features_a).reshape(1,-1)
+                # MAKE PREDICTION
+                cryptoproba = rf.predict_proba(features_a)
+                output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
+                output = ",".join(output)
 
-            # MAKE PREDICTION
-            cryptoproba = rf.predict_proba(features_a)
-            output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
-            output = ",".join(output)
-
-            # WRITE PREDICTION in kafka topic
-            print("OUTPUT: %s\n" % (output), flush=True)
-            producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'), timestamp_ms=round(time.time() * 1000)-received.timestamp)
-            producer.flush()
+                # WRITE PREDICTION in kafka topic
+                print("OUTPUT: %s\n" % (output), flush=True)
+                producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'), timestamp_ms=round(time.time() * 1000)-received.timestamp)
+                producer.flush()
+            else:
+                print("No SDA Processing... \n", flush=True)
 
 
 def handler(number, frame):
