@@ -1,42 +1,46 @@
 # Cryptomining Detection System (CDS)
-This is an example of a consumer for the SDA, it uses the [Netflow2CDS](https://github.com/giros-dit/semantic-metrics-datamodels/tree/main/drivers/consumers/Netflow2CDS) driver to obtain the features in CSV format. The input features are:
 
+## Introduction
+
+The data aggregated and processed by the `SDA` framework can be consumed by other external systems to continue procesing the data, for anomaly detection, or for threat classification, among others. The `Cryptomining Detection System` (i.e., `CDS`) is a consumer system for the `SDA` with the purpose to detect cryptomining traffic from Netflow-based monitoring data. 
+
+The `CDS` is a Python microservice with a Machine Learning module that makes use of the Scikit-Learn library for training a classification model based on a *Random Forest* classifier in order to get predictions about cryptoming traffic. The dataset used for training the ML model was devided in 16 million of samples for the training subset and 16 million of samples for the testing subset, being samples with cryptomining traffic and non-cryptomining traffic. Both cryptomining and benign traffic are formed by encrypted and non-encrypted connections, in order to accurately simulate all possible kinds of traffic in any machine connected to a server on Internet or on a dedicated network (e.g., web surfing, video and audio streaming, file systems, cloud storage, etc.). The `CDS` uses the features listed in the following table, which are aggregate features calculated by the SDA, in order to provide better prediction results.
+
+![Aggregated-Features-for-CDS](images/SDA-netflow-aggregated-features.png)
+
+The application reads events from a Kafka topic following a specific CSV schema and writes the results in another topic whether or not the resulting traffic belongs to cryptomining traffic. 
+
+The `CDS` application can be deployed as a service in Kubernetes and this folder provides the YAML template to install the K8s-related resources. To install the `CDS` within the regarding K8s cluster, run the following command inside the current folder with the `kubectl` client:
+```bash
+kubectl [--kubeconfig <kubeconfig-file>] [-n <namespace>] apply -f crypto_detection.yaml
 ```
-[
-    'inbound_packets_per_second',
-    'outbound_packets_per_second',
-    'inbound_unique_bytes_per_second',
-    'outbound_unique_bytes_per_second',
-    'inbound_bytes_per_packet',
-    'outbound_bytes_per_packet',
-    'ratio_bytes_inbound/bytes_outbound',
-    'ratio_packets_inbound/packets_outbound'
-]
+
+## CDS integration with the Threat Intelligence components in PALANTIR platform
+
+Once the Netflow-related monitoring data has been properly processed by the `SDA` and `DCP` (i.e., the `Data Collection and Data Preprocessing` component), the resulting data will be produced in a Kafka topic following the following data schema called `Anonymized & Preprocessed Netflow Data + Aggregated features`.
+
+```bash
+ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,cl,sl,al,ra,eng,exid,tr,zeek_extra_field,pktips,pktops,bytips,bytops,bytippkt,bytoppkt,bytipo,pktipo,tpkt,tbyt,cp,prtcp,prudp,pricmp,prigmp,prother,flga,flgs,flgf,flgr,flgp,flgu
 ```
 
-The application reads from a kafka topic and writes the result in other topic.
+>The `zeek_extra_field` is an extra field to be added because is needed to be consider and filled by the `Zeek` monitoring component in PALANTIR.
 
-# Data format and integration with PALANTIR
-Due to the presentation at WP5 of PALANTIR on 12/07/2022 the Cryptomining Detection System need some changes so it can be integrated with the PALANTIR project. Three solutions are proposed:
+For the integration of the Cryptomining Detection System in the Threat Intelligence ecosystem of the PALANTIR project, three solutions were proposed:
 
-- Don't do any modification but to read from a specific topic and write in another topic with an specific format, the format will be "_Anonymized & Preprocessed Netflow Data_" available in confluence [Schema form messages in Kafka](https://confluence.i2cat.net/pages/viewpage.action?pageId=129796187), the format will be:
-   ```
-   ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,cl,sl,al,ra,eng,exid,tr,tpkt,tbyt,cp,prtcp,prudp,pricmp,prigmp,prother,flga,flgs,flgf,flgr,flgp,flgu
-   ```
-   In this solution the CDS component is running in parallel with the MAD component, so all the traffic from topic A will be read from the CDS. This may cause problems if the CDS is not powerfull enough to handle the rate needed.
+- A) In this solution the `CDS` component is running in parallel with the `Multimodal Anomaly Detection` (i.e., `MAD`) component, so all the traffic from topic A will be read from the CDS. This may cause problems if the CDS is not powerfull enough to handle the rate needed.
 
-- Due to the rate problem mentioned before a solution will be to move the implementation from python to Spark so that the implementation allow for a higher message rate.
+- B) Due to the potencial rate problem mentioned before, a solution will be to move the implementation of the `CDS` from a Python application to a Spark streaming application, so that the resulting implementation allows for a higher message rate and performance.
 
-- The other solution to solve the high rate will be to add the CDS after the MAD so all the traffic is filtered and CDS only receives the Anomalies detected. In this solution it will be necessary to use the samples available to train another MAD module able to detect crytpomining attack as an anomaly.
+- C) Other solution to solve the high rate will be to add the `CDS` after the `MAD` component, so the traffic is filtered and the CDS only receives potential anomalies detected. In this solution, it will be needed to use the samples available in the crypto-related datasets to train another MAD module able to detect cryptomining attacks as an anomaly.
 
-![CDS-TCAM-background](https://user-images.githubusercontent.com/96416803/179494204-e67254d9-4ee6-4e39-baf5-2f802469f8f4.png)
+![CDS-integration-TI-background](images/CDS-integration-ThreatIntelligence-solutions.png)
 
-The implementation will start with the first solution, the following adjustments have therefore been made:
+According to the final decision, the proposal was the `A` solution. In such solution, the `CDS` consumes directly the input information following the schema of the data provided by the `DCP` component. The `CDS` has been tested to measure its latency performance, and it has been validated that it behaves properly. In the `stats` folder there is a test environment used to validated the `CDS` performance.
 
-- Modify the input as if we were to receive "_Anonymized & Preprocessed Netflow Data_" format
-- Modify the output to send "_Anonymized & Preprocessed Netflow Data_ + Threat_Label + Threat_Category + Classification Confidence". 
+The output data schema of the `CDS` adds the following features to the `Anonymized & Preprocessed Netflow Data + Aggregated features` input data schema: 
    ```
    Threat_Label="Crypto"
    Threat_Category="Malware"
+   Classification_Confidence = ...
    ```
-- Add the possibility of changing the read and write topics from the Kubernetes template
+, where the `Classification_Confidence` includes the prediction result about cryptomining traffic. The resulting information is written in another Kafka topic where the `Threat Classification and Alarm Management` (i.e., `TCAM`) component can consume it in order to classify the corresponding threat.
