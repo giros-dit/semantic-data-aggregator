@@ -1,8 +1,10 @@
 from kafka import KafkaConsumer
+from kafka.errors import KafkaError, NoBrokersAvailable, KafkaConnectionError 
 import logging
 import argparse
+import time
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 class Consumer:
 
@@ -19,9 +21,8 @@ class Consumer:
     def consume_from_kafka(self):
         for message in self.consumer:
             logging.info(message.value)
-            logging.info(message.timestamp)
             with open('stats.csv', 'a') as f:
-                f.write(str(message.timestamp)+"\n")
+                f.write(str(message.value)+"\n")
 
 def main(args):
 
@@ -30,8 +31,29 @@ def main(args):
 
     KAFKA_BROKER = args["broker"]
     KAFKA_TOPIC_CONSUME = args["consume"]
-  
-    consumer = Consumer()
+        
+    while True:
+        try:
+            consumer = Consumer()
+            break
+        except SystemExit:
+            logging.exception("Good bye!")
+            return
+        except KafkaError as e:
+            logging.exception(e)
+            time.sleep(1)
+            continue
+        except NoBrokersAvailable as e:
+            logging.exception(e)
+            time.sleep(2)
+            continue
+        except KafkaConnectionError as e:
+            logging.exception(e)
+            time.sleep(1)
+            continue
+        except Exception as e:
+            logging.exception(e)
+            return
 
     while True:
         consumer.consume_from_kafka()
