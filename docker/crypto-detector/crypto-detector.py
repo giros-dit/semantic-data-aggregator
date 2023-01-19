@@ -5,8 +5,9 @@ import threading
 import numpy as np
 import joblib
 import argparse
+import logging
 
-from kafka.errors import NoBrokersAvailable
+from kafka.errors import KafkaError, NoBrokersAvailable, KafkaConnectionError
 
 from kafka import KafkaProducer
 from kafka import KafkaConsumer
@@ -16,10 +17,11 @@ KAFKA_BROKER = ""
 KAFKA_TOPIC_CONSUME = ""
 KAFKA_TOPIC_PRODUCE = ""
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 def crypto_detector():
 
-    print("Crypto Detection Engine started.")
+    logging.info("Crypto Detection Engine started.")
     
     # Kafka Source Topic
     consumer = KafkaConsumer(
@@ -34,20 +36,20 @@ def crypto_detector():
 
     # Load the Predictor
     rf = joblib.load("RandomForestTrained.joblib")
-    print("ML module loaded.")
-    print("Detector Running!")
+    logging.info("ML module loaded.")
+    logging.info("Detector Running!")
 
 
     # READ from kafka topic when messages available
     for received in consumer:
-        print("\nRECEIVED: %s\n" % (received.value), flush=True)
+        logging.info("\nRECEIVED: %s\n" % (received.value))
         # DECODE the message
         message = None
         try:
             message = received.value.decode("utf-8")
             message = message.replace('"', '')
         except UnicodeDecodeError as e:
-            print(e)
+            logging.error(e)
 
         if(message is not None):
 
@@ -56,7 +58,7 @@ def crypto_detector():
 
             # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
             features_a = featuresl[49:57]
-            print("FEATURES: %s\n" % (features_a), flush=True)
+            logging.info("FEATURES: %s\n" % (features_a))
             
             agg_features_with_zero = 0
             for feature in features_a:
@@ -72,11 +74,11 @@ def crypto_detector():
                 output = ",".join(output)
 
                 # WRITE PREDICTION in kafka topic
-                print("OUTPUT: %s\n" % (output), flush=True)
+                logging.info("OUTPUT: %s\n" % (output))
                 producer.send(topic=KAFKA_TOPIC_PRODUCE, key=output.encode('utf-8'), value=output.encode('utf-8'), timestamp_ms=round(time.time() * 1000)-received.timestamp)
                 producer.flush()
             else:
-                print("No SDA Processing... \n", flush=True)
+                logging.exception("No SDA Processing... \n")
 
 
 def handler(number, frame):
@@ -88,13 +90,22 @@ def safe_loop(fn):
         try:
             fn()
         except SystemExit:
-            print("Good bye!")
+            logging.exception("Good bye!")
             return
-        except NoBrokersAvailable:
-            time.sleep(2)
+        except KafkaError as e:
+            logging.exception(e)
+            time.sleep(1)
+            continue
+        except NoBrokersAvailable as e:
+            logging.exception(e)
+            time.sleep(1)
+            continue
+        except KafkaConnectionError as e:
+            logging.exception(e)
+            time.sleep(1)
             continue
         except Exception as e:
-            print(e)
+            logging.exception(e)
             return
 
 
@@ -108,8 +119,8 @@ def main(args):
     KAFKA_TOPIC_CONSUME = args["consume"]
     KAFKA_TOPIC_PRODUCE = args["produce"]
 
-    print("Passed: -b " + KAFKA_BROKER + " -c " + KAFKA_TOPIC_CONSUME + " -p " + KAFKA_TOPIC_PRODUCE)
-    print("Launching detector!")
+    logging.info("Passed: -b " + KAFKA_BROKER + " -c " + KAFKA_TOPIC_CONSUME + " -p " + KAFKA_TOPIC_PRODUCE)
+    logging.info("Launching detector!")
 
     signal.signal(signal.SIGTERM, handler)
     detection = threading.Thread(target=safe_loop, args=[crypto_detector])

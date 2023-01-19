@@ -6,5 +6,5 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY producer.py /app
-ENTRYPOINT ["python3", "/app/producer.py"]
+COPY crypto-producer.py /app
+ENTRYPOINT ["python3", "/app/crypto-producer.py"]

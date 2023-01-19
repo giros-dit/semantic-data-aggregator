@@ -6,5 +6,5 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY consumer.py /app
-ENTRYPOINT ["python3", "/app/consumer.py"]
+COPY crypto-consumer.py /app
+ENTRYPOINT ["python3", "/app/crypto-consumer.py"]
