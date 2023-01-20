@@ -15,7 +15,6 @@ spec:
       containers:
       - name: crypto-service
         image: kubernetes:31320/crypto-detector:latest
-        imagePullPolicy: Never
         ports:
         - containerPort: 12000
         args: ["-b", "kafka:9092", "-c", "entrada", "-p", "salida"]
