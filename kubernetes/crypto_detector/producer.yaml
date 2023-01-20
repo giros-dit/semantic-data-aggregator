@@ -15,7 +15,6 @@ spec:
       containers:
       - name: producer-service
         image: producer
-        imagePullPolicy: Never
         ports:
         - containerPort: 12001
         args: ["-b", "kafka:9092", "-p", "entrada", "-t", "1"]
