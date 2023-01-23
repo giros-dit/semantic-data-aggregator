@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: crypto-consumer-app
+  template:
+    metadata:
+      labels:
+        app: crypto-consumer-app
+    spec:
+      containers:
+      - name: crypto-consumer-service
+        image: kubernetes:5000/crypto-producer:latest
+        ports:
+        - containerPort: 12002
+        args: ["-b", "kafka:9092", "-c", "sda-netflow-cds"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crypto-consumer-service
+  labels:
+    name: crypto-consumer-app
+spec:
+  ports:
+  - name: crypto-consumer-port
+    port: 12002
+    protocol: TCP
+  selector:
+    app: crypto-consumer-app
