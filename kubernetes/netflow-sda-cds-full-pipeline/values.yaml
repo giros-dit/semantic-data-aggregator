@@ -47,14 +47,14 @@ consumerDCP:
   repository: kubernetes:5000/netflow-consumer-driver:4.0
   kafka: "kafka:9092"
   input_topic: "sda-netflow-aggregated"
-  output_topic: "sda-netflow-dcp"
+  output_topic: "netflow-raw"
   
 CDS:
   name: crypto-detection-system
   repository: kubernetes:5000/crypto-detector:latest
   kafka: "kafka:9092"
-  input_topic: "sda-netflow-dcp"
-  output_topic: "sda-netflow-cds"
+  input_topic: "netflow-raw"
+  output_topic: "netflow-anonymized-preprocessed"
 
 flinkConf:
   memory: "2042Mi"
