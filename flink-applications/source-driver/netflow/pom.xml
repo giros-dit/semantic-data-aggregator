@@ -36,7 +36,7 @@ under the License.
 		<maven.compiler.target>${target.java.version}</maven.compiler.target>
 		<log4j.version>2.17.1</log4j.version>
 		<salGeneratorPath>target/generated-sources/mdsal-binding</salGeneratorPath>
-		<yangFilesPath>../../yang-models/netflow</yangFilesPath>
+		<yangFilesPath>../../yang-models</yangFilesPath>
 		<resourcePath>src/main/resources</resourcePath>
 	</properties>
 

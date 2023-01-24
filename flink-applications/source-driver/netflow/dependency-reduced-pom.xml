@@ -452,6 +452,6 @@
     <log4j.version>2.17.1</log4j.version>
     <target.java.version>11</target.java.version>
     <flink.version>1.14.4</flink.version>
-    <yangFilesPath>../../../yang-models/netflow</yangFilesPath>
+    <yangFilesPath>../../yang-models</yangFilesPath>
   </properties>
 </project>
