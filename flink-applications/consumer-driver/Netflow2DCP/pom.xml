@@ -37,7 +37,7 @@ under the License.
 		<!--salGeneratorPath>src/main/yang-bindings</salGeneratorPath-->
 		<!--spiGeneratorPath>src/main/resources</spiGeneratorPath-->
 		<!--spiGeneratorPathTest>src/test/resources</spiGeneratorPathTest-->
-		<yangFilesPath>../../yang-models/netflow</yangFilesPath>
+		<yangFilesPath>../../yang-models</yangFilesPath>
 		<resourcePath>src/main/resources</resourcePath>
 	</properties>
 

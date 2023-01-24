@@ -47,7 +47,7 @@ consumerDCP:
   repository: kubernetes:5000/netflow-consumer-driver:4.0
   kafka: "kafka:9092"
   input_topic: "sda-netflow-aggregated"
-  output_topic: "sda-netflow-dcp"
+  output_topic: "netflow-raw"
 
 flinkConf:
   memory: "2042Mi"
