@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: kubernetes:31320/netflow2dcp:latest 
+    name: kubernetes:5000/netflow-consumer-driver:4.0
   jobManager:
     ports:
       ui: 8081
@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/Netflow2DCP-1.0.jar
     className: tid.Netflow2DCP
-    args: ["kafka-service:9092", "netflow-aggregated", "netflow-dcp"]
+    args: ["kafka:9092", "sda-netflow-aggregated", "netflow-raw"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:

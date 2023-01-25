@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: kubernetes:31320/netflow-driver:latest 
+    name: kubernetes:5000/netflow-source-driver:2.0 
   jobManager:
     ports:
       ui: 8081
@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/netflow-driver-1.0.jar
     className: tid.NetflowDriver
-    args: ["kafka-service:9092", "flows", "uni-flows"]
+    args: ["kafka:9092", "sda-flows", "sda-uni-flows"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:

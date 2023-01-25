@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: kubernetes:31320/netflowaggregator-driver:latest 
+    name: kubernetes:5000/netflow-aggregator-app:latest 
   jobManager:
     ports:
       ui: 8081
@@ -36,7 +36,7 @@ spec:
   job:
     jarFile: /opt/flink/usrlib/netflowAggregator-1.0.jar
     className: tid.NetflowAggregator
-    args: ["kafka-service:9092", "bidi-flows", "netflow-aggregated"]
+    args: ["kafka:9092", "sda-bidi-flows", "sda-netflow-aggregated"]
     parallelism: 2
     restartPolicy: Never
   flinkProperties:
