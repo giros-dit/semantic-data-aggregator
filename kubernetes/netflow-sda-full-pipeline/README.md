@@ -11,7 +11,7 @@ To uninstall it run the following command with the `helm` client:
 helm [--kubeconfig <kubeconfig-file>] [-n <namespace>] uninstall sda-netflow
 ```
 
-For the deployment of `SDA` components related to Netflow processing, the integration with `Threat Intelligence` components within the PALANTIR infrastructure is required. Specifically, the integration of the `SDA` with the `Data Collection and Data Preprocessing` component (i.e., DCP) is required. For the integration between the `SDA` and the `DCP`, the proposed architecture is as follows:
+For the deployment of `SDA` components related to Netflow processing, the integration with `Threat Intelligence` components within the PALANTIR infrastructure is required. Specifically, the integration of the `SDA` with the `Distributed Collection and Data Preprocessing` component (i.e., `DCP`) is required. For the integration between the `SDA` and the `DCP`, the proposed architecture is as follows:
 
 ![SDA-DCP-e2e-integration](images/SDA-DCP-e2e-integration.png)
 

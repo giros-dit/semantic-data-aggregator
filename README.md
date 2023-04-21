@@ -1,233 +1,65 @@
 # Semantic Data Aggregator
 
-Docker-based prototype that deploys the `Semantic Data Aggregator (SDA)`.
+The `Semantic Data Aggregator` (`SDA`) is a semantic, model-driven monitoring component that enables data collection, data transformation, and data aggregation from different monitoring elements, and coordinates the flow of these data among a set of heterogeneous data sources and data consumers. By using formal data models, defined by means of the YANG modelling language [RFC7950], the `SDA` allows the programmer to abstract from the encoding and data model differences between monitoring information source and consumer. Such abstraction allows the generalization of the pre-processing stage, which will no longer need to be different for each source-to-consumer combination.
 
 > **IMPORTANT NOTE:**
 >
-> In 5G-CLARITY project this work is known as the `Data Semantics Fabric (DSF)`.
+> This is a release of the `SDA` framework for the PALANTIR H2020 European project.
 
-The aggregator is composed of three main elements: the context broker, the context registry, and the data fabric. The first two elements are represented by the [`Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) while the latter is a combination of agents that ingest/deliver data to/from the so-called data substrate represented by [`Kafka`](https://kafka.apache.org/). These agents are dynamically configured by the `Weaver` which subscribes to the context broker for news definitions of data sources and data consumers.
+In PALANTIR H2020 European project, the `SDA` is part of the Hybrid Threat Intelligence Framework and has been adapted to the specific case of monitoring network flows to perform data normalization, and enriching the obtained information by means of data aggregation. This aggregation will provide useful data to achieve better results by the subsequent threat classification analysis for cryptomining detection. The resulting `SDA` architectural design for PALANTIR is shown below.
 
-The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute data among data sources and data consumers that are attached to the `Semantic Data Aggregator`. `NiFi` enables the definition of graph flows that implement data ingestion mechanisms such as retrieving [`Prometheus`](https://Prometheus.io/) metrics by polling `Prometheus` REST API, or data delivery mechanisms such as fetching data from `Kafka` and sending it out to HTTP-based `data consumers`.
+![SDA Architecture Design PALANTIR](docs/images/SDA-architecture-design-PALANTIR.png)
 
-`Kafka` plays the role of the data substrate in the `SDA`, hence `NiFi` relies on `Kafka` as the distributed reliable storage system to read/write data in the defined graph flows. For the sake of simplicity, the weaver configures `NiFi` processors to connect to the same Kafka instance that `Scorpio` runs for its internal communication bus.
+The internal architecture of the `SDA` is based on a chain of five different components communicating via a data streaming bus and two YANG data models that define the schema of the data that is serialized by one application to be sent to the next application. These components and the YANG data models are briefly introduced below.
 
-![Architecture](docs/architecture/data-aggregator-architecture-D44-full.png)
+## NetFlow v9 and KPI-Augmented NetFlow v9 YANG data models
 
-# Table of Contents
+A YANG data model aligned with NetFlow version 9 has been designed to captures the semantic contents from
+the NetFlow export packet that are relevant for subscribers to NetFlow monitoring data (i.e., packet header and data flow sets). In addition a KPI-Augmented NetFlow v9 YANG data model is specifically defined to add additional parameters to each network flow that can be computed from the original data flow set and can be useful for AI engines to detect different anomalies in the analysed network flows. The details of both YANG data models can be found [here](yang-models/README.md).
 
-1. [Prototype](#prototype)
-    1. [Microservices](#microservices)
-        1. [Weaver](#weaver)
-        2. [Application Manager](#application-manager)
-        3. [Context Catalog](#context-catalog)
-        4. [Source Manager](#source-manager)
-        5. [Complex Publisher](#complex-publisher)
-        6. [Experimenter](#experimenter)
-    2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
+## NetFlow Collector
 
-- [Semantic Data Aggregator](#semantic-data-aggregator)
-- [Table of Contents](#table-of-contents)
-- [Prototype](#prototype)
-  - [Requirements](#requirements)
-  - [Microservices](#microservices)
-    - [Weaver](#weaver)
-    - [Application-Manager](#application-manager)
-    - [Context-Catalog](#context-catalog)
-    - [Source-Manager](#source-manager)
-    - [Complex-Publisher](#complex-publisher)
-    - [Experimenter](#experimenter)
-  - [Developing microservices using Poetry](#developing-microservices-using-poetry)
-- [Scenarios](#scenarios)
-  - [All-in-one Scenario](#all-in-one-scenario)
-  - [Data Source Specific Scenarios](#data-source-specific-scenarios)
-    - [Prometheus-based Data Sources](#prometheus-based-data-sources)
-    - [gNMI-based Data Sources (Arista cEOS)](#gnmi-based-data-sources-arista-ceos)
-    - [Kafka-based Data Sources](#kafka-based-data-sources)
-- [SDA Orchestration](#sda-orchestration)
-- [Stream Processing Aplications Management](#stream-processing-aplications-management)
-- [Postman Collections](#postman-collections)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
+The NetFlow Collector is the component in charge of receiving NetFlow v9 packets from a NetFlow Exporter and serializing the network flow information into the `SDA` Data Streaming Bus. This component is defined with the idea of reusing existing open-source NetFlow Collectors that will be able to output the received flow to a data streaming bus using a format that will be later adapted to the NetFlow v9 YANG data model schema by the NetFlow Source Driver.
+ 
+## NetFlow Source Driver
 
-# Prototype
+The NetFlow Source Driver is responsible for adapting the Collector Data Stream to a YANG NetFlow stream that follows the NetFlow v9 YANG data model schema. This component will take advantage of the software tools that are able to automatically create code from YANG files, in this case from the NetFlow v9 YANG data model. 
 
-## Requirements
+## Bidirectional Flow Aggregator
 
-- Docker (_Tested with version 19.03.13_)
-- Docker-compose (_Tested with version 1.27.4_)
-- Python 3.9
-- [Poetry](https://python-poetry.org/docs/)
+The Bidirectional Flow Aggregator is the component in charge of transforming the unidirectional network flows that are often captured by Flow Exporters into bidirectional flows. It is based on using a window to select the unidirectional flows that need to be combined, based on src-address, dst-address, src-port and dst-port.
+ 
+## NetFlow KPI Aggregator
 
-## Microservices
+The NetFlow KPI Aggregator is responsible for calculating the additional KPIs and generating the YANG KPI Netflow data stream following the KPI-Augmented NetFlow v9 YANG data model schema.
+ 
+## DCP Consumer Driver
 
-The SDA is composed of several microservices that are deployed as Docker containers. These microservices are briefly introduced in this section.
+The `DCP` Consumer Driver is the end of the `SDA` pipeline, in charge of adapting the normalized and aggregated events to the consumer, generating the SDA-DCP Data Stream containing the enriched monitoring data stream in the CSV data schema followed by the `Distributed Collection and Data Preprocessing `(i.e., `DCP`) in the Hybrid Threat Intelligence Framework of the PALANTIR platform.
 
-### Weaver
 
-The [weaver](docker/weaver) container implements the orchestration of Apache NiFi flows and Apache Flink jobs by consuming context information defined in the Context Broker.
+# Implementation details
 
-### Application-Manager
+All the SDA-related subcomponents are developed to be deployed as services in a Kubernetes environment. A Kubernetes Helm Chart is used to deploy the SDA-related components for the full SDA-related NetFlow data pipeline processing. For the deployment and integration of the `SDA` framework for NetFlow processing within the Threat Intelligence Framework of the PALANTIR infrastructure, follow the details [here](kubernetes/netflow-sda-full-pipeline/README.md). The implementation details of each component is briefly analysed below.
 
-The [app-manager](docker/app-manager) container offers a catalog of applications that can be used in the SDA. Within the scope of the SDA, these applications are NiFi templates and Flink applications, i.e., JARs. The app-manager implements a REST API that facilitates the on-boarding of applications in the SDA. This REST API takes as input the type of application, a name, a description, and the file of the application. The app-manager gathers all this information and makes sure that the application is properly uploaded in the target runner - NiFi or Flink - and that the context associated to the application is created in the Context Broker.
+## GoFlow2 NetFlow Collector
 
-The full OpenAPI specification is available [here](docs/architecture/microservices/app-manager/openapi.json).
+Within the `SDA`, the [GoFlow2](https://github.com/netsampler/goflow2) tool allows collecting network flows aligned with NetFlow v9 protocol. GoFlow2 is an open-source collector implementation that gathers network information from different flow protocols (i.e., NetFlow, IPFIX, and sFlow), and serialises into encoding formats such as JSON or Protobuf. GoFlow2 supports NetFlow version 9, and both IPv4 and IPv6. In addition, it can send the collected data to a message queue service such as Apache Kafka. This NetFlow Collector solution was chosen mainly because it is compatible with NetFlow v9, as well as the specification of the fields associated with the NetFlow records it generates is fairly well aligned with the YANG model developed for NetFlow v9. In addition, GoFlow2 allows serialising NetFlow monitoring data in the JSON encoding format, which makes the data processing more efficient, easier, and human-friendly.
 
-### Context-Catalog
+## Adaptation and Aggregation Data Engineering Applications for NetFlow
 
-The [context-catalog](docker/context-catalog) container provides a static web server where JSON-LD vocabularies can be uploaded. Interactions with the NGSI-LD API can link to this webserver rather than appending the JSON-LD vocabulary in the request's body.
+Within the `SDA`, different applications have been develped to process the NetFlow-based monitoring data, normalise/adapt the data according to the predefined YANG data model for NetFlow v9, and to perform aggregation functions for calculating additional features or KPIs. These application implements the logic of the rest of the components. These applications implement the logic of the rest of the `SDA` components mentioned above (i.e., `NetFlow Source Driver`, `Bidirectional Flow Aggregator`, `NetFlow KPI Aggregator`, and `DCP Consumer Driver`). All these applications are programmed as [Apache Flink](https://flink.apache.org/) data engineering applications.
 
-### Source-Manager
+For the implementation of these applications the `SDA` makes use of a Kubernetes operator for Apache Flink. Spotify has developed a Kubernetes operator for Apache Flink called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Flink applications. In summary, this Kubernetes operator allows us to orchestrate Flink jobs facilitating the deployment and lifecycle management of the different Flink applications of the `SDA` running on Kubernetes. For more details about the Apache Flink K8s operator and how each SDA-related application is implemented and deployed on top of Kubernetes using it, follow the details [here](kubernetes/flink-operator/README.md).
 
-The [source-manager](docker/source-manager) utility automates the discovery of Kafka topics available in a 5G-EVE monitoring platform. The source-manager provides a REST API through which users can specify the address of 5G-EVE's Kafka Broker and a string filter - usecase - to discover Kafka topics with maching names. Using this information the source-manager sends a request to the DCM service in 5G-EVE. Lastly, those discovered topics are created as new context information within the Context Broker.
+All Flink applications have been developed in Java, which is its native programming language. Moreover, [YANG Tools](https://docs.opendaylight.org/en/latest/developer-guides/yang-tools.html), which is an OpenDayLight compatible project, allows us to use YANG in Java. More specifically, YANG Tools is a set of libraries and tooling that supports the use of YANG in Java and allows normalising data according to a specific YANG data model and serialising that YANG-modelled data into a JSON or XML encoding format [RFC7951]. For the sake of interoperability, we will use the JSON-IETF format, which is a standardised JSON encoding format for representing YANG-modelled data. Using YANG Tools, we can generate Java classes automatically from a YANG model (also known as Java bindings), and instantiate them in the Flink applications to serialise, deserialise and perform the relevant transformations over data normalised according to the YANG model. The source code of each Flink application is available [here](flink-applications/).
 
-The full OpenAPI specification is available [here](docs/architecture/microservices/source-manager/openapi.json).
+## SDA and Cryptomining Detection System
 
-### Complex-Publisher
+The data aggregated and processed by the `SDA` framework can be consumed by other external systems to continue procesing the data, for anomaly detection, or for threat classification, among others. The `Cryptomining Detection System` (i.e., `CDS`) is a consumer system for the `SDA` with the purpose to detect cryptomining traffic from NetFlow-based monitoring data. For more details about the `CDS`, follow the details [here](kubernetes/crypto-detector/README.md).
 
-The [complex-publishers](docker/complex-publishers) utility allows for generating synthetic metrics compliant with 5G-EVE's data model or 5Gr-LogParser's data model.
+In addition, there is available a Kubernetes Helm Chart to deploy the CDS along with the SDA-related components for detecting cryptoming traffic from NetFlow-based monitoring data. For the deployment and integration of the `SDA` framework for NetFlow processing and the CDS for cryptomining traffic detection within the Threat Intelligence Framework of the PALANTIR infrastructure, follow the details [here](kubernetes/netflow-sda-cds-full-pipeline//README.md).
 
-### Experimenter
-
-The [experimenter](docker/experimenter) container emulates an application that receives updates from Tasks running in the SDA. This container subscribes to the Context Broker in order to receive NGSI-LD notifications related with the Tasks. These notifications are sent to stdout. The experimenter container serves as a first step towards a GUI to visualize the status of Tasks running in the SDA.
-
-## Developing microservices using Poetry
-
-Most of SDA microservices are applications based on Python. To ease management of Python dependencies we rely on poetry tool. Poetry takes care of solving dependency conflicts and also configures virtual environments to develop our Python application.
-
-The following guidelines are proposed to develop Python-based microservices for the SDA:
-
-1. Create folder for your application following a structure similar to [this](docker/app-manager)
-2. Start poetry project with `poetry init`
-3. Init virtual environment  with `poetry env use python3.9`. This should create a folder `.venv`.
-4. Activate virtual environment for development using `poetry shell`. Make sure venv is configured for your shell. In case this command fails, you must activate the environment manually by running `source <path to bin/activate script within venv>
-5. Include dependencies running `poetry add <my-dependency>`
-6. Install dependencies in your virtual environment with `poetry install`
-7. Now you can start developing your application within a fully configured virtual environment
-
-Once you are done with you application, we proposed a structure to containerize the application using a Dockerfile plus a  `docker-entrypoint.sh`.
-
-- The Dockerfile is mostly generic for all microservices execpt for the `APP_NAME`variable. This container will copy poetry files to replicate your virtual environment within the Docker image.
-- The `docker-entrypoint.sh` is the interesting part. This script works as wrapper to call your python application.
-- When developing your containerized application, you can mount the application code's folder as done in the docker-compose files existing in this repository. For example [see](docker-compose.yml)
-
-# Scenarios
-
-## All-in-one Scenario
-
-To deploy a scenario that comprises the SDA along with all the supported data sources, execute the following command:
-```bash
-docker-compose up
-```
-
-In case you are interested in running the prototype in background (`kafka` or `scorpio` logs may be annoying), use the following command:
-```bash
-docker-compose up -d
-```
-
-Tear the scenario down as follows:
-```bash
-docker-compose down
-```
-
-## Data Source Specific Scenarios
-
-In addition to the all-in-one setup, this repository includes different docker-compose files that deploy scenarios in which the SDA is integrated with a specific data source. These scenarios come handy for debugging purposes and showcasing demos.
-
-### Prometheus-based Data Sources
-
-This scenario deploys a Prometheus instance that is integrated as a data source for the SDA. Additionally, two node-exporter microservices are deployed to emulate two separate machines that send metrics to Prometheus - although both node exporters collect data from the same machine (host machine).
-
-1) Deploy the scenario with the following command:
-```bash
-docker-compose up  -f docker-compose-prometheus.yml -d
-```
-
-2) The [`MetricSource_Demo`](postman_collections/MetricSource_Demo.postman_collection.json) Postman collection provides a demo pipeline that periodically fetches a metric from Prometheus.
-
-3) Lastly, tear the scenario down with:
-```bash
-docker-compose -f docker-compose-prometheus.yml down
-```
-
-### gNMI-based Data Sources (Arista cEOS)
-
-If you are interested in running the gNMI-based data collection prototype, follow the next steps:
-
-The purpose of this prototype is collect data of [`gNMI`](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md) telemetry-based sources from the `Semantic Data Aggregator`. For this proof of concept with gNMI data sources, the prototype has two main resources: docker instances of `Arista cEOS` routers as network devices and YANG-based data sources that support the `gNMI` management protocol and a CLI client that provides a full support of `gNMI` RPCs called [`gNMIc`](https://gnmic.kmrd.dev/) to request the configuration and operational status from these telemetry-based network devices.
-
-To get a fine-grained view on how to extract telemetry information of `Arista cEOS` routers using the `gNMIc` client from our semantic data aggregator, follow the [`gNMI Telemetry Proof of Concept Recipe`](docs/gnmi-telemetry-recipe/README.md).
-
-1) Before starting docker-compose it is necessary to import the [`Arista cEOS`](https://www.arista.com/en/products/software-controlled-container-networking) router docker image. Specifically, the scenario uses one of the latest available Arista cEOS versions `cEOS-lab-4.27.4M`. Download it first from the [Arista software section](https://www.arista.com/en/support/software-download) (it is the 64-bit version).
-
-2) The command to import the image is:
-```bash
-docker import cEOS64-lab-4.27.4M.tar.xz ceos-image:4.27.4M
-```
-
-3) Then you can start the docker-compose:
-```bash
-docker-compose -f docker-compose-arista.yml up
-```
-
-4) Run the utility script [ceos-startup.sh](docker/ceos-arista/ceos-startup.sh) to configure a simple network topology with two Arista cEOS devices interconnected through a single link::
-```bash
-cd docker/ceos-arista
-./ceos-startup.sh
-```
-Following picture depicts the network topology and addressing:
-![single-link-topology](docs/gnmi-telemetry-recipe/single-link-topology.png)
-
-5) The [`TelemetrySource_Demo`](postman_collections/TelemetrySource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a YANG XPath of a network device through the gNMI protocol.
-
-6) Tear the scenario down with:
-```bash
-docker-compose -f docker-compose-arista.yml down
-```
-
-### Kafka-based Data Sources
-
-Kafka is another type of data source supported by the SDA. More precisely, the ICT-17 5G-EVE project represents a use case that provides monitoring data through Kafka. In this use case, the SDA enables interoperability by integrating a data source from an ICT-17 environment, and then aggregating and delivering the data to other domains such as 5Growth.
-
-1) For the 5G-EVE use case, we simply re-use the same Kafka instance to work as both the data source and the SDA's data substrate. Let's deploy the all-in-one scenario:
-```bash
-docker-compose up  -d
-```
-
-2) The [`EVESource_Demo`](postman_collections/EVESource_Demo.postman_collection.json) Postman collection provides a demo pipeline that subscribes to a Kafka topic.
-
-3) To generate synthetic data compliant with 5G-EVE data model, the [complex-publisher](docker/complex-publishers) microservice offers a utility that generates random data into a Kafka topic. For instance, execute the following command to generate 10 new metrics:
-```bash
-docker exec -it complex-publisher python3 /5GEVE-publisher/publisher.py kafka:9092 spain-5tonic.topic-1 10
-```
-
-4) Once you are done, tear the scenario down with:
-```bash
-docker-compose down
-```
-
-
-# SDA Orchestration
-
-In order to orchestrate the life cycle management of the `Semantic Data Aggregator` by an external application or system, the prototype uses he `NGSI-LD` API like an interface that allows translating orders from an external orchestrator component to requests to the `SDA` and extending the `NGSI-LD` data model for that. This is an approach to orchestrate the state of those `NGSI-LD` entities that represent the different stages in the data pipelines and model the activity of the Data Aggregator agents.
-
-To get a full view of the `SDA` orchestration process and to be able to build a full data pipeline for data aggregation, see [`Semantic Data Aggregator Orchestration`](docs/sda-orchestration/README.md).
-
-# Stream Processing Aplications Management
-
-The `SDA` makes use of the [`Apache Flink`](https://flink.apache.org/) engine, as part of its aggregation agent, to allow the execution of stream processing applications. The `SDA` allows to dynamically orchestrate the upload and submission of stream processing applications to the `Flink` engine in order to easily manage their execution.
-
-For more information on how `SDA` internally manages the uploading and execution of stream processing applications, see [`Stream Processing Applications Management`](docs/stream-processing/README.md).
-
-# Postman Collections
-
-This repository contains Postman collections that you can use to play with the REST APIs of some of the components present in the prototype. We recommend downloading [Postman Desktop](https://www.postman.com/downloads/) for an better user experience.
-
-- [`NGSI-LD API Orchestrator`](postman_collections/NGSI-LD%20API%20Orchestrator.postman_collection.json) Postman collection has a set of requests that can be used to interact with the [`NGSI-LD Scorpio Broker`](https://github.com/ScorpioBroker/ScorpioBroker) in order to model a full `NGSI-LD` datapipeline for data aggregation and orchestrate the life cycle of the entities involved in it, based on the `NGSI-LD` API. This collection includes most of the Entity, Subscription, and Context Source operations that are commonly used in `NGSI-LD`. The requests contained in this collection can be utilized with other `NGSI-LD` compliant broker such as [Orion-LD](https://github.com/FIWARE/context.Orion-LD) or [Stellio](https://github.com/stellio-hub/stellio-context-broker).
-
-- [`Flink REST API`](postman_collections/API%20REST%20Flink.postman_collection.json) provides example requests for the supported operations in [Apache Flink REST API](https://ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html).
-
-- [`YANG Catalog REST API`](postman_collections/yangcatalog.postman_collection.json) provides a collection of sample requests for interacting with the REST API of [YANG Catalog](https://yangcatalog.org). For more details, visit [Contribute to YANG Catalog](https://yangcatalog.org/contribute.html) webpage.
 
 # Acknowledgements
 
@@ -240,6 +72,7 @@ This work has been partly funded by the European Union’s Research and Innovati
 [5GROWTH](https://5growth.eu)<br />(No. 856709) | [5G-CLARITY](https://www.5gclarity.com)<br />(No. 871428) | [PALANTIR](https://www.palantir-project.eu)<br />(No. 883335)
 :-------------------------:|:-------------------------:|:-------------------------:
 [![](docs/logos/5growth.png)](https://5growth.eu) | [![](docs/logos/5g-clarity.png)](https://www.5gclarity.com) | [![](docs/logos/palantir.png)](https://www.palantir-project.eu)
+
 
 # License
 

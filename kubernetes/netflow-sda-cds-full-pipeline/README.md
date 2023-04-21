@@ -1,5 +1,5 @@
 # SDA Netflow full data pipeline (including CDS) within PALANTIR
-This folder provides a Kubernetes Helm Chart used to deploy the SDA-related components (i.e., GoFlow2 collector and Flink applications) for the Netflow full data pipeline processing on the PALANTIR platform. It also includes the CDS.
+This folder provides a Kubernetes Helm Chart used to deploy the SDA-related components (i.e., GoFlow2 collector and Flink applications) for the Netflow full data pipeline processing on the PALANTIR platform. It also includes the `Cryptomining Detection System` (i.e., `CDS`). For more details about the `CDS`, follow the details [here](../crypto-detector/README.md).
 
 To install the Helm Chart within the regarding K8s cluster, run the following command inside the current folder with the `helm` client:
 ```bash
