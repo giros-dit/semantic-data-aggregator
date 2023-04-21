@@ -27,8 +27,7 @@ def crypto_detector():
     consumer = KafkaConsumer(
         KAFKA_TOPIC_CONSUME,
         bootstrap_servers=[KAFKA_BROKER],
-        auto_offset_reset='latest',
-        group_id='event-gen')
+        auto_offset_reset='latest')
 
     # Kafka Sink Topic
     producer = KafkaProducer(bootstrap_servers=[KAFKA_BROKER])
