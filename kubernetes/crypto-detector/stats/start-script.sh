@@ -12,9 +12,9 @@ docker build -t producer:latest $ProducerDockerfile
 docker build -t consumer:latest $ConsumerDockerfile
 sleep 10
 # 3. Pods deployment
-kubectl apply -f ../crypto_detection.yaml
-kubectl apply -f ../producer.yaml
-kubectl apply -f ../consumer.yaml
+kubectl apply -f crypto_detection.yaml
+kubectl apply -f producer.yaml
+kubectl apply -f consumer.yaml
 sleep $1
 # 4. Move csv stat file out of the cluster
 consumer=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -l app=consumer-app)

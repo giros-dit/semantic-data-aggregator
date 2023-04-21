@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-generator 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generator-app
+  template:
+    metadata:
+      labels:
+        app: generator-app
+    spec:
+      containers:
+      - name: event-generator
+        image: kubernetes:31320/event-generator-v1:latest
+        ports:
+        - containerPort: 8088
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-generator
+  labels:
+    app: generator-app
+spec:
+  type: NodePort
+  ports:
+  - name: client
+    port: 8088
+    targetPort: 8088
+    nodePort: 31042
+    protocol: TCP
+  selector:
+    app: generator-app

@@ -19,7 +19,7 @@ metadata:
 spec:
   flinkVersion: "1.14"
   image:
-    name: kubernetes:5000/netflow-aggregator-app:latest 
+    name: kubernetes:5000/netflow-aggregator-app:1.0 
   jobManager:
     ports:
       ui: 8081
