@@ -1,8 +1,0 @@
-# HELP my_first_custom_metric an awesome description
-# TYPE my_first_custom_metric gauge
-my_first_custom_metric{code="200",handler="/api/v1/query"} 1 1633594413379
-my_first_custom_metric{code="200",handler="/metrics"} 5 1633594413379
-
-# HELP my_second_custom_metric an even more awesome description
-# TYPE my_second_custom_metric gauge
-my_second_custom_metric{identifier="vnf-1"} 8 1633594413379

@@ -1,5 +1,0 @@
-class Config:
-    validate_assignment = True
-{%- for field_name, value in config.dict(exclude_unset=True).items() %}
-    {% if field_name != "Extra" and class_name != "Name" %}{{ field_name }} = {{ value }}{% endif %}
-{%- endfor %}

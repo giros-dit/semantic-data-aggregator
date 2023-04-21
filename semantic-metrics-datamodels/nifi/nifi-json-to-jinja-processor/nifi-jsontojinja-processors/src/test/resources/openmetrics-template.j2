@@ -1,9 +1,0 @@
-{% for metric_family in content['openmetrics:metric-families']['metric-family'] %}
-    {%- if metric_family -%}
-# HELP {{metric_family['name']}} {{metric_family['help']}}
-    {%- endif %}
-# TYPE {{metric_family['name']}} {{metric_family['metric-type']}}
-    {%- for metric in metric_family['metrics']['metric'] %}
-{{metric['name']}}{{"{"}}{%- for label in metric['labels']['label'] -%}{{label['name']}}="{{label['value']}}"{{ "," if not loop.last else "" }}{%- endfor %}{{"}"}} {{metric['metric-points']['value']}} {{metric['metric-points']['timestamp']}}
-    {%- endfor %}{{ "\n\n" if not loop.last }}
-{%- endfor %}
