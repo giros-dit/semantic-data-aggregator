@@ -4,9 +4,9 @@ The `Semantic Data Aggregator` (`SDA`) is a semantic, model-driven monitoring co
 
 > **IMPORTANT NOTE:**
 >
-> This is a release of the `SDA` framework for the PALANTIR H2020 European project.
+> This is a release of the `SDA` framework for the _PALANTIR H2020 European project_.
 
-In PALANTIR H2020 European project, the `SDA` is part of the Hybrid Threat Intelligence Framework and has been adapted to the specific case of monitoring network flows to perform data normalization, and enriching the obtained information by means of data aggregation. This aggregation will provide useful data to achieve better results by the subsequent threat classification analysis for cryptomining detection. The resulting `SDA` architectural design for PALANTIR is shown below.
+In _PALANTIR H2020 European project_, the `SDA` is part of the Hybrid Threat Intelligence Framework and has been adapted to the specific case of monitoring network flows to perform data normalization, and enriching the obtained information by means of data aggregation. This aggregation will provide useful data to achieve better results by the subsequent threat classification analysis for cryptomining detection. The resulting `SDA` architectural design for PALANTIR is shown below.
 
 ![SDA Architecture Design PALANTIR](docs/images/SDA-architecture-design-PALANTIR.png)
 
@@ -15,7 +15,7 @@ The internal architecture of the `SDA` is based on a chain of five different com
 ## NetFlow v9 and KPI-Augmented NetFlow v9 YANG data models
 
 A YANG data model aligned with NetFlow version 9 has been designed to captures the semantic contents from
-the NetFlow export packet that are relevant for subscribers to NetFlow monitoring data (i.e., packet header and data flow sets). In addition a KPI-Augmented NetFlow v9 YANG data model is specifically defined to add additional parameters to each network flow that can be computed from the original data flow set and can be useful for AI engines to detect different anomalies in the analysed network flows. The details of both YANG data models can be found [here](yang-models/README.md).
+the NetFlow export packet that are relevant for subscribers to NetFlow monitoring data (i.e., packet header and data flow sets). In addition, a KPI-Augmented NetFlow v9 YANG data model is specifically defined to add additional parameters to each network flow that can be computed from the original data flow set and can be useful for AI engines to detect different anomalies in the analysed network flows. The details of both YANG data models can be found [here](yang-models/README.md).
 
 ## NetFlow Collector
 
