@@ -16,16 +16,6 @@ The `Weaver` leverages [`Apache NiFi`](https://nifi.apache.org/) to distribute d
 
 # Table of Contents
 
-1. [Prototype](#prototype)
-    1. [Microservices](#microservices)
-        1. [Weaver](#weaver)
-        2. [Application Manager](#application-manager)
-        3. [Context Catalog](#context-catalog)
-        4. [Source Manager](#source-manager)
-        5. [Complex Publisher](#complex-publisher)
-        6. [Experimenter](#experimenter)
-    2.  [Developing microservices using Poetry](#developing-microservices-using-poetry)
-
 - [Semantic Data Aggregator](#semantic-data-aggregator)
 - [Table of Contents](#table-of-contents)
 - [Prototype](#prototype)
