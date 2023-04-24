@@ -6,6 +6,26 @@ The `Semantic Data Aggregator` (`SDA`) is a semantic, model-driven monitoring co
 >
 > This is a release of the `SDA` framework for the _PALANTIR H2020 European project_.
 
+# Table of Contents
+
+- [Semantic Data Aggregator](#semantic-data-aggregator)
+- [Table of Contents](#table-of-contents)
+- [SDA Architectural Design](#sda-archictectural-design)
+  - [NetFlow v9 and KPI-Augmented NetFlow v9 YANG data models](#netflow-v9-and-kpi-augmented-netflow-v9-yang-data-models)
+  - [NetFlow Collector](#netflow-collector)
+  - [NetFlow Source Driver](#netflow-source-driver)
+  - [NetFlow KPI Aggregator](#netflow-kpi-aggregator)
+  - [Bidirectional Flow Aggregator](#bidirectional-flow-aggregator)
+  - [DCP Consumer Driver](#dcp-consumer-driver)
+- [Implementation details](#implementation-details)
+  - [GoFlow2 NetFlow Collector](#goflow2-netflow-collector)
+  - [Adaptation and Aggregation Data Engineering Applications for NetFlow](#adaptation-and-aggregation-data-engineering-applications-for-netflow)
+  - [SDA and Cryptomining Detection System](#sda-and-cryptomining-detection-system)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
+  
+# SDA Archictectural Design
+
 In _PALANTIR H2020 European project_, the `SDA` is part of the Hybrid Threat Intelligence Framework and has been adapted to the specific case of monitoring network flows to perform data normalization, and enriching the obtained information by means of data aggregation. This aggregation will provide useful data to achieve better results by the subsequent threat classification analysis for cryptomining detection. The resulting `SDA` architectural design for PALANTIR is shown below.
 
 ![SDA Architecture Design PALANTIR](docs/images/SDA-architecture-design-PALANTIR.png)
