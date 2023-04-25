@@ -5,7 +5,7 @@ The `Semantic Data Aggregator` (`SDA`) is a semantic, model-driven monitoring co
 > **IMPORTANT NOTE:**
 >
 > This is a release of the `SDA` framework for the _PALANTIR H2020 European project_.
-
+c
 # Table of Contents
 
 - [Semantic Data Aggregator](#semantic-data-aggregator)
@@ -68,7 +68,7 @@ Within the `SDA`, the [GoFlow2](https://github.com/netsampler/goflow2) tool allo
 
 ## Adaptation and Aggregation Data Engineering Applications for NetFlow
 
-Within the `SDA`, different applications have been develped to process the NetFlow-based monitoring data, normalise/adapt the data according to the predefined YANG data model for NetFlow v9, and to perform aggregation functions for calculating additional features or KPIs. These application implements the logic of the rest of the components. These applications implement the logic of the rest of the `SDA` components mentioned above (i.e., `NetFlow Source Driver`, `Bidirectional Flow Aggregator`, `NetFlow KPI Aggregator`, and `DCP Consumer Driver`). All these applications are programmed as [Apache Flink](https://flink.apache.org/) data engineering applications.
+Within the `SDA`, different applications have been developed to process the NetFlow-based monitoring data, normalise/adapt the data according to the predefined YANG data model for NetFlow v9, and to perform aggregation functions for calculating additional features or KPIs. These applications implement the logic of the rest of the `SDA` components mentioned above (i.e., `NetFlow Source Driver`, `Bidirectional Flow Aggregator`, `NetFlow KPI Aggregator`, and `DCP Consumer Driver`). All these applications are programmed as [Apache Flink](https://flink.apache.org/) data engineering applications.
 
 For the implementation of these applications the `SDA` makes use of a Kubernetes operator for Apache Flink. Spotify has developed a Kubernetes operator for Apache Flink called [flink-on-k8s-operator](https://github.com/spotify/flink-on-k8s-operator) that enables managing the lifecycle of Flink applications. In summary, this Kubernetes operator allows us to orchestrate Flink jobs facilitating the deployment and lifecycle management of the different Flink applications of the `SDA` running on Kubernetes. For more details about the Apache Flink K8s operator and how each SDA-related application is implemented and deployed on top of Kubernetes using it, follow the details [here](kubernetes/flink-operator/README.md).
 
