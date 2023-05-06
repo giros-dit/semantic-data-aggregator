@@ -5,7 +5,7 @@ The `Semantic Data Aggregator` (`SDA`) is a semantic, model-driven monitoring co
 > **IMPORTANT NOTE:**
 >
 > This is a release of the `SDA` framework for the _PALANTIR H2020 European project_.
-c
+
 # Table of Contents
 
 - [Semantic Data Aggregator](#semantic-data-aggregator)
