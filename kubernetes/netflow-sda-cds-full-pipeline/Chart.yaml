@@ -15,7 +15,7 @@
 #
 apiVersion: v2
 name: netflow-sda-cds-full-pipeline
-description: A Helm chart to deploy a Netflow full data pipeline related to SDA within PALANTIR
+description: A Helm chart to deploy a NetFlow full data pipeline related to SDA and CDS components within PALANTIR
 type: application
 version: 1.0-SNAPSHOT
 appVersion: 1.16.0

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.CDS.name }}
+  labels:
+    app: {{ .Values.CDS.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: {{ .Values.CDS.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.CDS.name }}
+    spec:
+      containers:
+      - name: {{ .Values.CDS.name }}
+        image: {{ .Values.CDS.repository }}
+        ports:
+        - containerPort: 12000
+        args: ["-b", {{ .Values.CDS.kafka }}, "-c", {{ .Values.CDS.input_topic }}, "-p", {{ .Values.CDS.output_topic }}, "-ts", {{ .Values.CDS.tenant_service }}, "-tid", {{ .Values.CDS.tenant_id }}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.CDS.name }}
+  labels:
+    name: {{ .Values.CDS.name }}
+spec:
+  selector:
+    app: {{ .Values.CDS.name }}
+  ports:
+  - name: crypto-detector-port
+    port: 12000
+    protocol: TCP
+

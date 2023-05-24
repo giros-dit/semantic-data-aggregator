@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.goflow2.name }}
+  labels:
+    app: {{ .Values.goflow2.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.goflow2.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.goflow2.name }}
+    spec:
+      containers:
+        - name: {{ .Values.goflow2.name }}
+          image: {{ .Values.goflow2.repository }}
+          ports:
+            - containerPort: 9995
+              protocol: UDP
+          args:
+           - -transport=kafka
+           - -transport.kafka.brokers={{ .Values.goflow2.kafka }}
+           - -transport.kafka.topic={{ .Values.goflow2.topic }}
+           - -format=json
+           - -listen=netflow://:9995
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.goflow2.name }}
+  labels:
+    app: {{ .Values.goflow2.name }}
+spec:
+  selector:
+    app: {{ .Values.goflow2.name }}
+  type: NodePort
+  ports:
+    - name: client
+      port: 9995
+      targetPort: 9995
+      nodePort: {{ .Values.goflow2.nodePort }}
+      protocol: UDP

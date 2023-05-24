@@ -1,14 +1,13 @@
 
 package tid;
 
-
+import com.google.gson.Gson;
 // GOOGLE JSON imports
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.JsonSyntaxException;
-
 
 // FLINK imports
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -20,12 +19,13 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
-
 
 // GENERATED-SOURCES imports
 import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.aggregated.rev220302.PerDecimal;
@@ -36,7 +36,6 @@ import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.aggregat
 import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.aggregated.rev220302.FlowDataRecord1Builder;
 import org.opendaylight.yang.gen.v1.http.data.aggregator.com.ns.netflow.rev211008.netflow.export.packet.FlowDataRecordBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Timestamp;
-
 
 // YANG-TOOLS imports
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
@@ -57,32 +56,43 @@ import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 
-
 // JAVA imports
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.IllegalArgumentException;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
- * Flink Streaming Application that make stateless aggregation on goflow2 traffic received in JSON_IETF format.
+ * Flink Streaming Application that make stateless aggregation on goflow2
+ * traffic received in JSON_IETF format.
  *
- * <p>To create bindings of your application, run 'mvn generate-bindings' on the command line.
- * Do not forget to make sure your "yangFilesPath" points to the yang-models folder
+ * <p>
+ * To create bindings of your application, run 'mvn generate-bindings' on the
+ * command line.
+ * Do not forget to make sure your "yangFilesPath" points to the yang-models
+ * folder
  *
- * <p>To package your application into a JAR file for execution, run
+ * <p>
+ * To package your application into a JAR file for execution, run
  * 'mvn package' on the command line.
  *
- * <p>If you change the name of the main class (with the public static void main(String[] args))
- * method, change the respective entry in the POM.xml file (simply search for 'mainClass').
+ * <p>
+ * If you change the name of the main class (with the public static void
+ * main(String[] args))
+ * method, change the respective entry in the POM.xml file (simply search for
+ * 'mainClass').
  */
 public class NetflowAggregator {
-
 
 	public static class netflowAggregateMap implements MapFunction<String, String> {
 
@@ -91,20 +101,20 @@ public class NetflowAggregator {
 
 			// get Object of class Netflow from the input (JSON-IETF)
 			JsonReader reader = new JsonReader(new StringReader(input));
-			Netflow netflowv9_netflow  = null;
-			try{
+			Netflow netflowv9_netflow = null;
+			try {
 				netflowv9_netflow = input2NetflowClass(reader);
 
-			} catch(IllegalStateException | JsonSyntaxException | IllegalArgumentException e){
+			} catch (IllegalStateException | JsonSyntaxException | IllegalArgumentException e) {
 				System.out.println("EXCEPTION: Malformed INPUT (JSON-IETF)");
 				e.printStackTrace();
-			} catch(Exception e){
-                System.out.println("Unknown exception:");
+			} catch (Exception e) {
+				System.out.println("Unknown exception:");
 				e.printStackTrace();
-            }
+			}
 
 			String serialized = "";
-			if(netflowv9_netflow != null){
+			if (netflowv9_netflow != null) {
 				// make aggregations
 				Netflow newnetflow = netflowAggregation(netflowv9_netflow);
 
@@ -119,36 +129,50 @@ public class NetflowAggregator {
 
 	public static void main(String[] args) throws Exception {
 
+		if (args.length == 5) {
+			multitenants(args);
+		} else {
+			if (args.length == 3) {
+				singletenant(args);
+			} else {
+				System.exit(1);
+			}
+		}
+
+	}
+
+	public static void singletenant(String[] args) throws Exception {
+
+		// GET EXECUTION ENVIRONMENT
 		StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
 
 		// KAFKA CONSUMER
 		KafkaSource<String> consumer = KafkaSource.<String>builder()
-		.setTopics(args[1])
-		.setGroupId("netflow-aggregation-group")
-		.setBootstrapServers(args[0])
-		.setStartingOffsets(OffsetsInitializer.latest())
-		.setValueOnlyDeserializer((DeserializationSchema<String>)new SimpleStringSchema())
-		.build();
-
+				.setTopics(args[1])
+				.setGroupId("netflow-aggregation-group")
+				.setBootstrapServers(args[0])
+				.setStartingOffsets(OffsetsInitializer.latest())
+				.setValueOnlyDeserializer((DeserializationSchema<String>) new SimpleStringSchema())
+				.build();
 
 		// KAFKA PRODUCER
 		KafkaSink<String> producer = KafkaSink
-		.<String>builder()
-		.setBootstrapServers(args[0])
-		.setRecordSerializer(KafkaRecordSerializationSchema.builder()
-		.setTopic(args[2])
-		.setValueSerializationSchema((SerializationSchema<String>)new SimpleStringSchema())
-		.build()
-        )
-		.setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
-		.build();
+				.<String>builder()
+				.setBootstrapServers(args[0])
+				.setRecordSerializer(KafkaRecordSerializationSchema.builder()
+						.setTopic(args[2])
+						.setValueSerializationSchema((SerializationSchema<String>) new SimpleStringSchema())
+						.build())
+				.setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+				.build();
 
 		// SOURCE DATASTREAM
-		DataStreamSource<String> dss =  environment.fromSource(consumer, WatermarkStrategy.noWatermarks(), "Kafka Source");
-
+		DataStreamSource<String> dss = environment.fromSource(consumer, WatermarkStrategy.noWatermarks(),
+				"Kafka Source");
 
 		DataStream<String> serializedds = dss.map(new netflowAggregateMap()).filter(new FilterFunction<String>() {
-			// make sure only valid json values are processed, then filter by permissible sources (ceos, prometheus, netflow)
+			// make sure only valid json values are processed, then filter by permissible
+			// sources (ceos, prometheus, netflow)
 			@Override
 			public boolean filter(String value) throws Exception {
 				// if empty do not return
@@ -161,46 +185,168 @@ public class NetflowAggregator {
 		environment.execute("netflowAggregator");
 	}
 
+	public static void multitenants(String[] args) throws Exception {
 
-	private static Netflow netflowAggregation(Netflow netflowv9){
+		int topic_partition = getPartition(args[3], args[4]);
+
+		FlinkKafkaPartitioner<String> customPartitioner = new MyCustomPartitioner(topic_partition);
+
+		// GET EXECUTION ENVIRONMENT
+		StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
+
+		final HashSet<TopicPartition> consumerPartitionSet = new HashSet<>(Arrays.asList(
+				new TopicPartition(args[1], topic_partition)));
+
+		// KAFKA CONSUMER
+		KafkaSource<String> consumer = KafkaSource.<String>builder()
+				.setPartitions(consumerPartitionSet)
+				.setGroupId("netflow-aggregation-group")
+				.setBootstrapServers(args[0])
+				.setStartingOffsets(OffsetsInitializer.latest())
+				.setValueOnlyDeserializer((DeserializationSchema<String>) new SimpleStringSchema())
+				.build();
+
+		// KAFKA PRODUCER
+		KafkaSink<String> producer = KafkaSink
+				.<String>builder()
+				.setBootstrapServers(args[0])
+				.setRecordSerializer(KafkaRecordSerializationSchema.builder()
+						.setTopic(args[2])
+						.setPartitioner(customPartitioner)
+						.setValueSerializationSchema((SerializationSchema<String>) new SimpleStringSchema())
+						.build())
+				.setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+				.build();
+
+		// SOURCE DATASTREAM
+		DataStreamSource<String> dss = environment.fromSource(consumer, WatermarkStrategy.noWatermarks(),
+				"Kafka Source");
+
+		DataStream<String> serializedds = dss.map(new netflowAggregateMap()).filter(new FilterFunction<String>() {
+			// make sure only valid json values are processed, then filter by permissible
+			// sources (ceos, prometheus, netflow)
+			@Override
+			public boolean filter(String value) throws Exception {
+				// if empty do not return
+				return !value.equals("");
+			}
+		});
+
+		serializedds.sinkTo(producer);
+
+		environment.execute("netflowAggregator");
+	}
+
+	/**
+	 * Method for obtaining the topic partition associated with a tenant id by
+	 * making a call to the tenant service.
+	 * 
+	 * @param tenant_service_url
+	 * @param tenant_id
+	 * @return
+	 */
+	public static int getPartition(String tenant_service_url, String tenant_id) {
+		int topic_partition = 0;
+		try {
+			// URL of tenant-service
+			URL url = new URL(tenant_service_url + tenant_id);
+
+			// Opening HTTP connection
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setConnectTimeout(2000);
+			connection.setRequestMethod("GET");
+
+			int responseCode = connection.getResponseCode();
+
+			if (responseCode >= 200 && responseCode <= 299) {
+				// Reading server response
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+				StringBuilder response = new StringBuilder();
+				while ((line = reader.readLine()) != null) {
+					response.append(line);
+				}
+
+				Gson json = new Gson();
+				JsonObject jsonObject = json.fromJson(response.toString(), JsonObject.class);
+				String partition = jsonObject.get("partition").getAsString();
+
+				reader.close();
+
+				topic_partition = Integer.parseInt(partition);
+			} else {
+				System.exit(1);
+			}
+
+			// Closing connection
+			connection.disconnect();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return topic_partition;
+	}
+
+	/**
+	 * Custom implementation of FlinkKafkaPartitioner
+	 */
+	public static class MyCustomPartitioner extends FlinkKafkaPartitioner<String> {
+
+		private int partition;
+
+		MyCustomPartitioner(int partition) {
+			this.partition = partition;
+		}
+
+		@Override
+		public int partition(String record, byte[] key, byte[] value, String targetTopic, int[] partitions) {
+
+			return partition;
+		}
+	}
+
+	private static Netflow netflowAggregation(Netflow netflowv9) {
 		// get Object of class Netflow from the input (JSON-IETF)
 
 		List<FlowDataRecord> newlist = new ArrayList<>();
-		// iterate over the FlowDataRecord List and create newlist with AUGMENTED aggregations
+		// iterate over the FlowDataRecord List and create newlist with AUGMENTED
+		// aggregations
 		for (FlowDataRecord fdr : netflowv9.getExportPacket().getFlowDataRecord()) {
 
-			FlowDataRecordBuilder flowbuilder = new FlowDataRecordBuilder(fdr); // create builder for adding aggregations
+			FlowDataRecordBuilder flowbuilder = new FlowDataRecordBuilder(fdr); // create builder for adding
+																				// aggregations
 
 			// create builder for flow aggregations
 			FlowDataRecord1Builder fdr1_builder = new FlowDataRecord1Builder();
 
 			// AGGREGATIONS --->
 			// FLOW DURATION
-			Float flowduration = Float.valueOf(fdr.getLastSwitched().longValue()-fdr.getFirstSwitched().longValue()); //duration in milliseconds
-			Float durationSeconds = flowduration/1000; // duration in seconds
+			Float flowduration = Float.valueOf(fdr.getLastSwitched().longValue() - fdr.getFirstSwitched().longValue()); // duration
+																														// in
+																														// milliseconds
+			Float durationSeconds = flowduration / 1000; // duration in seconds
 			fdr1_builder.setFlowDuration(new Timestamp(Uint32.valueOf(flowduration.intValue())));
 
 			Float temp;
 
-			if(durationSeconds!=0){
+			if (durationSeconds != 0) {
 
 				// BytesInPerSecond
-				temp = fdr.getBytesIn().getValue().floatValue()/durationSeconds;
+				temp = fdr.getBytesIn().getValue().floatValue() / durationSeconds;
 				fdr1_builder.setBytesInPerSecond(PerDecimal.getDefaultInstance(temp.toString()));
 
 				// PktsInPerSecond
-				temp = fdr.getPktsIn().getValue().floatValue()/durationSeconds;
+				temp = fdr.getPktsIn().getValue().floatValue() / durationSeconds;
 				fdr1_builder.setPktsInPerSecond(PerDecimal.getDefaultInstance(temp.toString()));
 
 				// BytesOutPerSecond
-				temp = fdr.getBytesOut().getValue().floatValue()/durationSeconds;
+				temp = fdr.getBytesOut().getValue().floatValue() / durationSeconds;
 				fdr1_builder.setBytesOutPerSecond(PerDecimal.getDefaultInstance(temp.toString()));
 
-
 				// PktsOutPerSecond
-				temp = fdr.getPktsOut().getValue().floatValue()/durationSeconds;
+				temp = fdr.getPktsOut().getValue().floatValue() / durationSeconds;
 				fdr1_builder.setPktsOutPerSecond(PerDecimal.getDefaultInstance(temp.toString()));
-			}else{
+			} else {
 				// BytesInPerSecond
 				fdr1_builder.setBytesInPerSecond(PerDecimal.getDefaultInstance("0"));
 				// PktsInPerSecond
@@ -211,40 +357,38 @@ public class NetflowAggregator {
 				fdr1_builder.setPktsOutPerSecond(PerDecimal.getDefaultInstance("0"));
 			}
 
-			if(fdr.getPktsIn().getValue().floatValue()!=0){
+			if (fdr.getPktsIn().getValue().floatValue() != 0) {
 				// BytesInPerPacket
-				temp = fdr.getBytesIn().getValue().floatValue()/fdr.getPktsIn().getValue().floatValue();
+				temp = fdr.getBytesIn().getValue().floatValue() / fdr.getPktsIn().getValue().floatValue();
 				fdr1_builder.setBytesInPerPacket(PerDecimal.getDefaultInstance(temp.toString()));
-			}else{
+			} else {
 				fdr1_builder.setBytesInPerPacket(PerDecimal.getDefaultInstance("0"));
 			}
 
-			if(fdr.getPktsOut().getValue().floatValue()!=0){
+			if (fdr.getPktsOut().getValue().floatValue() != 0) {
 				// BytesOutPerPacket
-				temp = fdr.getBytesOut().getValue().floatValue()/fdr.getPktsOut().getValue().floatValue();
+				temp = fdr.getBytesOut().getValue().floatValue() / fdr.getPktsOut().getValue().floatValue();
 				fdr1_builder.setBytesOutPerPacket(PerDecimal.getDefaultInstance(temp.toString()));
-			}else{
+			} else {
 				fdr1_builder.setBytesOutPerPacket(PerDecimal.getDefaultInstance("0"));
 			}
 
-			if(fdr.getBytesOut().getValue().floatValue()!=0){
+			if (fdr.getBytesOut().getValue().floatValue() != 0) {
 				// RatioBytesInPerOut
-				temp = fdr.getBytesIn().getValue().floatValue()/fdr.getBytesOut().getValue().floatValue();
+				temp = fdr.getBytesIn().getValue().floatValue() / fdr.getBytesOut().getValue().floatValue();
 				fdr1_builder.setRatioBytesInPerOut(PerDecimal.getDefaultInstance(temp.toString()));
-			}else{
+			} else {
 				fdr1_builder.setRatioBytesInPerOut(PerDecimal.getDefaultInstance("0"));
 			}
 
-			if(fdr.getPktsOut().getValue().floatValue()!=0){
+			if (fdr.getPktsOut().getValue().floatValue() != 0) {
 				// RatioPktsInPerOut
-				temp = fdr.getPktsIn().getValue().floatValue()/fdr.getPktsOut().getValue().floatValue();
+				temp = fdr.getPktsIn().getValue().floatValue() / fdr.getPktsOut().getValue().floatValue();
 				fdr1_builder.setRatioPktsInPerOut(PerDecimal.getDefaultInstance(temp.toString()));
-			}else{
+			} else {
 				fdr1_builder.setRatioPktsInPerOut(PerDecimal.getDefaultInstance("0"));
 			}
 			// <--- AGGREGATIONS
-
-
 
 			// build the object into an aggregations FlowDataRecord
 			FlowDataRecord1 fdr1 = fdr1_builder.build(); // ready to add to an augmentation
@@ -265,22 +409,18 @@ public class NetflowAggregator {
 		return nb.build();
 	}
 
-
 	// VARIABLES TO SERIALIZE AND DESERIALIZE
 	private static final JSONCodecFactorySupplier CODEC_SUPPLIER = JSONCodecFactorySupplier.RFC7951;
 	private static final BindingNormalizedNodeSerializer netflow_agg_codec = new BindingCodecContext(
-																					BindingRuntimeHelpers.createRuntimeContext(
-																							Netflow.class,
-																							FlowDataRecord1.class
-																						)
-																					);
-	private static final EffectiveModelContext schemaContext = BindingRuntimeHelpers.createEffectiveModel(BindingReflections.loadModuleInfos());;
+			BindingRuntimeHelpers.createRuntimeContext(
+					Netflow.class,
+					FlowDataRecord1.class));
+	private static final EffectiveModelContext schemaContext = BindingRuntimeHelpers
+			.createEffectiveModel(BindingReflections.loadModuleInfos());;
 	private static final JSONCodecFactory codecFactory = CODEC_SUPPLIER.getShared(schemaContext);
 	private static final JsonParser PARSER = new JsonParser();
 
-
-
-	public static Netflow input2NetflowClass(JsonReader reader){
+	public static Netflow input2NetflowClass(JsonReader reader) {
 
 		NormalizedNodeResult result = new NormalizedNodeResult();
 		NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
@@ -293,19 +433,18 @@ public class NetflowAggregator {
 
 	}
 
-
 	// CONVERSIONS FROM NETFLOW CLASS TO JSON STRING --->
 
 	/**
 	 * Performs the actual data conversion.
 	 *
 	 * @param schemaPath - schema path for data
-	 * @param data - Normalized Node
+	 * @param data       - Normalized Node
 	 * @return data converted as a JsonObject
 	 */
 	private static JsonObject doConvert(SchemaPath schemaPath, NormalizedNode<?, ?> data) {
 		try (StringWriter writer = new StringWriter();
-			 JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer)) {
+				JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer)) {
 			final NormalizedNodeStreamWriter jsonStream = (data instanceof MapEntryNode)
 					? JSONNormalizedNodeStreamWriter.createNestedWriter(codecFactory, schemaPath, null, jsonWriter)
 					: JSONNormalizedNodeStreamWriter.createExclusiveWriter(codecFactory, schemaPath, null, jsonWriter);
@@ -315,19 +454,19 @@ public class NetflowAggregator {
 			}
 			return PARSER.parse(writer.toString()).getAsJsonObject();
 		} catch (IOException e) {
-//			LOG.error(JSON_IO_ERROR, e);
+			// LOG.error(JSON_IO_ERROR, e);
 			return null;
 		}
 	}
 
-
-	private static String serialize2JSONstring(Netflow netflow){
+	private static String serialize2JSONstring(Netflow netflow) {
 
 		InstanceIdentifier<Netflow> iid = InstanceIdentifier.create(Netflow.class);
 		JsonObject gson_obj = new JsonObject();
 
 		try {
-			Entry<YangInstanceIdentifier, NormalizedNode<?, ?>> normalized = netflow_agg_codec.toNormalizedNode(iid, netflow);
+			Entry<YangInstanceIdentifier, NormalizedNode<?, ?>> normalized = netflow_agg_codec.toNormalizedNode(iid,
+					netflow);
 			gson_obj = doConvert(schemaContext.getPath(), normalized.getValue());
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -1,0 +1,5 @@
+# Ignore images/ directory:
+images/
+
+# Ignore README.md file:
+README.md

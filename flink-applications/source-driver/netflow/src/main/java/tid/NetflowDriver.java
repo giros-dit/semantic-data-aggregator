@@ -18,23 +18,28 @@
 
 package tid;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonStreamParser;
 import com.google.gson.stream.JsonWriter;
-
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -49,7 +54,8 @@ import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
+import org.apache.flink.streaming.connectors.kafka.partitioner.FlinkKafkaPartitioner;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.javatuples.Quintet;
@@ -119,96 +125,161 @@ import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 
 public class NetflowDriver {
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-		// Configuration of Kafka consumer and producer properties
-		Properties props = new Properties();
-		props.put("bootstrap.servers", args[0]);
-        props.put("group.id", "netflow-source-group");
-		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        if(args.length == 5){
+            multitenants(args);
+        } else {
+            if(args.length == 3){
+              singletenant(args);
+            }else{
+                System.exit(1);
+            }
+        }
+    
+    }
 
+    public static void singletenant(String[] args) throws Exception{
 
         // GET EXECUTION ENVIRONMENT
-		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
+        // KAFKA CONSUMER
+        KafkaSource<String> consumer = KafkaSource.<String>builder()
+                .setTopics(args[1])
+                .setGroupId("netflow-source-group")
+                .setBootstrapServers(args[0])
+                .setStartingOffsets(OffsetsInitializer.latest())
+                .setValueOnlyDeserializer((DeserializationSchema<String>) new SimpleStringSchema())
+                .build();
 
-		// KAFKA CONSUMER
-		KafkaSource<String> consumer = KafkaSource.<String>builder()
-		.setTopics(args[1])
-		.setGroupId("netflow-source-group")
-		.setBootstrapServers(args[0])
-		.setStartingOffsets(OffsetsInitializer.latest())
-		.setValueOnlyDeserializer((DeserializationSchema<String>)new SimpleStringSchema())
-		.build();
+        // KAFKA PRODUCER
+        KafkaSink<String> producer = KafkaSink.<String>builder()
+                .setBootstrapServers(args[0])
+                .setRecordSerializer(KafkaRecordSerializationSchema.builder()
+                        .setTopic(args[2])
+                        .setValueSerializationSchema((SerializationSchema<String>) new SimpleStringSchema())
+                        .build())
+                .setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+                .build();
 
+        DataStream<String> stringInputStream = env.fromSource(consumer, WatermarkStrategy.noWatermarks(),
+                "Kafka Source");
 
-		// KAFKA PRODUCER
-		KafkaSink<String> producer = KafkaSink.<String>builder()
-		.setBootstrapServers(args[0])
-		.setRecordSerializer(KafkaRecordSerializationSchema.builder()
-		.setTopic(args[2])
-		.setValueSerializationSchema((SerializationSchema<String>)new SimpleStringSchema())
-		.build()
-        )
-		.setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
-		.build();
-
-
-		DataStream<String> stringInputStream = env.fromSource(consumer, WatermarkStrategy.noWatermarks(), "Kafka Source");
-
-		DataStream<String> json_ietf = stringInputStream.map(new MapFunction<String, String>(){
-			@Override
-		    public String map(String json) throws Exception{
-				try {                    
+        DataStream<String> json_ietf = stringInputStream.map(new MapFunction<String, String>() {
+            @Override
+            public String map(String json) throws Exception {
+                try {
                     JsonStreamParser p = new JsonStreamParser(json);
                     json = driver(p);
-				} catch (JsonParseException | NullPointerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					json = "";
-				}
-				return json;
-		    }
-		}).filter(new FilterFunction<String>() {
-			//make sure only valid json values are written into the topic
-			@Override
-			public boolean filter(String value) throws Exception {
-				// if empty do not return
-				return !value.equals("");
-			}
-		});
+                } catch (JsonParseException | NullPointerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    json = "";
+                }
+                return json;
+            }
+        }).filter(new FilterFunction<String>() {
+            // make sure only valid json values are written into the topic
+            @Override
+            public boolean filter(String value) throws Exception {
+                // if empty do not return
+                return !value.equals("");
+            }
+        });
 
-		json_ietf.sinkTo(producer);
+        json_ietf.sinkTo(producer);
 
-		// Execute program
-		env.execute("NetFlow driver");
-	}
+        // Execute program
+        env.execute("NetFlow driver");
+    }
 
+    public static void multitenants(String[] args) throws Exception{
+        int topic_partition = getPartition(args[3], args[4]);
 
-	// Schema context initialization
+        FlinkKafkaPartitioner<String> customPartitioner = new MyCustomPartitioner(topic_partition);
+
+        // GET EXECUTION ENVIRONMENT
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        /* 
+        final HashSet<TopicPartition> consumerPartitionSet = new HashSet<>(Arrays.asList(
+                new TopicPartition(args[1], topic_partition)));
+        */
+
+        // KAFKA CONSUMER
+        KafkaSource<String> consumer = KafkaSource.<String>builder()
+                .setTopics(args[1])
+                //.setPartitions(consumerPartitionSet)
+                .setGroupId("netflow-source-group")
+                .setBootstrapServers(args[0])
+                .setStartingOffsets(OffsetsInitializer.latest())
+                .setValueOnlyDeserializer((DeserializationSchema<String>) new SimpleStringSchema())
+                .build();
+
+        // KAFKA PRODUCER
+        KafkaSink<String> producer = KafkaSink.<String>builder()
+                .setBootstrapServers(args[0])
+                .setRecordSerializer(KafkaRecordSerializationSchema.builder()
+                        .setTopic(args[2])
+                        .setPartitioner(customPartitioner)
+                        .setValueSerializationSchema((SerializationSchema<String>) new SimpleStringSchema())
+                        .build())
+                .setDeliverGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+                .build();
+
+        DataStream<String> stringInputStream = env.fromSource(consumer, WatermarkStrategy.noWatermarks(),
+                "Kafka Source");
+
+        DataStream<String> json_ietf = stringInputStream.map(new MapFunction<String, String>() {
+            @Override
+            public String map(String json) throws Exception {
+                try {
+                    JsonStreamParser p = new JsonStreamParser(json);
+                    json = driver(p);
+                } catch (JsonParseException | NullPointerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    json = "";
+                }
+                return json;
+            }
+        }).filter(new FilterFunction<String>() {
+            // make sure only valid json values are written into the topic
+            @Override
+            public boolean filter(String value) throws Exception {
+                // if empty do not return
+                return !value.equals("");
+            }
+        });
+
+        json_ietf.sinkTo(producer);
+
+        // Execute program
+        env.execute("NetFlow driver");
+    }
+
+    // Schema context initialization
     // Code borrowed from:
     // https://github.com/opendaylight/jsonrpc/blob/1331a9f73db2fe308e3bbde00ff42359431dbc7f/
     // binding-adapter/src/main/java/org/opendaylight/jsonrpc/binding/EmbeddedRpcInvocationAdapter.java#L38
-    private static final EffectiveModelContext schemaContext = BindingRuntimeHelpers.createEffectiveModel(BindingReflections.loadModuleInfos());
+    private static final EffectiveModelContext schemaContext = BindingRuntimeHelpers
+            .createEffectiveModel(BindingReflections.loadModuleInfos());
 
-    
     // Code borrowed from:
     // https://git.opendaylight.org/gerrit/gitweb?p=jsonrpc.git;a=blob_plain;f=impl/src/
     // main/java/org/opendaylight/jsonrpc/impl/
     // JsonConverter.java;h=ea8069c67ece073e3d9febb694c4e15b01238c10;hb=3ea331d0e57712654d9ecbf2ae2a46cb0ce02d31
     private static final String JSON_IO_ERROR = "I/O problem in JSON codec";
     private static final Logger LOG = LogManager.getLogger(NetflowDriver.class);
-    private static final JSONCodecFactorySupplier CODEC_SUPPLIER =
-        JSONCodecFactorySupplier.RFC7951;
+    private static final JSONCodecFactorySupplier CODEC_SUPPLIER = JSONCodecFactorySupplier.RFC7951;
     private static final JsonParser PARSER = new JsonParser();
 
-
-	/**
+    /**
      * Performs the actual data conversion.
      *
      * @param schemaPath - schema path for data
-     * @param data - Normalized Node
+     * @param data       - Normalized Node
      * @return data converted as a JsonObject
      */
     private static JsonObject doConvert(SchemaPath schemaPath, NormalizedNode<?, ?> data) {
@@ -229,8 +300,7 @@ public class NetflowDriver {
         }
     }
 
-
-	public static String driver(JsonStreamParser p) throws Exception {
+    public static String driver(JsonStreamParser p) throws Exception {
 
         // Init YANG Binding builders
         NetflowBuilder netflow_builder = new NetflowBuilder();
@@ -246,37 +316,38 @@ public class NetflowDriver {
 
         // Pattern for IPv4
         final String pattern = "(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\\p{N}\\p{L}]+)?";
-    
-        while (p.hasNext()){
+
+        while (p.hasNext()) {
 
             JsonElement jsonElement = p.next();
             JsonObject data = jsonElement.getAsJsonObject();
 
             LOG.info("Input Stream JSON: " + data.toString());
-            
-            //Map fields
-            //GOFLOW2 COLLECTOR INFORMATION
+
+            // Map fields
+            // GOFLOW2 COLLECTOR INFORMATION
             goflow2_builder.setTimeReceived(Timestamp.getDefaultInstance(data.get("TimeReceived").getAsString()));
 
-            //Check if sampler address is an IPv4 or IPv6
+            // Check if sampler address is an IPv4 or IPv6
             String sampler_address = data.get("SamplerAddress").getAsString();
-            if(Pattern.matches(pattern, sampler_address)){
-                goflow2_builder.setSamplerAddress(Ipv4Address.getDefaultInstance(data.get("SamplerAddress").getAsString()));
-            
-            }else{
-                goflow2_builder.setSamplerAddressIpv6(Ipv6Address.getDefaultInstance(data.get("SamplerAddress").getAsString()));
-            }
-            
+            if (Pattern.matches(pattern, sampler_address)) {
+                goflow2_builder
+                        .setSamplerAddress(Ipv4Address.getDefaultInstance(data.get("SamplerAddress").getAsString()));
 
-            //EXPORT PACKET INFORMATION
-            //Header data
+            } else {
+                goflow2_builder.setSamplerAddressIpv6(
+                        Ipv6Address.getDefaultInstance(data.get("SamplerAddress").getAsString()));
+            }
+
+            // EXPORT PACKET INFORMATION
+            // Header data
             exporter_builder.setSequenceNumber(Counter32.getDefaultInstance(data.get("SequenceNum").getAsString()));
             exporter_builder.setCount(Uint16.valueOf(data.get("Count").getAsString()));
             exporter_builder.setSystemUptime(Timestamp.getDefaultInstance(data.get("SystemUptime").getAsString()));
             exporter_builder.setUnixSeconds(Timestamp.getDefaultInstance(data.get("UnixSeconds").getAsString()));
             exporter_builder.setSourceId(Uint32.valueOf(data.get("SourceId").getAsString()));
 
-            //Flow data record fields
+            // Flow data record fields
             flow_builder.setDirection(DirectionType.forValue(data.get("FlowDirection").getAsInt()));
             flow_builder.setFirstSwitched(Uint64.valueOf(data.get("TimeFlowStartMs").getAsString()));
             flow_builder.setLastSwitched(Uint64.valueOf(data.get("TimeFlowEndMs").getAsString()));
@@ -287,72 +358,69 @@ public class NetflowDriver {
             flow_builder.setSrcPort(PortNumber.getDefaultInstance(data.get("SrcPort").getAsString()));
             flow_builder.setDstPort(PortNumber.getDefaultInstance(data.get("DstPort").getAsString()));
             flow_builder.setProtocol(ProtocolType.forValue(data.get("Proto").getAsInt()));
-            
-            //Bgp container
-            String src_as = data.get("SrcAS").getAsString(); //Then used
+
+            // Bgp container
+            String src_as = data.get("SrcAS").getAsString(); // Then used
             bgp_builder.setSrcAs(AsNumber.getDefaultInstance(src_as));
             bgp_builder.setDstAs(AsNumber.getDefaultInstance(data.get("DstAS").getAsString()));
 
-            //Check if IPv4 or IPv6
+            // Check if IPv4 or IPv6
             Integer etype = data.get("Etype").getAsInt();
-                    
-            if(etype==2048) //IPv4
+
+            if (etype == 2048) // IPv4
             {
                 flow_builder.setIpVersion(IpVersionType.forValue(4));
 
-                //Container IPv4
+                // Container IPv4
                 ipv4_builder.setSrcAddress(Ipv4Address.getDefaultInstance(data.get("SrcAddr").getAsString()));
                 ipv4_builder.setDstAddress(Ipv4Address.getDefaultInstance(data.get("DstAddr").getAsString()));
                 ipv4_builder.setSrcMask(PrefixLengthIpv4.getDefaultInstance(data.get("SrcNet").getAsString()));
                 ipv4_builder.setDstMask(PrefixLengthIpv4.getDefaultInstance(data.get("DstNet").getAsString()));
                 ipv4_builder.setIdentification(Uint16.valueOf(data.get("FragmentId").getAsString()));
-                
+
                 String src_preffix = data.get("SrcPrefix").getAsString();
                 String dst_preffix = data.get("DstPrefix").getAsString();
 
-                if(!src_preffix.isEmpty()){
+                if (!src_preffix.isEmpty()) {
                     ipv4_builder.setSrcPrefix(Ipv4Prefix.getDefaultInstance(data.get("SrcPrefix").getAsString()));
                 }
 
-                if(!dst_preffix.isEmpty()){
+                if (!dst_preffix.isEmpty()) {
                     ipv4_builder.setDstPrefix(Ipv4Prefix.getDefaultInstance(data.get("DstPrefix").getAsString()));
                 }
 
-                Quintet<Ipv4Address, PortNumber, Ipv4Address, PortNumber, Integer> ipv4_5tuple 
-                    = Quintet.with(ipv4_builder.getSrcAddress(), 
-                                   flow_builder.getSrcPort(),
-                                   ipv4_builder.getDstAddress(), 
-                                   flow_builder.getDstPort(), 
-                                   flow_builder.getProtocol().getIntValue());
+                Quintet<Ipv4Address, PortNumber, Ipv4Address, PortNumber, Integer> ipv4_5tuple = Quintet.with(
+                        ipv4_builder.getSrcAddress(),
+                        flow_builder.getSrcPort(),
+                        ipv4_builder.getDstAddress(),
+                        flow_builder.getDstPort(),
+                        flow_builder.getProtocol().getIntValue());
                 flow_builder.setFlowId(ipv4_5tuple.hashCode());
-                
+
                 String next_hop = data.get("NextHop").getAsString();
                 String bgp_next_hop = data.get("BgpNextHop").getAsString();
-                
-                if(!next_hop.isEmpty())
-                {
-                  ipv4_builder.setNextHop(Ipv4Address.getDefaultInstance(next_hop));
-                
-                }else{
-                  ipv4_builder.setNextHop(Ipv4Address.getDefaultInstance("0.0.0.0"));
+
+                if (!next_hop.isEmpty()) {
+                    ipv4_builder.setNextHop(Ipv4Address.getDefaultInstance(next_hop));
+
+                } else {
+                    ipv4_builder.setNextHop(Ipv4Address.getDefaultInstance("0.0.0.0"));
                 }
-                
-                if(!bgp_next_hop.isEmpty())
-                {
+
+                if (!bgp_next_hop.isEmpty()) {
                     bgp_builder.setNextHop(Ipv4Address.getDefaultInstance(bgp_next_hop));
-                
-                }else{
+
+                } else {
                     bgp_builder.setNextHop(Ipv4Address.getDefaultInstance("0.0.0.0"));
                 }
-               
-                        
-            } 
-                    
-            else if (etype==34525) //IPv6
+
+            }
+
+            else if (etype == 34525) // IPv6
             {
                 flow_builder.setIpVersion(IpVersionType.forValue(6));
 
-                //Container IPv6
+                // Container IPv6
                 ipv6_builder.setSrcAddress(Ipv6Address.getDefaultInstance(data.get("SrcAddr").getAsString()));
                 ipv6_builder.setDstAddress(Ipv6Address.getDefaultInstance(data.get("DstAddr").getAsString()));
                 ipv6_builder.setSrcMask(PrefixLengthIpv6.getDefaultInstance(data.get("SrcNet").getAsString()));
@@ -360,35 +428,31 @@ public class NetflowDriver {
                 ipv6_builder.setFlowLabel(Ipv6FlowLabel.getDefaultInstance(data.get("IPv6FlowLabel").getAsString()));
                 ipv6_builder.setOptHeaders(Uint32.valueOf(data.get("IPv6OptionHeaders").getAsString()));
 
-
-                Quintet<Ipv6Address, PortNumber, Ipv6Address, PortNumber, Integer> ipv6_5tuple 
-                    = Quintet.with(ipv6_builder.getSrcAddress(), 
-                                   flow_builder.getSrcPort(),
-                                   ipv6_builder.getDstAddress(), 
-                                   flow_builder.getDstPort(), 
-                                   flow_builder.getProtocol().getIntValue());
+                Quintet<Ipv6Address, PortNumber, Ipv6Address, PortNumber, Integer> ipv6_5tuple = Quintet.with(
+                        ipv6_builder.getSrcAddress(),
+                        flow_builder.getSrcPort(),
+                        ipv6_builder.getDstAddress(),
+                        flow_builder.getDstPort(),
+                        flow_builder.getProtocol().getIntValue());
                 flow_builder.setFlowId(ipv6_5tuple.hashCode());
 
                 String next_hop = data.get("NextHop").getAsString();
                 String bgp_next_hop = data.get("BgpNextHop").getAsString();
-                
-                if(!next_hop.isEmpty())
-                {
-                  ipv6_builder.setNextHop(Ipv6Address.getDefaultInstance(next_hop));
-                
-                }else{
-                  ipv6_builder.setNextHop(Ipv6Address.getDefaultInstance("0:0:0:0:0:0:0:0"));
+
+                if (!next_hop.isEmpty()) {
+                    ipv6_builder.setNextHop(Ipv6Address.getDefaultInstance(next_hop));
+
+                } else {
+                    ipv6_builder.setNextHop(Ipv6Address.getDefaultInstance("0:0:0:0:0:0:0:0"));
                 }
-                
-                if(!bgp_next_hop.isEmpty())
-                {
+
+                if (!bgp_next_hop.isEmpty()) {
                     bgp_builder.setNextHopIpv6(Ipv6Address.getDefaultInstance(bgp_next_hop));
-                
-                }else{
+
+                } else {
                     bgp_builder.setNextHopIpv6(Ipv6Address.getDefaultInstance("0:0:0:0:0:0:0:0"));
                 }
-        
-         
+
             }
 
             flow_builder.setSrcMacIn(MacAddress.getDefaultInstance(data.get("SrcMacIn").getAsString()));
@@ -405,26 +469,26 @@ public class NetflowDriver {
             flow_builder.setEngineId(Uint8.valueOf(data.get("EngineId").getAsString()));
             flow_builder.setSnmpIn(data.get("InIf").getAsInt());
             flow_builder.setSnmpOut(data.get("OutIf").getAsInt());
-            
-                    
-            //TCP Flags
+
+            // TCP Flags
             Integer flags_int = data.get("TCPFlags").getAsInt();
             String flags_bits = toBinary(flags_int, 8);
             Boolean[] flags = toBooleanArray(flags_bits);
-            TcpFlagsType tcp_flags = new TcpFlagsType(flags[0],flags[1],flags[2],flags[3],flags[4],flags[5],flags[6],flags[7]);
+            TcpFlagsType tcp_flags = new TcpFlagsType(flags[0], flags[1], flags[2], flags[3], flags[4], flags[5],
+                    flags[6], flags[7]);
             flow_builder.setTcpFlags(tcp_flags);
-                
-            //ICMP type
+
+            // ICMP type
             Integer icmp_type = data.get("IcmpType").getAsInt();
             Integer icmp_code = data.get("IcmpCode").getAsInt();
-            Integer icmp = icmp_type*256 + icmp_code;
+            Integer icmp = icmp_type * 256 + icmp_code;
             flow_builder.setIcmpType(Uint16.valueOf(icmp));
 
-            //Vlan container
+            // Vlan container
             vlan_builder.setSrcId(Uint16.valueOf(data.get("SrcVlan").getAsString()));
             vlan_builder.setDstId(Uint16.valueOf(data.get("DstVlan").getAsString()));
 
-            //MPLS container
+            // MPLS container
             mpls_builder.setPalRd(Uint64.valueOf(data.get("MPLSPalRd").getAsString()));
             mpls_builder.setPrefixLen(PrefixLengthIpv4.getDefaultInstance(data.get("MPLSPrefixLen").getAsString()));
             mpls_builder.setTopLabelType(TopLabelType.forValue((data.get("MPLSTopLabelType").getAsInt())));
@@ -440,15 +504,14 @@ public class NetflowDriver {
             mpls_builder.setLabel10(Uint32.valueOf(data.get("MPLS10Label").getAsString()));
 
             String top_label_ip = data.get("MPLSTopLabelIP").getAsString();
-            if(!top_label_ip.isEmpty())
-            {
+            if (!top_label_ip.isEmpty()) {
                 mpls_builder.setTopLabelIp(Ipv4Address.getDefaultInstance(top_label_ip));
-    
-            }else{
+
+            } else {
                 mpls_builder.setTopLabelIp(Ipv4Address.getDefaultInstance("0.0.0.0"));
             }
 
-            //Associate each container of a flow-data-record
+            // Associate each container of a flow-data-record
             Ipv4 ipv4_container = ipv4_builder.build();
             flow_builder.setIpv4(ipv4_container);
 
@@ -463,95 +526,152 @@ public class NetflowDriver {
 
             Mpls mpls_container = mpls_builder.build();
             flow_builder.setMpls(mpls_container);
-            
-            //Build a list with all flow fields 
+
+            // Build a list with all flow fields
             FlowDataRecord flow_record = flow_builder.build();
             flow_list.add(flow_record);
-            
-        }   
 
-        //Associate to each parent node
+        }
+
+        // Associate to each parent node
         exporter_builder.setFlowDataRecord(flow_list);
         ExportPacket export = exporter_builder.build();
         netflow_builder.setExportPacket(export);
 
         CollectorGoflow2 goflow2 = goflow2_builder.build();
         netflow_builder.setCollectorGoflow2(goflow2);
-        
 
         LOG.info("Netflow Builder: " + netflow_builder.build().toString());
         final Netflow netflow = netflow_builder.build();
         InstanceIdentifier<Netflow> iid = InstanceIdentifier.create(Netflow.class);
-        
+
         LOG.info("Netflow InstanceIdentifier (iid): " + iid);
 
         JsonObject gson_obj = new JsonObject();
-            
+
         try {
-            BindingNormalizedNodeSerializer codec = new BindingCodecContext(BindingRuntimeHelpers.createRuntimeContext(Netflow.class));
+            BindingNormalizedNodeSerializer codec = new BindingCodecContext(
+                    BindingRuntimeHelpers.createRuntimeContext(Netflow.class));
             Entry<YangInstanceIdentifier, NormalizedNode<?, ?>> normalized = codec.toNormalizedNode(iid, netflow);
             gson_obj = doConvert(schemaContext.getPath(), normalized.getValue());
-        
-            
+
         } catch (Exception ex) {
-                //TODO: handle exception
-                ex.printStackTrace();
-                StringWriter errors = new StringWriter();
-                ex.printStackTrace(new PrintWriter(errors));
-                LOG.error(errors.toString());
-            }
-            
+            // TODO: handle exception
+            ex.printStackTrace();
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            LOG.error(errors.toString());
+        }
+
         /**
-        * Instantiate JSONObject class from org.json library (https://mvnrepository.com/artifact/org.json/json) to get 
-        * the JSON Object keys (.names() fuction).
-        */
+         * Instantiate JSONObject class from org.json library
+         * (https://mvnrepository.com/artifact/org.json/json) to get
+         * the JSON Object keys (.names() fuction).
+         */
 
         return gson_obj.toString();
-        
+
     }
 
+    /**
+     * Method for obtaining the topic partition associated with a tenant id by making a call to the tenant service.
+     * @param tenant_service_url
+     * @param tenant_id
+     * @return
+     */
+    public static int getPartition(String tenant_service_url, String tenant_id) {
+        int topic_partition = 0;
+        try {
+            // URL of tenant-service
+            URL url = new URL(tenant_service_url+tenant_id);
 
-	//To convert an integer to a binary string of a specific length with leading zeros
-    public static String toBinary(int x, int len)
-    {
+            // Opening HTTP connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(2000);
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode >= 200 && responseCode <= 299){
+                // Reading server response
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                Gson json = new Gson();
+                JsonObject jsonObject = json.fromJson(response.toString(), JsonObject.class);
+                String partition = jsonObject.get("partition").getAsString();
+
+                reader.close();
+
+                topic_partition = Integer.parseInt(partition);
+            } else {
+                System.exit(1);
+            }
+
+            // Closing connection
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return topic_partition;
+    }
+
+    // To convert an integer to a binary string of a specific length with leading
+    // zeros
+    public static String toBinary(int x, int len) {
         StringBuilder result = new StringBuilder();
- 
-        for (int i = len - 1; i >= 0 ; i--)
-        {
+
+        for (int i = len - 1; i >= 0; i--) {
             int mask = 1 << i;
             result.append((x & mask) != 0 ? 1 : 0);
         }
- 
+
         return result.toString();
     }
 
+    // To convert a binary string to a boolean array and sorts it according to
+    // TcpFlags constructor
+    public static Boolean[] toBooleanArray(String bits) {
+        Boolean[] flags = new Boolean[bits.length()]; // MSB in array position 0
+        Boolean[] flags_sorted = new Boolean[bits.length()];
+        int[] index = { 3, 0, 1, 7, 4, 5, 6, 2 }; // indexes placed according to TcpFlags constructor
 
-	//To convert a binary string to a boolean array and sorts it according to TcpFlags constructor  
-    public static Boolean[] toBooleanArray(String bits)
-    {
-        Boolean[] flags = new Boolean[bits.length()]; //MSB in array position 0
-        Boolean[] flags_sorted = new Boolean[bits.length()]; 
-        int[] index = {3, 0, 1, 7, 4, 5, 6, 2}; //indexes placed according to TcpFlags constructor
+        for (int i = 0; i < bits.length(); i++) {
+            if (bits.charAt(i) == '1') {
+                flags[i] = true;
 
-        for (int i=0; i<bits.length(); i++)
-        {
-            if(bits.charAt(i)=='1')
-            {
-                flags[i]=true;
-           
-            }else{
-                flags[i]=false;
+            } else {
+                flags[i] = false;
             }
         }
-    
-        
-        for (int j=0; j<flags.length; j++)
-        {
-            flags_sorted[j]=flags[index[j]];
+
+        for (int j = 0; j < flags.length; j++) {
+            flags_sorted[j] = flags[index[j]];
         }
-        
+
         return flags_sorted;
     }
 
+    /**
+     * Custom implementation of FlinkKafkaPartitioner
+     */
+    public static class MyCustomPartitioner extends FlinkKafkaPartitioner<String> {
 
+        private int partition;
+
+        MyCustomPartitioner(int partition) {
+            this.partition = partition;
+        }
+
+        @Override
+        public int partition(String record, byte[] key, byte[] value, String targetTopic, int[] partitions) {
+
+            return partition;
+        }
+    }
 }
