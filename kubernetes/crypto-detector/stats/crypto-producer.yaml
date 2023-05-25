@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: crypto-producer-service
-        image: kubernetes:5000/crypto-producer:latest
+        image: <k8s-registry-ip>:<k8s-registry-port>/crypto-producer:latest
         ports:
         - containerPort: 12001
         args: ["-b", "kafka:9092", "-p", "sda-netflow-dcp", "-t", "1"]

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: crypto-consumer-service
-        image: kubernetes:5000/crypto-producer:latest
+        image: <k8s-registry-ip>:<k8s-registry-port>/crypto-producer:latest
         ports:
         - containerPort: 12002
         args: ["-b", "kafka:9092", "-c", "sda-netflow-cds"]
