@@ -10,7 +10,7 @@ The `CDS` is a Python microservice with a Machine Learning module that makes use
 
 The application reads events from a Kafka topic following a specific CSV schema and writes the results in another topic whether or not the resulting traffic belongs to cryptomining traffic. 
 
-The `CDS` application can be deployed as a service in Kubernetes and this folder provides the YAML template to install the K8s-related resources. To install the `CDS` within the regarding K8s cluster, run the following command inside the current folder with the `kubectl` client:
+The `CDS` application can be deployed as a service in Kubernetes and this folder provides the YAML templates to install the K8s-related resources. To install the `CDS` within the regarding K8s cluster, run the following command inside the current folder with the `kubectl` client:
 ```bash
 kubectl [--kubeconfig <kubeconfig-file>] [-n <namespace>] apply -f crypto_detection-singletenant.yaml
 ```
@@ -46,7 +46,7 @@ For the integration of the Cryptomining Detection System in the Threat Intellige
 
 ![CDS-integration-TI-background](images/CDS-integration-ThreatIntelligence-solutions.png)
 
-According to the final decision, the proposal was the `A` solution. In such solution, the `CDS` consumes directly the input information following the schema of the data provided by the `DCP` component. The `CDS` has been tested to measure its latency performance, and it has been validated that it behaves properly. In the `stats` folder there is a test environment used to validated the `CDS` performance.
+According to the final decision, the proposal was the `A` solution. In such solution, the `CDS` consumes directly the input information following the schema of the data provided by the `DCP` component. The `CDS` has been tested to measure its latency performance, and it has been validated that it behaves properly. In the [`stats/`](stats/) folder there is a test environment used to validated the `CDS` performance.
 
 The output data schema of the `CDS` adds the following features to the `Anonymized & Preprocessed NetFlow Data + Aggregated features` input data schema: 
    ```
