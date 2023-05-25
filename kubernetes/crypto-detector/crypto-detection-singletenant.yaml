@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: crypto-detector-service
-        image: kubernete:5000/crypto-detector:latest
+        image: <k8s-registry-ip>:<k8s-registry-port>/crypto-detector:latest
         ports:
         - containerPort: 12000
         args: ["-b", "kafka:9092", "-c", "sda-netflow-dcp", "-p", "sda-netflow-cds"]

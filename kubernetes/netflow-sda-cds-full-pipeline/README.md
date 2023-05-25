@@ -13,7 +13,7 @@ helm [--kubeconfig <kubeconfig-file>] [-n <namespace>] uninstall sda-cds-netflow
 
 The [values.yaml](values.yaml) file allows parameterizing differents arguments needed to deploy each application related to the SDA and the CDS. The main arguments are the following:
 - `name`: The name of the Kubernetes application.
-- `repository`: The container image needed to build and deploy the Kubernetes application. Each SDA and CDS application has a customize Docker image that has to be uploading/downloading to/from a Docker image repository available in the Kubernetes cluster. 
+- `repository`: The container image needed to build and deploy the Kubernetes application. Each SDA and CDS application has a customize Docker image that has to be uploading/downloading to/from a Docker image registry available at a particular endpoint (i.e., `<k8s-registry-ip>:<k8s-registry-port>`) in the Kubernetes cluster.
 - `kafka`, `input_topic`, and `output_topic`: The Kafka broker service endpoint and the input and output topics associated with each SDA and CDS application.
 
 For the deployment of `SDA` components related to NetFlow processing, the integration with `Threat Intelligence` components within the PALANTIR infrastructure is required. Specifically, the integration of the `SDA` with the `Distributed Collection and Data Preprocessing` component (i.e., `DCP`) is required. For the integration between the `SDA` and the `DCP`, the proposed architecture is as follows:

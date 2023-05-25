@@ -33,7 +33,7 @@ services:
       context: .
     hostname: crypto-detector
     container_name: crypto-detector  
-    entrypoint: ["python3", "/app/crypto-detector.py", "-b", "kafka:9092", "-c", "cds-input", "-p", "cds-output", "-ts", "http://10.101.41.42:6000/api/partition/", "-tid", "1"]
+    entrypoint: ["python3", "/app/crypto-detector.py", "-b", "kafka:9092", "-c", "cds-input", "-p", "cds-output", "-ts", "http://<tenant-service-ip>:<tenant-service-port>/api/partition/", "-tid", "1"]
     #restart: on-failure
     depends_on:
       - zookeeper
@@ -44,7 +44,7 @@ services:
       dockerfile: ./crypto-consumer/compose/Dockerfile
     hostname: crypto-consumer
     container_name: crypto-consumer  
-    entrypoint: ["python3", "/app/crypto-consumer.py", "-b", "kafka:9092", "-c", "cds-output", "-ts", "http://10.101.41.42:6000/api/partition/", "-tid", "1"]
+    entrypoint: ["python3", "/app/crypto-consumer.py", "-b", "kafka:9092", "-c", "cds-output", "-ts", "http://<tenant-service-ip>:<tenant-service-port>/api/partition/", "-tid", "1"]
     #restart: on-failure
     depends_on:
       - zookeeper

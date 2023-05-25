@@ -24,7 +24,7 @@ In addition, there is a variant template file [crypto-detection-multitenants.yam
 - `-ts <tenant_service>`, where `<tenant_service>` is the endpoint of the multi-tenancy service available within the PALANTIR platform that allows to get the Kafka topic partition associated with a specific tenant ID.
 - `-tid <tenant_id>`, where `<tenant_id>`is the tenant ID needed to get the particular Kafka topic partition associated with it. 
 
-Also, the `image` statement of the template files specifies the container image needed to build and deploy the application in Kubernetes. The CDS application has a custom Docker image that must be uploaded/downloaded to/from an available Docker image repository in the Kubernetes cluster.
+Also, the `image` statement of the template files specifies the container image needed to build and deploy the application in Kubernetes. The CDS application has a custom Docker image that must be uploaded/downloaded to/from an available Docker image registry available at a particular endpoint (i.e., `<k8s-registry-ip>:<k8s-registry-port>`) in the Kubernetes cluster.
 
 ## CDS integration with the Threat Intelligence components in PALANTIR platform
 

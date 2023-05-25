@@ -16,35 +16,35 @@
 
 goflow2:
   name: goflow2
-  repository: kubernetes:5000/goflow2:latest
+  repository: <k8s-registry-ip>:<k8s-registry-port>/goflow2:latest
   nodePort: 32001
   kafka: "kafka:9092"
   topic: "sda-flows"
 
 netflowDriver:
   name: flinkjobcluster-netflow-driver
-  repository: kubernetes:5000/netflow-source-driver:2.0
+  repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-source-driver:2.0
   kafka: "kafka:9092"
   input_topic: "sda-flows"
   output_topic: "sda-uni-flows"
   
 netflow2bidirectional:
   name: flinkjobcluster-netflow2bidirectional
-  repository: kubernetes:5000/netflow2bidirectional-app:2.0
+  repository: <k8s-registry-ip>:<k8s-registry-port>/netflow2bidirectional-app:2.0
   kafka: "kafka:9092"
   input_topic: "sda-uni-flows"
   output_topic: "sda-bidi-flows"
 
 netflowAggregator:
   name: flinkjobcluster-netflow-aggregator
-  repository: kubernetes:5000/netflow-aggregator-app:1.0
+  repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-aggregator-app:1.0
   kafka: "kafka:9092"
   input_topic: "sda-bidi-flows"
   output_topic: "sda-netflow-aggregated"
 
 consumerDCP:
   name: flinkjobcluster-netflow-consumer-dcp
-  repository: kubernetes:5000/netflow-consumer-driver:4.0
+  repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-consumer-driver:4.0
   kafka: "kafka:9092"
   input_topic: "sda-netflow-aggregated"
   output_topic: "sda-netflow-raw"
