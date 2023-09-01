@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goflow2
+  labels:
+    app: goflow2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goflow2
+  template:
+    metadata:
+      labels:
+        app: goflow2
+    spec:
+      containers:
+        - name: goflow2
+          image: kubernetes:5000/goflow2:latest
+          ports:
+            - containerPort: 9995
+              protocol: UDP
+          args:
+           - -transport=kafka
+           - -transport.kafka.brokers=kafka-service:9092
+           - -transport.kafka.topic=flows
+           - -format=json
+           - -listen=netflow://:9995
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goflow2
+  labels:
+    app: goflow2
+spec:
+  selector:
+    app: goflow2
+  type: NodePort
+  ports:
+    - name: client
+      port: 9995
+      targetPort: 9995
+      nodePort: 31000
+      protocol: UDP

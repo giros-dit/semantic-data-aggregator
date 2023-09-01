@@ -30,8 +30,8 @@ netflowDriver:
   tenant_service: "http://tenant-api-service.ti-dcp:6000/api/partition/"
   tenant_id: "7476dde9-6bb8-4bab-b45c-0128da24aefc"
 
-netflow2bidirectional:
-  name: sda-flinkjobcluster-netflow2bidirectional
+netflow2bidi:
+  name: sda-flinkjobcluster-netflow2bidi
   repository: <k8s-registry-ip>:<k8s-registry-port>/netflow2bidirectional-app:latest
   kafka: "kafka:9092"
   input_topic: "sda-uni-flows"

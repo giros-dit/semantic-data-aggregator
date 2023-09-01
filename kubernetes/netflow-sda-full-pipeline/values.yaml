@@ -15,35 +15,35 @@
 #
 
 goflow2:
-  name: goflow2
+  name: sda-goflow2
   repository: <k8s-registry-ip>:<k8s-registry-port>/goflow2:latest
   nodePort: 32001
   kafka: "kafka:9092"
   topic: "sda-flows"
 
 netflowDriver:
-  name: flinkjobcluster-netflow-driver
+  name: sda-flinkjobcluster-netflow-driver
   repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-source-driver:2.0
   kafka: "kafka:9092"
   input_topic: "sda-flows"
   output_topic: "sda-uni-flows"
   
-netflow2bidirectional:
-  name: flinkjobcluster-netflow2bidirectional
+netflow2bidi:
+  name: sda-flinkjobcluster-netflow2bidi
   repository: <k8s-registry-ip>:<k8s-registry-port>/netflow2bidirectional-app:2.0
   kafka: "kafka:9092"
   input_topic: "sda-uni-flows"
   output_topic: "sda-bidi-flows"
 
 netflowAggregator:
-  name: flinkjobcluster-netflow-aggregator
+  name: sda-flinkjobcluster-netflow-aggregator
   repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-aggregator-app:1.0
   kafka: "kafka:9092"
   input_topic: "sda-bidi-flows"
   output_topic: "sda-netflow-aggregated"
 
 consumerDCP:
-  name: flinkjobcluster-netflow-consumer-dcp
+  name: sda-flinkjobcluster-netflow-consumer-dcp
   repository: <k8s-registry-ip>:<k8s-registry-port>/netflow-consumer-driver:4.0
   kafka: "kafka:9092"
   input_topic: "sda-netflow-aggregated"
