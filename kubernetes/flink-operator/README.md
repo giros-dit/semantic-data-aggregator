@@ -209,7 +209,7 @@ kubectl apply -f flink-cluster-templates/test-services/goflow2.yaml
 In order to deploy a Flink cluster in Application mode with the NetFlow source-driver related job running, we need to customize the Flink Docker image to include the application's executable JAR file. The [`flink-cluster-templates/netflow/source-driver/json/Dockerfile`](../flink-operator/flink-cluster-templates/netflow/source-driver/json/Dockerfile) file is a simple Dockerfile example to include the NetFlow source-driver application related JAR in the Flink Docker image. To do this, follow the same procedure as with the custom GoFlow2 docker image, i.e:
 
 ```bash
-docker build -t netflow-driver flink-cluster-templates/netflow/json/source-driver/.
+docker build -t netflow-driver flink-cluster-templates/netflow/source-driver/json/.
 docker tag <IMAGE ID> <k8s-registry>:5000/netflow-driver:latest
 docker push <k8s-registry>:5000/netflow-driver:latest
 ```
