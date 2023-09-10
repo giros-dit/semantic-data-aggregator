@@ -88,19 +88,30 @@ def crypto_detector():
             featuresl = message.split(",")
 
             # This will change if index of Anonymized & Preprocessed Netflow Data schema changes
-            features_a = featuresl[49:57]
-            logging.info("FEATURES: %s\n" % (features_a))
+            # flow-duration feature:
+            feature_flow_duration = []
+            feature_flow_duration.append(featuresl[2])
+            # input-packets, input-bytes, output-packets, and output-bytes features:
+            features_pkts_bytes = featuresl[11:15]
+            # Aggregated features:
+            features_agg = featuresl[49:57]
+
+            features_all = feature_flow_duration + features_pkts_bytes + features_agg
+
+            logging.info("FEATURES: %s\n" % (features_all))
+
+            logging.info(len(features_all))
             
             agg_features_with_zero = 0
-            for feature in features_a:
+            for feature in features_agg:
                 if feature == "0.0":
                     agg_features_with_zero += 1
             
             # ONLY MAKE PREDICTION IF THE SDA ADDED THE AGGREGATED FEATURES (NOT ALL AGGREGATED FEATURES WITH DEFAULT VALUE 0.0)
             if agg_features_with_zero != 8:
-                features_a = np.array(features_a).reshape(1,-1)
-                # MAKE PREDICTION
-                cryptoproba = rf.predict_proba(features_a)
+                features_agg = np.array(features_agg).reshape(1,-1)
+                # MAKE PREDICTION 
+                cryptoproba = rf.predict_proba(features_agg)
                 output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
                 output = ",".join(output)
 
