@@ -99,8 +99,6 @@ def crypto_detector():
             features_all = feature_flow_duration + features_pkts_bytes + features_agg
 
             logging.info("FEATURES: %s\n" % (features_all))
-
-            logging.info(len(features_all))
             
             agg_features_with_zero = 0
             for feature in features_agg:
@@ -109,9 +107,9 @@ def crypto_detector():
             
             # ONLY MAKE PREDICTION IF THE SDA ADDED THE AGGREGATED FEATURES (NOT ALL AGGREGATED FEATURES WITH DEFAULT VALUE 0.0)
             if agg_features_with_zero != 8:
-                features_agg = np.array(features_agg).reshape(1,-1)
+                features_all = np.array(features_all).reshape(1,-1)
                 # MAKE PREDICTION 
-                cryptoproba = rf.predict_proba(features_agg)
+                cryptoproba = rf.predict_proba(features_all)
                 output = featuresl + ["Crypto", "Malware", str(cryptoproba[0][1])]
                 output = ",".join(output)
 
