@@ -223,7 +223,7 @@ This repository contains Postman collections that you can use to play with the R
 
 This work has been partly supported by project [ECTICS](https://www.dit.upm.es/~giros/project/ectics/) (PID2019-105257RB-C21), funded by:
 
-![](doc/logos/MICIU_AEI_w400.jpg)
+![](docs/logos/MICIU_AEI_w400.jpg)
 
 [![eu-comission](docs/logos/european-comission-h2020.png)](https://ec.europa.eu/info/research-and-innovation/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-2020_en)
 
